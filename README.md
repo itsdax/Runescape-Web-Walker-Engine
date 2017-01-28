@@ -7,12 +7,13 @@
 - The Walker Engine includes path walking, waypoint navigation (Ship Chartering/Portals/etc), and path randomization using BFS to prevent trackable walking patterns.
 
 ##Features
-- Speed. Will generate a path from any two points (Given that it is mapped) in less than a second, guaranteed. 
+- Speed. Will generate a path from any two points (Given that it is mapped) in less than a second, guaranteed.
 
 - Simplicity. Implement the engine into your script by simply calling
       ```
       WebWalker.walkTo(new RSTile(x, y, z)
       ```
+- Shortcuts. Using all and only the shortcuts that your Player can access, whether it is skill level requirements, or inventory item requirements.
 
 - Debugging visualization. Draw a live feed of **Path** and **Collision Data** the engine is working with.
       ```
@@ -28,8 +29,16 @@
 </p>
 
 
-##Visualization of the server generating a path from point A to point B
+###Visualization of the server generating a path from point A to point B (Slowed Down)
 
 <p align="center">
   <img src="http://i.imgur.com/ZD7hKWZ.gif"/>
 </p>
+
+##Supported Areas (Roughly 90% of the world)
+- All Cities (Except Lletya)
+- Gnome Slayer Dungeon
+- Relleka Slayer Dungeon
+- Most Dungeons (Falador Mine, Varrock Sewers, etc)
+
+
