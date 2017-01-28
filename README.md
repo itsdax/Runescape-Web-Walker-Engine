@@ -31,7 +31,8 @@
 
 
 ###Visualization of the server generating a path from point A to point B (Slowed Down)
-#####Notice how the algorithm knows how to limit itself to only the regions that will lead towards the destination. This is the key to generating paths as quickly as possible.
+Our algorithm limits itself to only the regions that will lead towards the destination. This is how we will generate paths in the fastest time possible.
+
 <p align="center">
   <img src="http://i.imgur.com/ZD7hKWZ.gif"/>
 </p>
