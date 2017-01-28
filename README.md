@@ -29,16 +29,6 @@
   <img src="http://i.imgur.com/gLMRq0O.png"/>
 </p>
 
-
-##Visualization of the server generating a path from point A to point B (Slowed Down)
-Our algorithm limits itself to only the regions that will lead towards the destination. This is how we will generate paths in the fastest time possible.
-######UI is coded on a canvas in JavaFX. Code is not included in this repository.
-
-<p align="center">
-  <img src="http://i.imgur.com/ZD7hKWZ.gif"/>
-</p>
-
-
 ##Supported Areas (Currently roughly 90% of the game world)
 - All Cities (Except Lletya) including Zeah
 - Wilderness
@@ -61,4 +51,12 @@ Our algorithm limits itself to only the regions that will lead towards the desti
 <p align="center">Path from inside to outside. (Exits through back door.)
 <p align="center">
 <img src="http://i.imgur.com/Ne2Ydy1.png"/>
+</p>
+
+##Visualization of the server generating a path from point A to point B (Slowed Down)
+Our algorithm limits itself to only the regions that will lead towards the destination. This is how we will generate paths in the fastest time possible.
+######UI is coded on a canvas in JavaFX. Code is not included in this repository.
+
+<p align="center">
+  <img src="http://i.imgur.com/ZD7hKWZ.gif"/>
 </p>
