@@ -13,5 +13,8 @@ WebWalkerPaint.getInstance().drawDebug(graphics, WebPath.previousPath(), true);
 ```
 <p align="center">
   <img src="http://i.imgur.com/17hx5iK.png"/>
+</p>
+
+<p align="center">
   <img src="http://i.imgur.com/gLMRq0O.png"/>
 </p>
