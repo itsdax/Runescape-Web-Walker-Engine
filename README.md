@@ -53,12 +53,12 @@ Our algorithm limits itself to only the regions that will lead towards the desti
 
 ######Here is an example of Draynor Manor's one way door
 
+<p align="center">Path from outside to inside. (Enters front door.)
 <p align="center">
-      <p align="center">Path from outside to inside. (Enters front door.)
-      <p>
-      <img src="http://i.imgur.com/2B2MyZ8.png" align="center"/>
-      
-      <p align="center">Path from inside to outside. (Has to leave through back door.)
-      <p>
-      <img src="http://i.imgur.com/Ne2Ydy1.png"/>
+      <img src="http://i.imgur.com/2B2MyZ8.png"/>
+</p>
+
+<p align="center">Path from inside to outside. (Has to leave through back door.)
+<p align="center">
+<img src="http://i.imgur.com/Ne2Ydy1.png"/>
 </p>
