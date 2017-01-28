@@ -31,5 +31,5 @@
 ##Visualization of the server generating a path from point A to point B
 
 <p align="center">
-  <img src="http://i.imgur.com/ZD7hKWZ.gifv"/>
+  <img src="http://i.imgur.com/ZD7hKWZ.gif"/>
 </p>
