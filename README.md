@@ -16,7 +16,17 @@
 
 - Shortcuts. Using all and only the shortcuts that your Player can access, whether it is skill level (Agility level needed for shortcut) or inventory item requirements (Such as gold needed for ship or fee to enter dungeon).
 
-- Debugging visualization. Draw a live feed of **Path** and **Collision Data** the engine is working with using:
+
+##Supported Areas (Currently roughly 90% of the game world)
+- All Cities (Except Lletya) including Zeah
+- Wilderness
+- Gnome Slayer Dungeon
+- Relleka Slayer Dungeon
+- Stronghold of Security
+- Most Dungeons (Falador Mine, Varrock Sewers, etc)
+
+
+- Debugging visualization. Draw a live feed of the **Path** and **Collision Data** the engine is working with using:
       ```
       WebWalkerPaint.getInstance().drawDebug(graphics, WebPath.previousPath(), true);
       ```
@@ -28,15 +38,6 @@
 <p align="center">
   <img src="http://i.imgur.com/gLMRq0O.png"/>
 </p>
-
-##Supported Areas (Currently roughly 90% of the game world)
-- All Cities (Except Lletya) including Zeah
-- Wilderness
-- Gnome Slayer Dungeon
-- Relleka Slayer Dungeon
-- Stronghold of Security
-- Most Dungeons (Falador Mine, Varrock Sewers, etc)
-
 
 ## Directed Nodes
 - Nodes that direct to another, and not vice versa (Such as one way entrances) are supported as well.
