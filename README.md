@@ -3,7 +3,7 @@
 
 ##About
 - This is the **front end** of my web walker, which includes a wrapper for the server-client interaction of generating paths from point A to point B and navigating through the path.
-- Back-end pathfinding is coded using a combination of dijkstra's and A\* algorithm. Dijstra's is mainly for region limiting for performance purposes whereas A\* calculates the actual path. Wayports (Node jumps) cannot be calculated using a heuristic value so Dijkstra's is needed in this scenario.
+- Back-end pathfinding is coded using a combination of dijkstra's and A\* algorithm. Dijkstra's is mainly for region limiting for performance purposes whereas A\* calculates the actual path. Wayports (Node jumps) cannot be calculated using a heuristic value so Dijkstra's is needed in this scenario.
 - The Walker Engine includes path walking, waypoint navigation (Ship Chartering/Portals/etc), and path randomization using BFS to prevent trackable walking patterns.
 
 ##Features
@@ -14,7 +14,7 @@
       WebWalker.walkTo(new RSTile(x, y, z));
       ```
 
-- Shortcuts. Using all and only the shortcuts that your Player can access, whether it is skill level requirements, or inventory item requirements.
+- Shortcuts. Using all and only the shortcuts that your Player can access, whether it is skill level (Agility level needed for shortcut) or inventory item requirements (Such as gold needed for ship or fee to enter dungeon).
 
 - Debugging visualization. Draw a live feed of **Path** and **Collision Data** the engine is working with using:
       ```
