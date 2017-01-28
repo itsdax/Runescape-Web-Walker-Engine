@@ -10,14 +10,14 @@
 - Speed. Will generate a path from any two point (Given that it is mapped) in less than a second.
 
 - Simplicity. Implement the engine into your script by simply calling
-```
-WebWalker.walkTo(new RSTile(x, y, z)
-```
+      ```
+      WebWalker.walkTo(new RSTile(x, y, z)
+      ```
 
 - Debugging. Visualization. Draw a live feed of **Path** and **Collision Data** the engine is working with.
-```
-WebWalkerPaint.getInstance().drawDebug(graphics, WebPath.previousPath(), true);
-```
+      ```
+      WebWalkerPaint.getInstance().drawDebug(graphics, WebPath.previousPath(), true);
+      ```
 <p align="center">
   <img src="http://i.imgur.com/17hx5iK.png"/>
 </p>
