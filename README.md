@@ -11,7 +11,7 @@
 
 - Simplicity. Implement the engine into your script by simply calling:
       ```
-      WebWalker.walkTo(new RSTile(x, y, z)
+      WebWalker.walkTo(new RSTile(x, y, z));
       ```
 
 - Shortcuts. Using all and only the shortcuts that your Player can access, whether it is skill level requirements, or inventory item requirements.
@@ -19,7 +19,7 @@
 - Debugging visualization. Draw a live feed of **Path** and **Collision Data** the engine is working with using:
       ```
       WebWalkerPaint.getInstance().drawDebug(graphics, WebPath.previousPath(), true);
-      ```
+      ``````
       
 <p align="center">
   <img src="http://i.imgur.com/17hx5iK.png"/>
@@ -30,7 +30,7 @@
 </p>
 
 
-###Visualization of the server generating a path from point A to point B (Slowed Down)
+##Visualization of the server generating a path from point A to point B (Slowed Down)
 Our algorithm limits itself to only the regions that will lead towards the destination. This is how we will generate paths in the fastest time possible.
 
 <p align="center">
