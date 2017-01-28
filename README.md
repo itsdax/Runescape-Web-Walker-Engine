@@ -1,5 +1,5 @@
 # Runescape-Web-Walker-Engine
-####A world walker for Rune Scape written in Java for TriBot.
+####An open-sourced world walker for Rune Scape written in Java for TriBot.
 
 
 ##About
