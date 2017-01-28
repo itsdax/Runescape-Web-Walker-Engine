@@ -25,7 +25,7 @@
 - Gnome Slayer Dungeon
 - Relleka Slayer Dungeon
 - Stronghold of Security
-- Most Dungeons (Falador Mine, Varrock Sewers, etc)
+- Most underground locations (Falador Mine, Varrock Sewers, etc)
 
 
 ##Debug
