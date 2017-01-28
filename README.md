@@ -56,7 +56,7 @@ Our algorithm limits itself to only the regions that will lead towards the desti
 <p align="center">
       <p align="center">Path from outside to inside. (Enters front door.)
       <p>
-      <img src="http://i.imgur.com/2B2MyZ8.png"/>
+      <img src="http://i.imgur.com/2B2MyZ8.png" align="center"/>
       
       <p align="center">Path from inside to outside. (Has to leave through back door.)
       <p>
