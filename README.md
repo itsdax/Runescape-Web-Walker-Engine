@@ -7,7 +7,7 @@
 - The front-end (Walker Engine) includes path walking, and randomization using BFS.
 
 ##Usages
-- Debugging
+- Debugging **Path** and **Collision Data using** paint
 ```
 WebWalkerPaint.getInstance().drawDebug(graphics, WebPath.previousPath(), true);
 ```
