@@ -26,6 +26,7 @@
 - Most Dungeons (Falador Mine, Varrock Sewers, etc)
 
 
+##Debug
 - Debugging visualization. Draw a live feed of the **Path** and **Collision Data** the engine is working with using:
       ```
       WebWalkerPaint.getInstance().drawDebug(graphics, WebPath.previousPath(), true);
