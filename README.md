@@ -58,7 +58,7 @@
 </p>
 
 ##Visualization of the server generating a path from point A to point B (Slowed Down)
-Our algorithm limits itself to only the regions that will lead towards the destination. This is how we will generate paths in the fastest time possible.
+The algorithm is designed to limit itself to only the regions that will lead towards the destination. This is how we will generate paths in the fastest time possible.
 ######UI is coded on a canvas in JavaFX. Code is not included in this repository.
 
 <p align="center">
