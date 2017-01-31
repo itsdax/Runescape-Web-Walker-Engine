@@ -25,7 +25,7 @@ public class ObjectHandler implements Loggable {
     private final TreeSet<String> sortedOptions, sortedBlackList, sortedHighPriorityOptions;
 
     private ObjectHandler(){
-        sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through",
+        sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use",
                 "Walk-Across", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb-into", "Climb-through",
                 "Jump-from", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));

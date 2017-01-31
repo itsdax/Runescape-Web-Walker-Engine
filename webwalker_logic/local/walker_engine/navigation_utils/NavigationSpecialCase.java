@@ -142,7 +142,12 @@ public class NavigationSpecialCase implements Loggable{
             case GNOME_ENTRANCE:
             case GNOME_EXIT:
                 if (clickObject(Filters.Objects.nameEquals("Gate").combine(Filters.Objects.actionsContains("Open"), true), "Open",
-                        () -> Player.getPosition().getY() == 3383 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                        () -> {
+                            if (NPCInteraction.isConversationWindowUp()) {
+                                NPCInteraction.handleConversation(NPCInteraction.GENERAL_RESPONSES);
+                            }
+                            return Player.getPosition().getY() == 3383 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                        })){
                     WaitFor.milliseconds(1060, 1500);
                     return true;
                 } else {

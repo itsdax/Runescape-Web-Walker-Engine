@@ -22,6 +22,10 @@ class WebPathCore {
     private static ArrayList<RSTile> lastCalledPath = null;
     private static HashMap<String, String> cache = null;
 
+    private static String getServerURL(){
+        return "http://" + HOST + ":" + PORT;
+    }
+
     static GetPathResponseContainer getPath(int x1, int y1, int z1, int x2, int y2, int z2, PlayerInformation playerInformation){
         try {
             String urlSafeParams = "x1=" + x1 + "&y1=" + y1 + "&z1=" + z1 + "&x2=" + x2 + "&y2=" + y2 + "&z2=" + z2;
@@ -62,7 +66,7 @@ class WebPathCore {
             if (cache == null){
                 cache = new HashMap<>();
             }
-            String request = "http://" + HOST + ":" + PORT + input;
+            String request = getServerURL() + input;
             String cachedResponse = cache.get(request);
             if (cachedResponse != null){
                 if (cache.size() > CACHE_SIZE_LIMIT){
