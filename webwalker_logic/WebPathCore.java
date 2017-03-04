@@ -13,17 +13,23 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 
 class WebPathCore {
 
     private static final String HOST = "173.208.130.82", TEST = "localhost", PORT = "8080", DIRECTORY = "/web?";
-    private static final int CACHE_SIZE_LIMIT = 100;
     private static ArrayList<RSTile> lastCalledPath = null;
-    private static HashMap<String, String> cache = null;
+    private static HashMap<String, GetPathResponseContainer> cache = null;
+
+    private static boolean local = false;
+
+    public static void setLocal(boolean b){
+        local = b;
+    }
 
     private static String getServerURL(){
-        return "http://" + HOST + ":" + PORT;
+        return "http://" + (local ? TEST : HOST) + ":" + PORT;
     }
 
     static GetPathResponseContainer getPath(int x1, int y1, int z1, int x2, int y2, int z2, PlayerInformation playerInformation){
@@ -32,8 +38,7 @@ class WebPathCore {
             if (playerInformation != null){
                 urlSafeParams += "&playerInfo=" + URLEncoder.encode(playerInformation.toString(), "UTF-8");
             }
-            String response = getResponse(DIRECTORY + urlSafeParams);
-            return parseResponse(response);
+            return getResponseAndParse(urlSafeParams);
         } catch (UnsupportedEncodingException e){
             e.printStackTrace();
             return null;
@@ -46,12 +51,28 @@ class WebPathCore {
             if (playerInformation != null){
                 urlSafeParams += "&playerInfo=" + URLEncoder.encode(playerInformation.toString(), "UTF-8");
             }
-            String response = getResponse(DIRECTORY + urlSafeParams);
-            return parseResponse(response);
+            return getResponseAndParse(urlSafeParams);
         } catch (UnsupportedEncodingException e){
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static GetPathResponseContainer getResponseAndParse(String urlSafeParams){
+        if (cache == null){
+            cache = new HashMap<>();
+        }
+        GetPathResponseContainer cached = cache.get(urlSafeParams);
+        if (cached != null){
+            return cached;
+        }
+
+        String response = getResponse(DIRECTORY + urlSafeParams);
+        GetPathResponseContainer getPathResponseContainer = parseResponse(response);
+        if (getPathResponseContainer.getPath().size() > 0){
+            cache.put(urlSafeParams, getPathResponseContainer);
+        }
+        return getPathResponseContainer;
     }
 
     private static GetPathResponseContainer parseResponse(String response){
@@ -63,30 +84,14 @@ class WebPathCore {
 
     private static String getResponse(String input){
         try {
-            if (cache == null){
-                cache = new HashMap<>();
-            }
             String request = getServerURL() + input;
-            String cachedResponse = cache.get(request);
-            if (cachedResponse != null){
-                if (cache.size() > CACHE_SIZE_LIMIT){
-                    cache.clear();
-                }
-                return cachedResponse;
-            }
             URL url = new URL(request);
             System.out.println("GET: " + url.toString());
             URLConnection connection = url.openConnection();
             connection.setConnectTimeout(20000);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                return bufferedReader.lines().collect(Collectors.joining());
             }
-            bufferedReader.close();
-            cache.put(request, stringBuilder.toString());
-            return stringBuilder.toString();
         } catch (ConnectException ignored){
             //server offline or unable to connect
         } catch (Exception e){

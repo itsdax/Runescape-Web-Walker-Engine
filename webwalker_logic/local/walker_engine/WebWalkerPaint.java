@@ -6,7 +6,6 @@ import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.local_pathfinding.PathAnalyzer;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.RealTimeCollisionTile;
 import scripts.webwalker_logic.shared.NodeInfo;
-import scripts.webwalker_logic.shared.PathFindingNode;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -47,6 +46,7 @@ public class WebWalkerPaint {
     public void drawDebug(Graphics graphics) {
         drawDebug(graphics, null, true);
     }
+
 
     public void drawDebug(Graphics graphics, ArrayList<RSTile> path, boolean drawMap) {
         if (!WalkerEngine.getInstance().isNavigating()){

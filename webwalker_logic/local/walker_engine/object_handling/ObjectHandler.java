@@ -1,5 +1,6 @@
 package scripts.webwalker_logic.local.walker_engine.object_handling;
 
+import org.tribot.api.General;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Objects;
@@ -25,8 +26,8 @@ public class ObjectHandler implements Loggable {
     private final TreeSet<String> sortedOptions, sortedBlackList, sortedHighPriorityOptions;
 
     private ObjectHandler(){
-        sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use",
-                "Walk-Across", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb-into", "Climb-through",
+        sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through",
+                "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb-into", "Climb-through",
                 "Jump-from", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
@@ -75,11 +76,24 @@ public class ObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getX() < 3097 && destinationDetails.getAssumed().equals(new RSTile(3097, 3359, 0));
             }
+        }),
+        ARDY_DOOR_LOCK_SIDE("Door", "Pick-lock", new RSTile(2565, 3356, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return Player.getPosition().getX() >= 2565 && Player.getPosition().distanceTo(new RSTile(2565, 3356, 0)) < 3;
+            }
+        }),
+        ARDY_DOOR_UNLOCKED_SIDE("Door", "Open", new RSTile(2565, 3356, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return Player.getPosition().getX() < 2565 && Player.getPosition().distanceTo(new RSTile(2565, 3356, 0)) < 3;
+            }
         });
 
         private String name, action;
         private RSTile location;
         private SpecialCondition specialCondition;
+
         SpecialObject(String name, String action, RSTile location, SpecialCondition specialCondition){
             this.name = name;
             this.action = action;
@@ -145,10 +159,10 @@ public class ObjectHandler implements Loggable {
         Arrays.stream(interactiveObjects).forEach(rsObject -> stringBuilder.append(rsObject.getDefinition().getName()).append(" ").append(Arrays.asList(rsObject.getDefinition().getActions())).append(", "));
         getInstance().log(stringBuilder);
 
-        return handle(path, interactiveObjects[0], destinationDetails, action);
+        return handle(path, interactiveObjects[0], destinationDetails, action, specialObject);
     }
 
-    private static boolean handle(ArrayList<RSTile> path, RSObject object, PathAnalyzer.DestinationDetails destinationDetails, String action){
+    private static boolean handle(ArrayList<RSTile> path, RSObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
         PathAnalyzer.DestinationDetails current = PathAnalyzer.furthestReachableTile(path);
 
         if (current == null){
@@ -165,17 +179,36 @@ public class ObjectHandler implements Loggable {
             return false;
         }
         boolean successfulClick = false;
-        for (int i = 0; i < 6; i++) {
-            String[] validOptions = action != null ? new String[]{action} : getViableOption(Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(Collectors.toList()), destinationDetails);
-            if (clickOnObject(object, validOptions)){
-                successfulClick = true;
-                break;
-            }
-            if (i > 2){
-                WaitFor.milliseconds(400 * (i - 2), 800 * (i - 2));
+        if (specialObject != null) {
+            switch (specialObject){
+                case ARDY_DOOR_LOCK_SIDE:
+                    for (int i = 0; i < General.random(15, 25); i++) {
+                        if (!clickOnObject(object, new String[]{specialObject.getAction()})){
+                            continue;
+                        }
+                        if (Player.getPosition().distanceTo(specialObject.getLocation()) > 1){
+                            WaitFor.condition(General.random(3000, 4000), () -> Player.getPosition().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        }
+                        if (Player.getPosition().equals(new RSTile(2564, 3356, 0))){
+                            successfulClick = true;
+                            break;
+                        }
+                    }
+                    break;
             }
         }
-
+        if (!successfulClick){
+            for (int i = 0; i < 6; i++) {
+                String[] validOptions = action != null ? new String[]{action} : getViableOption(Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(Collectors.toList()), destinationDetails);
+                if (clickOnObject(object, validOptions)) {
+                    successfulClick = true;
+                    break;
+                }
+                if (i > 2) {
+                    WaitFor.milliseconds(400 * (i - 2), 800 * (i - 2));
+                }
+            }
+        }
         if (isStrongholdDoor(object)){
             if (!handleStrongholdQuestions(destinationDetails)){
                 return false;

@@ -9,6 +9,10 @@ import java.util.ArrayList;
 
 public class WebPath {
 
+    public static void setTesting(boolean b){
+        WebPathCore.setLocal(b);
+    }
+
     /**
      *
      * @param destination

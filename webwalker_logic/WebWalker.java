@@ -2,11 +2,14 @@ package scripts.webwalker_logic;
 
 
 import org.tribot.api2007.Game;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
 import scripts.webwalker_logic.local.walker_engine.WalkingCondition;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
 import scripts.webwalker_logic.shared.helpers.BankHelper;
+
+import java.util.ArrayList;
 
 public class WebWalker {
 
@@ -72,7 +75,11 @@ public class WebWalker {
      *         condition returns.
      */
     public static boolean walkTo(RSTile destination, WalkingCondition walkingCondition){
-        return WalkerEngine.getInstance().walkPath(WebPath.getPath(destination), walkingCondition);
+        ArrayList<RSTile> path = WebPath.getPath(destination);
+        if (!Player.getPosition().equals(destination) && path.size() == 0){
+            return false;
+        }
+        return WalkerEngine.getInstance().walkPath(path, walkingCondition);
     }
 
     public static boolean walkToBank(){
@@ -84,6 +91,10 @@ public class WebWalker {
             RSTile destination = Game.getDestination();
             return destination != null && BankHelper.isInBank(destination) ? WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS : WalkingCondition.State.CONTINUE_WALKER;
         }).combine(walkingCondition));
+    }
+
+    public static void setLocal(boolean b){
+        WebPathCore.setLocal(b);
     }
 
 }

@@ -1,20 +1,23 @@
 package scripts.webwalker_logic.local.walker_engine.navigation_utils;
 
+import org.tribot.api.General;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api.util.Sorting;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
+import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
+import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSObjectDefinition;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
+import scripts.webwalker_logic.local.walker_engine.object_handling.AccurateMouse;
 import scripts.webwalker_logic.local.walker_engine.object_handling.ObjectHandler;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -41,6 +44,9 @@ public class NavigationSpecialCase implements Loggable{
      */
     public enum SpecialLocation {
 
+        KALPHITE_TUNNEL (3226, 3108, 0),
+        KALPHITE_TUNNEL_INSIDE (3483, 9510, 2),
+
         DWARF_CARTS_GE (3141, 3504, 0),
         DWARFS_CARTS_KELDAGRIM (2922, 10170, 0),
 
@@ -64,7 +70,10 @@ public class NavigationSpecialCase implements Loggable{
         BRIMHAVEN_PAY_FARE (2772, 3225, 0),
         GREAT_KOUREND (1824, 3691, 0),
         LANDS_END (1504, 3399, 0),
-        PEST_CONTROL (2659, 2676, 0);
+        PEST_CONTROL (2659, 2676, 0),
+
+        ARDY_LOG_WEST (2598, 3336, 0),
+        ARDY_LOG_EAST (2602, 3336, 0);
 
 
 
@@ -111,6 +120,26 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 break;
 
+            case KALPHITE_TUNNEL:
+            case KALPHITE_TUNNEL_INSIDE:
+                if (clickObject(Filters.Objects.nameEquals("Tunnel entrance"), "Climb-down", () -> Player.getPosition().getY() > 4000 ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    return true;
+                } else {
+                    RSObject[] objects = Objects.findNearest(20, "Tunnel entrance");
+                    if (objects.length > 0 && walkToObject(objects[0])){
+                        RSObjectDefinition definition = objects[0].getDefinition();
+                        String[] actions = definition != null ? definition.getActions() : null;
+                        if (actions != null && Arrays.stream(actions).noneMatch(s -> s.startsWith("Climb-down"))){
+                            RSItem[] items = Inventory.find(954);
+                            if (items.length > 0 && items[0].click() && clickObject(Filters.Objects.nameEquals("Tunnel entrance"), "Use", () -> WaitFor.Return.SUCCESS)){
+                                WaitFor.milliseconds(3000, 6000);
+                            }
+                        }
+                    }
+                }
+                getInstance().log("Unable to go inside tunnel.");
+                break;
             case DWARF_CARTS_GE:
                 RSObject[] objects = Objects.find(15, Filters.Objects.nameEquals("Train cart").combine(new Filter<RSObject>() {
                     @Override
@@ -211,6 +240,23 @@ public class NavigationSpecialCase implements Loggable{
             case LANDS_END:
                 zeahBoatLocation = "Travel to Land's End.";
                 break;
+
+            case ARDY_LOG_WEST:
+            case ARDY_LOG_EAST:
+                RSObject[] logSearch = Objects.findNearest(15, Filters.Objects.nameEquals("Log balance").combine(Filters.Objects.actionsContains("Walk-across"), true));
+                if (logSearch.length > 0 && AccurateMouse.click(logSearch[0], "Walk-across")){
+                    int agilityXP = Skills.getXP(Skills.SKILLS.AGILITY);
+                    if (WaitFor.condition(General.random(7600, 1200), () -> Skills.getXP(Skills.SKILLS.AGILITY) > agilityXP ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
+                        return true;
+                    }
+                    if (Player.isMoving()){
+                        WaitFor.milliseconds(1200, 2300);
+                    }
+                }
+                getInstance().log("Could not navigate through gnome door.");
+                break;
+
+
         }
 
         if (zeahBoatLocation != null){
@@ -245,6 +291,16 @@ public class NavigationSpecialCase implements Loggable{
         return false;
     }
 
+    public static boolean walkToObject(RSObject object) {
+        if (!object.isOnScreen() || !object.isClickable()){
+            WalkerEngine.getInstance().clickMinimap(object);
+            if (WaitFor.condition(15000, () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                return false;
+            }
+        }
+        return object.isOnScreen() && object.isClickable();
+    }
+
     public static boolean clickObject(RSObject object, String action, WaitFor.Condition condition) {
         if (!object.isOnScreen() || !object.isClickable()){
             WalkerEngine.getInstance().clickMinimap(object);
@@ -256,7 +312,7 @@ public class NavigationSpecialCase implements Loggable{
     }
 
     public static boolean clickObject(Filter<RSObject> filter, String action, WaitFor.Condition condition) {
-        RSObject[] objects = Objects.find(15, filter);
+        RSObject[] objects = Objects.findNearest(15, filter);
         if (objects.length == 0){
             return false;
         }

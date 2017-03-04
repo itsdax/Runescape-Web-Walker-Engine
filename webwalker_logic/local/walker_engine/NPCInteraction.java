@@ -1,5 +1,6 @@
 package scripts.webwalker_logic.local.walker_engine;
 
+import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Interfaces;
@@ -106,7 +107,7 @@ public class NPCInteraction implements Loggable {
 
     public static boolean handleConversation(String... options){
         while (true){
-            if (WaitFor.condition(2000, () -> {
+            if (WaitFor.condition(General.random(550, 700), () -> {
                 if (isConversationWindowUp()){
                     return WaitFor.Return.SUCCESS;
                 }
