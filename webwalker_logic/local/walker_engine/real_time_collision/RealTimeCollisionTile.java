@@ -194,4 +194,5 @@ public class RealTimeCollisionTile extends PathFindingNode {
         xMap = new HashMap<>();
         allCached = new HashSet<>();
     }
+
 }

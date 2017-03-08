@@ -1,8 +1,7 @@
-package scripts.webwalker_logic.local.walker_engine.object_handling;
+package scripts.webwalker_logic.local.walker_engine.interaction_handling;
 
 import org.tribot.api.General;
 import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.Game;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
@@ -19,22 +18,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class ObjectHandler implements Loggable {
+public class PathObjectHandler implements Loggable {
 
-    private static ObjectHandler instance;
+    private static PathObjectHandler instance;
 
     private final TreeSet<String> sortedOptions, sortedBlackList, sortedHighPriorityOptions;
 
-    private ObjectHandler(){
-        sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through",
+    private PathObjectHandler(){
+        sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb-into", "Climb-through",
-                "Jump-from", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel"));
+                "Board", "Jump-from", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
     }
 
-    private static ObjectHandler getInstance (){
-        return instance != null ? instance : (instance = new ObjectHandler());
+    private static PathObjectHandler getInstance (){
+        return instance != null ? instance : (instance = new PathObjectHandler());
     }
 
     private enum SpecialObject {
@@ -175,9 +174,10 @@ public class ObjectHandler implements Loggable {
                 return false;
             }
         }
-        if (WaitFor.condition(10000, () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
+        if (WaitFor.condition(General.random(5000, 8000), () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
             return false;
         }
+
         boolean successfulClick = false;
         if (specialObject != null) {
             switch (specialObject){
@@ -197,48 +197,45 @@ public class ObjectHandler implements Loggable {
                     break;
             }
         }
+
         if (!successfulClick){
-            for (int i = 0; i < 6; i++) {
-                String[] validOptions = action != null ? new String[]{action} : getViableOption(Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(Collectors.toList()), destinationDetails);
-                if (clickOnObject(object, validOptions)) {
-                    successfulClick = true;
-                    break;
-                }
-                if (i > 2) {
-                    WaitFor.milliseconds(400 * (i - 2), 800 * (i - 2));
-                }
+            String[] validOptions = action != null ? new String[]{action} : getViableOption(Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(Collectors.toList()), destinationDetails);
+            if (!clickOnObject(object, validOptions)) {
+                return false;
             }
         }
-        if (isStrongholdDoor(object)){
+
+        boolean strongholdDoor = isStrongholdDoor(object);
+
+        if (strongholdDoor){
             if (!handleStrongholdQuestions(destinationDetails)){
                 return false;
             }
         }
 
-        if (successfulClick) {
-            WaitFor.condition(15000, () -> {
-                DoomsToggle.handleToggle();
-                PathAnalyzer.DestinationDetails destinationDetails1 = PathAnalyzer.furthestReachableTile(path);
-                if (NPCInteraction.isConversationWindowUp()) {
-                    NPCInteraction.handleConversation(NPCInteraction.GENERAL_RESPONSES);
+        WaitFor.condition(General.random(7000, 9000), () -> {
+            DoomsToggle.handleToggle();
+            PathAnalyzer.DestinationDetails destinationDetails1 = PathAnalyzer.furthestReachableTile(path);
+            if (NPCInteraction.isConversationWindowUp()) {
+                NPCInteraction.handleConversation(NPCInteraction.GENERAL_RESPONSES);
+            }
+            if (destinationDetails1 != null) {
+                if (!destinationDetails1.getDestination().equals(currentFurthest)){
+                    return WaitFor.Return.SUCCESS;
                 }
-                if (destinationDetails1 != null) {
-                    if (!destinationDetails1.getDestination().equals(currentFurthest)){
-                        return WaitFor.Return.SUCCESS;
-                    }
+            }
+            if (current.getNextTile() != null){
+                PathAnalyzer.DestinationDetails hoverDetails = PathAnalyzer.furthestReachableTile(path, current.getNextTile());
+                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getRSTile().distanceTo(Player.getPosition()) > 7 && !strongholdDoor){
+                    WalkerEngine.getInstance().hoverMinimap(hoverDetails.getDestination());
                 }
-                if (current.getNextTile() != null){
-                    PathAnalyzer.DestinationDetails hoverDetails = PathAnalyzer.furthestReachableTile(path, current.getNextTile());
-                    if (hoverDetails != null && hoverDetails.getDestination() != null){
-                        WalkerEngine.getInstance().hoverMinimap(hoverDetails.getDestination());
-                    }
-                }
-                return WaitFor.Return.IGNORE;
-            });
-            WaitFor.milliseconds(400, 800);
-            return true;
+            }
+            return WaitFor.Return.IGNORE;
+        });
+        if (strongholdDoor){
+            General.sleep(800, 1200);
         }
-        return false;
+        return true;
     }
 
     public static RSObject[] getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
@@ -331,7 +328,7 @@ public class ObjectHandler implements Loggable {
         if (isClosedTrapDoor(object, options)){
             result = handleTrapDoor(object);
         } else {
-            result = object.click(options);
+            result = AccurateMouse.click(object, options);
             getInstance().log("Interacting with (" + object.getDefinition().getName() + ") at " + object.getPosition() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
         }
 
@@ -387,7 +384,7 @@ public class ObjectHandler implements Loggable {
 
     private static boolean handleTrapDoor(RSObject object){
         if (getActions(object).contains("Open")){
-            if (!clickObjectAndWait(object, "Open", () -> {
+            if (!InteractionHelper.click(object, "Open", () -> {
                 RSObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").combine(Filters.Objects.inArea(new RSArea(object, 2)), true));
                 if (objects.length > 0 && getActions(objects[0]).contains("Climb-down")){
                     return WaitFor.Return.SUCCESS;
@@ -399,10 +396,9 @@ public class ObjectHandler implements Loggable {
                 RSObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").combine(Filters.Objects.inArea(new RSArea(object, 2)), true));
                 return objects.length > 0 && handleTrapDoor(objects[0]);
             }
-
         }
         getInstance().log("Interacting with (" + object.getDefinition().getName() + ") at " + object.getPosition() + " with option: Climb-down");
-        return object.click("Climb-down");
+        return AccurateMouse.click(object, "Climb-down");
     }
 
     public static List<String> getActions(RSObject object){
@@ -419,10 +415,6 @@ public class ObjectHandler implements Loggable {
             return list;
         }
         return Arrays.asList(actions);
-    }
-
-    public static boolean clickObjectAndWait(RSObject object, String action, WaitFor.Condition condition) {
-        return object.click(action) && WaitFor.condition(10000, condition) == WaitFor.Return.SUCCESS;
     }
 
     @Override

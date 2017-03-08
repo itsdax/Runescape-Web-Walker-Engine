@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class WebWalker {
 
+    public final String version = "1.0.7";
+
     private static WebWalker instance;
     private boolean logging;
 
@@ -54,6 +56,14 @@ public class WebWalker {
      */
     public static void setPathOffset(Offset offset){
         BFS.OFFSET_SEARCH = offset.value;
+    }
+
+    /**
+     *
+     * @return version number of webwalker.
+     */
+    public static String getVersion(){
+        return getInstance().version;
     }
 
     /**

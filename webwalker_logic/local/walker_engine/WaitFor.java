@@ -48,10 +48,10 @@ public class WaitFor {
 
 
     public enum Return {
-        TIMEOUT,
-        SUCCESS,
-        FAIL,
-        IGNORE
+        TIMEOUT,    //EXIT CONDITION BECAUSE OF TIMEOUT
+        SUCCESS,    //EXIT CONDITION BECAUSE SUCCESS
+        FAIL,       //EXIT CONDITION BECAUSE OF FAILURE
+        IGNORE      //NOTHING HAPPENS, CONTINUE CONDITION
 
     }
 
@@ -61,6 +61,13 @@ public class WaitFor {
 
     public interface Condition{
         Return active();
+        default Condition combine(Condition a){
+            Condition b = this;
+            return () -> {
+                Return result = a.active();
+                return result != Return.IGNORE ? result : b.active();
+            };
+        }
     }
 
 }

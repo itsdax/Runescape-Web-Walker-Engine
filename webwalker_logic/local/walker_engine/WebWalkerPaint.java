@@ -50,7 +50,7 @@ public class WebWalkerPaint {
 
     public void drawDebug(Graphics graphics, ArrayList<RSTile> path, boolean drawMap) {
         if (!WalkerEngine.getInstance().isNavigating()){
-            return;
+//            return;
         }
         if (playerPosition == null || !playerPosition.equals(Player.getPosition()) || lastChange != RealTimeCollisionTile.getAllInitialized().size()) {
             lastChange = RealTimeCollisionTile.getAllInitialized().size();

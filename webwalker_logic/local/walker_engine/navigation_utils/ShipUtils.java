@@ -9,6 +9,7 @@ import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.InteractionHelper;
 
 
 public class ShipUtils {
@@ -36,12 +37,11 @@ public class ShipUtils {
         if (WaitFor.condition(1000, () -> Game.getCrosshairState() == 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
             return false;
         }
-        return WaitFor.condition(General.random(3000, 4000), () -> !ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+        return WaitFor.condition(General.random(2500, 3000), () -> !ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
     }
 
     private static RSObject getGangplank(){
-        RSObject[] objects =  Objects.findNearest(10, Filters.Objects.nameEquals("Gangplank").combine(Filters.Objects.actionsContains("Cross"), true));
-        return objects.length > 0 ? objects[0] : null;
+        return InteractionHelper.getRSObject(Filters.Objects.nameEquals("Gangplank").combine(Filters.Objects.actionsContains("Cross"), true));
     }
 
 }

@@ -4,6 +4,10 @@ import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.shared.GetPathResponseContainer;
 import scripts.webwalker_logic.shared.PlayerInformation;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -21,6 +25,8 @@ class WebPathCore {
     private static final String HOST = "173.208.130.82", TEST = "localhost", PORT = "8080", DIRECTORY = "/web?";
     private static ArrayList<RSTile> lastCalledPath = null;
     private static HashMap<String, GetPathResponseContainer> cache = null;
+
+    private static String apiKey = "87451910-3fde-40f4-b362-9787cdc17e5a", secretKey = "81744398AA80BD9E";
 
     private static boolean local = false;
 
@@ -62,6 +68,12 @@ class WebPathCore {
         if (cache == null){
             cache = new HashMap<>();
         }
+        try {
+            urlSafeParams += ("&apiKey=" + URLEncoder.encode(apiKey, "UTF-8") + "&token=" + URLEncoder.encode(generateAuthToken(), "UTF-8"));
+        } catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+            return GetPathResponseContainer.CLIENT_ERROR;
+        }
         GetPathResponseContainer cached = cache.get(urlSafeParams);
         if (cached != null){
             return cached;
@@ -96,6 +108,29 @@ class WebPathCore {
             //server offline or unable to connect
         } catch (Exception e){
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String generateAuthToken(){
+        return encrypt(apiKey, secretKey, System.currentTimeMillis() + "");
+    }
+
+    public static void setAuth(String apiKey, String secretKey){
+        WebPathCore.apiKey = apiKey;
+        WebPathCore.secretKey = secretKey;
+    }
+
+    private static String encrypt(String key, String initVector, String value) {
+        key = key.substring(0, 16);
+        try {
+            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
+            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+            return DatatypeConverter.printBase64Binary(cipher.doFinal(value.getBytes()));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return null;
     }

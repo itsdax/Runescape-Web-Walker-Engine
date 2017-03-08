@@ -15,6 +15,8 @@ public class GetPathResponseContainer {
     private PlayerInformation playerInformation;
     private ArrayList<RSTile> rstilePath;
 
+    public static GetPathResponseContainer CLIENT_ERROR = new GetPathResponseContainer(Status.CLIENT_ERROR, "No problem with server. Client issue.", new ArrayList<>(), null, true);
+
     public GetPathResponseContainer(Status status, String response, ArrayList<PathFindingNode> path, PlayerInformation playerInformation){
         this (status, response, new ArrayList<>(), playerInformation, false);
         if (path != null) {
@@ -49,7 +51,8 @@ public class GetPathResponseContainer {
         NO_WEB_PATH,
         COULD_NOT_FIND_PATH,
         SUCCESS,
-        UNKNOWN
+        UNKNOWN,
+        CLIENT_ERROR
         ;
         private static final long serialVersionUID = 42L;
         private static Status fromString(String s){

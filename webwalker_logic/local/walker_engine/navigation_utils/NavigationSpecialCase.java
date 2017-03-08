@@ -9,17 +9,19 @@ import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSObjectDefinition;
 import org.tribot.api2007.types.RSTile;
+import scripts.webwalker_logic.shared.helpers.RSItemAction;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
-import scripts.webwalker_logic.local.walker_engine.object_handling.AccurateMouse;
-import scripts.webwalker_logic.local.walker_engine.object_handling.ObjectHandler;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.AccurateMouse;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.InteractionHelper;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+
+import static scripts.webwalker_logic.local.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
 
 
 public class NavigationSpecialCase implements Loggable{
@@ -43,6 +45,19 @@ public class NavigationSpecialCase implements Loggable{
      * THE ABSOLUTE POSITION
      */
     public enum SpecialLocation {
+
+        ZANARIS_RING (2452, 4473, 0),
+        LUMBRIDGE_ZANARIS_SHED (3201, 3169, 0),
+
+        ROPE_TO_ROCK (2512, 3476, 0),
+        FINISHED_ROPE_TO_ROCK (2513, 3468, 0),
+
+        ROPE_TO_TREE (2512, 3466, 0),
+        WATERFALL_DUNGEON_ENTRANCE(2511, 3463, 0),
+
+        WATERFALL_LEDGE (2511, 3463, 0),
+        WATERFALL_DUNGEON (2575, 9861, 0),
+        WATERFALL_FALL_DOWN (2527, 3413, 0),
 
         KALPHITE_TUNNEL (3226, 3108, 0),
         KALPHITE_TUNNEL_INSIDE (3483, 9510, 2),
@@ -83,6 +98,10 @@ public class NavigationSpecialCase implements Loggable{
             this.y = y;
             this.z = z;
         }
+
+        RSTile getRSTile(){
+            return new RSTile(x, y, z);
+        }
     }
 
     public static SpecialLocation getLocation(RSTile rsTile){
@@ -103,7 +122,7 @@ public class NavigationSpecialCase implements Loggable{
 
             case BRIMHAVEN_DUNGEON:
                 if (!alreadyPaidFee()){
-                    if (!NPCInteraction.clickOn(Filters.NPCs.nameEquals("Saniboch"), "Pay")) {
+                    if (!InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Saniboch")), "Pay")) {
                         getInstance().log("Could not pay saniboch");
                         return false;
                     }
@@ -118,6 +137,64 @@ public class NavigationSpecialCase implements Loggable{
                         getInstance().log("Could not enter dungeon");
                     }
                 }
+                break;
+
+            case ZANARIS_RING:
+                if (Equipment.getCount(772) == 0){
+                    if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(772)), "Wield")){
+                        getInstance().log("Could not equip Dramen staff.");
+                        break;
+                    }
+                }
+                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> ZANARIS_RING.getRSTile().distanceTo(Player.getPosition()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    return true;
+                }
+                break;
+            case LUMBRIDGE_ZANARIS_SHED:
+                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Fairy ring")), "Use", () -> LUMBRIDGE_ZANARIS_SHED.getRSTile().distanceTo(Player.getPosition()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    return true;
+                }
+                break;
+
+            case ROPE_TO_ROCK:
+                break;
+            case FINISHED_ROPE_TO_ROCK:
+                if (RSItemAction.use(954)){
+                    InteractionHelper.focusCamera(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")));
+                    if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")), "Use Rope", () -> Player.getPosition().equals(new RSTile(2513, 3468, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                        return true;
+                    }
+                }
+                getInstance().log("Could not rope grab to rock.");
+                break;
+
+            case ROPE_TO_TREE:
+                break;
+            case WATERFALL_DUNGEON_ENTRANCE:
+                if (WATERFALL_DUNGEON.getRSTile().distanceTo(Player.getPosition()) < 500){
+                    return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> WATERFALL_DUNGEON_ENTRANCE.getRSTile().distanceTo(Player.getPosition()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                } else if (RSItemAction.use(954)){
+                    if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameContains("Dead tree")), "Use Rope", () -> Player.getPosition().equals(new RSTile(2511, 3463, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                        return true;
+                    }
+                }
+                getInstance().log("Could not reach entrance to waterfall dungeon.");
+                break;
+
+            case WATERFALL_LEDGE:
+                break;
+
+            case WATERFALL_DUNGEON:
+                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.idEquals(2010)), "Open", () -> Player.getPosition().getX() == WATERFALL_DUNGEON.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    return true;
+                }
+                getInstance().log("Failed to get to waterfall dungeon");
+                break;
+            case WATERFALL_FALL_DOWN:
+                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Get in")), "Get in", () -> Player.getPosition().distanceTo(new RSTile(2527, 3413, 0)) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    return true;
+                }
+                getInstance().log("Failed to fall down waterfall");
                 break;
 
             case KALPHITE_TUNNEL:
@@ -198,7 +275,7 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
             case ZEAH_SAND_CRAB:
-                if (NPCInteraction.clickOn(Filters.NPCs.nameEquals("Sandicrahb"), "Quick-travel") && WaitFor.condition(10000, () -> Player.getPosition().getY() >= 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Quick-travel") && WaitFor.condition(10000, () -> Player.getPosition().getY() >= 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                     getInstance().log("Paid for travel.");
                     return true;
                 } else {
@@ -206,7 +283,7 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 break;
             case ZEAH_SAND_CRAB_ISLAND:
-                if (NPCInteraction.clickOn(Filters.NPCs.nameEquals("Sandicrahb"), "Quick-travel") && WaitFor.condition(10000, () -> Player.getPosition().getY() < 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Quick-travel") && WaitFor.condition(10000, () -> Player.getPosition().getY() < 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                     getInstance().log("Paid for travel.");
                     return true;
                 } else {
@@ -228,7 +305,7 @@ public class NavigationSpecialCase implements Loggable{
                 return false;
             case PEST_CONTROL:
             case PORT_SARIM_PEST_CONTROL:
-                return NPCInteraction.clickOn(Filters.NPCs.actionsContains("Travel").combine(Filters.NPCs.nameEquals("Squire"), true), "Travel")
+                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Travel").combine(Filters.NPCs.nameEquals("Squire"), true)), "Travel")
                         && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
             case PORT_SARIM_VEOS:
@@ -308,7 +385,7 @@ public class NavigationSpecialCase implements Loggable{
                 return false;
             }
         }
-        return ObjectHandler.clickObjectAndWait(object, action, condition);
+        return InteractionHelper.click(object, action, condition);
     }
 
     public static boolean clickObject(Filter<RSObject> filter, String action, WaitFor.Condition condition) {

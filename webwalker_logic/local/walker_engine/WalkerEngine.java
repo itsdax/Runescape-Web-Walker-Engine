@@ -14,7 +14,7 @@ import scripts.webwalker_logic.local.walker_engine.local_pathfinding.PathAnalyze
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.Charter;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.NavigationSpecialCase;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.ShipUtils;
-import scripts.webwalker_logic.local.walker_engine.object_handling.ObjectHandler;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.RealTimeCollisionTile;
 import scripts.webwalker_logic.shared.PathFindingNode;
@@ -97,9 +97,8 @@ public class WalkerEngine implements Loggable{
                 }
 
                 final RealTimeCollisionTile destination = currentNode;
-
                 if (!Projection.isInMinimap(Projection.tileToMinimap(new RSTile(destination.getX(), destination.getY(), destination.getZ())))) {
-                    log("Closest tile in path is not in minimap");
+                    log("Closest tile in path is not in minimap: " + destination);
                     failedAttempt();
                     continue;
                 }
@@ -156,7 +155,7 @@ public class WalkerEngine implements Loggable{
                         NavigationSpecialCase.SpecialLocation specialLocation = NavigationSpecialCase.getLocation(currentNode.getRSTile()),
                                 specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
                         if (specialLocation != null && specialLocationDestination != null) {
-                            log("Handing special location: " + specialLocationDestination);
+                            log("[SPECIAL LOCATION] We are at " + specialLocation + " and our destination is " + specialLocationDestination);
                             if (!NavigationSpecialCase.handle(specialLocationDestination)) {
                                 failedAttempt();
                             } else {
@@ -181,7 +180,7 @@ public class WalkerEngine implements Loggable{
                     case OBJECT_BLOCKING:
                         if (isDestinationClose(destination) || clickMinimap(destination)) {
                             log("Handling Object...");
-                            if (!ObjectHandler.handle(destinationDetails, path)) {
+                            if (!PathObjectHandler.handle(destinationDetails, path)) {
                                 failedAttempt();
                             } else {
                                 successfulAttempt();

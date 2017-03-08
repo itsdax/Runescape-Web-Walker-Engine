@@ -8,6 +8,7 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.util.ThreadSettings;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.InteractionHelper;
 import scripts.webwalker_logic.shared.helpers.InterfaceHelper;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.RealTimeCollisionTile;
 
@@ -17,7 +18,8 @@ import java.util.stream.Collectors;
 
 public class NPCInteraction implements Loggable {
 
-    public static String[] GENERAL_RESPONSES = {"OK then."};
+    public static String[] GENERAL_RESPONSES = {"OK then.", "Yes.", "Okay..."};
+
     private static final int
             ITEM_ACTION_INTERFACE_WINDOW = 193,
             NPC_TALKING_INTERFACE_WINDOW = 231,
@@ -38,8 +40,8 @@ public class NPCInteraction implements Loggable {
         return instance != null ? instance : (instance = new NPCInteraction());
     }
 
-    public static boolean talkTo(Filter<RSNPC> rsnpcFilter, String[] talkOptions, String[] replies) {
-        return talkTo(rsnpcFilter, talkOptions) && handleConversation(replies);
+    public static boolean talkTo(Filter<RSNPC> rsnpcFilter, String[] talkOptions, String[] replyAnswers) {
+        return talkTo(rsnpcFilter, talkOptions) && handleConversation(replyAnswers);
     }
 
     public static boolean talkTo(Filter<RSNPC> rsnpcFilter, String[] options) {
@@ -49,18 +51,7 @@ public class NPCInteraction implements Loggable {
         }
 
         RSNPC npc = rsnpcs[0];
-        if (!npc.isOnScreen() || !npc.isClickable()) {
-            WalkerEngine.getInstance().clickMinimap(RealTimeCollisionTile.get(npc.getPosition().getX(), npc.getPosition().getY(), npc.getPosition().getPlane()));
-        }
-        return WaitFor.condition(10000, () -> {
-            if (!npc.isValid()) {
-                return WaitFor.Return.FAIL;
-            }
-            if (npc.isOnScreen() && npc.isClickable()) {
-                return WaitFor.Return.SUCCESS;
-            }
-            return WaitFor.Return.IGNORE;
-        }) == WaitFor.Return.SUCCESS && clickOn(npc, options) && waitForConversationWindow();
+        return InteractionHelper.click(npc, options) && waitForConversationWindow();
 
     }
 
@@ -71,34 +62,6 @@ public class NPCInteraction implements Loggable {
             }
             return WaitFor.Return.IGNORE;
         }) == WaitFor.Return.SUCCESS;
-    }
-
-    public static boolean clickOn(Filter<RSNPC> rsnpcFilter, String option) {
-        return clickOn(rsnpcFilter, new String[]{option});
-    }
-    public static boolean clickOn(Filter<RSNPC> rsnpcFilter, String[] options) {
-        RSNPC[] rsnpcs = NPCs.findNearest(rsnpcFilter);
-        if (rsnpcs.length < 1) {
-            getInstance().log("Cannot find NPC.");
-            return false;
-        }
-        RSNPC npc = rsnpcs[0];
-        if (!npc.isOnScreen() || !npc.isClickable()) {
-            if (WalkerEngine.getInstance().clickMinimap(npc)){
-                if (WaitFor.condition(10000, () -> {
-                    if (!npc.isValid()){
-                        return WaitFor.Return.FAIL;
-                    }
-                    if (npc.isOnScreen() && npc.isClickable()){
-                        return WaitFor.Return.SUCCESS;
-                    }
-                    return WaitFor.Return.IGNORE;
-                }) != WaitFor.Return.SUCCESS){
-                    return false;
-                }
-            }
-        }
-        return clickOn(npc, options);
     }
 
     public static boolean isConversationWindowUp(){
@@ -124,6 +87,7 @@ public class NPCInteraction implements Loggable {
 
             List<RSInterface> selectableOptions = getAllOptions(options);
             if (selectableOptions != null && selectableOptions.size() > 0){
+                General.sleep(General.randomSD(350, 2250, 775, 350));
                 getInstance().log("Replying with option: " + selectableOptions.get(0).getText());
                 Keyboard.typeString(selectableOptions.get(0).getComponentIndex() + "");
                 waitForNextOption();
@@ -191,28 +155,6 @@ public class NPCInteraction implements Loggable {
         final List<String> optionList = Arrays.stream(options).map(String::toLowerCase).collect(Collectors.toList());
         List<RSInterface> list = getConversationDetails();
         return list != null ? list.stream().filter(rsInterface -> optionList.contains(rsInterface.getText().trim().toLowerCase())).collect(Collectors.toList()) : null;
-    }
-
-
-    private boolean clickOn(RSNPC rsnpc){
-        return clickOn(rsnpc, null);
-    }
-
-    public static boolean clickOn(RSNPC rsnpc, String[] talkOptions){
-        if (talkOptions == null){
-            talkOptions = new String[]{"Talk-to"};
-        }
-
-        boolean result = false;
-        for (int i = 0; i < 5; i++) {
-            if (rsnpc.click(talkOptions)) {
-                result = true;
-                break;
-            }
-            WaitFor.milliseconds((i) * 200, (i) * 450);
-        }
-        getInstance().log("Clicking on " + rsnpc.getName() + " with action " + new ArrayList<>(Arrays.asList(talkOptions)) + " " + (result ? "SUCCESS" : "FAILED"));
-        return result;
     }
 
     @Override

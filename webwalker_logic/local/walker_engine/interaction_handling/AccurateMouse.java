@@ -1,4 +1,4 @@
-package scripts.webwalker_logic.local.walker_engine.object_handling;
+package scripts.webwalker_logic.local.walker_engine.interaction_handling;
 
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
@@ -23,60 +23,47 @@ import java.util.stream.Collectors;
  */
 public class AccurateMouse {
 
-    public static boolean click(RSCharacter rsCharacter, String clickAction){
-        return action(rsCharacter.getModel(), rsCharacter, clickAction, rsCharacter.getName(),false);
+    public static boolean click(Clickable clickable, String... clickActions){
+        return action(clickable, false, clickActions);
     }
 
-    public static boolean click(RSObject rsObject, String clickAction){
-        RSObjectDefinition definition = rsObject.getDefinition();
-        return definition != null && action(rsObject.getModel(), rsObject, clickAction, definition.getName(),false);
+    public static boolean hover(Clickable clickable, String... clickActions){
+        return action(clickable, true, clickActions);
     }
 
-    public static boolean click(RSGroundItem rsGroundItem, String clickAction){
-        RSItemDefinition definition = rsGroundItem.getDefinition();
-        return definition != null && action(rsGroundItem.getModel(), rsGroundItem, clickAction, definition.getName(), false);
-    }
-
-    public static boolean hover(RSCharacter rsCharacter){
-        return action(rsCharacter.getModel(), rsCharacter, null, rsCharacter.getName(), true);
-    }
-
-    public static boolean hover(RSObject rsObject) {
-        RSObjectDefinition definition = rsObject.getDefinition();
-        return definition != null && action(rsObject.getModel(), rsObject, null, definition.getName(), true);
-    }
-
-    public static boolean hover(RSGroundItem rsGroundItem) {
-        RSItemDefinition definition = rsGroundItem.getDefinition();
-        return definition != null && action(rsGroundItem.getModel(), rsGroundItem, null, definition.getName(), true);
-    }
-
-    public static boolean hover(RSCharacter rsCharacter, String clickAction){
-        return action(rsCharacter.getModel(), rsCharacter, clickAction, rsCharacter.getName(), true);
-    }
-
-    public static boolean hover(RSObject rsObject, String clickAction) {
-        RSObjectDefinition definition = rsObject.getDefinition();
-        return definition != null && action(rsObject.getModel(), rsObject, clickAction, definition.getName(), true);
-    }
-
-    public static boolean hover(RSGroundItem rsGroundItem, String clickAction) {
-        RSItemDefinition definition = rsGroundItem.getDefinition();
-        return definition != null && action(rsGroundItem.getModel(), rsGroundItem, clickAction, definition.getName(), true);
+    private static boolean action(Clickable clickable, boolean hover, String... clickActions){
+        String name = null;
+        RSModel model = null;
+        if (clickable instanceof RSCharacter){
+            RSCharacter rsCharacter = ((RSCharacter) clickable);
+            name = rsCharacter.getName();
+            model = rsCharacter.getModel();
+        } else if (clickable instanceof RSGroundItem){
+            RSGroundItem rsGroundItem = ((RSGroundItem) clickable);
+            RSItemDefinition rsItemDefinition = rsGroundItem.getDefinition();
+            name = rsItemDefinition != null ? rsItemDefinition.getName() : null;
+            model = rsGroundItem.getModel();
+        } else if (clickable instanceof RSObject){
+            RSObject rsObject = ((RSObject) clickable);
+            RSObjectDefinition rsObjectDefinition = rsObject.getDefinition();
+            name = rsObjectDefinition != null ? rsObjectDefinition.getName() : null;
+            model = rsObject.getModel();
+        }
+        return action(model, clickable, name, hover, clickActions);
     }
 
     /**
      *
      * @param model model of {@code clickable}
      * @param clickable target entity
-     * @param clickAction action to click or hover. Do not include {@code targetName}
+     * @param clickActions actions to click or hover. Do not include {@code targetName}
      * @param targetName name of the {@code clickable} entity
      * @param hover True to hover the OPTION, not the entity model. It will right click {@code clickable} and hover over option {@code clickAction}
      * @return whether action was successful.
      */
-    private static boolean action(RSModel model, Clickable clickable, String clickAction, String targetName, boolean hover){
+    private static boolean action(RSModel model, Clickable clickable, String targetName, boolean hover, String... clickActions){
         for (int i = 0; i < General.random(4, 7); i++) {
-            if (attemptAction(model, clickable, clickAction, targetName, hover)){
+            if (attemptAction(model, clickable, targetName, hover, clickActions)){
                 return true;
             }
         }
@@ -129,18 +116,18 @@ public class AccurateMouse {
      *
      * @param model target entity model
      * @param clickable target entity
-     * @param clickAction action option
+     * @param clickActions actions
      * @param targetName name of target
      * @param hover hover option or not
      * @return result of action
      */
-    private static boolean attemptAction(RSModel model, Clickable clickable, String clickAction, String targetName, boolean hover){
+    private static boolean attemptAction(RSModel model, Clickable clickable, String targetName, boolean hover, String... clickActions){
         if (model == null){
             return false;
         }
 
         if (ChooseOption.isOpen()){
-            RSMenuNode menuNode = getValidMenuNode(clickable, targetName, clickAction, ChooseOption.getMenuNodes());
+            RSMenuNode menuNode = getValidMenuNode(clickable, targetName, ChooseOption.getMenuNodes(), clickActions);
             if (handleMenuNode(menuNode, hover)){
                 return true;
             }
@@ -161,11 +148,11 @@ public class AccurateMouse {
             return false;
         }
 
-        if (hover && clickAction == null){
+        if (hover && clickActions.length == 0){
             return true;
         }
 
-        String regex = clickAction + " (-> )?" + targetName + "(.*)";
+        String regex = "(" + String.join("|", clickActions) + ")" + " (-> )?" + targetName + "(.*)";
         if (WaitFor.condition(100, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
 
             boolean multipleMatches = false;
@@ -186,7 +173,7 @@ public class AccurateMouse {
             }
 
             Mouse.click(3);
-            RSMenuNode menuNode = getValidMenuNode(clickable, targetName, clickAction, ChooseOption.getMenuNodes());
+            RSMenuNode menuNode = getValidMenuNode(clickable, targetName, ChooseOption.getMenuNodes(), clickActions);
             if (handleMenuNode(menuNode, hover)){
                 return true;
             }
@@ -219,13 +206,13 @@ public class AccurateMouse {
         return true;
     }
 
-    private static RSMenuNode getValidMenuNode(Clickable clickable, String targetName, String clickAction, RSMenuNode[] menuNodes){
-        if (clickable == null || targetName == null || clickAction == null || menuNodes == null){
+    private static RSMenuNode getValidMenuNode(Clickable clickable, String targetName, RSMenuNode[] menuNodes, String... clickActions){
+        if (clickable == null || targetName == null || menuNodes == null){
             return null;
         }
         List<RSMenuNode> list = Arrays.stream(menuNodes).filter(rsMenuNode -> {
             String target = rsMenuNode.getTarget(), action = rsMenuNode.getAction();
-            return target != null && action != null && action.equals(clickAction) && target.startsWith(targetName);
+            return target != null && action != null && Arrays.stream(clickActions).anyMatch(s -> s.equals(action)) && target.startsWith(targetName);
         }).collect(Collectors.toList());
         return list.stream().filter(rsMenuNode -> rsMenuNode.correlatesTo(clickable)).findFirst().orElse(list.size() > 0 ? list.get(0) : null);
     }

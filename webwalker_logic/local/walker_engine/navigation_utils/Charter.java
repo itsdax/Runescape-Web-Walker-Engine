@@ -8,6 +8,7 @@ import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.InteractionHelper;
 import scripts.webwalker_logic.shared.helpers.InterfaceHelper;
 
 import java.util.HashMap;
@@ -43,14 +44,13 @@ public class Charter implements Loggable{
         if (!NPCInteraction.waitForConversationWindow()){
             getInstance().log("Confirmation dialogue did not appear.");
         }
-        return NPCInteraction.handleConversation("Ok")
+        return NPCInteraction.handleConversation("Ok", "Okay")
                 && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
     }
 
     private static boolean openCharterMenu() {
         return Interfaces.isInterfaceValid(CHARTER_INTERFACE_MASTER) ||
-                ((NPCInteraction.clickOn(Filters.NPCs.actionsEquals("Charter"), "Charter"))
-                        && WaitFor.condition(10000, () -> getCharterLocations().size() > 0 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS);
+                InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsEquals("Charter")), "Charter", () -> Interfaces.isInterfaceValid(CHARTER_INTERFACE_MASTER) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
     }
 
     private static HashMap<LocationProperty, Location> getCharterLocations(){
