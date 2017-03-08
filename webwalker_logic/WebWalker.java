@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class WebWalker {
 
-    public final String version = "1.0.7";
+    public final String version = "1.0.8";
 
     private static WebWalker instance;
     private boolean logging;
@@ -105,6 +105,10 @@ public class WebWalker {
 
     public static void setLocal(boolean b){
         WebPathCore.setLocal(b);
+    }
+
+    public static void setApiKey(String apiKey, String secretKey){
+        WebPathCore.setAuth(apiKey, secretKey);
     }
 
 }
