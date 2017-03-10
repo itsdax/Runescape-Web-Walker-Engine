@@ -1,6 +1,13 @@
 # Runescape-Web-Walker-Engine
 ####An open-sourced world walker for Rune Scape written in Java for TriBot.
 
+##How to use
+- Simply copy the webwalker_logic package over to your scripts directory!
+
+<p align="center">
+  <img src="http://i.imgur.com/Age76Qx.png"/>
+  <img src="http://i.imgur.com/Fxvn5C1.png"/>
+</p>
 
 ##About
 - This is the **front end** of my web walker, which includes a wrapper for the server-client interaction of generating paths from point A to point B and navigating through the path.
