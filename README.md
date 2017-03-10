@@ -6,6 +6,9 @@
 
 <p align="center">
   <img src="http://i.imgur.com/Age76Qx.png"/>
+</p>
+
+<p align="center">
   <img src="http://i.imgur.com/Fxvn5C1.png"/>
 </p>
 
