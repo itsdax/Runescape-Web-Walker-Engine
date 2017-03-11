@@ -24,6 +24,8 @@
 - Simplicity. Implement the engine into your script by simply calling:
       ```
       WebWalker.walkTo(new RSTile(x, y, z));
+      WebWalker.walkTo(new RSTile(x, y, z), walkingCondition);
+      WebWalker.walkToBank();
       ```
 
 - Shortcuts. Using all and only the shortcuts that your Player can access, whether it is skill level (Agility level needed for shortcut) or inventory item requirements (Such as gold needed for ship or fee to enter dungeon). This also includes quest requirements.
