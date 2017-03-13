@@ -9,6 +9,7 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
+import org.tribot.api2007.types.RSMenuNode;
 
 import java.awt.*;
 import java.util.*;
@@ -17,6 +18,34 @@ import java.util.stream.Collectors;
 
 
 public class RSItemAction {
+
+    public static boolean click(String itemNameRegex, String itemAction){
+        return click(new Filter<RSItem>() {
+            @Override
+            public boolean accept(RSItem item) {
+                RSItemDefinition definition = item.getDefinition();
+                if (definition == null) {
+                    return false;
+                }
+                String name = definition.getName();
+                if (name == null || !name.matches(itemNameRegex)) {
+                    return false;
+                }
+                String[] actions = definition.getActions();
+                return actions != null && Arrays.stream(actions).anyMatch(s -> s.equals(itemAction));
+            }
+        }, itemAction);
+    }
+
+    public static boolean clickMatch(RSItem item, String regex){
+        return item.click(new Filter<RSMenuNode>() {
+            @Override
+            public boolean accept(RSMenuNode rsMenuNode) {
+                String action = rsMenuNode.getAction();
+                return action != null && action.matches(regex);
+            }
+        });
+    }
 
     public static boolean click(int itemID){
         return click(itemID, null);
@@ -87,6 +116,14 @@ public class RSItemAction {
 
     private static Point getCenter(Rectangle rectangle){
         return new Point(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
+    }
+
+    private static String getItemName(RSItem rsItem){
+        RSItemDefinition definition = rsItem.getDefinition();
+        if (definition == null){
+            return null;
+        }
+        return definition.getName();
     }
 
 }

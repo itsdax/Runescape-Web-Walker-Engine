@@ -46,6 +46,21 @@ public class NavigationSpecialCase implements Loggable{
      */
     public enum SpecialLocation {
 
+        SHILO_ENTRANCE (2881, 2953, 0),
+        SHILO_INSIDE (2864, 2955, 0),
+
+
+        SPIRIT_TREE_GRAND_EXCHANGE (3183, 3508, 0),
+        SPIRIT_TREE_STRONGHOLD (2461, 3444, 0),
+        SPIRIT_TREE_KHAZARD (2555, 3259, 0),
+        SPIRIT_TREE_VILLAGE (2542, 3170, 0),
+
+        GNOME_TREE_GLIDER (GnomeGlider.Location.TA_QUIR_PRIW.getX(), GnomeGlider.Location.TA_QUIR_PRIW.getY(), GnomeGlider.Location.TA_QUIR_PRIW.getZ()),
+        AL_KHARID_GLIDER (GnomeGlider.Location.KAR_HEWO.getX(), GnomeGlider.Location.KAR_HEWO.getY(), GnomeGlider.Location.KAR_HEWO.getZ()),
+        DIG_SITE_GLIDER (GnomeGlider.Location.LEMANTO_ANDRA.getX(), GnomeGlider.Location.LEMANTO_ANDRA.getY(), GnomeGlider.Location.LEMANTO_ANDRA.getZ()),
+        WOLF_MOUNTAIN_GLIDER (GnomeGlider.Location.SINDARPOS.getX(), GnomeGlider.Location.SINDARPOS.getY(), GnomeGlider.Location.SINDARPOS.getZ()),
+        GANDIUS_GLIDER (GnomeGlider.Location.GANDIUS.getX(), GnomeGlider.Location.GANDIUS.getY(), GnomeGlider.Location.GANDIUS.getZ()),
+
         ZANARIS_RING (2452, 4473, 0),
         LUMBRIDGE_ZANARIS_SHED (3201, 3169, 0),
 
@@ -126,9 +141,7 @@ public class NavigationSpecialCase implements Loggable{
                         getInstance().log("Could not pay saniboch");
                         return false;
                     }
-                    if (!NPCInteraction.handleConversation()){
-                        return false;
-                    }
+                    NPCInteraction.handleConversation();
                 } else {
                     if (clickObject(Filters.Objects.nameEquals("Dungeon entrance"), "Enter", () -> Player.getPosition().getY() > 4000 ?
                             WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
@@ -138,6 +151,20 @@ public class NavigationSpecialCase implements Loggable{
                     }
                 }
                 break;
+
+            case SHILO_ENTRANCE: break;
+            case SHILO_INSIDE: return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mosol Rei"), new String[]{"Talk-to"}, new String[]{"Yes, Ok, I'll go into the village!"});
+
+            case SPIRIT_TREE_GRAND_EXCHANGE: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_GRAND_EXCHANGE);
+            case SPIRIT_TREE_STRONGHOLD: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_STRONGHOLD);
+            case SPIRIT_TREE_KHAZARD: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_KHAZARD);
+            case SPIRIT_TREE_VILLAGE: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_VILLAGE);
+
+            case GNOME_TREE_GLIDER: return GnomeGlider.to(GnomeGlider.Location.TA_QUIR_PRIW);
+            case AL_KHARID_GLIDER: return GnomeGlider.to(GnomeGlider.Location.KAR_HEWO);
+            case DIG_SITE_GLIDER: return GnomeGlider.to(GnomeGlider.Location.LEMANTO_ANDRA);
+            case WOLF_MOUNTAIN_GLIDER: return GnomeGlider.to(GnomeGlider.Location.SINDARPOS);
+            case GANDIUS_GLIDER: return GnomeGlider.to(GnomeGlider.Location.GANDIUS);
 
             case ZANARIS_RING:
                 if (Equipment.getCount(772) == 0){
@@ -371,7 +398,7 @@ public class NavigationSpecialCase implements Loggable{
     public static boolean walkToObject(RSObject object) {
         if (!object.isOnScreen() || !object.isClickable()){
             WalkerEngine.getInstance().clickMinimap(object);
-            if (WaitFor.condition(15000, () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+            if (WaitFor.isOnScreenAndClickable(object) != WaitFor.Return.SUCCESS){
                 return false;
             }
         }

@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -22,6 +24,32 @@ import java.util.stream.Collectors;
  * clickAction should never include the target entity's name. Just the action.
  */
 public class AccurateMouse {
+
+    public static void click(int button){
+        click(Mouse.getPos(), button);
+    }
+
+    public static void click(int x, int y){
+        click(x, y, 1);
+    }
+
+    public static void click(int x, int y, int button){
+        click(new Point(x, y), button);
+    }
+
+    public static void click(Point point){
+        click(point.x, point.y, 1);
+    }
+
+    public static void click(Point point, int button){
+        if (!Mouse.getPos().equals(point)) {
+            Mouse.move(point.x, point.y);
+        }
+        Mouse.sendPress(point, button);
+        General.sleep(General.randomSD(5, 90, 30, 20));
+        Mouse.sendRelease(point, button);
+    }
+
 
     public static boolean click(Clickable clickable, String... clickActions){
         return action(clickable, false, clickActions);
@@ -82,7 +110,7 @@ public class AccurateMouse {
                 String uptext = Game.getUptext();
                 return uptext != null && uptext.startsWith("Walk here") ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
             }) == WaitFor.Return.SUCCESS){
-                Mouse.click(1);
+                click(1);
                 if (waitResponse() == State.YELLOW){
                     RSTile clicked = WaitFor.getValue(500, Game::getDestination);
                     return clicked != null && clicked.equals(destination);
@@ -122,6 +150,7 @@ public class AccurateMouse {
      * @return result of action
      */
     private static boolean attemptAction(RSModel model, Clickable clickable, String targetName, boolean hover, String... clickActions){
+//        System.out.println((hover ? "Hovering over" : "Clicking on") + " " + targetName + " with [" + Arrays.stream(clickActions).reduce("", String::concat) + "]");
         if (model == null){
             return false;
         }
@@ -130,6 +159,8 @@ public class AccurateMouse {
             RSMenuNode menuNode = getValidMenuNode(clickable, targetName, ChooseOption.getMenuNodes(), clickActions);
             if (handleMenuNode(menuNode, hover)){
                 return true;
+            } else {
+                ChooseOption.close();
             }
         }
 
@@ -152,9 +183,8 @@ public class AccurateMouse {
             return true;
         }
 
-        String regex = "(" + String.join("|", clickActions) + ")" + " (-> )?" + targetName + "(.*)";
+        String regex = "(" + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())) + ")" + " (-> )?" + targetName + "(.*)";
         if (WaitFor.condition(100, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
-
             boolean multipleMatches = false;
 
             String[] options = ChooseOption.getOptions();
@@ -168,11 +198,11 @@ public class AccurateMouse {
             }
 
             if (uptext.matches(regex) && !hover && !multipleMatches){
-                Mouse.click(1);
+                click(1);
                 return waitResponse() == State.RED;
             }
 
-            Mouse.click(3);
+            click(3);
             RSMenuNode menuNode = getValidMenuNode(clickable, targetName, ChooseOption.getMenuNodes(), clickActions);
             if (handleMenuNode(menuNode, hover)){
                 return true;
@@ -198,7 +228,7 @@ public class AccurateMouse {
             }
         } else {
             if (rectangle.contains(currentMousePosition)){
-                Mouse.click(1);
+                click(1);
             } else {
                 Mouse.clickBox(rectangle, 1);
             }

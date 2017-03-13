@@ -44,8 +44,8 @@ public class Charter implements Loggable{
         if (!NPCInteraction.waitForConversationWindow()){
             getInstance().log("Confirmation dialogue did not appear.");
         }
-        return NPCInteraction.handleConversation("Ok", "Okay")
-                && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+        NPCInteraction.handleConversation(new String[]{"Ok", "Okay"});
+        return WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
     }
 
     private static boolean openCharterMenu() {

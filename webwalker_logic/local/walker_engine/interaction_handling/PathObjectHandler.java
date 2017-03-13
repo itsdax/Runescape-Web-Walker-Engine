@@ -26,8 +26,9 @@ public class PathObjectHandler implements Loggable {
 
     private PathObjectHandler(){
         sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
-                "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb-into", "Climb-through",
-                "Board", "Jump-from", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in"));
+                "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
+                "Board", "Jump-from", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
+                "Investigate"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
     }
@@ -37,6 +38,15 @@ public class PathObjectHandler implements Loggable {
     }
 
     private enum SpecialObject {
+        ROCKFALL("Rockfall", "Mine", null, new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return Objects.find(15,
+                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                                .combine(Filters.Objects.nameEquals("Rockfall"), true)
+                                .combine(Filters.Objects.actionsContains("Mine"), true)).length > 0;
+            }
+        }),
         ROOTS("Roots", "Chop", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
@@ -150,7 +160,7 @@ public class PathObjectHandler implements Loggable {
             interactiveObjects = Objects.findNearest(15, specialObjectFilter);
         }
 
-        if (interactiveObjects.length < 1) {
+        if (interactiveObjects.length == 0) {
             return false;
         }
 
@@ -208,12 +218,23 @@ public class PathObjectHandler implements Loggable {
         boolean strongholdDoor = isStrongholdDoor(object);
 
         if (strongholdDoor){
-            if (!handleStrongholdQuestions(destinationDetails)){
+            if (WaitFor.condition(General.random(6700, 7800), () -> {
+                RSTile playerPosition = Player.getPosition();
+                if (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), destinationDetails.getNextTile(), 50)) {
+                    WaitFor.milliseconds(500, 1000);
+                    return WaitFor.Return.SUCCESS;
+                }
+                if (NPCInteraction.isConversationWindowUp()) {
+                    handleStrongholdQuestions();
+                    return WaitFor.Return.SUCCESS;
+                }
+                return WaitFor.Return.IGNORE;
+            }) != WaitFor.Return.SUCCESS){
                 return false;
             }
         }
 
-        WaitFor.condition(General.random(7000, 9000), () -> {
+        WaitFor.condition(General.random(8500, 11000), () -> {
             DoomsToggle.handleToggle();
             PathAnalyzer.DestinationDetails destinationDetails1 = PathAnalyzer.furthestReachableTile(path);
             if (NPCInteraction.isConversationWindowUp()) {
@@ -226,7 +247,7 @@ public class PathObjectHandler implements Loggable {
             }
             if (current.getNextTile() != null){
                 PathAnalyzer.DestinationDetails hoverDetails = PathAnalyzer.furthestReachableTile(path, current.getNextTile());
-                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getRSTile().distanceTo(Player.getPosition()) > 7 && !strongholdDoor){
+                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getRSTile().distanceTo(Player.getPosition()) > 7 && !strongholdDoor && Player.getPosition().distanceTo(object) <= 2){
                     WalkerEngine.getInstance().hoverMinimap(hoverDetails.getDestination());
                 }
             }
@@ -341,19 +362,10 @@ public class PathObjectHandler implements Loggable {
     }
 
 
-    private static boolean handleStrongholdQuestions(PathAnalyzer.DestinationDetails destinationDetails) {
-        return WaitFor.condition(10000, () -> {
-            RSTile playerPosition = Player.getPosition();
-            if (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), destinationDetails.getNextTile(), 50)) {
-                WaitFor.milliseconds(500, 1000);
-                return WaitFor.Return.SUCCESS;
-            }
-            if (NPCInteraction.isConversationWindowUp()) {
-                return WaitFor.Return.SUCCESS;
-            }
-            return WaitFor.Return.IGNORE;
-        }) == WaitFor.Return.SUCCESS && (!NPCInteraction.isConversationWindowUp()
-                || NPCInteraction.handleConversation("Virus scan my computer then change my password.",
+
+    private static void handleStrongholdQuestions() {
+        NPCInteraction.handleConversation(new String[]{
+                "Virus scan my computer then change my password.",
                 "No.",
                 "No",
                 "Report the incident and do not click any links.",
@@ -373,9 +385,8 @@ public class PathObjectHandler implements Loggable {
                 "Don't give him my password.",
                 "Nowhere.",
                 "Don't give them the information and send an 'Abuse report'.",
-                "Use the Account Recovery System."));
-
-
+                "Use the Account Recovery System."
+        });
     }
 
     private static boolean isClosedTrapDoor(RSObject object, String[] options){

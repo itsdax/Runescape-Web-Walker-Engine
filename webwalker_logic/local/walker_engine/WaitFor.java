@@ -1,9 +1,40 @@
 package scripts.webwalker_logic.local.walker_engine;
 
 
+import org.tribot.api.General;
+import org.tribot.api.interfaces.Clickable;
+import org.tribot.api.interfaces.Clickable07;
+import org.tribot.api.interfaces.Positionable;
+import org.tribot.api2007.Game;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.types.*;
+
 import java.util.Random;
 
 public class WaitFor {
+
+    public static int getMovementRandomSleep(Positionable positionable){
+        return getMovementRandomSleep(Player.getPosition().distanceTo(positionable));
+    }
+
+    public static int getMovementRandomSleep(int distance){
+        final int multiplier =  Game.isRunOn() ? 1 : 2, base = random(900, 1100);
+        if (distance > 25){
+            return base;
+        }
+        int sleep = (multiplier * distance);
+        return base + (int) General.randomSD(sleep * .7, sleep * 1.3, sleep, sleep * .125);
+    }
+
+
+    public static Return isOnScreenAndClickable(Clickable07 clickable){
+        Positionable positionable = (Positionable) clickable;
+        return WaitFor.condition(getMovementRandomSleep(positionable), () -> (
+                clickable instanceof RSCharacter ? ((RSCharacter) clickable).isOnScreen() :
+                clickable instanceof RSObject ? ((RSObject) clickable).isOnScreen() :
+                clickable instanceof RSGroundItem && ((RSGroundItem) clickable).isOnScreen())
+                && clickable.isClickable() ? Return.SUCCESS : Return.IGNORE);
+    }
 
     public static Return condition(int timeout, Condition condition){
         long startTime = System.currentTimeMillis();

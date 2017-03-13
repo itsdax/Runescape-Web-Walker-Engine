@@ -9,17 +9,17 @@ import java.util.ArrayList;
 
 public class WebPath {
 
-    public static void setTesting(boolean b){
-        WebPathCore.setLocal(b);
-    }
-
     /**
      *
      * @param destination
      * @return Path from current player position to destination
      */
     public static ArrayList<RSTile> getPath(RSTile destination){
-        return getPath(Player.getPosition(), destination).getRSTilePath();
+        return getPathResponseContainer(Player.getPosition(), destination).getRSTilePath();
+    }
+
+    public static ArrayList<RSTile> getPath(RSTile start, RSTile destination){
+        return getPathResponseContainer(start, destination).getRSTilePath();
     }
 
     /**
@@ -43,7 +43,7 @@ public class WebPath {
         return WebPathCore.getPathToBank(position.getX(), position.getY(), position.getPlane(), playerInformation);
     }
 
-    private static GetPathResponseContainer getPath(RSTile start, RSTile end){
+    private static GetPathResponseContainer getPathResponseContainer(RSTile start, RSTile end){
         PlayerInformation playerInformation = PlayerInformation.generatePlayerInformation();
         return WebPathCore.getPath(start.getX(), start.getY(), start.getPlane(), end.getX(), end.getY(), end.getPlane(), playerInformation);
     }

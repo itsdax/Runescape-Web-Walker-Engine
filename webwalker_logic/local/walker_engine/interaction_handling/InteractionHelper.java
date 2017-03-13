@@ -46,7 +46,7 @@ public class InteractionHelper {
             Walking.blindWalkTo(position);
         }
 
-        WaitFor.Return result = WaitFor.condition(General.random(5000, 7000), new WaitFor.Condition() {
+        WaitFor.Return result = WaitFor.condition(WaitFor.getMovementRandomSleep(position), new WaitFor.Condition() {
             final long startTime = System.currentTimeMillis();
             @Override
             public WaitFor.Return active() {
@@ -65,6 +65,9 @@ public class InteractionHelper {
         }
 
         if (!AccurateMouse.click(clickable, actions)){
+            if (Camera.getCameraAngle() < 90){
+                Camera.setCameraAngle(General.random(90, 100));
+            }
             return false;
         }
 

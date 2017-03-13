@@ -23,7 +23,9 @@ public class ShipUtils {
                 return true;
             }
         }
-        return getGangplank() != null && Player.getPosition().getPlane() == 1 && Objects.getAll(10, Filters.Objects.nameEquals("Ship's wheel", "Ship's ladder", "Anchor")).length > 0;
+        return getGangplank() != null
+                && Player.getPosition().getPlane() == 1
+                && Objects.getAll(10, Filters.Objects.nameEquals("Ship's wheel", "Ship's ladder", "Anchor")).length > 0;
     }
 
     public static boolean crossGangplank() {

@@ -44,11 +44,11 @@ public class WebWalkerPaint {
     }
 
     public void drawDebug(Graphics graphics) {
-        drawDebug(graphics, null, true);
+        drawDebug(graphics, true);
     }
 
 
-    public void drawDebug(Graphics graphics, ArrayList<RSTile> path, boolean drawMap) {
+    public void drawDebug(Graphics graphics, boolean drawMap) {
         if (!WalkerEngine.getInstance().isNavigating()){
             return;
         }
@@ -65,6 +65,7 @@ public class WebWalkerPaint {
 
                 int previousLocalX = -1, previousLocalY = -1;
                 nonDisplayableMapImageGraphics.setColor(new Color(0, 255, 23));
+                ArrayList<RSTile> path = WalkerEngine.getInstance().getCurrentPath();
                 if (path != null) {
                     for (RSTile node : path) {
                         int relativeX = node.getX() - playerX, relativeY = playerY - node.getY();
