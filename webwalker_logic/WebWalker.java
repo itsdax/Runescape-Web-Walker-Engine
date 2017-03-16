@@ -5,6 +5,7 @@ import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
 import scripts.webwalker_logic.local.walker_engine.WalkingCondition;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 public class WebWalker {
 
     private static final WalkingCondition EMPTY_WALKING_CONDITION = () -> WalkingCondition.State.CONTINUE_WALKER;
-    private final String version = "1.1.1";
+    private final String version = "1.1.11";
 
     private static WebWalker instance;
     private boolean logging;
@@ -119,7 +120,6 @@ public class WebWalker {
         if (path.size() == 0){
             return false;
         }
-
         ArrayList<RSTile> bestPath = TeleportManager.teleport(path.size(), destination);
         if (bestPath != null){
             path = bestPath;

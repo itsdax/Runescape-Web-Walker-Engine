@@ -52,6 +52,10 @@ public class TeleportManager implements Loggable {
     }
 
     public static ArrayList<RSTile> teleport(int originalPathLength, RSTile destination){
+        if (originalPathLength < getInstance().offset){
+            return null;
+        }
+
         List<TeleportAction> teleportActions =
                 Arrays.stream(TeleportMethod.values()).parallel().map(teleportMethod ->
                         Arrays.stream((teleportMethod.canUse() && !getInstance().blacklistTeleportMethods.contains(teleportMethod) ? teleportMethod.getDestinations() : new TeleportLocation[]{})).parallel().map(teleportLocation ->
@@ -61,7 +65,7 @@ public class TeleportManager implements Loggable {
 
         TeleportAction teleportAction = teleportActions.stream().min(Comparator.comparingInt(o -> o.path.size())).orElse(null);
 
-        if (teleportAction == null){
+        if (teleportAction == null || teleportAction.path.size() >= originalPathLength || teleportAction.path.size() == 0){
             return null;
         }
 
