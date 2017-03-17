@@ -12,6 +12,12 @@
   <img src="http://i.imgur.com/Fxvn5C1.png"/>
 </p>
 
+##API Keys
+
+The public key is limited to 400 calls ever minute. The public api key is already included in the source.
+If you require more calls, or wish to support my project, please refer to [here](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/) for API Keys. 
+
+
 ##About
 - This is the **front end** of my web walker, which includes a wrapper for the server-client interaction of generating paths from point A to point B and navigating through the path.
 - Back-end pathfinding is coded using a combination of dijkstra's and A\* algorithm. Dijkstra's is mainly for region limiting for performance purposes whereas A\* calculates the actual path. Wayports (Node jumps) cannot be calculated using a heuristic value so Dijkstra's is needed in this scenario.
