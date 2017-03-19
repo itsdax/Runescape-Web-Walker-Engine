@@ -4,7 +4,6 @@ package scripts.webwalker_logic.local.walker_engine.local_pathfinding;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
-import scripts.api.walking.AStarNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,10 +12,16 @@ public class Reachable {
 
     private RSTile[][] map;
 
-    public Reachable(){
+    private Reachable(){
         map = generateMap();
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return parent tile of tile(x,y)
+     */
     public RSTile getParent(int x, int y){
         if (x <= 0 || y <= 0){
             return null;
@@ -27,7 +32,10 @@ public class Reachable {
         return map[x][y];
     }
 
-
+    /**
+     *
+     * @return gets collision map.
+     */
     public static Reachable getMap(){
         return new Reachable();
     }
