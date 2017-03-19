@@ -4,10 +4,7 @@ package scripts.webwalker_logic.local.walker_engine;
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Login;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.Projection;
+import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
 import scripts.webwalker_logic.local.walker_engine.local_pathfinding.PathAnalyzer;
@@ -228,20 +225,6 @@ public class WalkerEngine implements Loggable{
                 && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 49));
     }
 
-    public boolean clickMinimap(Positionable positionable){
-        final RSTile playerPosition = Player.getPosition();
-        if (playerPosition.distanceTo(positionable) <= 1){
-            return true;
-        }
-        Point point = Projection.tileToMinimap(positionable);
-        if (Projection.isInMinimap(point)){
-            Mouse.click(point, 1);
-            return true;
-        }
-        return false;
-    }
-
-
     public boolean clickMinimap(PathFindingNode pathFindingNode){
         final RSTile playerPosition = Player.getPosition();
         if (playerPosition.distanceTo(pathFindingNode.getRSTile()) <= 1){
@@ -313,7 +296,12 @@ public class WalkerEngine implements Loggable{
     }
 
     private boolean failedAttempt(){
-        attemptsForAction++;
+        if (Camera.getCameraAngle() < 90) {
+            Camera.setCameraAngle(General.random(90, 100));
+        }
+        if (++attemptsForAction > 1) {
+            Camera.setCameraRotation(General.random(0, 360));
+        }
         log("Failed attempt on action.");
         WaitFor.milliseconds(350, 650);
         CollisionDataCollector.generateRealTimeCollision();

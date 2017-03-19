@@ -17,6 +17,8 @@ import java.util.stream.Stream;
 
 public class TeleportManager implements Loggable {
 
+    public static TeleportAction previousAction;
+
     private int offset;
     private HashSet<TeleportMethod> blacklistTeleportMethods;
     private ExecutorService executorService;
@@ -76,6 +78,8 @@ public class TeleportManager implements Loggable {
         if (teleportAction == null || teleportAction.path.size() >= originalPathLength || teleportAction.path.size() == 0){
             return null;
         }
+
+        previousAction = teleportAction;
 
         if (originalPathLength - teleportAction.path.size() < getInstance().offset){
             getInstance().log("No efficient teleports!");

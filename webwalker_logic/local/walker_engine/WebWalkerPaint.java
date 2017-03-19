@@ -89,8 +89,8 @@ public class WebWalkerPaint {
 
                         int localX = (relativeX + REGION_SIZE / 2) * TILE_WIDTH, localY = (relativeY + REGION_SIZE / 2) * TILE_WIDTH;
 
-                        nonDisplayableMapImageGraphics.setColor(new Color(0, 0, 0, 32));
-                        nonDisplayableMapImageGraphics.drawRect(localX, localY, TILE_WIDTH, TILE_WIDTH);
+//                        nonDisplayableMapImageGraphics.setColor(new Color(0, 0, 0, 32));
+//                        nonDisplayableMapImageGraphics.drawRect(localX, localY, TILE_WIDTH, TILE_WIDTH);
 
                         nonDisplayableMapImageGraphics.setColor(new Color(255, 255, 255, 47));
                         nonDisplayableMapImageGraphics.fillRect(localX, localY, TILE_WIDTH, TILE_WIDTH);

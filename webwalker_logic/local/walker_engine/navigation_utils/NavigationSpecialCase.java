@@ -397,7 +397,7 @@ public class NavigationSpecialCase implements Loggable{
 
     public static boolean walkToObject(RSObject object) {
         if (!object.isOnScreen() || !object.isClickable()){
-            WalkerEngine.getInstance().clickMinimap(object);
+            Walking.blindWalkTo(object);
             if (WaitFor.isOnScreenAndClickable(object) != WaitFor.Return.SUCCESS){
                 return false;
             }
@@ -406,12 +406,6 @@ public class NavigationSpecialCase implements Loggable{
     }
 
     public static boolean clickObject(RSObject object, String action, WaitFor.Condition condition) {
-        if (!object.isOnScreen() || !object.isClickable()){
-            WalkerEngine.getInstance().clickMinimap(object);
-            if (WaitFor.condition(15000, () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
-                return false;
-            }
-        }
         return InteractionHelper.click(object, action, condition);
     }
 

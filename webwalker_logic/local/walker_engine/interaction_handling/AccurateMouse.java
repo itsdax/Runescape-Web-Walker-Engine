@@ -156,7 +156,7 @@ public class AccurateMouse {
      * @return result of action
      */
     private static boolean attemptAction(RSModel model, Clickable clickable, String targetName, boolean hover, String... clickActions){
-        System.out.println((hover ? "Hovering over" : "Clicking on") + " " + targetName + " with [" + Arrays.stream(clickActions).reduce("", String::concat) + "]");
+//        System.out.println((hover ? "Hovering over" : "Clicking on") + " " + targetName + " with [" + Arrays.stream(clickActions).reduce("", String::concat) + "]");
 
         if (clickable instanceof RSItem || clickable instanceof RSInterface){
             Rectangle area = clickable instanceof  RSItem ? ((RSItem) clickable).getArea() : ((RSInterface) clickable).getAbsoluteBounds();

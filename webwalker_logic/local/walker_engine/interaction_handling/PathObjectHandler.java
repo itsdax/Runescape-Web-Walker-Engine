@@ -11,7 +11,9 @@ import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
 import scripts.webwalker_logic.local.walker_engine.local_pathfinding.PathAnalyzer;
+import scripts.webwalker_logic.local.walker_engine.local_pathfinding.Reachable;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.RealTimeCollisionTile;
+import scripts.webwalker_logic.shared.helpers.RSObjectHelper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,6 +39,15 @@ public class PathObjectHandler implements Loggable {
     }
 
     private enum SpecialObject {
+        WEB("Web", "Slash", null, new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return Objects.find(15,
+                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                                .combine(Filters.Objects.nameEquals("Web"), true)
+                                .combine(Filters.Objects.actionsContains("Slash"), true)).length > 0;
+            }
+        }),
         ROCKFALL("Rockfall", "Mine", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
@@ -190,6 +201,21 @@ public class PathObjectHandler implements Loggable {
         boolean successfulClick = false;
         if (specialObject != null) {
             switch (specialObject){
+                case WEB:
+                    List<RSObject> webs;
+                    int iterations = 0;
+                    while ((webs = Arrays.stream(Objects.getAt(object.getPosition())).filter(object1 -> Arrays.stream(RSObjectHelper.getObjectActions(object1)).anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
+                        RSObject web = webs.get(0);
+                        InteractionHelper.click(web, "Slash");
+                        WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
+                        if (Reachable.getMap().getParent(destinationDetails.getNextTile().getX(), destinationDetails.getNextTile().getY()) != null){
+                            successfulClick = true;
+                            break;
+                        }
+                        if (iterations++ > 10){
+                            break;
+                        }
+                    }
                 case ARDY_DOOR_LOCK_SIDE:
                     for (int i = 0; i < General.random(15, 25); i++) {
                         if (!clickOnObject(object, new String[]{specialObject.getAction()})){
