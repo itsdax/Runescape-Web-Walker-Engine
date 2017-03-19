@@ -9,9 +9,9 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
-import scripts.webwalker_logic.local.walker_engine.NPCInteraction;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
-import scripts.webwalker_logic.shared.helpers.RSItemAction;
+import scripts.webwalker_logic.shared.helpers.RSItemHelper;
 import scripts.webwalker_logic.teleport_logic.magic.Spell;
 
 import java.util.ArrayList;
@@ -74,11 +74,11 @@ public enum TeleportMethod implements Validatable {
     public boolean use(TeleportLocation teleportLocation){
         switch (teleportLocation) {
 
-            case VARROCK_CENTER: return RSItemAction.click("Varrock t.*", "Break") || Spell.VARROCK_TELEPORT.cast();
-            case LUMBRIDGE_CASTLE: return RSItemAction.click("Lumbridge t.*", "Break") || Spell.LUMBRIDGE_TELEPORT.cast();
-            case FALADOR_CENTER: return RSItemAction.click("Falador t.*", "Break") || Spell.FALADOR_TELEPORT.cast();
-            case CAMELOT: return RSItemAction.click("Camelot t.*", "Break") || Spell.CAMELOT_TELEPORT.cast();
-            case ARDOUGNE_MARKET_PLACE: return RSItemAction.click("Ardougne t.*", "Break") || Spell.ARDOUGNE_TELEPORT.cast();
+            case VARROCK_CENTER: return RSItemHelper.click("Varrock t.*", "Break") || Spell.VARROCK_TELEPORT.cast();
+            case LUMBRIDGE_CASTLE: return RSItemHelper.click("Lumbridge t.*", "Break") || Spell.LUMBRIDGE_TELEPORT.cast();
+            case FALADOR_CENTER: return RSItemHelper.click("Falador t.*", "Break") || Spell.FALADOR_TELEPORT.cast();
+            case CAMELOT: return RSItemHelper.click("Camelot t.*", "Break") || Spell.CAMELOT_TELEPORT.cast();
+            case ARDOUGNE_MARKET_PLACE: return RSItemHelper.click("Ardougne t.*", "Break") || Spell.ARDOUGNE_TELEPORT.cast();
 
             case DUEL_ARENA: return teleportWithItem(DUELING_FILTER, "(Duel.*|Al K.*)");
             case CASTLE_WARS: return teleportWithItem(DUELING_FILTER, "Castle War.*");
@@ -99,7 +99,7 @@ public enum TeleportMethod implements Validatable {
             case MONASTRY_EDGE: return teleportWithItem(COMBAT_FILTER, "Mona.*");
             case RANGED_GUILD: return teleportWithItem(COMBAT_FILTER, "Rang.*");
 
-            case ECTO: return RSItemAction.click(Filters.Items.nameContains("Ectophial"), "Empty");
+            case ECTO: return RSItemHelper.click(Filters.Items.nameContains("Ectophial"), "Empty");
 
             case FISHING_GUILD: return teleportWithItem(SKILLS_FILTER, "Fishing.*");
             case MOTHERLOAD_MINE: return teleportWithItem(SKILLS_FILTER, "Mother.*");
@@ -132,7 +132,7 @@ public enum TeleportMethod implements Validatable {
         }
 
         RSItem teleportItem = items.get(0);
-        if (!RSItemAction.clickMatch(teleportItem, "(Rub|" + regex + ")")){
+        if (!RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")")){
             return false;
         }
 

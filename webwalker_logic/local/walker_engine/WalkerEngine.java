@@ -332,7 +332,8 @@ public class WalkerEngine implements Loggable{
             this.result = WalkingCondition.State.CONTINUE_WALKER;
         }
         public WalkingCondition.State trigger(){
-            return result = walkingCondition != null ? walkingCondition.action() : result;
+            result = (walkingCondition != null ? walkingCondition.action() : result);
+            return result != null ? result : WalkingCondition.State.CONTINUE_WALKER;
         }
         public WalkingCondition.State getResult() {
             return result;

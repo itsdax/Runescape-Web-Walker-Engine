@@ -9,6 +9,7 @@ import org.tribot.api2007.Objects;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.*;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
+import scripts.webwalker_logic.shared.helpers.RSItemHelper;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -60,6 +61,9 @@ public class AccurateMouse {
     }
 
     private static boolean action(Clickable clickable, boolean hover, String... clickActions){
+        if (clickable == null){
+            return false;
+        }
         String name = null;
         RSModel model = null;
         if (clickable instanceof RSCharacter){
@@ -76,6 +80,8 @@ public class AccurateMouse {
             RSObjectDefinition rsObjectDefinition = rsObject.getDefinition();
             name = rsObjectDefinition != null ? rsObjectDefinition.getName() : null;
             model = rsObject.getModel();
+        } else if (clickable instanceof RSItem){
+            name = RSItemHelper.getItemName((RSItem) clickable);
         }
         return action(model, clickable, name, hover, clickActions);
     }
@@ -112,13 +118,13 @@ public class AccurateMouse {
             }) == WaitFor.Return.SUCCESS){
                 click(1);
                 if (waitResponse() == State.YELLOW){
-                    RSTile clicked = WaitFor.getValue(500, Game::getDestination);
-                    return clicked != null && clicked.equals(destination);
+                    RSTile clicked = WaitFor.getValue(900, Game::getDestination);
+                    return clicked != null && (clicked.equals(destination) || Player.getPosition().equals(destination));
                 } else {
                     break;
                 }
             }
-        };
+        }
         return false;
     }
 
@@ -150,7 +156,19 @@ public class AccurateMouse {
      * @return result of action
      */
     private static boolean attemptAction(RSModel model, Clickable clickable, String targetName, boolean hover, String... clickActions){
-//        System.out.println((hover ? "Hovering over" : "Clicking on") + " " + targetName + " with [" + Arrays.stream(clickActions).reduce("", String::concat) + "]");
+        System.out.println((hover ? "Hovering over" : "Clicking on") + " " + targetName + " with [" + Arrays.stream(clickActions).reduce("", String::concat) + "]");
+
+        if (clickable instanceof RSItem || clickable instanceof RSInterface){
+            Rectangle area = clickable instanceof  RSItem ? ((RSItem) clickable).getArea() : ((RSInterface) clickable).getAbsoluteBounds();
+            String uptext = Game.getUptext();
+            if (area.contains(Mouse.getPos()) && uptext != null && Arrays.stream(clickActions).anyMatch(uptext::contains)){
+                Mouse.click(1);
+                return true;
+            }
+            return clickable.click(clickActions);
+        }
+
+
         if (model == null){
             return false;
         }

@@ -9,9 +9,9 @@ import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSObjectDefinition;
 import org.tribot.api2007.types.RSTile;
-import scripts.webwalker_logic.shared.helpers.RSItemAction;
+import scripts.webwalker_logic.shared.helpers.RSItemHelper;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
-import scripts.webwalker_logic.local.walker_engine.NPCInteraction;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.AccurateMouse;
@@ -186,7 +186,7 @@ public class NavigationSpecialCase implements Loggable{
             case ROPE_TO_ROCK:
                 break;
             case FINISHED_ROPE_TO_ROCK:
-                if (RSItemAction.use(954)){
+                if (RSItemHelper.use(954)){
                     InteractionHelper.focusCamera(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")));
                     if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")), "Use Rope", () -> Player.getPosition().equals(new RSTile(2513, 3468, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                         return true;
@@ -200,7 +200,7 @@ public class NavigationSpecialCase implements Loggable{
             case WATERFALL_DUNGEON_ENTRANCE:
                 if (WATERFALL_DUNGEON.getRSTile().distanceTo(Player.getPosition()) < 500){
                     return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> WATERFALL_DUNGEON_ENTRANCE.getRSTile().distanceTo(Player.getPosition()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
-                } else if (RSItemAction.use(954)){
+                } else if (RSItemHelper.use(954)){
                     if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameContains("Dead tree")), "Use Rope", () -> Player.getPosition().equals(new RSTile(2511, 3463, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                         return true;
                     }

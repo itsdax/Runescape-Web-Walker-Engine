@@ -1,4 +1,4 @@
-package scripts.webwalker_logic.local.walker_engine;
+package scripts.webwalker_logic.local.walker_engine.interaction_handling;
 
 import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
@@ -7,7 +7,8 @@ import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
-import scripts.webwalker_logic.local.walker_engine.interaction_handling.InteractionHelper;
+import scripts.webwalker_logic.local.walker_engine.Loggable;
+import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.shared.helpers.InterfaceHelper;
 
 import java.util.*;

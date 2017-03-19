@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class RSItemAction {
+public class RSItemHelper {
 
     public static boolean click(String itemNameRegex, String itemAction){
         return click(new Filter<RSItem>() {
@@ -105,7 +105,7 @@ public class RSItemAction {
             Mouse.click(3);
             ChooseOption.select("Cancel");
         }
-        return RSItemAction.click(itemID, "Use");
+        return RSItemHelper.click(itemID, "Use");
     }
 
     private static RSItem getClosestToMouse(List<RSItem> rsItems){
@@ -118,12 +118,40 @@ public class RSItemAction {
         return new Point(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
     }
 
-    private static String getItemName(RSItem rsItem){
+
+    public static RSItem getItem(Filter<RSItem> filter){
+        RSItem[] items = Inventory.find(filter);
+        return items.length > 0 ? items[0] : null;
+    }
+
+    public static String getItemName(int id){
+        RSItemDefinition definition = RSItemDefinition.get(id);
+        if (definition == null){
+            return null;
+        }
+        return definition.getName();
+    }
+
+    public static String[] getItemActions(RSItem rsItem){
+        RSItemDefinition definition = rsItem.getDefinition();
+        if (definition == null){
+            return new String[0];
+        }
+        String[] actions = definition.getActions();
+        return actions != null ? actions : new String[0];
+    }
+
+    public static String getItemName(RSItem rsItem){
         RSItemDefinition definition = rsItem.getDefinition();
         if (definition == null){
             return null;
         }
         return definition.getName();
+    }
+
+    public static boolean isStackable(RSItem rsItem) {
+        RSItemDefinition definition = rsItem.getDefinition();
+        return definition != null && definition.isStackable();
     }
 
 }

@@ -6,7 +6,7 @@ import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
-import scripts.webwalker_logic.local.walker_engine.NPCInteraction;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.InteractionHelper;
 import scripts.webwalker_logic.shared.helpers.InterfaceHelper;

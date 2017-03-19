@@ -23,6 +23,10 @@ public enum RuneElement {
         this.alternativeNames = alternativeNames;
     }
 
+    public String[] getAlternativeNames() {
+        return alternativeNames;
+    }
+
     public int getCount(){
         if (haveStaff()){
             return Integer.MAX_VALUE;
@@ -44,7 +48,7 @@ public enum RuneElement {
                 return false;
             }
         });
-        return Arrays.stream(items).mapToInt(RSItem::getStack).sum();
+        return Arrays.stream(items).mapToInt(RSItem::getStack).sum() + RunePouch.getQuantity(this);
     }
 
     private boolean haveStaff (){
@@ -52,17 +56,8 @@ public enum RuneElement {
             @Override
             public boolean accept(RSItem rsItem) {
                 String name = getItemName(rsItem).toLowerCase();
+                return name.contains("staff") && Arrays.stream(alternativeNames).anyMatch(name::contains);
 
-                if (!name.contains("staff")){
-                    return false;
-                }
-
-                for (String alternativeName : alternativeNames){
-                    if (name.contains(alternativeName.toLowerCase())){
-                        return true;
-                    }
-                }
-                return false;
             }
         }).length > 0;
     }
@@ -70,7 +65,7 @@ public enum RuneElement {
     /**
      *
      * @param item
-     * @return item name. Never null.
+     * @return item name. Never null. "null" if no name.
      */
     private static String getItemName(RSItem item){
         RSItemDefinition definition = item.getDefinition();
