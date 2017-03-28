@@ -49,7 +49,7 @@ If you require more calls, or wish to support my project, please refer to [here]
 ## Debug
 - Debugging visualization. Draw a live feed of the **Path** and **Collision Data** the engine is working with on the minimap using:
       ```
-      WebWalkerPaint.getInstance().drawDebug(graphics, WebPath.previousPath(), true);
+      WebWalkerPaint.getInstance().drawDebug(graphics);
       ```
       
 <p align="center">
