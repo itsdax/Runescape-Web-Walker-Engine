@@ -16,7 +16,9 @@ import java.util.HashSet;
 
 public class BankHelper {
 
-    private static final Filter<RSObject> BANK_OBJECT_FILTER = Filters.Objects.nameContains("bank", "Bank", "Exchange booth", "Open chest").combine(Filters.Objects.actionsContains("Collect"), true);
+    private static final Filter<RSObject> BANK_OBJECT_FILTER = Filters.Objects.nameContains("bank", "Bank", "Exchange booth", "Open chest")
+            .combine(Filters.Objects.actionsContains("Collect"), true)
+            .combine(Filters.Objects.actionsContains("Bank"), true);
 
     public static boolean isInBank(){
         return isInBank(Player.getPosition());
@@ -52,7 +54,7 @@ public class BankHelper {
         return InteractionHelper.click(object, "Bank") && waitForBankScreen(object);
     }
 
-    private static HashSet<RSTile> getBuilding(Positionable positionable){
+    public static HashSet<RSTile> getBuilding(Positionable positionable){
         return computeBuilding(positionable, Game.getSceneFlags(), new HashSet<>());
     }
 

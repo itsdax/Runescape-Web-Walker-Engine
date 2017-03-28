@@ -7,6 +7,7 @@ import org.tribot.api2007.ChooseOption;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.ext.Filters;
+import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSMenuNode;
@@ -23,16 +24,7 @@ public class RSItemHelper {
         return click(new Filter<RSItem>() {
             @Override
             public boolean accept(RSItem item) {
-                RSItemDefinition definition = item.getDefinition();
-                if (definition == null) {
-                    return false;
-                }
-                String name = definition.getName();
-                if (name == null || !name.matches(itemNameRegex)) {
-                    return false;
-                }
-                String[] actions = definition.getActions();
-                return actions != null && Arrays.stream(actions).anyMatch(s -> s.equals(itemAction));
+                return getItemName(item).matches(itemNameRegex) && Arrays.stream(getItemActions(item)).anyMatch(s -> s.equals(itemAction));
             }
         }, itemAction);
     }
@@ -55,7 +47,7 @@ public class RSItemHelper {
         return click(Filters.Items.idEquals(itemID), action, true);
     }
 
-    public static boolean click(Filter<RSItem> filter, String action ){
+    public static boolean click(Filter<RSItem> filter, String action){
         return click(filter, action, true);
     }
 
@@ -108,7 +100,7 @@ public class RSItemHelper {
         return RSItemHelper.click(itemID, "Use");
     }
 
-    private static RSItem getClosestToMouse(List<RSItem> rsItems){
+    public static RSItem getClosestToMouse(List<RSItem> rsItems){
         Point mouse = Mouse.getPos();
         rsItems.sort(Comparator.comparingInt(o -> (int) getCenter(o.getArea()).distance(mouse)));
         return rsItems.size() > 0 ? rsItems.get(0) : null;
@@ -120,38 +112,72 @@ public class RSItemHelper {
 
 
     public static RSItem getItem(Filter<RSItem> filter){
-        RSItem[] items = Inventory.find(filter);
-        return items.length > 0 ? items[0] : null;
+        return getClosestToMouse(Arrays.stream(Inventory.find(filter)).collect(Collectors.toList()));
     }
 
-    public static String getItemName(int id){
+    public static boolean isNoted(RSItem item) {
+        return item != null && isNoted(item.getID());
+    }
+
+    public static boolean isNoted(int id) {
         RSItemDefinition definition = RSItemDefinition.get(id);
-        if (definition == null){
-            return null;
-        }
-        return definition.getName();
+        return definition != null && definition.isNoted();
+    }
+
+
+    public static String[] getItemActions(RSGroundItem rsGroundItem){
+        return getItemActions(rsGroundItem.getDefinition());
     }
 
     public static String[] getItemActions(RSItem rsItem){
-        RSItemDefinition definition = rsItem.getDefinition();
-        if (definition == null){
-            return new String[0];
-        }
-        String[] actions = definition.getActions();
-        return actions != null ? actions : new String[0];
+        return getItemActions(rsItem.getDefinition());
+    }
+
+
+    public static String getItemName(int id){
+        return getItemName(RSItemDefinition.get(id));
+    }
+
+    public static String getItemName(RSGroundItem rsGroundItem){
+        return getItemName(rsGroundItem.getDefinition());
     }
 
     public static String getItemName(RSItem rsItem){
-        RSItemDefinition definition = rsItem.getDefinition();
-        if (definition == null){
-            return null;
-        }
-        return definition.getName();
+        return getItemName(rsItem.getDefinition());
     }
+
+
+    public static boolean isStackable(int id) {
+        RSItemDefinition definition = RSItemDefinition.get(id);
+        return definition != null && definition.isStackable();
+    }
+
 
     public static boolean isStackable(RSItem rsItem) {
         RSItemDefinition definition = rsItem.getDefinition();
         return definition != null && definition.isStackable();
     }
+
+    private static String[] getItemActions(RSItemDefinition rsItemDefinition){
+        if (rsItemDefinition == null){
+            return new String[0];
+        }
+        String[] actions = rsItemDefinition.getActions();
+        return actions != null ? actions : new String[0];
+    }
+
+    private static String getItemName(RSItemDefinition definition){
+        String name = definition.getName();
+        return name != null ? name : "null";
+    }
+
+    public static int distanceToMouse(RSItem item){
+        Rectangle rectangle = item.getArea();
+        if (rectangle == null){
+            return Integer.MAX_VALUE;
+        }
+        return (int) Mouse.getPos().distance(rectangle.x + rectangle.width, rectangle.y + rectangle.height);
+    }
+
 
 }

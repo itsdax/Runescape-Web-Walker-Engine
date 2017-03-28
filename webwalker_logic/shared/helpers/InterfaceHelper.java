@@ -12,30 +12,33 @@ public class InterfaceHelper {
 
     /**
      *
-     * @param id
+     * @param ids
      * @return never null
      */
-    public static List<RSInterface> getAllInterfaces(int id){
+    public static List<RSInterface> getAllInterfaces(int... ids){
         ArrayList<RSInterface> interfaces = new ArrayList<>();
-        Queue<RSInterface> queue = new LinkedList<>();
-        RSInterfaceMaster master = Interfaces.get(id);
 
-        if (master == null){
-            return interfaces;
-        }
+        for (int id : ids) {
+            Queue<RSInterface> queue = new LinkedList<>();
+            RSInterfaceMaster master = Interfaces.get(id);
 
-        queue.add(master);
-        RSInterfaceComponent[] components = master.getComponents();
-        if (components != null) {
-            Collections.addAll(queue, components);
-        }
+            if (master == null) {
+                return interfaces;
+            }
 
-        while (!queue.isEmpty()){
-            RSInterface rsInterface = queue.poll();
-            interfaces.add(rsInterface);
-            RSInterface[] children = rsInterface.getChildren();
-            if (children != null) {
-                Collections.addAll(queue, children);
+            queue.add(master);
+            RSInterfaceComponent[] components = master.getComponents();
+            if (components != null) {
+                Collections.addAll(queue, components);
+            }
+
+            while (!queue.isEmpty()) {
+                RSInterface rsInterface = queue.poll();
+                interfaces.add(rsInterface);
+                RSInterface[] children = rsInterface.getChildren();
+                if (children != null) {
+                    Collections.addAll(queue, children);
+                }
             }
         }
 
@@ -62,4 +65,29 @@ public class InterfaceHelper {
 
         return interfaces;
     }
+
+    public static boolean textContains(RSInterface rsInterface, String match){
+        String text = rsInterface.getText();
+        return text != null && text.contains(match);
+    }
+
+    public static boolean textMatches(RSInterface rsInterface, String match){
+        if (rsInterface == null){
+            return false;
+        }
+        String text = rsInterface.getText();
+        return text != null && text.matches(match);
+    }
+
+    public static List<String> getActions(RSInterface rsInterface){
+        if (rsInterface == null){
+            return Collections.emptyList();
+        }
+        String[] actions = rsInterface.getActions();
+        if (actions == null){
+            return Collections.emptyList();
+        }
+        return Arrays.asList(actions);
+    }
+
 }

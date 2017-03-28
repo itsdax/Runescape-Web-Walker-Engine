@@ -21,6 +21,7 @@ public class TeleportManager implements Loggable {
 
     private int offset;
     private HashSet<TeleportMethod> blacklistTeleportMethods;
+    private HashSet<TeleportLocation> blacklistTeleportLocations;
     private ExecutorService executorService;
 
     private static TeleportManager teleportManager;
@@ -31,7 +32,9 @@ public class TeleportManager implements Loggable {
     public TeleportManager(){
         offset = 25;
         blacklistTeleportMethods = new HashSet<>();
-        executorService = Executors.newFixedThreadPool(5);
+        blacklistTeleportLocations = new HashSet<>();
+        executorService = Executors.newFixedThreadPool(15);;
+
     }
 
     /**
@@ -42,11 +45,16 @@ public class TeleportManager implements Loggable {
         getInstance().blacklistTeleportMethods.addAll(Arrays.asList(teleportMethods));
     }
 
-    /**
-     * Clears blacklist
-     */
-    public static void clearBlackList(){
+    public static void ignoreTeleportLocations(TeleportLocation... teleportLocations){
+        getInstance().blacklistTeleportLocations.addAll(Arrays.asList(teleportLocations));
+    }
+
+    public static void clearTeleportMethodBlackList(){
         getInstance().blacklistTeleportMethods.clear();
+    }
+
+    public static void clearTeleportLocationBlackList(){
+        getInstance().blacklistTeleportLocations.clear();
     }
 
     /**
@@ -64,8 +72,10 @@ public class TeleportManager implements Loggable {
 
         TeleportAction teleportAction = Arrays.stream(TeleportMethod.values())
                 .filter(TeleportMethod::canUse)
-                        .map(teleportMethod -> Arrays.stream(teleportMethod.getDestinations()) //map to destinations
-                        .map(teleportLocation -> getInstance().executorService.submit(new PathComputer(teleportMethod, teleportLocation, destination)))) //map to future
+                .filter(teleportMethod -> !getInstance().blacklistTeleportMethods.contains(teleportMethod))
+                        .map(teleportMethod -> Arrays.stream(teleportMethod.getDestinations())
+                                .filter(teleportLocation -> !getInstance().blacklistTeleportLocations.contains(teleportLocation)) //map to destinations
+                                .map(teleportLocation -> getInstance().executorService.submit(new PathComputer(teleportMethod, teleportLocation, destination)))) //map to future
                 .flatMap(futureStream -> futureStream).collect(Collectors.toList()).stream().map(teleportActionFuture -> { //flatten out futures
                     try {
                         return teleportActionFuture.get();
@@ -109,19 +119,32 @@ public class TeleportManager implements Loggable {
 
         @Override
         public TeleportAction call() throws Exception {
+            getInstance().log("Checking path... [" + teleportMethod + "] -> [" + teleportLocation + "]");
             return new TeleportAction(WebPath.getPath(teleportLocation.getRSTile(), destination), teleportMethod, teleportLocation);
         }
 
     }
 
-    private static class TeleportAction {
-        ArrayList<RSTile> path;
-        TeleportMethod teleportMethod;
-        TeleportLocation teleportLocation;
+    public static class TeleportAction {
+        private ArrayList<RSTile> path;
+        private TeleportMethod teleportMethod;
+        private TeleportLocation teleportLocation;
         TeleportAction(ArrayList<RSTile> path, TeleportMethod teleportMethod, TeleportLocation teleportLocation){
             this.path = path;
             this.teleportMethod = teleportMethod;
             this.teleportLocation = teleportLocation;
+        }
+
+        public ArrayList<RSTile> getPath() {
+            return path;
+        }
+
+        public TeleportMethod getTeleportMethod() {
+            return teleportMethod;
+        }
+
+        public TeleportLocation getTeleportLocation() {
+            return teleportLocation;
         }
     }
 

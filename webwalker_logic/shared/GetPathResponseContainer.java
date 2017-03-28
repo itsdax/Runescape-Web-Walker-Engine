@@ -87,7 +87,7 @@ public class GetPathResponseContainer {
             PlayerInformation playerInformation = PlayerInformation.fromJSONString(jsonObject.get("playerInformation"));
             return new GetPathResponseContainer(status, response, path, playerInformation, true);
         } catch (Exception e){
-            return new GetPathResponseContainer(Status.UNKNOWN, "Server may be offline.", new ArrayList<>(), null, true);
+            return new GetPathResponseContainer(Status.UNKNOWN, "[ERROR] " + s, new ArrayList<>(), null, true);
         }
     }
 

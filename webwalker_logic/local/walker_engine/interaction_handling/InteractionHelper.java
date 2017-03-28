@@ -10,6 +10,7 @@ import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.*;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
+import scripts.webwalker_logic.local.walker_engine.local_pathfinding.Reachable;
 
 
 public class InteractionHelper {

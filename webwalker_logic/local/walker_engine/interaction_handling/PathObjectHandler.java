@@ -28,7 +28,7 @@ public class PathObjectHandler implements Loggable {
     private PathObjectHandler(){
         sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
-                "Board", "Jump-from", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
+                "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
                 "Investigate"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
@@ -204,11 +204,11 @@ public class PathObjectHandler implements Loggable {
                 case WEB:
                     List<RSObject> webs;
                     int iterations = 0;
-                    while ((webs = Arrays.stream(Objects.getAt(object.getPosition())).filter(object1 -> Arrays.stream(RSObjectHelper.getObjectActions(object1)).anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
+                    while ((webs = Arrays.stream(Objects.getAt(object.getPosition())).filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1)).anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
                         RSObject web = webs.get(0);
                         InteractionHelper.click(web, "Slash");
                         WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
-                        if (Reachable.getMap().getParent(destinationDetails.getNextTile().getX(), destinationDetails.getNextTile().getY()) != null){
+                        if (Reachable.getMap().getParent(destinationDetails.getAssumedX(), destinationDetails.getAssumedY()) != null){
                             successfulClick = true;
                             break;
                         }

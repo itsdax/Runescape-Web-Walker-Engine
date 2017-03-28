@@ -13,8 +13,8 @@ import java.util.HashMap;
 public class PlayerInformation {
 
     private static final int[] SETTINGS = {176, 32, 71, 273, 144, 63, 179, 145, 68, 655, 10, 964, 399, 869, 314, 794,
-            440, 622, 131, 335, 299, 896, 671, 810, 17, 11, 347, 302, 111, 116, 482, 307, 165, 150};
-    private static final int[] VARBITS = {5087, 5088, 5089, 5090}; //this is shared with settings because of terrible hindsight. cross fingers that nothing cross paths.
+            440, 622, 131, 335, 299, 896, 671, 810, 17, 11, 347, 302, 111, 116, 482, 307, 165, 150, 425};
+    private static final int[] VARBITS = {5087, 5088, 5089, 5090}; //shared with settings because of terrible hindsight. cross fingers that nothing cross paths.
 
     private Integer combatLevel;
     private HashMap<String, Integer> skills;

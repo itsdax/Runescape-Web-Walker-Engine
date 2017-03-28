@@ -5,8 +5,11 @@ import org.tribot.api.input.Keyboard;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.NPCs;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSPlayer;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.shared.helpers.InterfaceHelper;
@@ -17,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class NPCInteraction implements Loggable {
 
-    public static String[] GENERAL_RESPONSES = {"OK then.", "Yes.", "Okay..."};
+    public static String[] GENERAL_RESPONSES = {"Sorry, I'm a bit busy.", "OK then.", "Yes.", "Okay..."};
 
     private static final int
             ITEM_ACTION_INTERFACE_WINDOW = 193,
@@ -72,7 +75,12 @@ public class NPCInteraction implements Loggable {
     }
 
     public static boolean waitForConversationWindow(){
-        return WaitFor.condition(10000, () -> {
+        RSPlayer player = Player.getRSPlayer();
+        RSCharacter rsCharacter = null;
+        if (player != null){
+            rsCharacter = player.getInteractingCharacter();
+        }
+        return WaitFor.condition(rsCharacter != null ? WaitFor.getMovementRandomSleep(rsCharacter) : 10000, () -> {
             if (isConversationWindowUp()) {
                 return WaitFor.Return.SUCCESS;
             }

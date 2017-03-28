@@ -13,7 +13,6 @@ import scripts.webwalker_logic.shared.helpers.RSItemHelper;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
-import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.AccurateMouse;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.InteractionHelper;
 
@@ -46,9 +45,16 @@ public class NavigationSpecialCase implements Loggable{
      */
     public enum SpecialLocation {
 
+        SHANTAY_PASS(3311, 3109, 0),
+        UZER (3468, 3110, 0),
+        BEDABIN_CAMP (3181, 3043, 0),
+        POLLNIVNEACH (3350, 3002, 0),
+
         SHILO_ENTRANCE (2881, 2953, 0),
         SHILO_INSIDE (2864, 2955, 0),
 
+        RELEKKA_WEST_BOAT (2621, 3682, 0),
+        WATERBIRTH (2546, 3760, 0),
 
         SPIRIT_TREE_GRAND_EXCHANGE (3183, 3508, 0),
         SPIRIT_TREE_STRONGHOLD (2461, 3444, 0),
@@ -133,15 +139,17 @@ public class NavigationSpecialCase implements Loggable{
      */
     public static boolean handle(SpecialLocation specialLocation){
         String zeahBoatLocation = null;
+
         switch (specialLocation){
 
             case BRIMHAVEN_DUNGEON:
-                if (!alreadyPaidFee()){
+                if (Game.getSetting(393) != 1){
                     if (!InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Saniboch")), "Pay")) {
                         getInstance().log("Could not pay saniboch");
-                        return false;
+                        break;
                     }
                     NPCInteraction.handleConversation();
+                    return true;
                 } else {
                     if (clickObject(Filters.Objects.nameEquals("Dungeon entrance"), "Enter", () -> Player.getPosition().getY() > 4000 ?
                             WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
@@ -152,8 +160,40 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 break;
 
+            case SHANTAY_PASS:
+            case UZER:
+            case BEDABIN_CAMP:
+            case POLLNIVNEACH:
+                String carpetDestination = specialLocation == SHANTAY_PASS ? "Shantay Pass" : specialLocation == UZER ? "Uzer" : specialLocation == BEDABIN_CAMP ? "Bedabin camp" : "Pollnivneach";
+                if (NPCInteraction.talkTo(Filters.NPCs.actionsContains("Travel"), new String[]{"Travel"}, new String[]{carpetDestination})){
+                    WaitFor.milliseconds(3500, 5000); //wait for board carpet before starting moving condition
+                    WaitFor.condition(30000, WaitFor.getNotMovingCondition());
+                    WaitFor.milliseconds(2250, 3250);
+                    return true;
+                }
+                break;
+
+
             case SHILO_ENTRANCE: break;
             case SHILO_INSIDE: return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mosol Rei"), new String[]{"Talk-to"}, new String[]{"Yes, Ok, I'll go into the village!"});
+
+            case RELEKKA_WEST_BOAT:
+                if (NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"}, new String[0])){
+                    WaitFor.milliseconds(2000, 3000);
+                }
+                break;
+
+            case WATERBIRTH:
+                String option = NPCs.find(Filters.NPCs.nameContains("Jarvald").combine(Filters.NPCs.actionsContains("Travel"),true)).length > 0 ? "Travel" : "Talk-to";
+                if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Jarvald"), new String[]{option}, new String[]{
+                        "What Jarvald is doing.",
+                        "Can I come?",
+                        "YES",
+                        "Yes"
+                })){
+                    WaitFor.milliseconds(2000, 3000);
+                }
+                break;
 
             case SPIRIT_TREE_GRAND_EXCHANGE: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_GRAND_EXCHANGE);
             case SPIRIT_TREE_STRONGHOLD: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_STRONGHOLD);
@@ -370,10 +410,6 @@ public class NavigationSpecialCase implements Loggable{
         }
 
         return false;
-    }
-
-    public static boolean alreadyPaidFee(){
-        return Game.getSetting(393) == 1;
     }
 
     public static boolean handleZeahBoats(String locationOption){

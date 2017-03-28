@@ -134,6 +134,7 @@ public class WebWalker {
 
     public static boolean walkToBank(WalkingCondition walkingCondition) {
         if (BankHelper.isInBank()){
+            System.out.println("already in bank");
             return true;
         }
 

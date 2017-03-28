@@ -34,11 +34,12 @@ public class WaitFor {
     }
 
     public static int getMovementRandomSleep(int distance){
-        final int multiplier =  Game.isRunOn() ? 1 : 2, base = random(1800, 2400);
+        final double multiplier =  Game.isRunOn() ? 0.3 : 0.6;
+        final int base = random(1800, 2400);
         if (distance > 25){
             return base;
         }
-        int sleep = (multiplier * distance);
+        int sleep = (int) (multiplier * distance);
         return base + (int) General.randomSD(sleep * .6, sleep * 1.3, sleep, sleep * .125);
     }
 

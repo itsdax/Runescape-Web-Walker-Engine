@@ -10,6 +10,8 @@ import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.*;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.shared.helpers.RSItemHelper;
+import scripts.webwalker_logic.shared.helpers.RSNPCHelper;
+import scripts.webwalker_logic.shared.helpers.RSObjectHelper;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -25,6 +27,14 @@ import java.util.stream.Collectors;
  * clickAction should never include the target entity's name. Just the action.
  */
 public class AccurateMouse {
+
+    public static void move(int x, int y){
+        move(new Point(x, y));
+    }
+
+    public static void move(Point point){
+        Mouse.move(point.x, point.y);
+    }
 
     public static void click(int button){
         click(Mouse.getPos(), button);
@@ -106,6 +116,9 @@ public class AccurateMouse {
 
 
     public static boolean walkScreenTile(RSTile destination){
+        if (!destination.isOnScreen() || !destination.isClickable()){
+            return false;
+        }
         for (int i = 0; i < General.random(4, 6); i++) {
             Point point = getWalkingPoint(destination);
             if (point == null){
@@ -135,7 +148,7 @@ public class AccurateMouse {
                 continue;
             }
             Mouse.move(point);
-            General.sleep(20, 35);
+            General.sleep(20, 30);
             return isHoveringScreenTileWalkHere(destination);
         };
         return false;
@@ -158,18 +171,14 @@ public class AccurateMouse {
     private static boolean attemptAction(RSModel model, Clickable clickable, String targetName, boolean hover, String... clickActions){
 //        System.out.println((hover ? "Hovering over" : "Clicking on") + " " + targetName + " with [" + Arrays.stream(clickActions).reduce("", String::concat) + "]");
 
-        if (clickable instanceof RSItem || clickable instanceof RSInterface){
-            Rectangle area = clickable instanceof  RSItem ? ((RSItem) clickable).getArea() : ((RSInterface) clickable).getAbsoluteBounds();
-            String uptext = Game.getUptext();
-            if (area.contains(Mouse.getPos()) && uptext != null && Arrays.stream(clickActions).anyMatch(uptext::contains)){
-                Mouse.click(1);
-                return true;
-            }
-            return clickable.click(clickActions);
+        if (handleRSItemRSInterface(clickable, hover, clickActions)){
+            return true;
         }
 
-
-        if (model == null){
+        Point point = null;
+        if (clickable instanceof RSTile && Arrays.stream(clickActions).anyMatch(s -> s.matches("Walk here"))){
+            point = ((RSTile) clickable).getHumanHoverPoint();
+        } else if (model == null){
             return false;
         }
 
@@ -182,12 +191,15 @@ public class AccurateMouse {
             }
         }
 
-        Point point = model.getHumanHoverPoint();
+        if (point == null) {
+            point = model.getHumanHoverPoint();
+        }
+
         if (point == null || point.getX() == -1){
             return false;
         }
 
-        if (point.distance(Mouse.getPos()) < Mouse.getSpeed()/10){
+        if (point.distance(Mouse.getPos()) < Mouse.getSpeed()/20){
             Mouse.hop(point);
         } else {
             Mouse.move(point);
@@ -201,7 +213,7 @@ public class AccurateMouse {
             return true;
         }
 
-        String regex = "(" + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())) + ")" + " (-> )?" + targetName + "(.*)";
+        String regex = "(" + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())) + ")" + " (-> )?" + (targetName != null ? targetName : "") + "(.*)";
         if (WaitFor.condition(100, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             boolean multipleMatches = false;
 
@@ -228,6 +240,34 @@ public class AccurateMouse {
 
         }
         return false;
+    }
+
+    private static boolean handleRSItemRSInterface(Clickable clickable, boolean hover, String... clickActions){
+        if (!(clickable instanceof RSItem || clickable instanceof RSInterface)){
+            return false;
+        }
+
+        Rectangle area = clickable instanceof  RSItem ? ((RSItem) clickable).getArea() : ((RSInterface) clickable).getAbsoluteBounds();
+        String uptext = Game.getUptext();
+        if (area.contains(Mouse.getPos())){
+            if (uptext != null && (clickActions.length == 0 || Arrays.stream(clickActions).anyMatch(uptext::contains))) {
+                if (hover) {
+                    return true;
+                }
+                click(1);
+                return true;
+            } else {
+                Mouse.click(3);
+                return ChooseOption.select(clickActions);
+            }
+        } else {
+            Mouse.moveBox(area);
+            if (!hover){
+                return clickable.click(clickActions);
+            }
+            //TODO: handle hovering of interfaces for secondary actions such as right click hover
+            return true;
+        }
     }
 
     private static boolean handleMenuNode(RSMenuNode rsMenuNode, boolean hover){
@@ -305,6 +345,9 @@ public class AccurateMouse {
                 continue;
             }
             polygons.add(Projection.getTileBoundsPoly(tile, 0));
+            polygons.addAll(Arrays.stream(Objects.getAt(tile)).filter(object -> RSObjectHelper.getActions(object).length > 0).map(RSObject::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(Collectors.toList()));
+            polygons.addAll(Arrays.stream(GroundItems.getAt(tile)).filter(object -> RSItemHelper.getItemActions(object).length > 0).map(RSGroundItem::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(Collectors.toList()));
+            polygons.addAll(Arrays.stream(NPCs.find(Filters.NPCs.tileEquals(tile))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(Collectors.toList()));
         }
 
         outterLoop:
