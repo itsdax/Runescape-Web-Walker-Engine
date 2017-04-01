@@ -15,7 +15,7 @@
 ## API Keys
 
 The public key is limited to 400 calls ever minute. The public api key is already included in the source.
-If you require more calls, or wish to support my project, please refer to [here](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/) for API Keys. 
+If you require more calls, or wish to support my project, please refer to [here](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/) or contact me over Tribot for API Keys. 
 
 
 ## About
