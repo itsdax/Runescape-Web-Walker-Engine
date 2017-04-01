@@ -1,7 +1,7 @@
 # Runescape-Web-Walker-Engine
 #### An open-sourced world walker for Rune Scape written in Java for TriBot.
 
-## How to add
+## How to import to Tribot Scripts Folder
 - Simply copy the webwalker_logic package over to your scripts directory!
 
 <p align="center">
