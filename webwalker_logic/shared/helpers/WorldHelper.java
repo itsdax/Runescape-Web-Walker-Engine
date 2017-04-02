@@ -24,14 +24,33 @@ public class WorldHelper {
         return instance != null ? instance : (instance = new WorldHelper());
     }
 
+    public static Map<Integer, World> getWorldList(){
+        return Collections.unmodifiableMap(getInstance().worldList);
+    }
+
+    public static boolean isSkillTotal(int worldNumber) {
+        World world = getWorld(worldNumber);
+        return world != null && world.isSkillTotal();
+    }
+
     public static boolean isMember(int worldNumber) {
-        worldNumber = worldNumber % 300;
-        World world = getInstance().getWorldList().get(worldNumber);
+        World world = getWorld(worldNumber);
         return world != null && world.isMember();
     }
 
-    public Map<Integer, World> getWorldList() {
-        return worldList;
+    public static boolean isDeadMan(int worldNumber) {
+        World world = getWorld(worldNumber);
+        return world != null && world.isDeadman();
+    }
+
+    public static boolean isPvp(int worldNumber) {
+        World world = getWorld(worldNumber);
+        return world != null && world.isPvp();
+    }
+
+    private static World getWorld(int worldNumber){
+        worldNumber = worldNumber % 300;
+        return getWorldList().get(worldNumber);
     }
 
     /**
@@ -78,7 +97,7 @@ public class WorldHelper {
         private final boolean member;
         private final boolean pvp;
         private final boolean highRisk;
-        private final boolean deadman;
+        private final boolean deadman, skillTotal;
         private final String host;
         private final String activity;
         private final int serverLoc;
@@ -96,6 +115,7 @@ public class WorldHelper {
             this.serverLoc = serverLoc;
             this.playerCount = playerCount;
             deadman = activity.toLowerCase().contains("deadman");
+            skillTotal = activity.toLowerCase().contains("skill");
         }
 
         public int getId() {
@@ -138,9 +158,13 @@ public class WorldHelper {
             return playerCount;
         }
 
+        public boolean isSkillTotal() {
+            return skillTotal;
+        }
+
         @Override
         public String toString() {
-            return "[World " + id + " | " + playerCount + " players | " + (member ? "Members" : "F2P") + " | " + activity + "]\n";
+            return "[World " + id + " | " + playerCount + " players | " + (member ? "Members" : "F2P") + " | " + activity + "]";
         }
 
     }
