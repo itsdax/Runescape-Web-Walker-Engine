@@ -2,7 +2,7 @@
 #### An open-sourced world walker for Rune Scape written in Java for TriBot.
 
 ## How to import to Tribot Scripts Folder
-- Simply copy the webwalker_logic package over to your scripts directory!
+- Simply copy the webwalker_logic package inside your scripts directory! If you need further help, the visit the [Scripting Help Channel](https://discord.gg/T7QeCm3) on Tribot discord.
 
 <p align="center">
   <img src="http://i.imgur.com/Age76Qx.png"/>
