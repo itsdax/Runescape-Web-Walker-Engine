@@ -13,14 +13,14 @@
   <img src="http://i.imgur.com/Fxvn5C1.png"/>
 </p>
 
+## Documentation
+View [JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
+
 ## API Keys
 
 The public key is limited to a combined total of 400 calls every minute. The public api key is already included in the source.
 
 If your scripts have a large userbase, then the public key may not be enough for your needs. If you require more calls or wish to support my project, please refer to [this link](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/) or contact me over Tribot for API Keys. 
-
-## Documentation
-[JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
 
 ## About
 - This is the **front end** of my web walker, which includes a wrapper for the server-client interaction of generating paths from point A to point B and navigating through the path.
