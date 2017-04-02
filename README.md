@@ -15,8 +15,9 @@
 
 ## API Keys
 
-The public key is limited to 400 calls ever minute. The public api key is already included in the source.
-If you require more calls, or wish to support my project, please refer to [here](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/) or contact me over Tribot for API Keys. 
+The public key is limited to a combined total of 400 calls every minute. The public api key is already included in the source.
+
+If your scripts have a large userbase, then the public key may not be enough for your needs. If you require more calls or wish to support my project, please refer to [this link](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/) or contact me over Tribot for API Keys. 
 
 
 ## About
@@ -29,14 +30,15 @@ If you require more calls, or wish to support my project, please refer to [here]
 - Speed. Will generate a path from any two points (Given that it is mapped) in less than a second, guaranteed.
 
 - Simplicity. Implement the engine into your script by simply calling:
-      ```
+```
       WebWalker.walkTo(new RSTile(x, y, z));
       WebWalker.walkTo(new RSTile(x, y, z), walkingCondition);
       WebWalker.walkToBank();
-      ```
+```
 
 - Shortcuts. Using all and only the shortcuts that your Player can access, whether it is skill level (Agility level needed for shortcut) or inventory item requirements (Such as gold needed for ship or fee to enter dungeon). This also includes quest requirements.
 
+- Obstacles. All obstacles such as doors/ladders/etc are supported as long as area is mapped.
 
 ## Supported Areas (Currently roughly 90% of the game world)
 - All Cities (Except Lletya) including Zeah
