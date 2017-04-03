@@ -1,11 +1,9 @@
 package scripts.webwalker_logic;
 
-
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.WalkerEngine;
 import scripts.webwalker_logic.local.walker_engine.WalkingCondition;
@@ -24,16 +22,36 @@ public class WebWalker {
     private boolean logging;
     private WalkingCondition globalWalkingCondition;
     private int runAt;
-    private ABCUtil abcUtil;
 
-    private WebWalker(){
+    private org.tribot.api.util.ABCUtil abcUtilV1;
+    private ABCUtil abcUtilV2;
+
+    private WebWalker() {
+        this(new ABCUtil());
+    }
+
+    private WebWalker(ABCUtil util) {
         logging = true;
-        abcUtil = new ABCUtil();
-        runAt = abcUtil.generateRunActivation();
+        abcUtilV2 = util;
+        runAt = abcUtilV2.generateRunActivation();
         globalWalkingCondition = () -> {
             if (!Game.isRunOn() && Game.getRunEnergy() > runAt){
                 Options.setRunOn(true);
-                runAt = abcUtil.generateRunActivation();
+                runAt = abcUtilV2.generateRunActivation();
+            }
+            return WalkingCondition.State.CONTINUE_WALKER;
+        };
+    }
+
+    private WebWalker(org.tribot.api.util.ABCUtil util) {
+        logging = true;
+        abcUtilV1 = util;
+        runAt = abcUtilV1.INT_TRACKER.NEXT_RUN_AT.next();
+        globalWalkingCondition = () -> {
+            if (!Game.isRunOn() && Game.getRunEnergy() > runAt){
+                Options.setRunOn(true);
+                runAt = abcUtilV1.INT_TRACKER.NEXT_RUN_AT.next();
+                abcUtilV1.INT_TRACKER.NEXT_RUN_AT.reset();
             }
             return WalkingCondition.State.CONTINUE_WALKER;
         };
@@ -41,6 +59,14 @@ public class WebWalker {
 
     private static WebWalker getInstance(){
         return instance != null ? instance : (instance = new WebWalker());
+    }
+
+    private static WebWalker getInstance(ABCUtil abcUtil){
+        return instance != null ? instance : (instance = new WebWalker(abcUtil));
+    }
+
+    private static WebWalker getInstance(org.tribot.api.util.ABCUtil abcUtil){
+        return instance != null ? instance : (instance = new WebWalker(abcUtil));
     }
 
     /**
@@ -84,7 +110,6 @@ public class WebWalker {
     public static void setGlobalWalkingCondition(WalkingCondition walkingCondition){
         getInstance().globalWalkingCondition = walkingCondition;
     }
-
 
     /**
      *
@@ -167,4 +192,29 @@ public class WebWalker {
         WebPathCore.setAuth(apiKey, secretKey);
     }
 
+    private static void setABCUtil(ABCUtil util) {
+        WebWalker walker = getInstance(util);
+
+        if (walker.abcUtilV2 != util) {
+            walker.abcUtilV2.close();
+            walker.abcUtilV2 = util;
+        }
+
+        if (walker.abcUtilV1 != null) {
+            walker.abcUtilV1 = null;
+        }
+    }
+
+    private static void setABCUtil(org.tribot.api.util.ABCUtil util) {
+        WebWalker walker = getInstance(util);
+
+        if (walker.abcUtilV1 != util) {
+            walker.abcUtilV1 = null;
+            walker.abcUtilV1 = util;
+        }
+
+        if (walker.abcUtilV2 != null) {
+            walker.abcUtilV2.close();
+        }
+    }
 }
