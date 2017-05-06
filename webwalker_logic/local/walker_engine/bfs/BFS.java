@@ -2,13 +2,13 @@ package scripts.webwalker_logic.local.walker_engine.bfs;
 
 
 import org.tribot.api2007.types.RSTile;
+import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.shared.NodeInfo;
 import scripts.webwalker_logic.shared.PathFindingNode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 
 public class BFS {
 
@@ -113,7 +113,7 @@ public class BFS {
     public static PathFindingNode getRandomTileNearby(PathFindingNode start){
         NodeInfo.clearMemory(start.getClass());
 
-        int limit = new Random().nextInt(OFFSET_SEARCH), currentLimit = 0;
+        int limit = WaitFor.random(1, OFFSET_SEARCH), currentLimit = 0;
         Queue<PathFindingNode> queue = new LinkedList<>();
         queue.add(start);
         NodeInfo.create(queue.peek()).traversed = true;

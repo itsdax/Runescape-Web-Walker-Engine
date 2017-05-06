@@ -14,6 +14,8 @@ import java.util.Random;
 
 public class WaitFor {
 
+    private static final Random random = new Random();
+
     public static Condition getNotMovingCondition(){
         return new Condition() {
             final RSTile initialTile = Player.getPosition();
@@ -40,7 +42,7 @@ public class WaitFor {
             return base;
         }
         int sleep = (int) (multiplier * distance);
-        return base + (int) General.randomSD(sleep * .6, sleep * 1.3, sleep, sleep * .125);
+        return (int)General.randomSD(base * .8, base * 1.2, base, base * 0.1) + sleep;
     }
 
 
@@ -59,7 +61,7 @@ public class WaitFor {
             switch (condition.active()){
                 case SUCCESS: return Return.SUCCESS;
                 case FAIL: return Return.FAIL;
-                case IGNORE: milliseconds(25);
+                case IGNORE: milliseconds(75);
             }
         }
         return Return.TIMEOUT;
@@ -84,8 +86,8 @@ public class WaitFor {
         return null;
     }
 
-    private static int random(int low, int high) {
-        return new Random().nextInt((high - low) + 1) + low;
+    public static int random(int low, int high) {
+        return random.nextInt((high - low) + 1) + low;
     }
 
     public static Return milliseconds(int low, int high){

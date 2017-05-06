@@ -9,12 +9,15 @@ import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSObjectDefinition;
 import org.tribot.api2007.types.RSTile;
+import scripts.api.interaction.ObjectInteraction;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.webwalker_logic.shared.helpers.RSItemHelper;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.AccurateMouse;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.InteractionHelper;
+import scripts.webwalker_logic.shared.helpers.RSObjectHelper;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;
@@ -109,7 +112,16 @@ public class NavigationSpecialCase implements Loggable{
         PEST_CONTROL (2659, 2676, 0),
 
         ARDY_LOG_WEST (2598, 3336, 0),
-        ARDY_LOG_EAST (2602, 3336, 0);
+        ARDY_LOG_EAST (2602, 3336, 0),
+
+        GNOME_TREE_DAERO (2482, 3486, 1),
+        GNOME_WAYDAR (2649, 4516, 0),
+        CRASH_ISLAND (2894, 2726, 0),
+        APE_ATOLL_GLIDER_CRASH (2802, 2707, 0),
+        GNOME_DROPOFF (2393, 3466, 0),
+
+        HAM_OUTSIDE (3166, 3251, 0),
+        HAM_INSIDE (3149, 9652, 0);
 
 
 
@@ -401,6 +413,64 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
 
+            case GNOME_TREE_DAERO:
+                break;
+
+            case GNOME_WAYDAR:
+                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Daero"), new String[]{"Travel"})){
+                    if (WaitFor.condition(5000, () -> Player.getPosition().distanceTo(GNOME_WAYDAR.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                        break;
+                    }
+                    WaitFor.milliseconds(1000, 2000);
+                    return true;
+                }
+                break;
+
+            case CRASH_ISLAND:
+                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Waydar"), new String[]{"Travel"})){
+                    if (WaitFor.condition(5000, () -> Player.getPosition().distanceTo(CRASH_ISLAND.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                        break;
+                    }
+                    WaitFor.milliseconds(1000, 2000);
+                    return true;
+                }
+                break;
+
+            case APE_ATOLL_GLIDER_CRASH:
+                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Lumdo"), new String[]{"Travel"})){
+                    if (WaitFor.condition(5000, () -> Player.getPosition().distanceTo(APE_ATOLL_GLIDER_CRASH.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                        break;
+                    }
+                    WaitFor.milliseconds(1000, 2000);
+                    return true;
+                }
+                break;
+            case GNOME_DROPOFF:
+                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Waydar"), new String[]{"Travel"})){
+                    if (WaitFor.condition(5000, () -> Player.getPosition().distanceTo(CRASH_ISLAND.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                        break;
+                    }
+                    WaitFor.milliseconds(1000, 2000);
+                    return true;
+                }
+                break;
+
+            case HAM_OUTSIDE:
+            case HAM_INSIDE:
+                if (RSObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock"))){
+                    System.out.println("adsads");
+                    if (InteractionHelper.click(RSObjectHelper.get(Filters.Objects.actionsContains("Pick-Lock")), "Pick-Lock")){
+                        WaitFor.condition(WaitFor.random(6000, 9000), () -> !RSObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock")) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        return true;
+                    }
+                } else {
+                    System.out.println("aaaaaaaa");
+                    if (InteractionHelper.click(RSObjectHelper.get(Filters.Objects.actionsContains("Climb-down")), "Climb-down")){
+                        WaitFor.condition(3000, () -> HAM_INSIDE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        return true;
+                    }
+                }
+                break;
         }
 
         if (zeahBoatLocation != null){

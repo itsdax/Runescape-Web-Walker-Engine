@@ -182,7 +182,7 @@ public class WebWalker {
 
     public static void setLocal(boolean b){
         if (b){
-            setApiKey("749b4a91-1ae5-4ea8-bba6-c70f4c892eb4", "5CC11D7E3E5E153F");
+            setApiKey("0243f275-cf5f-428b-be41-e4804e06e0da", "4CB3A01E48C3F79F");
             System.out.println("Switching to local api key");
         }
         WebPathCore.setLocal(b);

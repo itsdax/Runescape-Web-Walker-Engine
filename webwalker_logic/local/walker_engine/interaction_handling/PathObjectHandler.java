@@ -29,7 +29,7 @@ public class PathObjectHandler implements Loggable {
         sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
-                "Investigate"));
+                "Investigate", "Operate"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
     }
@@ -64,6 +64,15 @@ public class PathObjectHandler implements Loggable {
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Roots"), true)
                                 .combine(Filters.Objects.actionsContains("Chop"), true)).length > 0;
+            }
+        }),
+        ROCK_SLIDE("Rockslide", "Climb-over", null, new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return Objects.find(15,
+                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                                .combine(Filters.Objects.nameEquals("Rockslide"), true)
+                                .combine(Filters.Objects.actionsContains("Climb-over"), true)).length > 0;
             }
         }),
         ROOT("Root", "Step-over", null, new SpecialCondition() {
@@ -199,7 +208,9 @@ public class PathObjectHandler implements Loggable {
         }
 
         boolean successfulClick = false;
+
         if (specialObject != null) {
+            getInstance().log("Detected Special Object: " + specialObject);
             switch (specialObject){
                 case WEB:
                     List<RSObject> webs;
@@ -207,15 +218,20 @@ public class PathObjectHandler implements Loggable {
                     while ((webs = Arrays.stream(Objects.getAt(object.getPosition())).filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1)).anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
                         RSObject web = webs.get(0);
                         InteractionHelper.click(web, "Slash");
-                        WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
+                        if (web.getPosition().distanceTo(Player.getPosition()) <= 1) {
+                            WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
+                        } else {
+                            WaitFor.milliseconds(2000, 4000);
+                        }
                         if (Reachable.getMap().getParent(destinationDetails.getAssumedX(), destinationDetails.getAssumedY()) != null){
                             successfulClick = true;
                             break;
                         }
-                        if (iterations++ > 10){
+                        if (iterations++ > 5){
                             break;
                         }
                     }
+                    break;
                 case ARDY_DOOR_LOCK_SIDE:
                     for (int i = 0; i < General.random(15, 25); i++) {
                         if (!clickOnObject(object, new String[]{specialObject.getAction()})){

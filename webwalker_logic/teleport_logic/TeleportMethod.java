@@ -12,7 +12,7 @@ import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
 import scripts.webwalker_logic.shared.helpers.RSItemHelper;
-import scripts.webwalker_logic.teleport_logic.magic.Spell;
+import scripts.webwalker_logic.shared.helpers.magic.Spell;
 
 import java.util.ArrayList;
 import java.util.Arrays;
