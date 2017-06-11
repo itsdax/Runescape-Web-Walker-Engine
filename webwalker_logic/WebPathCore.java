@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 class WebPathCore {
 
-    private static final String HOST = "173.208.130.82", TEST = "localhost", PORT = "8080", DIRECTORY = "/web?";
+    private static final String HOST = "webwalker.dax.cloud", TEST = "localhost:8080", DIRECTORY = "/web?";
     private static ArrayList<RSTile> lastCalledPath = null;
     private static HashMap<String, GetPathResponseContainer> cache = null;
 
@@ -35,7 +35,7 @@ class WebPathCore {
     }
 
     private static String getServerURL(){
-        return "http://" + (local ? TEST : HOST) + ":" + PORT;
+        return "http://" + (local ? TEST : HOST);
     }
 
     static GetPathResponseContainer getPath(int x1, int y1, int z1, int x2, int y2, int z2, PlayerInformation playerInformation){

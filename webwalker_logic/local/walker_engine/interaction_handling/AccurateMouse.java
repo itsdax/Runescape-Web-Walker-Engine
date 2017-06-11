@@ -57,7 +57,7 @@ public class AccurateMouse {
             Mouse.move(point.x, point.y);
         }
         Mouse.sendPress(point, button);
-        General.sleep(General.randomSD(5, 90, 30, 20));
+        General.sleep(General.randomSD(5, 180, 60, 25));
         Mouse.sendRelease(point, button);
         Mouse.sendClickEvent(point, button);
     }

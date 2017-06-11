@@ -9,8 +9,6 @@ import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSObjectDefinition;
 import org.tribot.api2007.types.RSTile;
-import scripts.api.interaction.ObjectInteraction;
-import scripts.webwalker_logic.local.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.webwalker_logic.shared.helpers.RSItemHelper;
 import scripts.webwalker_logic.local.walker_engine.Loggable;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.NPCInteraction;
@@ -47,6 +45,14 @@ public class NavigationSpecialCase implements Loggable{
      * THE ABSOLUTE POSITION
      */
     public enum SpecialLocation {
+
+
+        RELLEKA_UPPER_PORT (2621, 3688, 0),
+        SMALL_PIRATES_COVE_AREA (2213, 3794, 0),
+
+        PIRATE_COVE_SHIP_TILE (2138, 3900, 2),
+        CAPTAIN_BENTLY_PIRATES_COVE (2223, 3796, 2),
+        CAPTAIN_BENTLY_LUNAR_ISLE (2130, 3899, 2),
 
         SHANTAY_PASS(3311, 3109, 0),
         UZER (3468, 3110, 0),
@@ -138,10 +144,10 @@ public class NavigationSpecialCase implements Loggable{
     }
 
     public static SpecialLocation getLocation(RSTile rsTile){
-        Optional<SpecialLocation> optional = Arrays.stream(
+        return Arrays.stream(
                 SpecialLocation.values()).filter(tile -> tile.z == rsTile.getPlane()
-                && Point2D.distance(tile.x, tile.y, rsTile.getX(), rsTile.getY()) <= 2).findFirst();
-        return optional.isPresent() ? optional.get() : null;
+                && Point2D.distance(tile.x, tile.y, rsTile.getX(), rsTile.getY()) <= 2)
+                    .findFirst().orElse(null);
     }
 
     /**
@@ -172,6 +178,34 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 break;
 
+            case RELLEKA_UPPER_PORT:
+                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{"That's fine, I'm just going to Pirates' Cove."})){
+                    System.out.println("Was not able to travel with Lokar");
+                    break;
+                }
+                WaitFor.milliseconds(3300, 5200);
+                break;
+            case SMALL_PIRATES_COVE_AREA:
+                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{"That's fine, I'm just going to Pirates' Cove."})){
+                    System.out.println("Was not able to travel with Lokar");
+                    break;
+                }
+                WaitFor.milliseconds(3300, 5200);
+                break;
+            case CAPTAIN_BENTLY_PIRATES_COVE:
+                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Captain"), new String[]{"Travel"}, new String[]{})){
+                    System.out.println("Was not able to travel with Captain");
+                    break;
+                }
+                WaitFor.milliseconds(5300, 7200);
+                break;
+            case CAPTAIN_BENTLY_LUNAR_ISLE:
+                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Captain"), new String[]{"Travel"}, new String[]{})){
+                    System.out.println("Was not able to travel with Captain");
+                    break;
+                }
+                WaitFor.milliseconds(5300, 7200);
+                break;
             case SHANTAY_PASS:
             case UZER:
             case BEDABIN_CAMP:
@@ -471,6 +505,8 @@ public class NavigationSpecialCase implements Loggable{
                     }
                 }
                 break;
+
+
         }
 
         if (zeahBoatLocation != null){

@@ -82,7 +82,17 @@ public class WebWalkerPaint {
                             previousLocalY = localY;
                             continue;
                         }
-                        nonDisplayableMapImageGraphics.setColor(new Color(0, 255, 23));
+
+                        switch (node.getPlane()){
+                            case 1:
+                                nonDisplayableMapImageGraphics.setColor(new Color(0, 224, 255));
+                                break;
+                            case 2:
+                                nonDisplayableMapImageGraphics.setColor(new Color(255, 115, 166));
+                                break;
+                            default:
+                                nonDisplayableMapImageGraphics.setColor(new Color(0, 255, 23));
+                        }
 
                         if (Point2D.distance(previousLocalX, previousLocalY, localX, localY) > 20){
                             nonDisplayableMapImageGraphics.setColor(new Color(233, 255, 224, 120));

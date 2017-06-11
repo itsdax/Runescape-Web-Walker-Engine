@@ -108,7 +108,7 @@ public class NPCInteraction implements Loggable {
 
             List<RSInterface> selectableOptions = getAllOptions(regex);
             if (selectableOptions == null || selectableOptions.size() == 0){
-                WaitFor.milliseconds(50);
+                WaitFor.milliseconds(100);
                 continue;
             }
 
@@ -136,7 +136,7 @@ public class NPCInteraction implements Loggable {
 
             List<RSInterface> selectableOptions = getAllOptions(options);
             if (selectableOptions == null || selectableOptions.size() == 0){
-                WaitFor.milliseconds(50);
+                WaitFor.milliseconds(150);
                 continue;
             }
 
