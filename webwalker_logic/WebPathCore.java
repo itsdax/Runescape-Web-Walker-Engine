@@ -9,12 +9,10 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.ConnectException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -113,7 +111,18 @@ class WebPathCore {
     }
 
     private static String generateAuthToken(){
-        return encrypt(apiKey, secretKey, System.currentTimeMillis() + "");
+        return encrypt(apiKey, secretKey, pingTime() + "");
+    }
+
+    public static long pingTime(){
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(getServerURL() + "/timing").openStream()))){
+            String time = bufferedReader.readLine();
+            System.out.println("Ping time result: " + time);
+            return Long.parseLong(time);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0L;
     }
 
     public static void setAuth(String apiKey, String secretKey){

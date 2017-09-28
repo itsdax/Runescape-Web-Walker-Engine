@@ -66,6 +66,11 @@ public class InterfaceHelper {
         return interfaces;
     }
 
+    public static boolean textEquals(RSInterface rsInterface, String match){
+        String text = rsInterface.getText();
+        return text != null && text.equals(match);
+    }
+
     public static boolean textContains(RSInterface rsInterface, String match){
         String text = rsInterface.getText();
         return text != null && text.contains(match);

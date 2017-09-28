@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class WebWalker {
 
     private static final WalkingCondition EMPTY_WALKING_CONDITION = () -> WalkingCondition.State.CONTINUE_WALKER;
-    private final String version = "1.1.14";
+    private final String version = "1.1.15";
 
     private static WebWalker instance;
     private boolean logging;
@@ -182,7 +182,7 @@ public class WebWalker {
 
     public static void setLocal(boolean b){
         if (b){
-            setApiKey("0243f275-cf5f-428b-be41-e4804e06e0da", "4CB3A01E48C3F79F");
+            setApiKey("8d18a428-5474-40d3-aec8-0bc79243ad05", "3E5C311D338664EE");
             System.out.println("Switching to local api key");
         }
         WebPathCore.setLocal(b);

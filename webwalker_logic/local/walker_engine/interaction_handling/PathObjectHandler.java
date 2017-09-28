@@ -30,7 +30,7 @@ public class PathObjectHandler implements Loggable {
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
                 "Investigate", "Operate"));
-        sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));
+        sortedBlackList = new TreeSet<>(Arrays.asList("Coffin", "Close", "Chop down"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
     }
 
@@ -331,6 +331,9 @@ public class PathObjectHandler implements Loggable {
         StringBuilder a = new StringBuilder("Detected: ");
         Arrays.stream(objects).forEach(object -> a.append(object.getDefinition().getName()).append(" "));
         getInstance().log(a);
+
+
+
         return objects;
     }
 
