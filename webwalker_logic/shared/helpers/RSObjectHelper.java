@@ -5,6 +5,9 @@ import org.tribot.api2007.Objects;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSObjectDefinition;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class RSObjectHelper {
 
@@ -15,6 +18,10 @@ public class RSObjectHelper {
 
     public static boolean exists(Filter<RSObject> filter){
         return Objects.find(10, filter).length > 0;
+    }
+
+    public static List<String> getActionsList(RSObject object){
+        return Arrays.asList(getActions(object));
     }
 
     public static String[] getActions(RSObject object){

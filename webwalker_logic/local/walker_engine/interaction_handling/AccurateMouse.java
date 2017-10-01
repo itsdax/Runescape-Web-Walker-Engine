@@ -215,7 +215,7 @@ public class AccurateMouse {
         }
 
         String regex = "(" + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())) + ")" + " (-> )?" + (targetName != null ? targetName : "") + "(.*)";
-        if (WaitFor.condition(100, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+        if (WaitFor.condition(80, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             boolean multipleMatches = false;
 
             String[] options = ChooseOption.getOptions();
@@ -338,6 +338,12 @@ public class AccurateMouse {
     }
 
 
+    /**
+     * This is a cpu intensive method.
+     *
+     * @param destination
+     * @return
+     */
     private static Point getWalkingPoint(RSTile destination){
         Area area = getTileModel(destination);
         ArrayList<Polygon> polygons = new ArrayList<>();

@@ -23,14 +23,15 @@ public class PathObjectHandler implements Loggable {
 
     private static PathObjectHandler instance;
 
-    private final TreeSet<String> sortedOptions, sortedBlackList, sortedHighPriorityOptions;
+    private final TreeSet<String> sortedOptions, sortedBlackList, sortedBlackListOptions, sortedHighPriorityOptions;
 
     private PathObjectHandler(){
         sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
                 "Investigate", "Operate"));
-        sortedBlackList = new TreeSet<>(Arrays.asList("Coffin", "Close", "Chop down"));
+        sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));
+        sortedBlackListOptions = new TreeSet<>(Arrays.asList("Close", "Chop down"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
     }
 
@@ -337,23 +338,35 @@ public class PathObjectHandler implements Loggable {
         return objects;
     }
 
-
+    /**
+     * Filter that accepts only interactive objects to progress in path.
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param destinationDetails context where destination is at
+     * @return
+     */
     private static Filter<RSObject> interactiveObjectFilter(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
         final RSTile position = new RSTile(x, y, z);
         return new Filter<RSObject>() {
             @Override
             public boolean accept(RSObject rsObject) {
-                if (rsObject.getPosition().distanceTo(destinationDetails.getDestination().getRSTile()) > 5){
-                    return false;
-                }
-                if (Arrays.stream(rsObject.getAllTiles()).noneMatch(rsTile -> rsTile.distanceTo(position) <= 2)){
-                    return false;
-                }
                 RSObjectDefinition def = rsObject.getDefinition();
                 if (def == null){
                     return false;
                 }
-                if (getInstance().sortedBlackList.contains(def.getName())){
+                String name = def.getName();
+                if (getInstance().sortedBlackList.contains(name)) {
+                    return false;
+                }
+                if (RSObjectHelper.getActionsList(rsObject).stream().anyMatch(s -> getInstance().sortedBlackListOptions.contains(s))){
+                    return false;
+                }
+                if (rsObject.getPosition().distanceTo(destinationDetails.getDestination().getRSTile()) > 5) {
+                    return false;
+                }
+                if (Arrays.stream(rsObject.getAllTiles()).noneMatch(rsTile -> rsTile.distanceTo(position) <= 2)) {
                     return false;
                 }
                 List<String> options = Arrays.asList(def.getActions());
@@ -394,7 +407,7 @@ public class PathObjectHandler implements Loggable {
             result = handleTrapDoor(object);
         } else {
             result = AccurateMouse.click(object, options);
-            getInstance().log("Interacting with (" + object.getDefinition().getName() + ") at " + object.getPosition() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
+            getInstance().log("Interacting with (" + RSObjectHelper.getName(object) + ") at " + object.getPosition() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
         }
 
         return result;

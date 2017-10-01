@@ -111,7 +111,8 @@ class WebPathCore {
     }
 
     private static String generateAuthToken(){
-        return encrypt(apiKey, secretKey, pingTime() + "");
+//        return encrypt(apiKey, secretKey, pingTime() + "");
+        return encrypt(apiKey, secretKey, System.currentTimeMillis() + "");
     }
 
     public static long pingTime(){

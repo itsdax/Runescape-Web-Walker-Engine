@@ -175,8 +175,8 @@ public class WebWalkerPaint {
         }
         Graphics2D graphics2D = (Graphics2D) graphics;
         AffineTransform affineTransform = new AffineTransform();
-//        affineTransform.rotate(Math.toRadians(Camera.getCameraRotation()), mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2, mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2);
-        affineTransform.rotate(Game.getMinimapRotation(), mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2, mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2);
+        affineTransform.rotate(Math.toRadians(Camera.getCameraRotation()), mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2, mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2);
+//        affineTransform.rotate(Game.getMinimapRotation(), mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2, mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2);
         affineTransform.translate(mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH), mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH));
         graphics2D.drawImage(mapDisplay, affineTransform, null);
     }
