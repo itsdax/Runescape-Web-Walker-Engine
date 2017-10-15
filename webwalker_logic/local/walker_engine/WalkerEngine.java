@@ -5,9 +5,13 @@ import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.*;
+import org.tribot.api2007.ext.Filters;
+import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
+import scripts.webwalker_logic.local.walker_engine.interaction_handling.AccurateMouse;
 import scripts.webwalker_logic.local.walker_engine.local_pathfinding.PathAnalyzer;
+import scripts.webwalker_logic.local.walker_engine.local_pathfinding.Reachable;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.Charter;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.NavigationSpecialCase;
 import scripts.webwalker_logic.local.walker_engine.navigation_utils.ShipUtils;
@@ -15,9 +19,11 @@ import scripts.webwalker_logic.local.walker_engine.interaction_handling.PathObje
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.RealTimeCollisionTile;
 import scripts.webwalker_logic.shared.PathFindingNode;
+import scripts.webwalker_logic.shared.helpers.RSObjectHelper;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class WalkerEngine implements Loggable{
 
@@ -71,12 +77,9 @@ public class WalkerEngine implements Loggable{
                 }
 
                 if (ShipUtils.isOnShip()) {
-                    log("We're on a boat.");
-                    if (ShipUtils.crossGangplank()) {
-                        log("Successfully crossed gangplank");
-                    } else {
+                    if (!ShipUtils.crossGangplank()) {
+                        log("Failed to exit ship via gangplank.");
                         failedAttempt();
-                        log("Failed to cross gangplank");
                     }
                     WaitFor.milliseconds(50);
                     continue;
@@ -140,7 +143,13 @@ public class WalkerEngine implements Loggable{
                         }
                         //DO NOT BREAK OUT
                     case OBJECT_BLOCKING:
-                        if (isDestinationClose(destination) || clickMinimap(destination)) {
+                        RSObject target = Arrays.stream(Objects.getAll(20))
+                                .filter(object -> Arrays.stream(object.getAllTiles()).anyMatch(tile -> tile.equals(destination.getRSTile())))
+                                .filter(object -> RSObjectHelper.getActionsList(object).size() > 0).findAny().orElse(null);
+                        Reachable reachable = new Reachable();
+                        RSTile walkingTile = target != null ? Reachable.getBestWalkableTile(target, reachable) : null;
+
+                        if (isDestinationClose(destination) || (walkingTile != null ? clickExactMinimap(walkingTile) : clickMinimap(destination))) {
                             log("Handling Object...");
                             if (!PathObjectHandler.handle(destinationDetails, path)) {
                                 failedAttempt();
@@ -223,6 +232,30 @@ public class WalkerEngine implements Loggable{
         return new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()).isClickable()
                 && playerPosition.distanceTo(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 6
                 && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 49));
+    }
+
+    public boolean clickExactMinimap(RSTile tile){
+        for (int i = 0; i < General.random(1, 3); i++) {
+            RSTile currentDestination = Game.getDestination();
+            if (currentDestination != null && currentDestination.equals(tile)) {
+                return true;
+            }
+
+            Point point = Projection.tileToMinimap(tile);
+            if (point == null || point.x == -1){
+                return false;
+            }
+
+            AccurateMouse.click(point);
+            RSTile newDestination = WaitFor.getValue(200, () -> {
+                RSTile destination = Game.getDestination();
+                return destination == null || destination.equals(currentDestination) ? null : destination;
+            });
+            if (newDestination != null && newDestination.equals(tile)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){

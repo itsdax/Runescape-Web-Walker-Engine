@@ -18,7 +18,7 @@ public class Reachable {
     /**
      * Generates reachable map from player position
      */
-    private Reachable(){
+    public Reachable(){
         this(null);
     }
 
@@ -157,7 +157,6 @@ public class Reachable {
         traversed[localPosition.getX()][localPosition.getY()] = true;
         parentMap[localPosition.getX()][localPosition.getY()] = null;
 
-        General.println(building.size());
         while (!queue.isEmpty()){
             RSTile currentLocal = queue.poll();
             int x = currentLocal.getX(), y = currentLocal.getY();
