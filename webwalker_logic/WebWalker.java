@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class WebWalker {
 
     private static final WalkingCondition EMPTY_WALKING_CONDITION = () -> WalkingCondition.State.CONTINUE_WALKER;
-    private final String version = "1.1.16"; //TODO: Grab from server
+    private final String version = "1.1.2"; //TODO: Grab from server
 
     private static WebWalker instance;
     private boolean logging;

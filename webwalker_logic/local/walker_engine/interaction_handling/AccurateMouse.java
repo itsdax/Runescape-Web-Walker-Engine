@@ -71,6 +71,39 @@ public class AccurateMouse {
         return action(clickable, true, clickActions);
     }
 
+    public static boolean clickMinimap(RSTile tile){
+        if (tile == null){
+            return false;
+        }
+        for (int i = 0; i < General.random(4, 6); i++) {
+            RSTile currentDestination = Game.getDestination();
+            if (currentDestination != null && currentDestination.equals(tile)) {
+                return true;
+            }
+
+            Point point = Projection.tileToMinimap(tile);
+            if (point.x == -1 || !Projection.isInMinimap(point)){
+                return false;
+            }
+
+            if (!Mouse.getPos().equals(point)) {
+                AccurateMouse.move(point);
+                continue;
+            } else {
+                AccurateMouse.click(point);
+            }
+
+            RSTile newDestination = WaitFor.getValue(250, () -> {
+                RSTile destination = Game.getDestination();
+                return destination == null || destination.equals(currentDestination) ? null : destination;
+            });
+            if (newDestination != null && newDestination.equals(tile)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static boolean action(Clickable clickable, boolean hover, String... clickActions){
         if (clickable == null){
             return false;

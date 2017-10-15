@@ -3,10 +3,7 @@ package scripts.webwalker_logic.local.walker_engine;
 
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
-import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.*;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.bfs.BFS;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.AccurateMouse;
@@ -19,11 +16,9 @@ import scripts.webwalker_logic.local.walker_engine.interaction_handling.PathObje
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.webwalker_logic.local.walker_engine.real_time_collision.RealTimeCollisionTile;
 import scripts.webwalker_logic.shared.PathFindingNode;
-import scripts.webwalker_logic.shared.helpers.RSObjectHelper;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class WalkerEngine implements Loggable{
 
@@ -143,13 +138,8 @@ public class WalkerEngine implements Loggable{
                         }
                         //DO NOT BREAK OUT
                     case OBJECT_BLOCKING:
-                        RSObject target = Arrays.stream(Objects.getAll(20))
-                                .filter(object -> Arrays.stream(object.getAllTiles()).anyMatch(tile -> tile.equals(destination.getRSTile())))
-                                .filter(object -> RSObjectHelper.getActionsList(object).size() > 0).findAny().orElse(null);
-                        Reachable reachable = new Reachable();
-                        RSTile walkingTile = target != null ? Reachable.getBestWalkableTile(target, reachable) : null;
-
-                        if (isDestinationClose(destination) || (walkingTile != null ? clickExactMinimap(walkingTile) : clickMinimap(destination))) {
+                        RSTile walkingTile = Reachable.getBestWalkableTile(destination.getRSTile(), new Reachable());
+                        if (isDestinationClose(destination) || (walkingTile != null ? AccurateMouse.clickMinimap(walkingTile) : clickMinimap(destination))) {
                             log("Handling Object...");
                             if (!PathObjectHandler.handle(destinationDetails, path)) {
                                 failedAttempt();
@@ -223,39 +213,15 @@ public class WalkerEngine implements Loggable{
         }
     }
 
-    public boolean isNavigating() {
+    boolean isNavigating() {
         return navigating;
     }
 
-    public boolean isDestinationClose(PathFindingNode pathFindingNode){
+    boolean isDestinationClose(PathFindingNode pathFindingNode){
         final RSTile playerPosition = Player.getPosition();
         return new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()).isClickable()
                 && playerPosition.distanceTo(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 6
                 && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 49));
-    }
-
-    public boolean clickExactMinimap(RSTile tile){
-        for (int i = 0; i < General.random(1, 3); i++) {
-            RSTile currentDestination = Game.getDestination();
-            if (currentDestination != null && currentDestination.equals(tile)) {
-                return true;
-            }
-
-            Point point = Projection.tileToMinimap(tile);
-            if (point == null || point.x == -1){
-                return false;
-            }
-
-            AccurateMouse.click(point);
-            RSTile newDestination = WaitFor.getValue(200, () -> {
-                RSTile destination = Game.getDestination();
-                return destination == null || destination.equals(currentDestination) ? null : destination;
-            });
-            if (newDestination != null && newDestination.equals(tile)){
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){
@@ -270,45 +236,8 @@ public class WalkerEngine implements Loggable{
             return false;
         }
 
-        log("Clicking Tile On Minimap (" + pathFindingNode.getX() + ", " + pathFindingNode.getY() + ", " + pathFindingNode.getZ() + ") -> RANDOMIZE -> (" + randomNearby.getX() + ", " + randomNearby.getY() + ", " + randomNearby.getZ() + ")");
-        Point point = Projection.tileToMinimap(new RSTile(randomNearby.getX(), randomNearby.getY(), randomNearby.getZ()));
-
-        if (!Projection.isInMinimap(point)){
-            log("Randomize is off the map, clicking normal instead.");
-            point = Projection.tileToMinimap(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
-        }
-
-        final RSTile currentDestination = WaitFor.getValue(200, Game::getDestination);
-        Mouse.click(point, 1);
-        WaitFor.milliseconds(400);
-
-        RSTile gameDestination = WaitFor.getValue(1000, () -> {
-            RSTile destination = Game.getDestination();
-            if (destination == null){
-                return null;
-            }
-            if (currentDestination != null && currentDestination.equals(destination)){
-                return null;
-            }
-            RealTimeCollisionTile realTimeCollisionTile = RealTimeCollisionTile.get(destination.getX(), destination.getY(), destination.getPlane());
-            if (realTimeCollisionTile == null){
-                return null;
-            }
-            if (!realTimeCollisionTile.isWalkable()){
-                return null;
-            }
-            return destination;
-        });
-        if (gameDestination == null){
-            log("Could not detect destination.");
-            return false;
-        }
-        if (!BFS.isReachable(RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), RealTimeCollisionTile.get(gameDestination.getX(), gameDestination.getY(), gameDestination.getPlane()), 121)){
-            log("We clicked on " + gameDestination + " and that is not what we want.");
-            return false;
-        }
-        log("We clicked on " + gameDestination + " and that is a valid tile.");
-        return true;
+        log("Randomize(" + pathFindingNode.getX() + "," + pathFindingNode.getY() + "," + pathFindingNode.getZ() + ") -> (" + randomNearby.getX() + "," + randomNearby.getY() + "," + randomNearby.getZ() + ")");
+        return AccurateMouse.clickMinimap(new RSTile(randomNearby.getX(), randomNearby.getY(), randomNearby.getZ())) || AccurateMouse.clickMinimap(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
     }
 
     public void hoverMinimap(PathFindingNode pathFindingNode){

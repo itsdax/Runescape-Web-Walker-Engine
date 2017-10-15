@@ -31,7 +31,7 @@ public class PathObjectHandler implements Loggable {
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
                 "Investigate", "Operate"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin"));
-        sortedBlackListOptions = new TreeSet<>(Arrays.asList("Close", "Chop down"));
+        sortedBlackListOptions = new TreeSet<>(Arrays.asList("Chop down"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
     }
 
