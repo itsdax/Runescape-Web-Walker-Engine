@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class Charter implements Loggable{
 
-    private static final int CHARTER_INTERFACE_MASTER = 95;
+    private static final int CHARTER_INTERFACE_MASTER = 72;
     private static Charter instance;
 
     private static Charter getInstance(){
