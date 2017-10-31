@@ -3,6 +3,7 @@ package scripts.webwalker_logic.local.walker_engine.interaction_handling;
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Clickable;
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.*;
 import org.tribot.api2007.Objects;
@@ -71,7 +72,7 @@ public class AccurateMouse {
         return action(clickable, true, clickActions);
     }
 
-    public static boolean clickMinimap(RSTile tile){
+    public static boolean clickMinimap(Positionable tile){
         if (tile == null){
             return false;
         }
@@ -153,7 +154,7 @@ public class AccurateMouse {
         if (!destination.isOnScreen() || !destination.isClickable()){
             return false;
         }
-        for (int i = 0; i < General.random(4, 6); i++) {
+        for (int i = 0; i < General.random(3, 5); i++) {
             Point point = getWalkingPoint(destination);
             if (point == null){
                 continue;
@@ -377,7 +378,7 @@ public class AccurateMouse {
      * @param destination
      * @return
      */
-    private static Point getWalkingPoint(RSTile destination){
+    public static Point getWalkingPoint(RSTile destination){
         Area area = getTileModel(destination);
         ArrayList<Polygon> polygons = new ArrayList<>();
         for (RSTile tile : new RSArea(destination, 1).getAllTiles()){

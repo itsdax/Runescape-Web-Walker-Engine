@@ -124,7 +124,10 @@ public class NPCInteraction implements Loggable {
     }
 
     public static void handleConversation(String[] options){
-        while (true){
+        getInstance().log("Handling... " + Arrays.asList(options));
+        List<String> blackList = new ArrayList<>();
+        int limit = 0;
+        while (limit++ < 25){
             if (WaitFor.condition(General.random(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                 break;
             }
@@ -140,10 +143,17 @@ public class NPCInteraction implements Loggable {
                 continue;
             }
 
-            General.sleep(General.randomSD(350, 2250, 775, 350));
-            getInstance().log("Replying with option: " + selectableOptions.get(0).getText());
-            Keyboard.typeString(selectableOptions.get(0).getComponentIndex() + "");
-            waitForNextOption();
+            for (RSInterface selected : selectableOptions){
+                if(blackList.contains(selected.getText())){
+                    continue;
+                }
+                General.sleep(General.randomSD(350, 2250, 775, 350));
+                getInstance().log("Replying with option: " + selected.getText());
+                blackList.add(selected.getText());
+                Keyboard.typeString(selected.getComponentIndex() + "");
+                waitForNextOption();
+                break;
+            }
         }
     }
 

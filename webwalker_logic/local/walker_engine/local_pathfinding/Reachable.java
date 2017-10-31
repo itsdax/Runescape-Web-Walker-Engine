@@ -7,6 +7,7 @@ import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
+import scripts.api.walking.AStar;
 import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 import java.util.*;
@@ -26,6 +27,15 @@ public class Reachable {
         map = generateMap(homeTile != null ? homeTile : Player.getPosition());
     }
 
+    public boolean canReach(RSTile position){
+        position = position.toWorldTile();
+        RSTile playerPosition = Player.getPosition();
+        if (playerPosition.getX() == position.getX() && playerPosition.getY() == position.getY()){
+            return true;
+        }
+        return getParent(position.toLocalTile()) != null;
+    }
+
     public boolean canReach(int x, int y){
         RSTile playerPosition = Player.getPosition();
         if (playerPosition.getX() == x && playerPosition.getY() == y){
@@ -33,6 +43,20 @@ public class Reachable {
         }
         RSTile position = convertToLocal(x, y);
         return getParent(position) != null;
+    }
+
+    public RSTile closestTile(Collection<RSTile> tiles){
+        RSTile closest = null;
+        double closestDistance = Integer.MAX_VALUE;
+        RSTile playerPosition = Player.getPosition();
+        for (RSTile positionable : tiles){
+            double distance = playerPosition.distanceToDouble(positionable);
+            if (distance < closestDistance){
+                closestDistance = distance;
+                closest = positionable;
+            }
+        }
+        return closest;
     }
 
     /**
@@ -107,7 +131,7 @@ public class Reachable {
         int length = 0;
         RSTile tile = new RSTile(x, y, Player.getPosition().getPlane(), RSTile.TYPES.LOCAL);
         while ((tile = map[tile.getX()][tile.getY()]) != null){
-            path.add(tile);
+            path.add(tile.toWorldTile());
         }
         Collections.reverse(path);
         return path;
@@ -154,8 +178,12 @@ public class Reachable {
         int[][] collisionData = PathFinding.getCollisionData();
 
         queue.add(localPosition);
-        traversed[localPosition.getX()][localPosition.getY()] = true;
-        parentMap[localPosition.getX()][localPosition.getY()] = null;
+        try {
+            traversed[localPosition.getX()][localPosition.getY()] = true;
+            parentMap[localPosition.getX()][localPosition.getY()] = null;
+        } catch (ArrayIndexOutOfBoundsException e){
+            return null;
+        }
 
         while (!queue.isEmpty()){
             RSTile currentLocal = queue.poll();
@@ -219,8 +247,12 @@ public class Reachable {
         int[][] collisionData = PathFinding.getCollisionData();
 
         queue.add(localPlayerPosition);
-        traversed[localPlayerPosition.getX()][localPlayerPosition.getY()] = true;
-        parentMap[localPlayerPosition.getX()][localPlayerPosition.getY()] = null;
+        try {
+            traversed[localPlayerPosition.getX()][localPlayerPosition.getY()] = true;
+            parentMap[localPlayerPosition.getX()][localPlayerPosition.getY()] = null;
+        } catch (Exception e){
+            return parentMap;
+        }
 
         while (!queue.isEmpty()){
             RSTile currentLocal = queue.poll();
@@ -255,6 +287,10 @@ public class Reachable {
         EAST (1, 0),
         SOUTH (0, -1),
         WEST (-1, 0),
+        NORTH_EAST (1, 1),
+        NORTH_WEST (-1, 1),
+        SOUTH_EAST (1, -1),
+        SOUTH_WEST (-1, -1),
         ;
 
         int x, y;
@@ -269,12 +305,89 @@ public class Reachable {
         }
 
         public boolean isValidDirection(int x, int y, int[][] collisionData){
-            switch (this) {
-                case NORTH:     return !AStarNode.blockedNorth(collisionData[x][y]);
-                case EAST:      return !AStarNode.blockedEast(collisionData[x][y]);
-                case SOUTH:     return !AStarNode.blockedSouth(collisionData[x][y]);
-                case WEST:      return !AStarNode.blockedWest(collisionData[x][y]);
-                default:        return false;
+            try {
+                switch (this) {
+                    case NORTH:
+                        return !AStarNode.blockedNorth(collisionData[x][y]);
+                    case EAST:
+                        return !AStarNode.blockedEast(collisionData[x][y]);
+                    case SOUTH:
+                        return !AStarNode.blockedSouth(collisionData[x][y]);
+                    case WEST:
+                        return !AStarNode.blockedWest(collisionData[x][y]);
+                    case NORTH_EAST:
+                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])){
+                            return false;
+                        }
+                        if (!AStarNode.isWalkable(collisionData[x + 1][y])){
+                            return false;
+                        }
+                        if (!AStarNode.isWalkable(collisionData[x][y + 1])){
+                            return false;
+                        }
+                        if (AStarNode.blockedNorth(collisionData[x + 1][y])) {
+                            return false;
+                        }
+                        if (AStarNode.blockedEast(collisionData[x][y + 1])) {
+                            return false;
+                        }
+                        return true;
+                    case NORTH_WEST:
+                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])){
+                            return false;
+                        }
+                        if (!AStarNode.isWalkable(collisionData[x - 1][y])){
+                            return false;
+                        }
+                        if (!AStarNode.isWalkable(collisionData[x][y + 1])){
+                            return false;
+                        }
+                        if (AStarNode.blockedNorth(collisionData[x - 1][y])) {
+                            return false;
+                        }
+                        if (AStarNode.blockedWest(collisionData[x][y + 1])) {
+                            return false;
+                        }
+                        return true;
+                    case SOUTH_EAST:
+                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])){
+                            return false;
+                        }
+                        if (!AStarNode.isWalkable(collisionData[x + 1][y])){
+                            return false;
+                        }
+                        if (!AStarNode.isWalkable(collisionData[x][y - 1])){
+                            return false;
+                        }
+                        if (AStarNode.blockedSouth(collisionData[x + 1][y])) {
+                            return false;
+                        }
+                        if (AStarNode.blockedEast(collisionData[x][y - 1])) {
+                            return false;
+                        }
+                        return true;
+                    case SOUTH_WEST:
+                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])){
+                            return false;
+                        }
+                        if (!AStarNode.isWalkable(collisionData[x - 1][y])){
+                            return false;
+                        }
+                        if (!AStarNode.isWalkable(collisionData[x][y - 1])){
+                            return false;
+                        }
+                        if (AStarNode.blockedSouth(collisionData[x - 1][y])) {
+                            return false;
+                        }
+                        if (AStarNode.blockedWest(collisionData[x][y - 1])) {
+                            return false;
+                        }
+                        return true;
+                    default:
+                        return false;
+                }
+            } catch (ArrayIndexOutOfBoundsException e){
+                return false;
             }
         }
     }

@@ -180,7 +180,6 @@ public class WalkerEngine implements Loggable{
                                     return WaitFor.Return.FAIL;
                                 }
                                 int indexNextDestination = path.indexOf(furthestReachable.getDestination().getRSTile());
-
                                 if (indexNextDestination - indexCurrentDestination > 5 || indexCurrentDestination - indexCurrentPosition < 5) {
                                     return WaitFor.Return.SUCCESS;
                                 }
