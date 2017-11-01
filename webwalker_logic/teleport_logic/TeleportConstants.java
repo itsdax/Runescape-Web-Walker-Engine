@@ -1,11 +1,11 @@
 package scripts.webwalker_logic.teleport_logic;
 
 import org.tribot.api2007.Interfaces;
+import org.tribot.api2007.types.RSInterface;
 
 public class TeleportConstants {
     
-    private static int  WILD_LVL_MASTER = 90,
-                        WILD_LVL_CHILD = 46;
+    private static int WILD_LVL_MASTER = 90, WILD_LVL_CHILD = 46;
 
     public static final TeleportLimit
             LEVEL_20_WILDERNESS_LIMIT = () -> getWildernessLevel() < 20,
@@ -19,7 +19,7 @@ public class TeleportConstants {
 			String txt = level.getText();
 			if(txt == null)
 				return 0;
-			return Integer.parseInt(Utilities.extractNumber(txt));
+			return Integer.parseInt(txt.replaceAll("[^0-9]", ""));
 		} catch(Exception e){
 			return 0;
 		}

@@ -36,7 +36,7 @@ public enum TeleportMethod implements Validatable {
     ;
 
     private TeleportLocation[] destinations;
-    private TeleportLimit limit;
+    private TeleportLimit teleportLimit;
 
     TeleportMethod(TeleportLimit teleportLimit, TeleportLocation... destinations){
         this.teleportLimit = teleportLimit;
@@ -56,12 +56,12 @@ public enum TeleportMethod implements Validatable {
         return destinations;
     }
     public TeleportLimit getLimit(){
-        return limit;
+        return teleportLimit;
     }
 
     @Override
     public boolean canUse() {
-        if(!limit.canUse())
+        if(!this.getLimit().canCast())
             return false;
         switch (this){
             case ECTOPHIAL: return Inventory.find(Filters.Items.nameContains("Ectophial")).length > 0;
