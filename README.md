@@ -80,6 +80,18 @@ If your scripts have a large userbase, then the public key may not be enough for
 <img src="http://i.imgur.com/Ne2Ydy1.png"/>
 </p>
 
+## What's Included
+- Client side shortest path calculation for every location in the current region in a single call.
+
+###### Real time visualization:
+
+  ```java8
+  Reachable.getMap();
+  ```
+<p align="center">
+  <img src="https://i.imgur.com/4hZi3eM.gif"/>
+</p>
+
 ## Visualization of the server generating a path from point A to point B (Slowed Down)
 The algorithm is designed to limit itself to only the regions that will lead towards the destination. This is how we will generate paths in the fastest time possible.
 ###### UI is coded on a canvas in JavaFX. Code is not included in this repository.
