@@ -1,13 +1,18 @@
 package scripts.webwalker_logic.teleport_logic;
 
 import org.tribot.api.General;
+import org.tribot.api.Timing;
+import org.tribot.api.types.generic.Condition;
 import org.tribot.api.types.generic.Filter;
+import org.tribot.api2007.Banking;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
 import scripts.webwalker_logic.local.walker_engine.interaction_handling.NPCInteraction;
 import scripts.webwalker_logic.local.walker_engine.WaitFor;
@@ -36,49 +41,74 @@ public enum TeleportMethod implements Validatable {
     ;
 
     private TeleportLocation[] destinations;
-    private TeleportLimit limit;
+    private TeleportLimit teleportLimit;
 
     TeleportMethod(TeleportLimit teleportLimit, TeleportLocation... destinations){
-        this.teleportLimit = teleportLimit;
         this.destinations = destinations;
+        this.teleportLimit = teleportLimit;
+    }
+    
+    private static Filter<RSItem> isNotNoted = new Filter<RSItem>(){
+
+		@Override
+		public boolean accept(RSItem arg0) {
+			RSItemDefinition def = arg0.getDefinition();
+			if(def == null)
+				return false;
+			return !def.isNoted();
+		}
+    	
+    };
+    private static boolean inMembersWorld(){
+    	return WorldHopper.isMembers(WorldHopper.getWorld());
     }
 
     private static final Filter<RSItem>
-            GLORY_FILTER = Filters.Items.nameContains("Glory").combine(Filters.Items.nameContains("("), true),
-            GAMES_FILTER = Filters.Items.nameContains("Games").combine(Filters.Items.nameContains("("), true),
-            DUELING_FILTER = Filters.Items.nameContains("dueling").combine(Filters.Items.nameContains("("), true),
-            COMBAT_FILTER = Filters.Items.nameContains("Combat").combine(Filters.Items.nameContains("("), true),
-            SKILLS_FILTER = Filters.Items.nameContains("Skills necklace").combine(Filters.Items.nameContains("("), true),
-            WEALTH_FILTER = Filters.Items.nameContains("Ring of wealth").combine(Filters.Items.nameContains("("), true)
+            GLORY_FILTER = isNotNoted.combine(Filters.Items.nameContains("Glory").combine(Filters.Items.nameContains("("), true).combine(Filters.Items.nameNotContains("(t)"), false),false),
+            GAMES_FILTER = isNotNoted.combine(Filters.Items.nameContains("Games").combine(Filters.Items.nameContains("("), true),false),
+            DUELING_FILTER = isNotNoted.combine(Filters.Items.nameContains("dueling").combine(Filters.Items.nameContains("("), true),false),
+            COMBAT_FILTER = isNotNoted.combine(Filters.Items.nameContains("Combat").combine(Filters.Items.nameContains("("), true),false),
+            SKILLS_FILTER = isNotNoted.combine(Filters.Items.nameContains("Skills necklace").combine(Filters.Items.nameContains("("), true),false),
+            WEALTH_FILTER = isNotNoted.combine(Filters.Items.nameContains("Ring of wealth").combine(Filters.Items.nameContains("("), true),false)
     ;
 
     public TeleportLocation[] getDestinations() {
         return destinations;
     }
-    public TeleportLimit getLimit(){
-        return limit;
-    }
 
     @Override
     public boolean canUse() {
-        if(!limit.canUse())
-            return false;
         switch (this){
-            case ECTOPHIAL: return Inventory.find(Filters.Items.nameContains("Ectophial")).length > 0;
-            case VARROCK_TELEPORT: return Spell.VARROCK_TELEPORT.canUse() || Inventory.getCount("Varrock teleport") > 0;
-            case LUMBRIDGE_TELEPORT: return Spell.LUMBRIDGE_TELEPORT.canUse() || Inventory.getCount("Lumbridge teleport") > 0;
-            case FALADOR_TELEPORT: return Spell.FALADOR_TELEPORT.canUse() || Inventory.getCount("Falador teleport") > 0;
-            case CAMELOT_TELEPORT: return Spell.CAMELOT_TELEPORT.canUse() || Inventory.getCount("Camelot teleport") > 0;
-            case ARDOUGNE_TELPORT: return Game.getSetting(165) >= 30 && (Spell.ARDOUGNE_TELEPORT.canUse() || Inventory.getCount("Ardougne teleport") > 0);
-            case GLORY: return Inventory.find(GLORY_FILTER).length > 0 || Equipment.find(GLORY_FILTER).length > 0;
-            case COMBAT_BRACE: return Inventory.find(COMBAT_FILTER).length > 0 || Equipment.find(COMBAT_FILTER).length > 0;
-            case GAMES_NECKLACE: return Inventory.find(GAMES_FILTER).length > 0 || Equipment.find(GAMES_FILTER).length > 0;
-            case DUELING_RING: return Inventory.find(DUELING_FILTER).length > 0 || Equipment.find(DUELING_FILTER).length > 0;
+            case ECTOPHIAL: return inMembersWorld() && (Inventory.find(Filters.Items.nameContains("Ectophial")).length > 0) && teleportLimit.canCast();
+            case VARROCK_TELEPORT: return (Spell.VARROCK_TELEPORT.canUse() || (inMembersWorld() && Inventory.getCount("Varrock teleport") > 0)) && teleportLimit.canCast();
+            case LUMBRIDGE_TELEPORT: return (Spell.LUMBRIDGE_TELEPORT.canUse() || (inMembersWorld() && Inventory.getCount("Lumbridge teleport") > 0)) && teleportLimit.canCast();
+            case FALADOR_TELEPORT: return (Spell.FALADOR_TELEPORT.canUse() || (inMembersWorld() && Inventory.getCount("Falador teleport") > 0)) && teleportLimit.canCast();
+            case CAMELOT_TELEPORT: return (Spell.CAMELOT_TELEPORT.canUse() || (inMembersWorld() && Inventory.getCount("Camelot teleport") > 0)) && teleportLimit.canCast();
+            case ARDOUGNE_TELPORT: return (Game.getSetting(165) >= 30 && (Spell.ARDOUGNE_TELEPORT.canUse() || Inventory.getCount("Ardougne teleport") > 0)) && teleportLimit.canCast();
+            case GLORY: return inMembersWorld() && (Inventory.find(GLORY_FILTER).length > 0 || Equipment.find(GLORY_FILTER).length > 0) && teleportLimit.canCast();
+            case COMBAT_BRACE: return inMembersWorld() && (Inventory.find(COMBAT_FILTER).length > 0 || Equipment.find(COMBAT_FILTER).length > 0) && teleportLimit.canCast();
+            case GAMES_NECKLACE: return inMembersWorld() && (Inventory.find(GAMES_FILTER).length > 0 || Equipment.find(GAMES_FILTER).length > 0) && teleportLimit.canCast();
+            case DUELING_RING: return inMembersWorld() && (Inventory.find(DUELING_FILTER).length > 0 || Equipment.find(DUELING_FILTER).length > 0) && teleportLimit.canCast();
         }
         return false;
     }
 
     public boolean use(TeleportLocation teleportLocation){
+    	if(Banking.isBankScreenOpen()){
+    		if(Banking.close()){
+    			Timing.waitCondition(new Condition(){
+
+					@Override
+					public boolean active() {
+						General.sleep(40,200);
+						return !Banking.isBankScreenOpen();
+					}
+    				
+    			},8000);
+    		} else{
+    			return false;
+    		}
+    	}
         switch (teleportLocation) {
 
             case VARROCK_CENTER: return RSItemHelper.click("Varrock t.*", "Break") || Spell.VARROCK_TELEPORT.cast();
