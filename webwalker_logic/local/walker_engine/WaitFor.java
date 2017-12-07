@@ -94,7 +94,7 @@ public class WaitFor {
         try {
             Thread.sleep(random(low, high));
         } catch (InterruptedException e){
-
+            throw new IllegalStateException("Break out");
         }
         return Return.IGNORE;
     }

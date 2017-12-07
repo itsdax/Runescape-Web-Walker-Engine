@@ -1,5 +1,6 @@
 package scripts.webwalker_logic;
 
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Options;
@@ -124,7 +125,7 @@ public class WebWalker {
      * @param destination
      * @return Whether destination was successfully reached.
      */
-    public static boolean walkTo(RSTile destination){
+    public static boolean walkTo(Positionable destination){
         return walkTo(destination, EMPTY_WALKING_CONDITION);
     }
 
@@ -137,15 +138,15 @@ public class WebWalker {
      * @return Whether destination was successfully reached or depending on what your walking
      *         condition returns.
      */
-    public static boolean walkTo(RSTile destination, WalkingCondition walkingCondition){
+    public static boolean walkTo(Positionable destination, WalkingCondition walkingCondition){
         if (Player.getPosition().equals(destination)){
             return true;
         }
-        ArrayList<RSTile> path = WebPath.getPath(destination);
+        ArrayList<RSTile> path = WebPath.getPath(destination.getPosition());
         if (path.size() == 0){
             return false;
         }
-        ArrayList<RSTile> bestPath = TeleportManager.teleport(path.size(), destination);
+        ArrayList<RSTile> bestPath = TeleportManager.teleport(path.size(), destination.getPosition());
         if (bestPath != null){
             path = bestPath;
         }

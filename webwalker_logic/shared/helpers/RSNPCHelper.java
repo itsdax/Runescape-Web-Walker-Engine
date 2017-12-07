@@ -6,6 +6,9 @@ import org.tribot.api2007.types.RSNPC;
 public class RSNPCHelper {
 
     public static String getName(RSNPC rsnpc){
+        if (rsnpc == null){
+            return null;
+        }
         String name = rsnpc.getName();
         return name != null ? name : "null";
     }
