@@ -425,7 +425,7 @@ public class NavigationSpecialCase implements Loggable{
                 zeahBoatLocation = "Travel to Port Sarim.";
                 break;
             case GREAT_KOUREND:
-                zeahBoatLocation = "Travel to Great Kourend.";
+                zeahBoatLocation = "Travel to Piscarilius House.";
                 break;
             case LANDS_END:
                 zeahBoatLocation = "Travel to Land's End.";
