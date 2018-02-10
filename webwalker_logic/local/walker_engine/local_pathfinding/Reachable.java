@@ -7,7 +7,6 @@ import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
-import scripts.api.walking.AStar;
 import scripts.webwalker_logic.shared.helpers.BankHelper;
 
 import java.util.*;
