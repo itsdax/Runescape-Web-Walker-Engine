@@ -32,7 +32,8 @@ public enum TeleportMethod implements Validatable {
     DUELING_RING (TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, DUEL_ARENA, CASTLE_WARS, CLAN_WARS),
     ECTOPHIAL (TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, ECTO),
     SKILLS_NECKLACE (TeleportConstants.LEVEL_30_WILDERNESS_LIMIT, FISHING_GUILD, MOTHERLOAD_MINE, CRAFTING_GUILD, COOKING_GUILD, WOOD_CUTTING_GUILD),
-    RING_OF_WEALTH (TeleportConstants.LEVEL_30_WILDERNESS_LIMIT, GRAND_EXCHANGE, FALADOR_PARK)
+    RING_OF_WEALTH (TeleportConstants.LEVEL_30_WILDERNESS_LIMIT, GRAND_EXCHANGE, FALADOR_PARK),
+    BURNING_AMULET (TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, CHAOS_TEMPLE, BANDIT_CAMP, LAVA_MAZE)
     ;
 
     private TeleportLocation[] destinations;
@@ -49,7 +50,8 @@ public enum TeleportMethod implements Validatable {
             DUELING_FILTER = Filters.Items.nameContains("dueling").combine(Filters.Items.nameContains("("), true),
             COMBAT_FILTER = Filters.Items.nameContains("Combat").combine(Filters.Items.nameContains("("), true),
             SKILLS_FILTER = Filters.Items.nameContains("Skills necklace").combine(Filters.Items.nameContains("("), true),
-            WEALTH_FILTER = Filters.Items.nameContains("Ring of wealth").combine(Filters.Items.nameContains("("), true)
+            WEALTH_FILTER = Filters.Items.nameContains("Ring of wealth").combine(Filters.Items.nameContains("("), true),
+            BURNING_FILTER = Filters.Items.nameContains("Burning amulet").combine(Filters.Items.nameContains("("), true)
     ;
 
     public TeleportLocation[] getDestinations() {
@@ -74,13 +76,13 @@ public enum TeleportMethod implements Validatable {
             case COMBAT_BRACE: return Inventory.find(COMBAT_FILTER).length > 0 || Equipment.find(COMBAT_FILTER).length > 0;
             case GAMES_NECKLACE: return Inventory.find(GAMES_FILTER).length > 0 || Equipment.find(GAMES_FILTER).length > 0;
             case DUELING_RING: return Inventory.find(DUELING_FILTER).length > 0 || Equipment.find(DUELING_FILTER).length > 0;
+            case BURNING_AMULET: return Inventory.find(BURNING_FILTER).length > 0 || Equipment.find(BURNING_FILTER).length > 0;
         }
         return false;
     }
 
     public boolean use(TeleportLocation teleportLocation){
         switch (teleportLocation) {
-
             case VARROCK_CENTER: return RSItemHelper.click("Varrock t.*", "Break") || Spell.VARROCK_TELEPORT.cast();
             case LUMBRIDGE_CASTLE: return RSItemHelper.click("Lumbridge t.*", "Break") || Spell.LUMBRIDGE_TELEPORT.cast();
             case FALADOR_CENTER: return RSItemHelper.click("Falador t.*", "Break") || Spell.FALADOR_TELEPORT.cast();
@@ -116,6 +118,10 @@ public enum TeleportMethod implements Validatable {
 
             case GRAND_EXCHANGE: return teleportWithItem(WEALTH_FILTER, "Grand.*");
             case FALADOR_PARK: return teleportWithItem(WEALTH_FILTER, "Falad.*");
+
+            case CHAOS_TEMPLE: return teleportWithItem(BURNING_FILTER, "(Chaos.*|Okay, teleport to level.*)");
+            case BANDIT_CAMP: return teleportWithItem(BURNING_FILTER, "(Bandit.*|Okay, teleport to level.*)");
+            case LAVA_MAZE: return teleportWithItem(BURNING_FILTER, "(Lava.*|Okay, teleport to level.*)");
         }
         return false;
     }

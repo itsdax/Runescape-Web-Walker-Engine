@@ -34,8 +34,12 @@ public enum TeleportLocation {
     WOOD_CUTTING_GUILD (1660, 3504, 0),
 
     GRAND_EXCHANGE (3164, 3465, 0),
-    FALADOR_PARK (2995, 3376, 0)
-
+    FALADOR_PARK (2995, 3376, 0),
+    
+    CHAOS_TEMPLE (3236, 3635, 0),
+    BANDIT_CAMP (3039, 3652, 0),
+    LAVA_MAZE (3029, 3843, 0)
+    
     ;
 
     private int x, y, z;
