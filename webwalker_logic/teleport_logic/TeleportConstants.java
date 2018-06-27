@@ -8,8 +8,8 @@ public class TeleportConstants {
     private static int WILD_LVL_MASTER = 90, WILD_LVL_CHILD = 46;
 
     public static final TeleportLimit
-            LEVEL_20_WILDERNESS_LIMIT = () -> getWildernessLevel() < 20,
-            LEVEL_30_WILDERNESS_LIMIT = () ->  getWildernessLevel() < 30;
+            LEVEL_20_WILDERNESS_LIMIT = () -> getWildernessLevel() <= 20,
+            LEVEL_30_WILDERNESS_LIMIT = () ->  getWildernessLevel() <= 30;
     
     private static int getWildernessLevel(){
         try{
