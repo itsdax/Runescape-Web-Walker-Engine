@@ -66,6 +66,10 @@ public class TeleportManager implements Loggable {
     }
 
     public static ArrayList<RSTile> teleport(int originalPathLength, RSTile destination){
+        return teleport(originalPathLength, destination, false);
+    }
+
+    public static ArrayList<RSTile> teleport(int originalPathLength, RSTile destination, final boolean isBank){
         if (originalPathLength < getInstance().offset){
             return null;
         }
@@ -73,9 +77,9 @@ public class TeleportManager implements Loggable {
         TeleportAction teleportAction = Arrays.stream(TeleportMethod.values())
                 .filter(TeleportMethod::canUse)
                 .filter(teleportMethod -> !getInstance().blacklistTeleportMethods.contains(teleportMethod))
-                        .map(teleportMethod -> Arrays.stream(teleportMethod.getDestinations())
-                                .filter(teleportLocation -> !getInstance().blacklistTeleportLocations.contains(teleportLocation)) //map to destinations
-                                .map(teleportLocation -> getInstance().executorService.submit(new PathComputer(teleportMethod, teleportLocation, destination)))) //map to future
+                .map(teleportMethod -> Arrays.stream(teleportMethod.getDestinations())
+                        .filter(teleportLocation -> !getInstance().blacklistTeleportLocations.contains(teleportLocation)) //map to destinations
+                        .map(teleportLocation -> getInstance().executorService.submit(new PathComputer(teleportMethod, teleportLocation, isBank ? teleportMethod.getClosestBank() : destination )))) //map to future
                 .flatMap(futureStream -> futureStream).collect(Collectors.toList()).stream().map(teleportActionFuture -> { //flatten out futures
                     try {
                         return teleportActionFuture.get();
