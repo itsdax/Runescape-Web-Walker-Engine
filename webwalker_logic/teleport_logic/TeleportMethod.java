@@ -61,6 +61,26 @@ public enum TeleportMethod implements Validatable {
         return teleportLimit;
     }
 
+    public RSTile getClosestBank() {
+        switch (this){
+            case VARROCK_TELEPORT: return new RSTile(3185,3436,0);
+            case LUMBRIDGE_TELEPORT: return new RSTile(3208,3220,2);
+            case FALADOR_TELEPORT: return new RSTile(2946,3368,0);
+            case CAMELOT_TELEPORT: return new RSTile(2727, 3493, 0);
+            case ARDOUGNE_TELPORT: return new RSTile(2655, 3283, 0);
+            case GLORY: return new RSTile(3094, 3491, 0);
+            case COMBAT_BRACE: return new RSTile(3094, 3491, 0);
+            case GAMES_NECKLACE: return new RSTile(2536, 3573, 0);
+            case DUELING_RING: return new RSTile(2443, 3083, 0);
+            case ECTOPHIAL: return new RSTile(3688, 3467, 0);
+            case SKILLS_NECKLACE: return new RSTile(3168,3488,0);
+            case RING_OF_WEALTH: return new RSTile(3168,3488,0);
+            case BURNING_AMULET: return new RSTile(3094, 3491, 0);
+        }
+
+        return null;
+    }
+
     @Override
     public boolean canUse() {
         if(!this.getLimit().canCast())

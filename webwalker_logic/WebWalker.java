@@ -143,12 +143,14 @@ public class WebWalker {
             return true;
         }
         ArrayList<RSTile> path = WebPath.getPath(destination.getPosition());
-        if (path.size() == 0){
-            return false;
-        }
-        ArrayList<RSTile> bestPath = TeleportManager.teleport(path.size(), destination.getPosition());
+
+        ArrayList<RSTile> bestPath = TeleportManager.teleport(path.size() > 0 ? path.size() : Integer.MAX_VALUE, destination.getPosition());
         if (bestPath != null){
             path = bestPath;
+        }
+
+        if (path.size() == 0){
+            return false;
         }
 
         return WalkerEngine.getInstance().walkPath(path, walkingCondition.combine(getInstance().globalWalkingCondition));
@@ -166,13 +168,13 @@ public class WebWalker {
 
         ArrayList<RSTile> bankPath = WebPath.getPathToBank();
 
-        if (bankPath.size() == 0){
-            return false;
-        }
-
-        ArrayList<RSTile> bestPath = TeleportManager.teleport(bankPath.size(), bankPath.get(bankPath.size() - 1));
+        ArrayList<RSTile> bestPath = TeleportManager.teleport(bankPath.size(), bankPath.size() > 0 ? bankPath.get(bankPath.size() - 1) : null, true);
         if (bestPath != null){
             bankPath = bestPath;
+        }
+
+        if (bankPath.size() == 0){
+            return false;
         }
 
         return WalkerEngine.getInstance().walkPath(bankPath, ((WalkingCondition) () -> {
