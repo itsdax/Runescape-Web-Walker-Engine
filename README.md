@@ -26,7 +26,7 @@ Please visit https://admin.dax.cloud/ for more information. To use your Api Keys
             }
         });
 ```
-[![Api Keys](https://i.imgur.com/1dElWhh.png)](https://admin.dax.cloud)
+[![Api Keys](https://i.imgur.com/Qwc0115.png)](https://admin.dax.cloud)
 
 ## About
 - This is the **client side** of dax walker, which includes a wrapper for the server-client interaction of generating paths from point A to point B and navigating through the path.
