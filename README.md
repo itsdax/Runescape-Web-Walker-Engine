@@ -2,7 +2,7 @@
 ##### Open-sourced world walker engine and path generation for Rune Scape written in Java.
 
 ## How to import to Tribot Scripts Folder
-- Simply copy the webwalker_logic package inside your scripts directory! (View below) If you need further help, the visit the [Scripting Help Channel](https://discord.gg/T7QeCm3) on Tribot discord. 
+- Simply copy the webwalker_logic package inside your scripts directory! (View below) If you need further help, the visit the [Tribot Forums](https://discord.gg/T7QeCm3). 
 - You can also clone this repo directly in your scripts directory with a few tweaks.
 
 <p align="center">
@@ -17,15 +17,16 @@
 View [JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
 
 ## API Keys
-Please https://admin.dax.cloud for more information. To use your Api Keys, please condigure an API Key provider.
+Please visit https://admin.dax.cloud/ for more information. To use your Api Keys, please condigure an API Key provider.
 ```java8
         WebWalkerServerApi.getInstance().setDaxCredentialsProvider(new DaxCredentialsProvider() {
             @Override
             public DaxCredentials getDaxCredentials() {
-                return new DaxCredentials("YOUR0-PUBLIC-KEY", "YOUR-SECRET-KEY");
+                return new DaxCredentials("YOUR-PUBLIC-KEY", "YOUR-SECRET-KEY");
             }
         });
 ```
+[![Api Keys](https://i.imgur.com/1dElWhh.png)](https://admin.dax.cloud)
 
 ## About
 - This is the **client side** of dax walker, which includes a wrapper for the server-client interaction of generating paths from point A to point B and navigating through the path.
