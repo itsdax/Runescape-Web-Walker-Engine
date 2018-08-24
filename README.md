@@ -17,13 +17,18 @@
 View [JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
 
 ## API Keys
-
-The public key is limited to a combined total of 400 calls every minute. The public api key is already included in the source.
-
-If your scripts have a large userbase, then the public key may not be enough for your needs. If you require more calls or wish to support my project, please refer to [this link](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/) or contact me over Tribot for API Keys. 
+Please https://admin.dax.cloud for more information. To use your Api Keys, please condigure an API Key provider.
+```java8
+        WebWalkerServerApi.getInstance().setDaxCredentialsProvider(new DaxCredentialsProvider() {
+            @Override
+            public DaxCredentials getDaxCredentials() {
+                return new DaxCredentials("YOUR0-PUBLIC-KEY", "YOUR-SECRET-KEY");
+            }
+        });
+```
 
 ## About
-- This is the **front end** of my web walker, which includes a wrapper for the server-client interaction of generating paths from point A to point B and navigating through the path.
+- This is the **client side** of dax walker, which includes a wrapper for the server-client interaction of generating paths from point A to point B and navigating through the path.
 - Back-end pathfinding is coded using a combination of dijkstra's and A\* algorithm. Dijkstra's is mainly for region limiting for performance purposes whereas A\* calculates the actual path. Wayports (Node jumps) cannot be calculated using a heuristic value so Dijkstra's is needed in this scenario.
 - The Walker Engine includes path walking, waypoint navigation (Ship Chartering/Portals/etc), and path randomization using BFS to prevent trackable walking patterns.
 
@@ -32,10 +37,9 @@ If your scripts have a large userbase, then the public key may not be enough for
 - Speed. Will generate a path from any two points (Given that it is mapped) in less than a second, guaranteed.
 
 - Simplicity. Implement the engine into your script by simply calling:
-```
-      WebWalker.walkTo(new RSTile(x, y, z));
-      WebWalker.walkTo(new RSTile(x, y, z), walkingCondition);
-      WebWalker.walkToBank();
+```java8
+        DaxWalker.walkTo(new RSTile(1,2,3));
+        DaxWalker.walkToBank(Bank.VARROCK_EAST);
 ```
 
 - Shortcuts. Using all and only the shortcuts that your Player can access, whether it is skill level (Agility level needed for shortcut) or inventory item requirements (Such as gold needed for ship or fee to enter dungeon). This also includes quest requirements.
