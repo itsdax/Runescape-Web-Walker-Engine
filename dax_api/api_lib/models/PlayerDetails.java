@@ -5,6 +5,7 @@ import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.api_lib.json.JsonObject;
 import scripts.dax_api.shared.helpers.WorldHelper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -20,11 +21,20 @@ public class PlayerDetails {
         List<IntPair> equipment = Arrays.stream(Equipment.getItems())
                 .map(rsItem -> new IntPair(rsItem.getID(), rsItem.getStack())).collect(Collectors.toList());
 
-        Set<IntPair> settings = Arrays.stream(Game.getSettingsArray())
-                .mapToObj(value -> new IntPair(value, Game.getSetting(value))).collect(Collectors.toSet());
+        List<Integer> settingsList = new ArrayList<>(Arrays.asList(
+                5090, 1630, 130, 29, 222, 31, 176, 32, 62, 160, 122, 71, 273, 107, 144, 63, 179, 145, 178, 67, 939, 433,
+                293, 68, 655, 10, 964, 399, 869, 314, 794, 440, 622, 131, 80, 0, 335, 934, 299, 896, 641, 912, 844, 671,
+                810, 148, 435, 17, 11, 521, 347, 553, 180, 482, 437, 150, 382, 223, 188, 5, 351, 445, 705, 387, 175, 139,
+                147, 465, 823, 604, 14, 30, 365, 423, 517, 574, 192, 905, 307, 112, 416, 165, 302, 714, 607, 678, 496,
+                328, 402, 730, 600, 76, 159, 339, 602, 60, 116, 874, 709, 616, 723, 568, 449, 26, 359, 197, 111, 200,
+                385, 980, 635, 317, 161, 571, 212, 65, 992, 226
+        ));
+
+        Set<IntPair> settings = settingsList.stream()
+                .map(value -> new IntPair(value, Game.getSetting(value))).collect(Collectors.toSet());
 
 
-        Set<IntPair> varbit = Arrays.stream(new int[]{5087, 5088, 5089, 5090})
+        Set<IntPair> varbit = Arrays.stream(new int[]{5087, 5088, 5089, 5090, 4895})
                 .mapToObj(value -> new IntPair(value, Game.getSetting(value))).collect(Collectors.toSet());
 
         return new PlayerDetails(

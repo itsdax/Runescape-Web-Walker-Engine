@@ -41,15 +41,13 @@ public class DaxWalker {
 
     public static boolean walkTo(Positionable destination, WalkingCondition walkingCondition) {
         Positionable start = Player.getPosition();
-
         if (start.equals(destination)) {
             return true;
         }
 
         PathResult pathResult = WebWalkerServerApi.getInstance().getPath(Point3D.fromPositionable(start), Point3D.fromPositionable(destination), PlayerDetails.generate());
 
-
-        ArrayList<RSTile> path = TeleportManager.teleportPath(pathResult.getCost(), destination.getPosition());
+        ArrayList<RSTile> path = TeleportManager.teleportPath(pathResult.getPathStatus() == PathStatus.SUCCESS ? pathResult.getCost() : Integer.MAX_VALUE, destination.getPosition());
         if (path != null) {
             return WalkerEngine.getInstance().walkPath(path, walkingCondition);
         }
@@ -68,7 +66,7 @@ public class DaxWalker {
     public static boolean walkToBank(Bank bank, WalkingCondition walkingCondition) {
         PathResult pathResult = WebWalkerServerApi.getInstance().getBankPath(Point3D.fromPositionable(Player.getPosition()), bank, PlayerDetails.generate());
 
-        ArrayList<RSTile> path = TeleportManager.teleportBankPath(pathResult.getCost());
+        ArrayList<RSTile> path = TeleportManager.teleportBankPath(pathResult.getPathStatus() == PathStatus.SUCCESS ? pathResult.getCost() : Integer.MAX_VALUE);
         if (path != null) {
             return WalkerEngine.getInstance().walkPath(path, walkingCondition);
         }

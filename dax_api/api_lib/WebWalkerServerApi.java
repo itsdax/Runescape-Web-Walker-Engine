@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 public class WebWalkerServerApi {
 
@@ -30,9 +31,10 @@ public class WebWalkerServerApi {
 
 
     private DaxCredentialsProvider daxCredentialsProvider;
+    private HashMap<String, String> cache;
 
     private WebWalkerServerApi() {
-
+        cache = new HashMap<>();
     }
 
     public DaxCredentialsProvider getDaxCredentialsProvider() {
@@ -107,6 +109,10 @@ public class WebWalkerServerApi {
     }
 
     private ServerResponse post(JsonObject jsonObject, String endpoint) throws IOException {
+        if (cache.containsKey(jsonObject.toString())) {
+            return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(jsonObject.toString()));
+        }
+
         URL myurl = new URL(endpoint);
         HttpsURLConnection connection = (HttpsURLConnection) myurl.openConnection();
         connection.setDoOutput(true);
@@ -127,7 +133,9 @@ public class WebWalkerServerApi {
             return new ServerResponse(false, connection.getResponseCode(), IOHelper.readInputStream(connection.getErrorStream()));
         }
 
-        return new ServerResponse(true, HttpURLConnection.HTTP_OK, IOHelper.readInputStream(connection.getInputStream()));
+        String contents = IOHelper.readInputStream(connection.getInputStream());
+        cache.put(jsonObject.toString(), contents);
+        return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
     }
 
     private void appendAuth(HttpsURLConnection connection) {
