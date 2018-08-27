@@ -86,7 +86,7 @@ public class PathResult {
 
         List<Point3D> path = new ArrayList<>();
 
-        JsonArray jsonArray = jsonObject.get("path").asArray();
+        JsonArray jsonArray = jsonObject.get("path").isNull() ? new JsonArray() : jsonObject.get("path").asArray();
         for (JsonValue jsonValue : jsonArray) {
             path.add(Point3D.fromJson(jsonValue.asObject()));
         }
