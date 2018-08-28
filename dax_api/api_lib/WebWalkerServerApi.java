@@ -93,7 +93,6 @@ public class WebWalkerServerApi implements Loggable {
     }
 
     private PathResult parseResult(ServerResponse serverResponse) {
-        System.out.println("fsedoijfwesrjoifrwsejiow");
         getInstance().log(serverResponse.toString());
         if (!serverResponse.isSuccess()) {
             getInstance().log("[Error] " + Json.parse(serverResponse.getContents()).asObject().getString(
@@ -130,7 +129,6 @@ public class WebWalkerServerApi implements Loggable {
         if (cache.containsKey(jsonObject.toString())) {
             return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(jsonObject.toString()));
         }
-        System.out.println("asddasadsadsfe");
 
         URL myurl = new URL(endpoint);
         HttpURLConnection connection = (isTestMode ? (HttpURLConnection) myurl.openConnection() : (HttpsURLConnection) myurl.openConnection());
