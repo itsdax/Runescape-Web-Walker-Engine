@@ -59,6 +59,7 @@ public class WebWalkerServerApi implements Loggable {
         try {
             return parseResult(post(pathRequest, (isTestMode ? TEST_ENDPOINT : WALKER_ENDPOINT) + GENERATE_PATH));
         } catch (IOException e) {
+            getInstance().log("Is server down? Spam dax.");
             return new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER);
         }
 
@@ -78,6 +79,7 @@ public class WebWalkerServerApi implements Loggable {
         try {
             return parseResult(post(pathRequest, (isTestMode ? TEST_ENDPOINT : WALKER_ENDPOINT) + GENERATE_BANK_PATH));
         } catch (IOException e) {
+            getInstance().log("Is server down? Spam dax.");
             return new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER);
         }
     }
@@ -91,8 +93,10 @@ public class WebWalkerServerApi implements Loggable {
     }
 
     private PathResult parseResult(ServerResponse serverResponse) {
+        System.out.println("fsedoijfwesrjoifrwsejiow");
+        getInstance().log(serverResponse.toString());
         if (!serverResponse.isSuccess()) {
-            General.println("[Error] " + Json.parse(serverResponse.getContents()).asObject().getString(
+            getInstance().log("[Error] " + Json.parse(serverResponse.getContents()).asObject().getString(
                     "message",
                     "Could not generate path: " + serverResponse.getContents()
             ));
@@ -126,6 +130,7 @@ public class WebWalkerServerApi implements Loggable {
         if (cache.containsKey(jsonObject.toString())) {
             return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(jsonObject.toString()));
         }
+        System.out.println("asddasadsadsfe");
 
         URL myurl = new URL(endpoint);
         HttpURLConnection connection = (isTestMode ? (HttpURLConnection) myurl.openConnection() : (HttpsURLConnection) myurl.openConnection());
