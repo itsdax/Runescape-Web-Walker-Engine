@@ -265,7 +265,14 @@ public class PlayerDetails {
                 .add("farming", farming)
                 .add("runecrafting", runecrafting)
                 .add("hunter", hunter)
-                .add("construction", construction);
+                .add("construction", construction)
+                .add("setting", IntPair.toJsonArray(setting))
+                .add("varbit", IntPair.toJsonArray(varbit))
+                .add("equipment", IntPair.toJsonArray(equipment))
+                .add("inventory", IntPair.toJsonArray(inventory))
+                .add("members", member)
+                ;
     }
+
 
 }

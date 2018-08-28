@@ -5,10 +5,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.WebPath;
 import scripts.dax_api.api_lib.WebWalkerServerApi;
-import scripts.dax_api.api_lib.models.PathResult;
-import scripts.dax_api.api_lib.models.PathStatus;
-import scripts.dax_api.api_lib.models.PlayerDetails;
-import scripts.dax_api.api_lib.models.Point3D;
+import scripts.dax_api.api_lib.models.*;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
 
@@ -71,17 +68,19 @@ public class TeleportManager implements Loggable {
         getInstance().offset = offset;
     }
 
-    public static ArrayList<RSTile> teleportBankPath(int originalMoveCost) {
+    public static ArrayList<RSTile> getClosestBankPath(Bank bank, int originalMoveCost) {
+        final int cost = originalMoveCost - 25;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
-        Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
+        Arrays.stream(TeleportMethod.values())
+                .forEach(teleportMethod -> {
             if (!teleportMethod.canUse()) {
                 return;
             }
             for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
                 PathResult pathResult = WebWalkerServerApi.getInstance().getBankPath(
                         Point3D.fromPositionable(teleportLocation.getRSTile()),
-                        null,
+                        bank,
                         PlayerDetails.generate()
                 );
                 teleport.add(new TeleportWrapper(pathResult, teleportMethod, teleportLocation));
@@ -90,21 +89,29 @@ public class TeleportManager implements Loggable {
 
 
         TeleportWrapper closest = teleport.stream()
-                .filter(pathResult -> pathResult.getPathResult().getPathStatus() == PathStatus.SUCCESS && pathResult.getPathResult().getCost() < originalMoveCost - 25)
+                .filter(pathResult -> pathResult.getPathResult().getPathStatus() == PathStatus.SUCCESS && pathResult.getPathResult().getCost() < cost)
                 .min(Comparator.comparingInt(value -> value.getPathResult().getCost()))
                 .orElse(null);
 
-        if (closest != null && !closest.getTeleportMethod().use(closest.getTeleportLocation())) {
-            getInstance().log("Failed to teleport");
+        if (closest == null) {
+            return null;
         }
 
-        return closest != null ? closest.getPathResult().toRSTilePath() : null;
+        getInstance().log("Found shorter path with teleport: " + closest.getTeleportMethod() + " > " + closest.getTeleportLocation());
+
+        if (!closest.getTeleportMethod().use(closest.getTeleportLocation())) {
+            getInstance().log("Failed to teleport");
+            return null;
+        }
+
+        return closest.getPathResult().toRSTilePath();
     }
 
-    public static ArrayList<RSTile> teleportPath(int originalMoveCost, RSTile destination) {
+    public static ArrayList<RSTile> getClosestPath(int originalMoveCost, RSTile destination) {
+        final int cost = originalMoveCost - 25;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
-        Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
+        Arrays.stream(TeleportMethod.values()).forEach(teleportMethod -> {
             if (!teleportMethod.canUse()) {
                 return;
             }
@@ -120,15 +127,22 @@ public class TeleportManager implements Loggable {
 
 
         TeleportWrapper closest = teleport.stream()
-                .filter(pathResult -> pathResult.getPathResult().getPathStatus() == PathStatus.SUCCESS && pathResult.getPathResult().getCost() < originalMoveCost - 25)
+                .filter(pathResult -> pathResult.getPathResult().getPathStatus() == PathStatus.SUCCESS && pathResult.getPathResult().getCost() < cost)
                 .min(Comparator.comparingInt(value -> value.getPathResult().getCost()))
                 .orElse(null);
 
-        if (closest != null && !closest.getTeleportMethod().use(closest.getTeleportLocation())) {
-            getInstance().log("Failed to teleport");
+        if (closest == null) {
+            return null;
         }
 
-        return closest != null ? closest.getPathResult().toRSTilePath() : null;
+        getInstance().log("Found shorter path with teleport: " + closest.getTeleportMethod() + " > " + closest.getTeleportLocation());
+
+        if (!closest.getTeleportMethod().use(closest.getTeleportLocation())) {
+            getInstance().log("Failed to teleport");
+            return null;
+        }
+
+        return closest.getPathResult().toRSTilePath();
     }
 
 

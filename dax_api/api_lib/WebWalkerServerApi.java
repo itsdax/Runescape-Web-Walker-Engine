@@ -7,6 +7,7 @@ import scripts.dax_api.api_lib.json.JsonParser;
 import scripts.dax_api.api_lib.json.ParseException;
 import scripts.dax_api.api_lib.models.*;
 import scripts.dax_api.api_lib.utils.IOHelper;
+import scripts.dax_api.walker_engine.Loggable;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -15,7 +16,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
-public class WebWalkerServerApi {
+public class WebWalkerServerApi implements Loggable {
 
     private static WebWalkerServerApi webWalkerServerApi;
 
@@ -23,7 +24,7 @@ public class WebWalkerServerApi {
         return webWalkerServerApi != null ? webWalkerServerApi : (webWalkerServerApi = new WebWalkerServerApi());
     }
 
-    private static final String WALKER_ENDPOINT = "https://api.dax.cloud";
+    private static final String WALKER_ENDPOINT = "https://api.dax.cloud", TEST_ENDPOINT = "http://localhost:8080";
 
     private static final String
             GENERATE_PATH = "/walker/generatePath",
@@ -32,6 +33,7 @@ public class WebWalkerServerApi {
 
     private DaxCredentialsProvider daxCredentialsProvider;
     private HashMap<String, String> cache;
+    private boolean isTestMode;
 
     private WebWalkerServerApi() {
         cache = new HashMap<>();
@@ -55,7 +57,7 @@ public class WebWalkerServerApi {
         }
 
         try {
-            return parseResult(post(pathRequest, WALKER_ENDPOINT + GENERATE_PATH));
+            return parseResult(post(pathRequest, (isTestMode ? TEST_ENDPOINT : WALKER_ENDPOINT) + GENERATE_PATH));
         } catch (IOException e) {
             return new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER);
         }
@@ -74,20 +76,26 @@ public class WebWalkerServerApi {
         }
 
         try {
-            return parseResult(post(pathRequest, WALKER_ENDPOINT + GENERATE_BANK_PATH));
+            return parseResult(post(pathRequest, (isTestMode ? TEST_ENDPOINT : WALKER_ENDPOINT) + GENERATE_BANK_PATH));
         } catch (IOException e) {
             return new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER);
         }
     }
 
+    public boolean isTestMode() {
+        return isTestMode;
+    }
+
+    public void setTestMode(boolean testMode) {
+        isTestMode = testMode;
+    }
+
     private PathResult parseResult(ServerResponse serverResponse) {
-        if (serverResponse.getCode() != 200) {
+        if (!serverResponse.isSuccess()) {
             General.println("[Error] " + Json.parse(serverResponse.getContents()).asObject().getString(
                     "message",
                     "Could not generate path: " + serverResponse.getContents()
             ));
-        }
-        if (!serverResponse.isSuccess()) {
             switch (serverResponse.getCode()) {
                 case 429:
                     return new PathResult(PathStatus.RATE_LIMIT_EXCEEDED);
@@ -98,23 +106,29 @@ public class WebWalkerServerApi {
             }
         }
 
+        PathResult pathResult;
         JsonObject jsonObject;
         try {
             jsonObject = Json.parse(serverResponse.getContents()).asObject();
         } catch (ParseException e) {
-            return new PathResult(PathStatus.UNKNOWN);
+            pathResult = new PathResult(PathStatus.UNKNOWN);
+            log("Error: " + pathResult.getPathStatus());
+            return pathResult;
         }
 
-        return PathResult.fromJson(jsonObject);
+        pathResult = PathResult.fromJson(jsonObject);
+        log("Response: " + pathResult.getPathStatus()  + " Cost: " + pathResult.getCost());
+        return pathResult;
     }
 
     private ServerResponse post(JsonObject jsonObject, String endpoint) throws IOException {
+        getInstance().log("Generating path: " + jsonObject.toString());
         if (cache.containsKey(jsonObject.toString())) {
             return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(jsonObject.toString()));
         }
 
         URL myurl = new URL(endpoint);
-        HttpsURLConnection connection = (HttpsURLConnection) myurl.openConnection();
+        HttpURLConnection connection = (isTestMode ? (HttpURLConnection) myurl.openConnection() : (HttpsURLConnection) myurl.openConnection());
         connection.setDoOutput(true);
         connection.setDoInput(true);
 
@@ -138,12 +152,17 @@ public class WebWalkerServerApi {
         return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
     }
 
-    private void appendAuth(HttpsURLConnection connection) {
+    private void appendAuth(HttpURLConnection connection) {
         if (daxCredentialsProvider != null && daxCredentialsProvider.getDaxCredentials() != null) {
             DaxCredentials daxCredentials = daxCredentialsProvider.getDaxCredentials();
             connection.setRequestProperty("key", daxCredentials.getApiKey());
             connection.setRequestProperty("secret", daxCredentials.getSecretKey());
         }
+    }
+
+    @Override
+    public String getName() {
+        return "DaxWalker";
     }
 
     private class ServerResponse {

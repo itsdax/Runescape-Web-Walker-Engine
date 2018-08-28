@@ -11,16 +11,16 @@ import java.util.Arrays;
 
 public enum RuneElement {
 
-    AIR ("Air", "Smoke", "Mist", "Dust"),
-    EARTH ("Earth", "Lava", "Mud", "Dust"),
-    FIRE ("Fire", "Lava", "Smoke", "Steam"),
-    WATER ("Water", "Mud", "Steam", "Mist"),
-    LAW ("Law"),
-    NATURE ("Nature");
+    AIR("Air", "Smoke", "Mist", "Dust"),
+    EARTH("Earth", "Lava", "Mud", "Dust"),
+    FIRE("Fire", "Lava", "Smoke", "Steam"),
+    WATER("Water", "Mud", "Steam", "Mist"),
+    LAW("Law"),
+    NATURE("Nature");
 
     private String[] alternativeNames;
 
-    RuneElement (String... alternativeNames){
+    RuneElement(String... alternativeNames) {
         this.alternativeNames = alternativeNames;
     }
 
@@ -28,8 +28,8 @@ public enum RuneElement {
         return alternativeNames;
     }
 
-    public int getCount(){
-        if (haveStaff()){
+    public int getCount() {
+        if (haveStaff()) {
             return Integer.MAX_VALUE;
         }
         RSItem[] items = Inventory.find(new Filter<RSItem>() {
@@ -37,12 +37,12 @@ public enum RuneElement {
             public boolean accept(RSItem rsItem) {
                 String name = getItemName(rsItem).toLowerCase();
 
-                if (!name.contains("rune")){
+                if (!name.contains("rune")) {
                     return false;
                 }
 
-                for (String alternativeName : alternativeNames){
-                    if (name.startsWith(alternativeName.toLowerCase())){
+                for (String alternativeName : alternativeNames) {
+                    if (name.startsWith(alternativeName.toLowerCase())) {
                         return true;
                     }
                 }
@@ -52,28 +52,33 @@ public enum RuneElement {
         return Arrays.stream(items).mapToInt(RSItem::getStack).sum() + RunePouch.getQuantity(this);
     }
 
-    private boolean haveStaff (){
+    private boolean haveStaff() {
         return Equipment.find(new Filter<RSItem>() {
             @Override
             public boolean accept(RSItem rsItem) {
                 String name = getItemName(rsItem).toLowerCase();
-                return name.contains("staff") && Arrays.stream(alternativeNames).anyMatch(name::contains);
-
+                if (!name.contains("staff")) {
+                    return false;
+                }
+                for (String alternativeName : alternativeNames) {
+                    if (name.contains(alternativeName.toLowerCase())) {
+                        return true;
+                    }
+                }
+                return false;
             }
         }).length > 0;
     }
 
     /**
-     *
      * @param item
      * @return item name. Never null. "null" if no name.
      */
-    private static String getItemName(RSItem item){
+    private static String getItemName(RSItem item) {
         RSItemDefinition definition = item.getDefinition();
         String name;
         return definition == null || (name = definition.getName()) == null ? "null" : name;
     }
-
 
 
 }
