@@ -6,12 +6,12 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSPlayer;
 import scripts.dax_api.api_lib.models.*;
 import scripts.dax_api.api_lib.utils.DaxTrackerProperty;
+import scripts.dax_api.walker_engine.Loggable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class DaxTracker {
+public class DaxTracker implements Loggable {
 
     public static void setCredentials(DaxCredentialsProvider daxCredentialsProvider) {
         DaxTrackerServerApi.getInstance().setDaxCredentialsProvider(daxCredentialsProvider);
@@ -81,43 +81,77 @@ public class DaxTracker {
         return DaxTrackerServerApi.getInstance().topUsers(propertyName, period);
     }
 
-    public static DataLog log(String propertyName, double value) {
-        RSPlayer player = Player.getRSPlayer();
-        String accountName = player != null ? player.getName().replaceAll("[^a-zA-Z0-9]", " ") : null;
-        System.out.println(accountName + " @@@@");
-        return DaxTrackerServerApi.getInstance().log(
-                General.getTRiBotUsername(),
-                accountName,
-                propertyName,
-                value
-        );
-    }
-
     private List<DaxTrackerProperty> trackerProperties;
     private long lastUpdated;
+    private boolean started, stopped;
 
-    private DaxTracker() {
+    public DaxTracker() {
         trackerProperties = new ArrayList<>();
         lastUpdated = System.currentTimeMillis();
+        started = false;
+        stopped = false;
     }
 
     public void add(DaxTrackerProperty daxTrackerProperty) {
         trackerProperties.add(daxTrackerProperty);
     }
 
-    public void update() {
-
+    public boolean update() {
         if (Timing.timeFromMark(lastUpdated) < 60000) {
-            return;
+            return false;
         }
 
         for (DaxTrackerProperty daxTrackerProperty : trackerProperties) {
-            log(daxTrackerProperty.getName(), daxTrackerProperty.differenceSinceLastTracked());
-            daxTrackerProperty.update();
+            if (daxTrackerProperty.update()) {
+                log(daxTrackerProperty.getName(), daxTrackerProperty.differenceSinceLastTracked());
+                log("Logged " + daxTrackerProperty.getName());
+            } else {
+                log("Refused update " + daxTrackerProperty.getName() + " [Exceeded maximum acceptable value]");
+            }
         }
 
         lastUpdated = System.currentTimeMillis();
+        return true;
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void start() {
+        if (started) {
+            throw new IllegalStateException("DaxTracker already started!");
+        }
+        this.started = true;
+
+        new Thread(() -> {
+           while (!isStopped()) {
+               update();
+               General.sleep(60000);
+           }
+        });
+
+    }
+
+    public void stop() {
+        this.started = false;
+        this.stopped = true;
     }
 
 
+    @Override
+    public String getName() {
+        return "DaxTracker";
+    }
+
+    private static void log(String propertyName, double value) {
+        RSPlayer player = Player.getRSPlayer();
+        String accountName = player != null ? player.getName().replaceAll("[^a-zA-Z0-9]", " ") : null;
+        DaxTrackerServerApi.getInstance().log(
+                General.getTRiBotUsername(),
+                accountName,
+                propertyName,
+                value
+        );
+    }
 }

@@ -25,8 +25,13 @@ public abstract class DaxTrackerProperty {
         return currentValue() - lastTrackedValue;
     }
 
-    public void update() {
+    public boolean update() {
+        if (differenceSinceLastTracked() > Math.abs(maxAcceptableChange())) {
+            return false;
+        }
+
         this.lastTrackedValue = currentValue();
+        return true;
     }
 
     public String getName() {
