@@ -1,21 +1,18 @@
 package scripts.dax_api.teleport_logic;
 
-import obf.We;
 import org.tribot.api.General;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
-import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.shared.helpers.RSItemHelper;
 import scripts.dax_api.shared.helpers.magic.Spell;
+import scripts.dax_api.walker_engine.WaitFor;
+import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 
 import static scripts.dax_api.teleport_logic.TeleportLocation.*;
 

@@ -71,7 +71,7 @@ public class AccurateMouse {
         return action(clickable, true, clickActions);
     }
 
-    public static boolean clickMinimap(Positionable tile){
+    public static boolean clickMinimap(Positionable tile) {
         if (tile == null){
             return false;
         }

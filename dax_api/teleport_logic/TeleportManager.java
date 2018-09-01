@@ -72,12 +72,17 @@ public class TeleportManager implements Loggable {
         final int cost = originalMoveCost - 25;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
-        Arrays.stream(TeleportMethod.values())
-                .forEach(teleportMethod -> {
+        Arrays.stream(TeleportMethod.values()).forEach(teleportMethod -> {
+            if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
+                return;
+            }
             if (!teleportMethod.canUse()) {
                 return;
             }
             for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
+                if (getInstance().blacklistTeleportLocations.contains(teleportLocation)) {
+                    continue;
+                }
                 PathResult pathResult = WebWalkerServerApi.getInstance().getBankPath(
                         Point3D.fromPositionable(teleportLocation.getRSTile()),
                         bank,
@@ -112,10 +117,17 @@ public class TeleportManager implements Loggable {
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
         Arrays.stream(TeleportMethod.values()).forEach(teleportMethod -> {
+            if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
+                return;
+            }
             if (!teleportMethod.canUse()) {
                 return;
             }
             for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
+                if (getInstance().blacklistTeleportLocations.contains(teleportLocation)) {
+                    continue;
+                }
+
                 PathResult pathResult = WebWalkerServerApi.getInstance().getPath(
                         Point3D.fromPositionable(teleportLocation.getRSTile()),
                         Point3D.fromPositionable(destination),

@@ -1,9 +1,11 @@
 package scripts.dax_api.api_lib.models;
 
+import com.allatori.annotations.DoNotRename;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.json.JsonObject;
 
+@DoNotRename
 public class Point3D {
 
     private int x, y, z;

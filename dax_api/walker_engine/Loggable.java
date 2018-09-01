@@ -1,7 +1,6 @@
 package scripts.dax_api.walker_engine;
 
-
-import scripts.dax_api.WebWalker;
+import scripts.dax_api.api_lib.DaxConfigs;
 
 public interface Loggable {
 
@@ -14,14 +13,11 @@ public interface Loggable {
     String getName();
 
     default void log(CharSequence debug){
-        if (!WebWalker.isLogging()){
-            return;
-        }
         System.out.println("[" + getName() + "] " + debug);
     }
 
-    default void log(Level level, CharSequence debug){
-        if (!WebWalker.isLogging()){
+    default void log(Level level, CharSequence debug) {
+        if (!DaxConfigs.logging){
             return;
         }
         System.out.println(level + " [" + getName() + "] " + debug);

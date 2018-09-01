@@ -56,6 +56,7 @@ public class WalkerEngine implements Loggable{
      */
     public boolean walkPath(ArrayList<RSTile> path, WalkingCondition walkingCondition){
         if (path.size() == 0) {
+            log("Path is empty");
             return false;
         }
 
@@ -256,7 +257,7 @@ public class WalkerEngine implements Loggable{
         return true;
     }
 
-    private boolean failedAttempt(){
+    private void failedAttempt(){
         if (Camera.getCameraAngle() < 90) {
             Camera.setCameraAngle(General.random(90, 100));
         }
@@ -264,9 +265,8 @@ public class WalkerEngine implements Loggable{
             Camera.setCameraRotation(General.random(0, 360));
         }
         log("Failed attempt on action.");
-        WaitFor.milliseconds(350 * (attemptsForAction + 1), 650 * (attemptsForAction + 1));
+        WaitFor.milliseconds(450 * (attemptsForAction + 1), 850 * (attemptsForAction + 1));
         CollisionDataCollector.generateRealTimeCollision();
-        return true;
     }
 
     private boolean isFailedOverThreshhold(){

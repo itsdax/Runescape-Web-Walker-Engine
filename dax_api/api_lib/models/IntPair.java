@@ -1,5 +1,6 @@
 package scripts.dax_api.api_lib.models;
 
+import com.allatori.annotations.DoNotRename;
 import org.tribot.api.General;
 import scripts.dax_api.api_lib.json.JsonArray;
 import scripts.dax_api.api_lib.json.JsonObject;
@@ -7,7 +8,9 @@ import scripts.dax_api.api_lib.json.JsonObject;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
+@DoNotRename
 public class IntPair {
     private int key;
     private int value;
@@ -23,6 +26,19 @@ public class IntPair {
 
     public int getValue() {
         return this.value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IntPair intPair = (IntPair) o;
+        return key == intPair.key;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key);
     }
 
     public static JsonArray toJsonArray(Collection<IntPair> intPairCollection) {

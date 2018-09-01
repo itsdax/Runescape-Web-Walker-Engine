@@ -1,16 +1,16 @@
 package scripts.dax_api.api_lib;
 
-import org.tribot.api.General;
 import scripts.dax_api.api_lib.json.Json;
 import scripts.dax_api.api_lib.json.JsonObject;
-import scripts.dax_api.api_lib.json.JsonParser;
+import scripts.dax_api.api_lib.json.JsonValue;
 import scripts.dax_api.api_lib.json.ParseException;
 import scripts.dax_api.api_lib.models.*;
 import scripts.dax_api.api_lib.utils.IOHelper;
 import scripts.dax_api.walker_engine.Loggable;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -37,10 +37,6 @@ public class WebWalkerServerApi implements Loggable {
 
     private WebWalkerServerApi() {
         cache = new HashMap<>();
-    }
-
-    public DaxCredentialsProvider getDaxCredentialsProvider() {
-        return daxCredentialsProvider;
     }
 
     public void setDaxCredentialsProvider(DaxCredentialsProvider daxCredentialsProvider) {
@@ -95,10 +91,15 @@ public class WebWalkerServerApi implements Loggable {
     private PathResult parseResult(ServerResponse serverResponse) {
         getInstance().log(serverResponse.toString());
         if (!serverResponse.isSuccess()) {
-            getInstance().log("[Error] " + Json.parse(serverResponse.getContents()).asObject().getString(
-                    "message",
-                    "Could not generate path: " + serverResponse.getContents()
-            ));
+
+            JsonValue jsonValue = Json.parse(serverResponse.getContents());
+            if (!jsonValue.isNull()) {
+                getInstance().log("[Error] " + jsonValue.asObject().getString(
+                        "message",
+                        "Could not generate path: " + serverResponse.getContents()
+                ));
+            }
+
             switch (serverResponse.getCode()) {
                 case 429:
                     return new PathResult(PathStatus.RATE_LIMIT_EXCEEDED);
@@ -139,7 +140,7 @@ public class WebWalkerServerApi implements Loggable {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
 
-        appendAuth(connection);
+        IOHelper.appendAuth(connection, daxCredentialsProvider);
 
         try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
             outputStream.write(jsonObject.toString().getBytes(StandardCharsets.UTF_8));
@@ -155,41 +156,11 @@ public class WebWalkerServerApi implements Loggable {
         return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
     }
 
-    private void appendAuth(HttpURLConnection connection) {
-        if (daxCredentialsProvider != null && daxCredentialsProvider.getDaxCredentials() != null) {
-            DaxCredentials daxCredentials = daxCredentialsProvider.getDaxCredentials();
-            connection.setRequestProperty("key", daxCredentials.getApiKey());
-            connection.setRequestProperty("secret", daxCredentials.getSecretKey());
-        }
-    }
 
     @Override
     public String getName() {
         return "DaxWalker";
     }
 
-    private class ServerResponse {
-        private boolean success;
-        private int code;
-        private String contents;
-
-        private ServerResponse(boolean success, int code, String contents) {
-            this.success = success;
-            this.code = code;
-            this.contents = contents;
-        }
-
-        public boolean isSuccess() {
-            return success;
-        }
-
-        public int getCode() {
-            return code;
-        }
-
-        public String getContents() {
-            return contents;
-        }
-    }
 
 }

@@ -1,5 +1,6 @@
 package scripts.dax_api.api_lib.models;
 
+import com.allatori.annotations.DoNotRename;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.json.JsonArray;
 import scripts.dax_api.api_lib.json.JsonObject;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@DoNotRename
 public class PathResult {
 
     private PathStatus pathStatus;

@@ -2,6 +2,7 @@ package scripts.dax_api.shared.helpers.magic;
 
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.types.RSVarBit;
 
 import java.util.Arrays;
 
@@ -23,7 +24,7 @@ public class RunePouch{
         }
 
         public String getRuneName(){
-            switch(Game.getVarBit(type)){
+            switch(RSVarBit.get(type).getValue()){
                 case 1: return "Air rune";
                 case 2: return "Water rune";
                 case 3: return "Earth rune";
