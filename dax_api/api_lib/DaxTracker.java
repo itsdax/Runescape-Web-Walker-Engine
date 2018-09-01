@@ -1,10 +1,14 @@
 package scripts.dax_api.api_lib;
 
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSPlayer;
 import scripts.dax_api.api_lib.models.*;
+import scripts.dax_api.api_lib.utils.DaxTrackerProperty;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class DaxTracker {
@@ -54,7 +58,7 @@ public class DaxTracker {
      * @return High score for Accounts owned by the user for a tracked property.
      */
     public static SourceHighScore getAccountsHighScore(String propertyName, Period period) {
-        return DaxTrackerServerApi.getInstance().topSources(General.getTRiBotUsername(), propertyName, null);
+        return DaxTrackerServerApi.getInstance().topSources(General.getTRiBotUsername(), propertyName, period);
     }
 
     /**
@@ -64,7 +68,7 @@ public class DaxTracker {
      * @return High score of Tribot Usernames for a specific property.
      */
     public static UserHighScore getUsersHighScore(String propertyName, Period period) {
-        return DaxTrackerServerApi.getInstance().topUsers(propertyName, null);
+        return DaxTrackerServerApi.getInstance().topUsers(propertyName, period);
     }
 
     /**
@@ -88,5 +92,32 @@ public class DaxTracker {
                 value
         );
     }
+
+    private List<DaxTrackerProperty> trackerProperties;
+    private long lastUpdated;
+
+    private DaxTracker() {
+        trackerProperties = new ArrayList<>();
+        lastUpdated = System.currentTimeMillis();
+    }
+
+    public void add(DaxTrackerProperty daxTrackerProperty) {
+        trackerProperties.add(daxTrackerProperty);
+    }
+
+    public void update() {
+
+        if (Timing.timeFromMark(lastUpdated) < 60000) {
+            return;
+        }
+
+        for (DaxTrackerProperty daxTrackerProperty : trackerProperties) {
+            log(daxTrackerProperty.getName(), daxTrackerProperty.differenceSinceLastTracked());
+            daxTrackerProperty.update();
+        }
+
+        lastUpdated = System.currentTimeMillis();
+    }
+
 
 }

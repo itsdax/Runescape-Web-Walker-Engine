@@ -6,7 +6,6 @@ import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.api_lib.json.JsonObject;
 import scripts.dax_api.shared.helpers.WorldHelper;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
