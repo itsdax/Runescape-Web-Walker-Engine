@@ -1,10 +1,12 @@
 package scripts.dax_api.api_lib.models;
 
 
+import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
 
 import java.util.List;
 
+@DoNotRename
 public class SourceHighScore {
 
     private String propertyName;
