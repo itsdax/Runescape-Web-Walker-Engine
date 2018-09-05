@@ -97,13 +97,14 @@ public class DaxTracker implements Loggable {
     }
 
     public boolean update() {
-        if (Timing.timeFromMark(lastUpdated) < 60000) {
+        if (Timing.timeFromMark(lastUpdated) < 10000) {
             return false;
         }
 
         for (DaxTrackerProperty daxTrackerProperty : trackerProperties) {
+            double value = daxTrackerProperty.differenceSinceLastTracked();
             if (daxTrackerProperty.update()) {
-                log(daxTrackerProperty.getName(), daxTrackerProperty.differenceSinceLastTracked());
+                log(daxTrackerProperty.getName(), value);
                 log("Logged " + daxTrackerProperty.getName());
             } else {
                 log("Refused update " + daxTrackerProperty.getName() + " [Exceeded maximum acceptable value]");
@@ -127,9 +128,9 @@ public class DaxTracker implements Loggable {
         new Thread(() -> {
            while (!isStopped()) {
                update();
-               General.sleep(60000);
+               General.sleep(15000);
            }
-        });
+        }).start();
 
     }
 

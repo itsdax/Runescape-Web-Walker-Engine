@@ -56,11 +56,15 @@ public class DaxWalker {
     }
 
     public static boolean walkToBank() {
-        return walkToBank(null);
+        return walkToBank(null, null);
     }
 
     public static boolean walkToBank(Bank bank) {
         return walkToBank(bank, null);
+    }
+
+    public static boolean walkToBank(WalkingCondition walkingCondition) {
+        return walkToBank(null, walkingCondition);
     }
 
     public static boolean walkToBank(Bank bank, WalkingCondition walkingCondition) {
