@@ -19,7 +19,7 @@ View [JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
 ## API Keys
 Please visit https://admin.dax.cloud/ for more information. To use your Api Keys, please condigure an API Key provider.
 ```java8
-        WebWalkerServerApi.getInstance().setDaxCredentialsProvider(new DaxCredentialsProvider() {
+        DaxWalker.setCredentials(new DaxCredentialsProvider() {
             @Override
             public DaxCredentials getDaxCredentials() {
                 return new DaxCredentials("YOUR-PUBLIC-KEY", "YOUR-SECRET-KEY");
