@@ -60,7 +60,8 @@ public class DaxTrackerServerApi implements Loggable {
         Escaper escaper = UrlEscapers.urlFormParameterEscaper();
         try {
             serverResponse = IOHelper.get(
-                    TRACKER_ENDPOINT + "/tracker/users/online?propertyName=" + escaper.escape(propertyName)
+                    TRACKER_ENDPOINT + "/tracker/users/online?"
+                            + (propertyName != null ? "&propertyName=" + escaper.escape(propertyName) : "")
                             + (period != null ? "&period=" + period : ""),
                     daxCredentialsProvider
             );
