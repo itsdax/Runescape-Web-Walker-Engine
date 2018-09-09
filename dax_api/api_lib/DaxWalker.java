@@ -1,5 +1,6 @@
 package scripts.dax_api.api_lib;
 
+import com.google.gson.Gson;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;

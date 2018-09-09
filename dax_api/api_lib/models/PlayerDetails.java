@@ -1,14 +1,14 @@
 package scripts.dax_api.api_lib.models;
 
 import com.allatori.annotations.DoNotRename;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSVarBit;
-import scripts.dax_api.api_lib.json.JsonObject;
 import scripts.dax_api.shared.helpers.WorldHelper;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,14 +23,12 @@ public class PlayerDetails {
         List<IntPair> equipment = Arrays.stream(Equipment.getItems())
                 .map(rsItem -> new IntPair(rsItem.getID(), rsItem.getStack())).collect(Collectors.toList());
 
-        Set<IntPair> settings = Stream.of(176, 32, 71, 273, 144, 63, 179, 145, 68, 655, 10, 964, 399, 869, 314, 794,
+        List<IntPair> settings = Stream.of(176, 32, 71, 273, 144, 63, 179, 145, 68, 655, 10, 964, 399, 869, 314, 794,
                 440, 622, 131, 335, 299, 896, 671, 810, 17, 11, 347, 302, 111, 116, 482, 307, 165, 150, 425, 365, 1630)
-                .map(value -> new IntPair(value, Game.getSetting(value))).collect(Collectors.toSet());
+                .map(value -> new IntPair(value, Game.getSetting(value))).distinct().collect(Collectors.toList());
 
-        System.out.println(Arrays.toString(Game.getSettingsArray()));
-
-        Set<IntPair> varbit = Arrays.stream(new int[]{5087, 5088, 5089, 5090, 4895})
-                .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).collect(Collectors.toSet());
+        List<IntPair> varbit = Arrays.stream(new int[]{5087, 5088, 5089, 5090, 4895})
+                .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(Collectors.toList());
 
         return new PlayerDetails(
                 Skills.getActualLevel(Skills.SKILLS.ATTACK),
@@ -87,13 +85,17 @@ public class PlayerDetails {
     private int runecrafting;
     private int hunter;
     private int construction;
-    private Set<IntPair> setting;
-    private Set<IntPair> varbit;
+    private List<IntPair> setting;
+    private List<IntPair> varbit;
     private boolean member;
     private List<IntPair> equipment;
     private List<IntPair> inventory;
 
-    public PlayerDetails(int attack, int defence, int strength, int hitpoints, int ranged, int prayer, int magic, int cooking, int woodcutting, int fletching, int fishing, int firemaking, int crafting, int smithing, int mining, int herblore, int agility, int thieving, int slayer, int farming, int runecrafting, int hunter, int construction, Set<IntPair> setting, Set<IntPair> varbit, boolean member, List<IntPair> equipment, List<IntPair> inventory) {
+    public PlayerDetails() {
+
+    }
+
+    public PlayerDetails(int attack, int defence, int strength, int hitpoints, int ranged, int prayer, int magic, int cooking, int woodcutting, int fletching, int fishing, int firemaking, int crafting, int smithing, int mining, int herblore, int agility, int thieving, int slayer, int farming, int runecrafting, int hunter, int construction, List<IntPair> setting, List<IntPair> varbit, boolean member, List<IntPair> equipment, List<IntPair> inventory) {
         this.attack = attack;
         this.defence = defence;
         this.strength = strength;
@@ -216,11 +218,11 @@ public class PlayerDetails {
         return construction;
     }
 
-    public Set<IntPair> getSetting() {
+    public List<IntPair> getSetting() {
         return setting;
     }
 
-    public Set<IntPair> getVarbit() {
+    public List<IntPair> getVarbit() {
         return varbit;
     }
 
@@ -236,38 +238,8 @@ public class PlayerDetails {
         return inventory;
     }
 
-    public JsonObject toJson() {
-        return new JsonObject()
-                .add("attack", attack)
-                .add("defence", defence)
-                .add("strength", strength)
-                .add("hitpoints", hitpoints)
-                .add("ranged", ranged)
-                .add("prayer", prayer)
-                .add("magic", magic)
-                .add("cooking", cooking)
-                .add("woodcutting", woodcutting)
-                .add("fletching", fletching)
-                .add("fishing", fishing)
-                .add("firemaking", firemaking)
-                .add("crafting", crafting)
-                .add("smithing", smithing)
-                .add("mining", mining)
-                .add("herblore", herblore)
-                .add("agility", agility)
-                .add("thieving", thieving)
-                .add("slayer", slayer)
-                .add("farming", farming)
-                .add("runecrafting", runecrafting)
-                .add("hunter", hunter)
-                .add("construction", construction)
-                .add("setting", IntPair.toJsonArray(setting))
-                .add("varbit", IntPair.toJsonArray(varbit))
-                .add("equipment", IntPair.toJsonArray(equipment))
-                .add("inventory", IntPair.toJsonArray(inventory))
-                .add("members", member)
-                ;
+    public JsonElement toJson() {
+        return new Gson().toJsonTree(this);
     }
-
 
 }

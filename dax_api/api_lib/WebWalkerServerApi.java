@@ -1,7 +1,9 @@
 package scripts.dax_api.api_lib;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import scripts.dax_api.api_lib.json.Json;
-import scripts.dax_api.api_lib.json.JsonObject;
 import scripts.dax_api.api_lib.json.JsonValue;
 import scripts.dax_api.api_lib.json.ParseException;
 import scripts.dax_api.api_lib.models.*;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 public class WebWalkerServerApi implements Loggable {
 
     private static WebWalkerServerApi webWalkerServerApi;
+    private static Gson gson = new Gson();
 
     public static WebWalkerServerApi getInstance() {
         return webWalkerServerApi != null ? webWalkerServerApi : (webWalkerServerApi = new WebWalkerServerApi());
@@ -44,13 +47,15 @@ public class WebWalkerServerApi implements Loggable {
     }
 
     public PathResult getPath(Point3D start, Point3D end, PlayerDetails playerDetails) {
-        JsonObject pathRequest = new JsonObject()
-                .add("start", start.toJson())
-                .add("end", end.toJson());
+        com.google.gson.JsonObject pathRequest = new com.google.gson.JsonObject();
+        pathRequest.add("start", start.toJson());
+        pathRequest.add("end", end.toJson());
 
         if (playerDetails != null) {
             pathRequest.add("player", playerDetails.toJson());
         }
+
+        System.out.println(pathRequest.toString());
 
         try {
             return parseResult(post(pathRequest, (isTestMode ? TEST_ENDPOINT : WALKER_ENDPOINT) + GENERATE_PATH));
@@ -62,10 +67,12 @@ public class WebWalkerServerApi implements Loggable {
     }
 
     public PathResult getBankPath(Point3D start, Bank bank, PlayerDetails playerDetails) {
-        JsonObject pathRequest = new JsonObject().add("start", start.toJson());
+        com.google.gson.JsonObject pathRequest = new com.google.gson.JsonObject();
+
+        pathRequest.add("start", start.toJson());
 
         if (bank != null) {
-            pathRequest.add("bank", bank.toString());
+            pathRequest.addProperty("bank", bank.toString());
         }
 
         if (playerDetails != null) {
@@ -111,9 +118,9 @@ public class WebWalkerServerApi implements Loggable {
         }
 
         PathResult pathResult;
-        JsonObject jsonObject;
+        JsonElement jsonObject;
         try {
-            jsonObject = Json.parse(serverResponse.getContents()).asObject();
+            jsonObject = new JsonParser().parse(serverResponse.getContents());
         } catch (ParseException e) {
             pathResult = new PathResult(PathStatus.UNKNOWN);
             log("Error: " + pathResult.getPathStatus());
@@ -121,11 +128,11 @@ public class WebWalkerServerApi implements Loggable {
         }
 
         pathResult = PathResult.fromJson(jsonObject);
-        log("Response: " + pathResult.getPathStatus()  + " Cost: " + pathResult.getCost());
+        log("Response: " + pathResult.getPathStatus() + " Cost: " + pathResult.getCost());
         return pathResult;
     }
 
-    private ServerResponse post(JsonObject jsonObject, String endpoint) throws IOException {
+    private ServerResponse post(com.google.gson.JsonObject jsonObject, String endpoint) throws IOException {
         getInstance().log("Generating path: " + jsonObject.toString());
         if (cache.containsKey(jsonObject.toString())) {
             return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(jsonObject.toString()));

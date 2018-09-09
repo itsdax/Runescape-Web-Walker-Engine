@@ -1,9 +1,11 @@
 package scripts.dax_api.api_lib.models;
 
 import com.allatori.annotations.DoNotRename;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.api_lib.json.JsonObject;
 
 @DoNotRename
 public class Point3D {
@@ -28,8 +30,8 @@ public class Point3D {
         return z;
     }
 
-    public JsonObject toJson() {
-        return new JsonObject().add("x", x).add("y", y).add("z", z);
+    public JsonElement toJson() {
+        return new Gson().toJsonTree(this);
     }
 
     @Override
@@ -54,14 +56,6 @@ public class Point3D {
     public static Point3D fromPositionable(Positionable positionable) {
         RSTile rsTile = positionable.getPosition();
         return new Point3D(rsTile.getX(), rsTile.getY(), rsTile.getPlane());
-    }
-
-    public static Point3D fromJson(JsonObject jsonObject) {
-        return new Point3D(
-                jsonObject.getInt("x", -1),
-                jsonObject.getInt("y", -1),
-                jsonObject.getInt("z", -1)
-        );
     }
 
 }

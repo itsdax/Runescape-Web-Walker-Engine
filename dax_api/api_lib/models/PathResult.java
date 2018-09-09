@@ -1,6 +1,8 @@
 package scripts.dax_api.api_lib.models;
 
 import com.allatori.annotations.DoNotRename;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.json.JsonArray;
 import scripts.dax_api.api_lib.json.JsonObject;
@@ -81,19 +83,8 @@ public class PathResult {
         return Objects.hash(pathStatus, path, cost);
     }
 
-    public static PathResult fromJson(JsonObject jsonObject) {
-        PathResult pathResult = new PathResult();
-        pathResult.setCost(jsonObject.getInt("cost", -1));
-        pathResult.setPathStatus(PathStatus.valueOf(jsonObject.getString("pathStatus", "UNKNOWN")));
-
-        List<Point3D> path = new ArrayList<>();
-
-        JsonArray jsonArray = jsonObject.get("path").isNull() ? new JsonArray() : jsonObject.get("path").asArray();
-        for (JsonValue jsonValue : jsonArray) {
-            path.add(Point3D.fromJson(jsonValue.asObject()));
-        }
-        pathResult.setPath(path);
-        return pathResult;
+    public static PathResult fromJson(JsonElement jsonObject) {
+        return new Gson().fromJson(jsonObject, PathResult.class);
     }
 
 }
