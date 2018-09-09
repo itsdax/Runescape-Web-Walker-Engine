@@ -55,8 +55,6 @@ public class WebWalkerServerApi implements Loggable {
             pathRequest.add("player", playerDetails.toJson());
         }
 
-        System.out.println(pathRequest.toString());
-
         try {
             return parseResult(post(pathRequest, (isTestMode ? TEST_ENDPOINT : WALKER_ENDPOINT) + GENERATE_PATH));
         } catch (IOException e) {

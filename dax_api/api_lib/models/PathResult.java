@@ -15,8 +15,13 @@ import java.util.Objects;
 @DoNotRename
 public class PathResult {
 
+    @DoNotRename
     private PathStatus pathStatus;
+
+    @DoNotRename
     private List<Point3D> path;
+
+    @DoNotRename
     private int cost;
 
     private PathResult () {

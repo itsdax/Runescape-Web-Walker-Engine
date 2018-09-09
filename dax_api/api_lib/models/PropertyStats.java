@@ -9,9 +9,16 @@ import java.util.List;
 @DoNotRename
 public class PropertyStats {
 
+    @DoNotRename
     private Period period;
+
+    @DoNotRename
     private String propertyName;
+
+    @DoNotRename
     private double total;
+
+    @DoNotRename
     private List<DataSnapshot> dataSnapshots;
 
     public PropertyStats() {

@@ -8,7 +8,11 @@ import java.util.List;
 
 @DoNotRename
 public class ListSearch {
+
+    @DoNotRename
     private int amount;
+
+    @DoNotRename
     private List<String> list;
 
     public ListSearch() {

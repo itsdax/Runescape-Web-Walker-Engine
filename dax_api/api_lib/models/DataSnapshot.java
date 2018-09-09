@@ -5,7 +5,11 @@ import com.allatori.annotations.DoNotRename;
 
 @DoNotRename
 public class DataSnapshot {
+
+    @DoNotRename
     private String timeStamp;
+
+    @DoNotRename
     private double total;
 
     public DataSnapshot() {

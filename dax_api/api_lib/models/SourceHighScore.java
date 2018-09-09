@@ -9,8 +9,13 @@ import java.util.List;
 @DoNotRename
 public class SourceHighScore {
 
+    @DoNotRename
     private String propertyName;
+
+    @DoNotRename
     private Period period;
+
+    @DoNotRename
     private List<String> sources;
 
     public String getPropertyName() {

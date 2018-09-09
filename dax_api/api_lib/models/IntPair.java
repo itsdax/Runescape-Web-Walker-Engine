@@ -12,7 +12,12 @@ import java.util.Objects;
 
 @DoNotRename
 public class IntPair {
+
+
+    @DoNotRename
     private int key;
+
+    @DoNotRename
     private int value;
 
     public IntPair() {

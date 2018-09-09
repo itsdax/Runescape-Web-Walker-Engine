@@ -10,6 +10,8 @@ import org.tribot.api2007.types.RSTile;
 @DoNotRename
 public class Point3D {
 
+
+    @DoNotRename
     private int x, y, z;
 
     public Point3D(int x, int y, int z) {

@@ -62,33 +62,89 @@ public class PlayerDetails {
         );
     }
 
+
+    @DoNotRename
     private int attack;
+
+    @DoNotRename
     private int defence;
+
+    @DoNotRename
     private int strength;
+
+    @DoNotRename
     private int hitpoints;
+
+    @DoNotRename
     private int ranged;
+
+    @DoNotRename
     private int prayer;
+
+    @DoNotRename
     private int magic;
+
+    @DoNotRename
     private int cooking;
+
+    @DoNotRename
     private int woodcutting;
+
+    @DoNotRename
     private int fletching;
+
+    @DoNotRename
     private int fishing;
+
+    @DoNotRename
     private int firemaking;
+
+    @DoNotRename
     private int crafting;
+
+    @DoNotRename
     private int smithing;
+
+    @DoNotRename
     private int mining;
+
+    @DoNotRename
     private int herblore;
+
+    @DoNotRename
     private int agility;
+
+    @DoNotRename
     private int thieving;
+
+    @DoNotRename
     private int slayer;
+
+    @DoNotRename
     private int farming;
+
+    @DoNotRename
     private int runecrafting;
+
+    @DoNotRename
     private int hunter;
+
+    @DoNotRename
     private int construction;
+
+    @DoNotRename
     private List<IntPair> setting;
+
+    @DoNotRename
     private List<IntPair> varbit;
+
+    @DoNotRename
     private boolean member;
+
+    @DoNotRename
     private List<IntPair> equipment;
+
+    @DoNotRename
     private List<IntPair> inventory;
 
     public PlayerDetails() {

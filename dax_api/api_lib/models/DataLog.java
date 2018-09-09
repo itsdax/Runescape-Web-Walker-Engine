@@ -6,12 +6,25 @@ import com.google.gson.Gson;
 @DoNotRename
 public class DataLog {
 
+    @DoNotRename
     private String id;
+
+    @DoNotRename
     private String timeStamp;
+
+    @DoNotRename
     private String group;
+
+    @DoNotRename
     private String user;
+
+    @DoNotRename
     private String source;
+
+    @DoNotRename
     private String propertyName;
+
+    @DoNotRename
     private double value;
 
     public DataLog(String id, String timeStamp, String group, String user, String source, String propertyName, double value) {
