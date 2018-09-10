@@ -9,7 +9,7 @@
 View [JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
 
 ## API Keys
-Please visit https://admin.dax.cloud/ for more information. To use your Api Keys, please condigure an API Key provider.
+Please visit https://admin.dax.cloud/ for more information. To use your Api Keys, please configure your Dax API Key provider.
 ```java8
         DaxWalker.setCredentials(new DaxCredentialsProvider() {
             @Override
@@ -27,9 +27,9 @@ Please visit https://admin.dax.cloud/ for more information. To use your Api Keys
 
 
 ## Features
-- Speed. Will generate a path from any two points (Given that it is mapped) in less than a second, guaranteed.
+- Speed. Despite RuneScape's huge world of 10M tiles in a sparse map of 15000x15000x4, my optimized engine will generate a path from any two points in less than 200ms, guaranteed. My custom heuristic function for A* will calculate portals and teleports without loss of accuracy for your unividual character.
 
-- Simplicity. Implement the engine into your script by simply calling:
+- Ease of use. Implement the engine into your script by simply calling:
 ```java8
         DaxWalker.walkTo(new RSTile(1,2,3));
         DaxWalker.walkToBank(Bank.VARROCK_EAST);
