@@ -1,17 +1,9 @@
 # Runescape-Web-Walker-Engine
 ##### Open-sourced world walker engine and path generation for Rune Scape written in Java.
 
-## How to import to Tribot Scripts Folder
-- Simply copy the webwalker_logic package inside your scripts directory! (View below) If you need further help, the visit the [Tribot Forums](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/). 
-- You can also clone this repo directly in your scripts directory with a few tweaks.
-
-<p align="center">
-  <img src="http://i.imgur.com/Age76Qx.png"/>
-</p>
-
-<p align="center">
-  <img src="http://i.imgur.com/Fxvn5C1.png"/>
-</p>
+## Manually Porting to Tribot Directory.
+- **DO NOT CLONE INTO SCRIPTS DIRECTORY!** Tribot will not be able to detect it.
+- Copy the dax_api package inside your scripts directory. If you need further help, the visit the [Tribot Forums](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/). 
 
 ## Documentation
 View [JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
