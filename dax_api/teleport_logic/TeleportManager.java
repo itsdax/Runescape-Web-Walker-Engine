@@ -13,6 +13,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+import static scripts.dax_api.api_lib.models.PathStatus.RATE_LIMIT_EXCEEDED;
+import static scripts.dax_api.api_lib.models.PathStatus.SUCCESS;
+
 
 public class TeleportManager implements Loggable {
 
@@ -72,7 +75,7 @@ public class TeleportManager implements Loggable {
         final int cost = originalMoveCost - 25;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
-        Arrays.stream(TeleportMethod.values()).forEach(teleportMethod -> {
+        Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
             if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
                 return;
             }
@@ -92,11 +95,21 @@ public class TeleportManager implements Loggable {
             }
         });
 
+        boolean[] rateLimit = new boolean[]{false};
 
-        TeleportWrapper closest = teleport.stream()
-                .filter(pathResult -> pathResult.getPathResult().getPathStatus() == PathStatus.SUCCESS && pathResult.getPathResult().getCost() < cost)
+        TeleportWrapper closest = teleport.stream().parallel()
+                .filter(pathResult -> {
+                    if (pathResult.getPathResult().getPathStatus() == RATE_LIMIT_EXCEEDED) {
+                        rateLimit[0] = true;
+                    }
+                    return pathResult.getPathResult().getPathStatus() == SUCCESS && pathResult.getPathResult().getCost() < cost;
+                })
                 .min(Comparator.comparingInt(value -> value.getPathResult().getCost()))
                 .orElse(null);
+
+        if (rateLimit[0]) {
+            return null;
+        }
 
         if (closest == null) {
             return null;
@@ -116,7 +129,7 @@ public class TeleportManager implements Loggable {
         final int cost = originalMoveCost - 25;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
-        Arrays.stream(TeleportMethod.values()).forEach(teleportMethod -> {
+        Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
             if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
                 return;
             }
@@ -138,10 +151,21 @@ public class TeleportManager implements Loggable {
         });
 
 
-        TeleportWrapper closest = teleport.stream()
-                .filter(pathResult -> pathResult.getPathResult().getPathStatus() == PathStatus.SUCCESS && pathResult.getPathResult().getCost() < cost)
+        boolean[] rateLimit = new boolean[]{false};
+
+        TeleportWrapper closest = teleport.stream().parallel()
+                .filter(pathResult -> {
+                    if (pathResult.getPathResult().getPathStatus() == RATE_LIMIT_EXCEEDED) {
+                        rateLimit[0] = true;
+                    }
+                    return pathResult.getPathResult().getPathStatus() == SUCCESS && pathResult.getPathResult().getCost() < cost;
+                })
                 .min(Comparator.comparingInt(value -> value.getPathResult().getCost()))
                 .orElse(null);
+
+        if (rateLimit[0]) {
+            return null;
+        }
 
         if (closest == null) {
             return null;
