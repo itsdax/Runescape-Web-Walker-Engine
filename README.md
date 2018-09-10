@@ -1,5 +1,7 @@
 # Runescape-Web-Walker-Engine
 ##### Open-sourced world walker engine and path generation for Rune Scape written in Java.
+Visual Debug:
+![](https://i.imgur.com/OEg03Rv.png)
 
 ## Importing to Tribot.
 - **DO NOT CLONE INTO SCRIPTS DIRECTORY!** Tribot will not be able to detect it.
