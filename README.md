@@ -1,23 +1,17 @@
 # Runescape-Web-Walker-Engine
 ##### Open-sourced world walker engine and path generation for Rune Scape written in Java.
+Visual Debug:
+![](https://i.imgur.com/OEg03Rv.png)
 
-## How to import to Tribot Scripts Folder
-- Simply copy the webwalker_logic package inside your scripts directory! (View below) If you need further help, the visit the [Tribot Forums](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/). 
-- You can also clone this repo directly in your scripts directory with a few tweaks.
-
-<p align="center">
-  <img src="http://i.imgur.com/Age76Qx.png"/>
-</p>
-
-<p align="center">
-  <img src="http://i.imgur.com/Fxvn5C1.png"/>
-</p>
+## Importing to Tribot.
+- **DO NOT CLONE INTO SCRIPTS DIRECTORY!** Tribot will not be able to detect it.
+- Copy the dax_api package inside your scripts directory. If you need further help, the visit the [Tribot Forums](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/). 
 
 ## Documentation
 View [JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
 
 ## API Keys
-Please visit https://admin.dax.cloud/ for more information. To use your Api Keys, please condigure an API Key provider.
+Please visit https://admin.dax.cloud/ for more information. To use your Api Keys, please configure your Dax API Key provider.
 ```java8
         DaxWalker.setCredentials(new DaxCredentialsProvider() {
             @Override
@@ -35,9 +29,9 @@ Please visit https://admin.dax.cloud/ for more information. To use your Api Keys
 
 
 ## Features
-- Speed. Will generate a path from any two points (Given that it is mapped) in less than a second, guaranteed.
+- Speed. Despite RuneScape's huge world of 10M tiles in a sparse map of **15000x15000x4**, my optimized engine will generate a path from any two points in less than **200ms**, guaranteed. My custom heuristic function for A* will calculate portals and teleports without loss of accuracy for your unividual character.
 
-- Simplicity. Implement the engine into your script by simply calling:
+- Ease of use. Implement the engine into your script by simply calling:
 ```java8
         DaxWalker.walkTo(new RSTile(1,2,3));
         DaxWalker.walkToBank(Bank.VARROCK_EAST);
