@@ -6,8 +6,10 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.models.*;
 import scripts.dax_api.teleport_logic.TeleportManager;
+import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.WalkerEngine;
 import scripts.dax_api.walker_engine.WalkingCondition;
+import scripts.dax_api.walker_engine.navigation_utils.ShipUtils;
 
 import java.util.ArrayList;
 
@@ -45,12 +47,20 @@ public class DaxWalker {
     }
 
     public static boolean walkTo(Positionable destination, WalkingCondition walkingCondition) {
+        if (ShipUtils.isOnShip()) {
+            ShipUtils.crossGangplank();
+            WaitFor.milliseconds(500, 1200);
+        }
         Positionable start = Player.getPosition();
         if (start.equals(destination)) {
             return true;
         }
 
         PathResult pathResult = WebWalkerServerApi.getInstance().getPath(Point3D.fromPositionable(start), Point3D.fromPositionable(destination), PlayerDetails.generate());
+
+        if (pathResult.getPathStatus() == PathStatus.SUCCESS && pathResult.getCost() < 50) {
+            return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
+        }
 
         ArrayList<RSTile> path = TeleportManager.getClosestPath(pathResult.getPathStatus() == PathStatus.SUCCESS ? pathResult.getCost() : Integer.MAX_VALUE, destination.getPosition());
         return WalkerEngine.getInstance().walkPath(path != null ? path : pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
@@ -69,7 +79,16 @@ public class DaxWalker {
     }
 
     public static boolean walkToBank(Bank bank, WalkingCondition walkingCondition) {
+        if (ShipUtils.isOnShip()) {
+            ShipUtils.crossGangplank();
+            WaitFor.milliseconds(500, 1200);
+        }
+
         PathResult pathResult = WebWalkerServerApi.getInstance().getBankPath(Point3D.fromPositionable(Player.getPosition()), bank, PlayerDetails.generate());
+
+        if (pathResult.getPathStatus() == PathStatus.SUCCESS && pathResult.getCost() < 50) {
+            return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
+        }
 
         ArrayList<RSTile> path = TeleportManager.getClosestBankPath(bank, pathResult.getPathStatus() == PathStatus.SUCCESS ? pathResult.getCost() : Integer.MAX_VALUE);
         return WalkerEngine.getInstance().walkPath(path != null ? path : pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));

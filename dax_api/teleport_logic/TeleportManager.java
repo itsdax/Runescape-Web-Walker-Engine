@@ -25,7 +25,7 @@ public class TeleportManager implements Loggable {
     private HashSet<TeleportMethod> blacklistTeleportMethods;
     private HashSet<TeleportLocation> blacklistTeleportLocations;
     private ExecutorService executorService;
-    private ExecutorService customThreadPool = Executors.newFixedThreadPool(5);
+    private ExecutorService customThreadPool = new ForkJoinPool(10);
 
 
     private static TeleportManager teleportManager;

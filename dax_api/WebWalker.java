@@ -154,7 +154,6 @@ public class WebWalker {
         if (bestPath != null){
             path = bestPath;
         }
-
         return WalkerEngine.getInstance().walkPath(path, walkingCondition.combine(getInstance().globalWalkingCondition));
     }
 

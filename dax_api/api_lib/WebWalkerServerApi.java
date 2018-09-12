@@ -94,7 +94,6 @@ public class WebWalkerServerApi implements Loggable {
     }
 
     private PathResult parseResult(ServerResponse serverResponse) {
-        getInstance().log(serverResponse.toString());
         if (!serverResponse.isSuccess()) {
 
             JsonValue jsonValue = Json.parse(serverResponse.getContents());
