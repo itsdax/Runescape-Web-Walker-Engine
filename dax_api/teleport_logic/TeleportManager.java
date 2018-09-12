@@ -25,6 +25,8 @@ public class TeleportManager implements Loggable {
     private HashSet<TeleportMethod> blacklistTeleportMethods;
     private HashSet<TeleportLocation> blacklistTeleportLocations;
     private ExecutorService executorService;
+    private ForkJoinPool customThreadPool = new ForkJoinPool(5);
+
 
     private static TeleportManager teleportManager;
 
@@ -75,29 +77,33 @@ public class TeleportManager implements Loggable {
         final int cost = originalMoveCost - 25;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
-        Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
-            if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
-                return;
-            }
-            if (!teleportMethod.canUse()) {
-                return;
-            }
-            for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
-                if (getInstance().blacklistTeleportLocations.contains(teleportLocation)) {
-                    continue;
+        try {
+            getInstance().customThreadPool.submit(() -> Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
+                if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
+                    return;
                 }
-                PathResult pathResult = WebWalkerServerApi.getInstance().getBankPath(
-                        Point3D.fromPositionable(teleportLocation.getRSTile()),
-                        bank,
-                        PlayerDetails.generate()
-                );
-                teleport.add(new TeleportWrapper(pathResult, teleportMethod, teleportLocation));
-            }
-        });
+                if (!teleportMethod.canUse()) {
+                    return;
+                }
+                for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
+                    if (getInstance().blacklistTeleportLocations.contains(teleportLocation)) {
+                        continue;
+                    }
+                    PathResult pathResult = WebWalkerServerApi.getInstance().getBankPath(
+                            Point3D.fromPositionable(teleportLocation.getRSTile()),
+                            bank,
+                            PlayerDetails.generate()
+                    );
+                    teleport.add(new TeleportWrapper(pathResult, teleportMethod, teleportLocation));
+                }
+            })).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
         boolean[] rateLimit = new boolean[]{false};
 
-        TeleportWrapper closest = teleport.stream().parallel()
+        TeleportWrapper closest = teleport.stream()
                 .filter(pathResult -> {
                     if (pathResult.getPathResult().getPathStatus() == RATE_LIMIT_EXCEEDED) {
                         rateLimit[0] = true;
@@ -129,31 +135,35 @@ public class TeleportManager implements Loggable {
         final int cost = originalMoveCost - 25;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
-        Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
-            if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
-                return;
-            }
-            if (!teleportMethod.canUse()) {
-                return;
-            }
-            for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
-                if (getInstance().blacklistTeleportLocations.contains(teleportLocation)) {
-                    continue;
+        try {
+            getInstance().customThreadPool.submit(() -> Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
+                if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
+                    return;
                 }
+                if (!teleportMethod.canUse()) {
+                    return;
+                }
+                for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
+                    if (getInstance().blacklistTeleportLocations.contains(teleportLocation)) {
+                        continue;
+                    }
 
-                PathResult pathResult = WebWalkerServerApi.getInstance().getPath(
-                        Point3D.fromPositionable(teleportLocation.getRSTile()),
-                        Point3D.fromPositionable(destination),
-                        PlayerDetails.generate()
-                );
-                teleport.add(new TeleportWrapper(pathResult, teleportMethod, teleportLocation));
-            }
-        });
+                    PathResult pathResult = WebWalkerServerApi.getInstance().getPath(
+                            Point3D.fromPositionable(teleportLocation.getRSTile()),
+                            Point3D.fromPositionable(destination),
+                            PlayerDetails.generate()
+                    );
+                    teleport.add(new TeleportWrapper(pathResult, teleportMethod, teleportLocation));
+                }
+            })).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
 
         boolean[] rateLimit = new boolean[]{false};
 
-        TeleportWrapper closest = teleport.stream().parallel()
+        TeleportWrapper closest = teleport.stream()
                 .filter(pathResult -> {
                     if (pathResult.getPathResult().getPathStatus() == RATE_LIMIT_EXCEEDED) {
                         rateLimit[0] = true;
