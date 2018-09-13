@@ -1,22 +1,30 @@
 package scripts.dax_api.api_lib;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import scripts.dax_api.api_lib.json.Json;
-import scripts.dax_api.api_lib.json.JsonValue;
-import scripts.dax_api.api_lib.json.ParseException;
-import scripts.dax_api.api_lib.models.*;
-import scripts.dax_api.api_lib.utils.IOHelper;
-import scripts.dax_api.walker_engine.Loggable;
-
-import javax.net.ssl.HttpsURLConnection;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+import scripts.dax_api.api_lib.json.Json;
+import scripts.dax_api.api_lib.json.JsonValue;
+import scripts.dax_api.api_lib.json.ParseException;
+import scripts.dax_api.api_lib.models.RunescapeBank;
+import scripts.dax_api.api_lib.models.DaxCredentialsProvider;
+import scripts.dax_api.api_lib.models.PathResult;
+import scripts.dax_api.api_lib.models.PathStatus;
+import scripts.dax_api.api_lib.models.PlayerDetails;
+import scripts.dax_api.api_lib.models.Point3D;
+import scripts.dax_api.api_lib.models.ServerResponse;
+import scripts.dax_api.api_lib.utils.IOHelper;
+import scripts.dax_api.walker_engine.Loggable;
 
 public class WebWalkerServerApi implements Loggable {
 
@@ -64,7 +72,7 @@ public class WebWalkerServerApi implements Loggable {
 
     }
 
-    public PathResult getBankPath(Point3D start, Bank bank, PlayerDetails playerDetails) {
+    public PathResult getBankPath(Point3D start, RunescapeBank bank, PlayerDetails playerDetails) {
         com.google.gson.JsonObject pathRequest = new com.google.gson.JsonObject();
 
         pathRequest.add("start", start.toJson());

@@ -3,7 +3,7 @@ package scripts.dax_api.api_lib.models;
 import com.allatori.annotations.DoNotRename;
 
 @DoNotRename
-public enum Bank {
+public enum RunescapeBank {
     FALADOR_WEST,
     FALADOR_EAST,
     EDGEVILLE,

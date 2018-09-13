@@ -1,17 +1,22 @@
 package scripts.dax_api.api_lib;
 
-import com.google.gson.Gson;
+import java.util.ArrayList;
+
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.api_lib.models.*;
+
+import scripts.dax_api.api_lib.models.DaxCredentialsProvider;
+import scripts.dax_api.api_lib.models.PathResult;
+import scripts.dax_api.api_lib.models.PathStatus;
+import scripts.dax_api.api_lib.models.PlayerDetails;
+import scripts.dax_api.api_lib.models.Point3D;
+import scripts.dax_api.api_lib.models.RunescapeBank;
 import scripts.dax_api.teleport_logic.TeleportManager;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.WalkerEngine;
 import scripts.dax_api.walker_engine.WalkingCondition;
 import scripts.dax_api.walker_engine.navigation_utils.ShipUtils;
-
-import java.util.ArrayList;
 
 public class DaxWalker {
 
@@ -70,7 +75,7 @@ public class DaxWalker {
         return walkToBank(null, null);
     }
 
-    public static boolean walkToBank(Bank bank) {
+    public static boolean walkToBank(RunescapeBank bank) {
         return walkToBank(bank, null);
     }
 
@@ -78,7 +83,7 @@ public class DaxWalker {
         return walkToBank(null, walkingCondition);
     }
 
-    public static boolean walkToBank(Bank bank, WalkingCondition walkingCondition) {
+    public static boolean walkToBank(RunescapeBank bank, WalkingCondition walkingCondition) {
         if (ShipUtils.isOnShip()) {
             ShipUtils.crossGangplank();
             WaitFor.milliseconds(500, 1200);
