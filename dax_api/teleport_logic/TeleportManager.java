@@ -119,7 +119,7 @@ public class TeleportManager implements Loggable {
             return null;
         }
 
-        getInstance().log("Found shorter path with teleport: " + closest.getTeleportMethod() + " > " + closest.getTeleportLocation());
+        getInstance().log("Found shorter path with teleport: " + closest.getTeleportMethod() + " > " + closest.getTeleportLocation() + " (" + originalMoveCost);
 
         if (!closest.getTeleportMethod().use(closest.getTeleportLocation())) {
             getInstance().log("Failed to teleport");
@@ -141,6 +141,7 @@ public class TeleportManager implements Loggable {
                 if (!teleportMethod.canUse()) {
                     return;
                 }
+                System.out.println("We can use " + teleportMethod);
                 for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
                     if (getInstance().blacklistTeleportLocations.contains(teleportLocation)) {
                         continue;
@@ -179,7 +180,7 @@ public class TeleportManager implements Loggable {
             return null;
         }
 
-        getInstance().log("Found shorter path with teleport: " + closest.getTeleportMethod() + " > " + closest.getTeleportLocation());
+        getInstance().log("Found shorter path with teleport: " + closest.getTeleportMethod() + " > " + closest.getTeleportLocation() + " (" + originalMoveCost);
 
         if (!closest.getTeleportMethod().use(closest.getTeleportLocation())) {
             getInstance().log("Failed to teleport");

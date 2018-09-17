@@ -50,7 +50,7 @@ public class RunePouch{
         }
 
         public int getQuantity(){
-            return Game.getVarBit(quantityVarbitIndex);
+            return RSVarBit.get(quantityVarbitIndex).getValue();
         }
 
     }
