@@ -1,20 +1,33 @@
 package scripts.dax_api.teleport_logic;
 
+import static scripts.dax_api.api_lib.models.PathStatus.RATE_LIMIT_EXCEEDED;
+import static scripts.dax_api.api_lib.models.PathStatus.SUCCESS;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
+
 import org.tribot.api.General;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
+
 import scripts.dax_api.WebPath;
 import scripts.dax_api.api_lib.WebWalkerServerApi;
-import scripts.dax_api.api_lib.models.*;
+import scripts.dax_api.api_lib.models.PathResult;
+import scripts.dax_api.api_lib.models.PlayerDetails;
+import scripts.dax_api.api_lib.models.Point3D;
+import scripts.dax_api.api_lib.models.RunescapeBank;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
-
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
-
-import static scripts.dax_api.api_lib.models.PathStatus.RATE_LIMIT_EXCEEDED;
-import static scripts.dax_api.api_lib.models.PathStatus.SUCCESS;
 
 
 public class TeleportManager implements Loggable {
@@ -71,7 +84,7 @@ public class TeleportManager implements Loggable {
         getInstance().offset = offset;
     }
 
-    public static ArrayList<RSTile> getClosestBankPath(Bank bank, int originalMoveCost) {
+    public static ArrayList<RSTile> getClosestBankPath(RunescapeBank bank, int originalMoveCost) {
         final int cost = originalMoveCost - 25;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
