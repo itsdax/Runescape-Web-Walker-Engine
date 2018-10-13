@@ -429,7 +429,6 @@ public class PathObjectHandler implements Loggable {
         		"Only on the RuneScape website.",
         		"Report the incident and do not click any links.",
         		"Authenticator and two-step login on my registered email.",
-        		"No way! You'll just take my gold for your own! Reported!.",
         		"No way! You'll just take my gold for your own! Reported!",
         		"No.",
         		"Don't give them the information and send an 'Abuse Report'.",
