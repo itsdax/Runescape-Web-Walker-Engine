@@ -191,7 +191,7 @@ public class Reachable {
                 if (reachable != null && !reachable.canReach(currentLocal.toWorldTile().getX(), currentLocal.toWorldTile().getY())){
                     continue;
                 }
-                if (building.size() > 0) {
+                if (building != null && building.size() > 0) {
                     if (building.contains(currentLocal.toWorldTile())) {
                         return currentLocal.toWorldTile();
                     }

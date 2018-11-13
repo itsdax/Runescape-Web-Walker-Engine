@@ -49,6 +49,11 @@ public class Point3D {
             }
 
             @Override
+            public boolean adjustCameraTo() {
+                return false;
+            }
+
+            @Override
             public RSTile getPosition() {
                 return new RSTile(x, y, z);
             }

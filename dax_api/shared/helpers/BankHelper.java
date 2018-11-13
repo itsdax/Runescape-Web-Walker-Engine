@@ -59,24 +59,28 @@ public class BankHelper {
     }
 
     private static HashSet<RSTile> computeBuilding(Positionable positionable, byte[][][] sceneFlags, HashSet<RSTile> tiles){
-        RSTile local = positionable.getPosition().toLocalTile();
-        int localX = local.getX(), localY = local.getY(), localZ = local.getPlane();
-        if (localX == -1 || localY == -1 || localZ == -1){
-            return tiles;
+        try {
+            RSTile local = positionable.getPosition().toLocalTile();
+            int localX = local.getX(), localY = local.getY(), localZ = local.getPlane();
+            if (localX == -1 || localY == -1 || localZ == -1){
+                return tiles;
+            }
+            if (sceneFlags.length <= localZ || sceneFlags[localZ].length <= localX || sceneFlags[localZ][localX].length <= localY){ //Not within bounds
+                return tiles;
+            }
+            if (sceneFlags[localZ][localX][localY] < 4){ //Not a building
+                return tiles;
+            }
+            if (!tiles.add(local.toWorldTile())){ //Already computed
+                return tiles;
+            }
+            computeBuilding(new RSTile(localX, localY + 1, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new RSTile(localX + 1, localY, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new RSTile(localX, localY - 1, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new RSTile(localX - 1, localY, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+        } catch (ArrayIndexOutOfBoundsException e) {
+
         }
-        if (sceneFlags.length <= localZ || sceneFlags[localZ].length <= localX || sceneFlags[localZ][localX].length <= localY){ //Not within bounds
-            return tiles;
-        }
-        if (sceneFlags[localZ][localX][localY] < 4){ //Not a building
-            return tiles;
-        }
-        if (!tiles.add(local.toWorldTile())){ //Already computed
-            return tiles;
-        }
-        computeBuilding(new RSTile(localX, localY + 1, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-        computeBuilding(new RSTile(localX + 1, localY, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-        computeBuilding(new RSTile(localX, localY - 1, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-        computeBuilding(new RSTile(localX - 1, localY, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
         return tiles;
     }
 

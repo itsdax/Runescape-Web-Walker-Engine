@@ -13,7 +13,7 @@ public class CollisionDataCollector {
         RSTile playerPosition = Player.getPosition();
         int[][] collisionData = PathFinding.getCollisionData();
 
-        if (collisionData == null){
+        if (collisionData == null) {
             return;
         }
 

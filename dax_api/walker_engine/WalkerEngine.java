@@ -178,6 +178,7 @@ public class WalkerEngine implements Loggable{
                                 }
                                 int indexCurrentPosition = path.indexOf(closestToPlayer.getRSTile());
                                 if (furthestReachable == null) {
+                                    System.out.println("Furthest reachable is null/");
                                     return WaitFor.Return.FAIL;
                                 }
                                 int indexNextDestination = path.indexOf(furthestReachable.getDestination().getRSTile());

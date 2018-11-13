@@ -30,6 +30,7 @@ public class PathAnalyzer {
 
     public static DestinationDetails furthestReachableTile(ArrayList<RSTile> path, PathFindingNode currentPosition){
         if (path == null || currentPosition == null){
+            System.out.println("PathAnalyzer attempt to find closest tile in path: " + currentPosition + " " + path);
             return null;
         }
         outside:

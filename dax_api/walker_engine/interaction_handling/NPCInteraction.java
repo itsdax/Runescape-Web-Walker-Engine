@@ -123,7 +123,7 @@ public class NPCInteraction implements Loggable {
         handleConversation(new String[]{});
     }
 
-    public static void handleConversation(String[] options){
+    public static void handleConversation(String... options){
         getInstance().log("Handling... " + Arrays.asList(options));
         List<String> blackList = new ArrayList<>();
         int limit = 0;
