@@ -421,9 +421,7 @@ public class PathObjectHandler implements Loggable {
 
 
     private static void handleStrongholdQuestions() {
-        NPCInteraction.handleConversation(new String[]{
-<<<<<<< HEAD
-                "Use the Account Recovery System.",
+        NPCInteraction.handleConversation("Use the Account Recovery System.",
                 "Nobody.",
                 "Don't tell them anything and click the 'Report Abuse' button.",
                 "Me.",
@@ -455,43 +453,7 @@ public class PathObjectHandler implements Loggable {
                 "No way! I'm reporting you to Jagex!",
                 "Talk to any banker in RuneScape.",
                 "Secure my device and reset my RuneScape password.",
-                "Don't share your information and report the player."
-=======
-        		"Use the Account Recovery System.",
-        		"Nobody.",
-        		"Don't tell them anything and click the 'Report Abuse' button.",
-        		"Me.",
-        		"Only on the RuneScape website.",
-        		"Report the incident and do not click any links.",
-        		"Authenticator and two-step login on my registered email.",
-        		"No way! You'll just take my gold for your own! Reported!",
-        		"No.",
-        		"Don't give them the information and send an 'Abuse Report'.",
-        		"Don't give them my password.",
-        		"The birthday of a famous person or event.",
-        		"Through account settings on runescape.com.",
-        		"Secure my device and reset my RuneScape password.",
-        		"Report the player for phishing.",
-        		"Don't click any links, forward the email to reportphishing@jagex.com.",
-        		"Inform Jagex by emailing reportphishing@jagex.com.",
-        		"Don't give out your password to anyone. Not even close friends.",
-        		"Politely tell them no and then use the 'Report Abuse' button.",
-        		"Set up 2 step authentication with my email provider.",
-        		"No, you should never buy a RuneScape account.",
-        		"Do not visit the website and report the player who messaged you.",
-        		"Only on the RuneScape website.",
-        		"Don't type in my password backwards and report the player.",
-        		"Virus scan my device then change my password.",
-        		"No, you should never allow anyone to level your account.",
-        		"Don't give out your password to anyone. Not even close friends.",
-        		"Report the stream as a scam. Real Jagex streams have a 'verified' mark.",
-        		"Read the text and follow the advice given.",
-        		"No way! I'm reporting you to Jagex!",
-        		"Talk to any banker in RuneScape.",
-        		"Secure my device and reset my RuneScape password.",
-        		"Don't share your information and report the player." 
->>>>>>> 193d2eca815c2cb1e2638a6454be3f4f49d507c2
-        });
+                "Don't share your information and report the player.");
     }
 
     private static boolean isClosedTrapDoor(RSObject object, String[] options){
