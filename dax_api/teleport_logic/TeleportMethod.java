@@ -149,7 +149,7 @@ public enum TeleportMethod implements Validatable {
             case FISHING_GUILD:
                 return teleportWithItem(SKILLS_FILTER, "Fishing.*");
             case MOTHERLOAD_MINE:
-                return teleportWithItem(SKILLS_FILTER, "Mother.*");
+                return teleportWithItem(SKILLS_FILTER, "Mining.*");
             case CRAFTING_GUILD:
                 return teleportWithItem(SKILLS_FILTER, "Crafting.*");
             case COOKING_GUILD:
