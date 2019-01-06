@@ -35,10 +35,10 @@ public class Reachable {
 
     public boolean canReach(int x, int y){
         RSTile playerPosition = Player.getPosition().toLocalTile();
-        if (playerPosition.getX() == x && playerPosition.getY() == y){
+        RSTile position = convertToLocal(x, y);
+        if (playerPosition.equals(position)){
             return true;
         }
-        RSTile position = convertToLocal(x, y);
         return getParent(position) != null;
     }
 
