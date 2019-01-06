@@ -34,7 +34,7 @@ public class Reachable {
     }
 
     public boolean canReach(int x, int y){
-        RSTile playerPosition = Player.getPosition();
+        RSTile playerPosition = Player.getPosition().toLocalTile();
         if (playerPosition.getX() == x && playerPosition.getY() == y){
             return true;
         }
@@ -125,7 +125,6 @@ public class Reachable {
         if (map[x][y] == null){
             return null;
         }
-        int length = 0;
         RSTile tile = new RSTile(x, y, Player.getPosition().getPlane(), RSTile.TYPES.LOCAL);
         while ((tile = map[tile.getX()][tile.getY()]) != null){
             path.add(tile.toWorldTile());
@@ -302,7 +301,11 @@ public class Reachable {
         }
 
         public boolean isValidDirection(int x, int y, int[][] collisionData){
+        	
             try {
+                if (!AStarNode.isWalkable(collisionData[x + this.x][y + this.y])){
+                    return false;
+                }
                 switch (this) {
                     case NORTH:
                         return !AStarNode.blockedNorth(collisionData[x][y]);
@@ -330,7 +333,7 @@ public class Reachable {
                         }
                         return true;
                     case NORTH_WEST:
-                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])){
+                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedWest(collisionData[x][y])){
                             return false;
                         }
                         if (!AStarNode.isWalkable(collisionData[x - 1][y])){
@@ -347,7 +350,7 @@ public class Reachable {
                         }
                         return true;
                     case SOUTH_EAST:
-                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])){
+                        if (AStarNode.blockedSouth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])){
                             return false;
                         }
                         if (!AStarNode.isWalkable(collisionData[x + 1][y])){
@@ -364,7 +367,7 @@ public class Reachable {
                         }
                         return true;
                     case SOUTH_WEST:
-                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])){
+                        if (AStarNode.blockedSouth(collisionData[x][y]) || AStarNode.blockedWest(collisionData[x][y])){
                             return false;
                         }
                         if (!AStarNode.isWalkable(collisionData[x - 1][y])){
