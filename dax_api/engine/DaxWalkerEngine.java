@@ -15,6 +15,7 @@ public class DaxWalkerEngine {
         int failAttempts = 0;
         while (true) {
             WalkTask walkTask = determineWalkTask(path);
+            System.out.println(walkTask.getWalkTaskType());
             switch (walkTask.getWalkTaskType()) {
                 case COLLISION_BLOCKING:
                     failAttempts = 0;
@@ -33,7 +34,6 @@ public class DaxWalkerEngine {
                     break;
             }
 
-
             if (failAttempts > 0) {
                 WaitFor.milliseconds(2000, 3500);
             }
@@ -41,7 +41,6 @@ public class DaxWalkerEngine {
             if (failAttempts > 3) {
                 return walkTask;
             }
-
         }
 
     }
