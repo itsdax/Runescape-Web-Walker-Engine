@@ -3,10 +3,14 @@ package scripts.dax_api.engine.utils;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.api_lib.models.Point3D;
 import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
+
+import static scripts.dax_api.engine.utils.DaxPathFinder.distance;
 
 public class PathUtils {
 
@@ -14,7 +18,7 @@ public class PathUtils {
         int index = path.indexOf(current);
 
         if (index == -1) {
-            throw new NotInPathException();
+            return null;
         }
 
         int next = index + 1;
@@ -23,7 +27,8 @@ public class PathUtils {
 
     public static RSTile getClosestTileInPath(List<RSTile> path) {
         RSTile player = Player.getPosition();
-        return path.stream().min(Comparator.comparingInt(player::distanceTo)).orElse(null);
+        return path.stream().min(Comparator.comparingDouble(o -> o.distanceToDouble(player))).orElse(null);
+
     }
 
     public static RSTile getFurthestReachableTileInMinimap(List<RSTile> path) {
@@ -54,6 +59,81 @@ public class PathUtils {
             }
         }
         return null;
+    }
+
+    public static void drawDebug(Graphics graphics, List<RSTile> path) {
+        Graphics2D g = (Graphics2D) graphics;
+        RSTile player = Player.getPosition();
+
+        g.setColor(new Color(0, 191, 23, 80));
+        for (RSTile tile : path) {
+            if (tile.distanceTo(player) > 25) {
+                continue;
+            }
+            Polygon polygon = Projection.getTileBoundsPoly(tile, 0);
+            if (polygon == null) {
+                continue;
+            }
+            g.fillPolygon(polygon);
+        }
+
+        RSTile closest = getClosestTileInPath(path);
+        if (closest != null) {
+            Polygon polygon = Projection.getTileBoundsPoly(closest, 0);
+            if (polygon != null) {
+                g.setColor(new Color(205, 0, 255, 80));
+                g.fillPolygon(polygon);
+
+                g.setColor(Color.BLACK);
+                graphics.drawString("Closest In Path", polygon.xpoints[0] - 24, polygon.ypoints[1] + 1);
+                g.setColor(Color.WHITE);
+                graphics.drawString("Closest In Path", polygon.xpoints[0] - 25, polygon.ypoints[1]);
+            }
+        }
+
+        RSTile furthestScreenTile = getFurthestReachableTileOnScreen(path);
+        if (furthestScreenTile != null) {
+            Polygon polygon = Projection.getTileBoundsPoly(furthestScreenTile, 0);
+            if (polygon != null) {
+                g.setColor(new Color(255, 0, 11, 157));
+                g.fillPolygon(polygon);
+
+                g.setColor(Color.BLACK);
+                graphics.drawString("Furthest Screen Tile", polygon.xpoints[0] - 24, polygon.ypoints[1] + 30);
+                g.setColor(Color.WHITE);
+                graphics.drawString("Furthest Screen Tile", polygon.xpoints[0] - 25, polygon.ypoints[1] + 30);
+            }
+        }
+
+        RSTile furthestMapTile = getFurthestReachableTileInMinimap(path);
+        if (furthestMapTile != null) {
+            Point p = Projection.tileToMinimap(furthestMapTile);
+            if (p != null) {
+                g.setColor(new Color(255, 0, 11, 157));
+                g.fillRect(p.x - 3, p.y - 3, 6, 6);
+
+                g.setColor(Color.BLACK);
+                graphics.drawString("Furthest Map Tile", p.x + 1, p.y + 14);
+                g.setColor(Color.WHITE);
+                graphics.drawString("Furthest Map Tile", p.x, p.y + 15);
+            }
+        }
+
+        RSTile nextTile = getNextTileInPath(furthestMapTile, path);
+        if (nextTile != null) {
+            Polygon polygon = Projection.getTileBoundsPoly(nextTile, 0);
+            if (polygon != null) {
+                g.setColor(new Color(255, 242, 0, 157));
+                g.fillPolygon(polygon);
+
+                g.setColor(Color.BLACK);
+                graphics.drawString("Next Tile", polygon.xpoints[0] - 24, polygon.ypoints[1]);
+                g.setColor(Color.WHITE);
+                graphics.drawString("Next Tile", polygon.xpoints[0] - 25, polygon.ypoints[1]);
+            }
+        }
+
+
     }
 
     public static class NotInPathException extends RuntimeException {

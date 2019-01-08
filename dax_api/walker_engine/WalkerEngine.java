@@ -5,6 +5,7 @@ import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.engine.utils.PathUtils;
 import scripts.dax_api.walker_engine.bfs.BFS;
 import scripts.dax_api.walker_engine.interaction_handling.AccurateMouse;
 import scripts.dax_api.walker_engine.local_pathfinding.PathAnalyzer;
@@ -86,7 +87,8 @@ public class WalkerEngine implements Loggable{
                     return false;
                 }
 
-                if ((destinationDetails = PathAnalyzer.furthestReachableTile(path)) == null) {
+                destinationDetails = PathAnalyzer.furthestReachableTile(path);
+                if (PathUtils.getFurthestReachableTileInMinimap(path) == null) {
                     log("Could not grab destination details.");
                     failedAttempt();
                     continue;
