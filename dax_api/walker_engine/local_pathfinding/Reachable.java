@@ -33,12 +33,12 @@ public class Reachable {
         return getParent(position.toLocalTile()) != null;
     }
 
-    public boolean canReach(int x, int y) {
-        RSTile playerPosition = Player.getPosition();
-        if (playerPosition.getX() == x && playerPosition.getY() == y) {
+    public boolean canReach(int x, int y){
+        RSTile playerPosition = Player.getPosition().toLocalTile();
+        RSTile position = convertToLocal(x, y);
+        if (playerPosition.equals(position)){
             return true;
         }
-        RSTile position = convertToLocal(x, y);
         return getParent(position) != null;
     }
 
@@ -121,7 +121,6 @@ public class Reachable {
         if (map[x][y] == null) {
             return null;
         }
-        int length = 0;
         RSTile tile = new RSTile(x, y, Player.getPosition().getPlane(), RSTile.TYPES.LOCAL);
         while ((tile = map[tile.getX()][tile.getY()]) != null) {
             path.add(tile.toWorldTile());
@@ -297,6 +296,9 @@ public class Reachable {
 
         public boolean isValidDirection(int x, int y, int[][] collisionData) {
             try {
+                if (!AStarNode.isWalkable(collisionData[x + this.x][y + this.y])){
+                    return false;
+                }
                 switch (this) {
                     case NORTH:
                         return !AStarNode.blockedNorth(collisionData[x][y]);
