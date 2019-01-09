@@ -1,5 +1,5 @@
 # Runescape-Web-Walker-Engine
-##### Open-sourced world walker engine and path generation for Rune Scape written in Java.
+Insanely Fast Path Finding for RuneScape's graph-based map with over 10 million nodes.
 
 ## Visit **[Explv's](https://github.com/Explv/Explv.github.io)** Project to check out pathfinding with Dax Path generation!
 <p align="center">
