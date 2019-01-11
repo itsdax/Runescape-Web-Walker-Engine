@@ -32,7 +32,7 @@ Please visit https://admin.dax.cloud/ for more information. To use your Api Keys
 
 
 ## Features
-- Speed. Despite RuneScape's huge world of 10M tiles in a sparse map of **15000x15000x4**, my optimized engine will generate a path from any two points in less than **200ms**, guaranteed. My custom heuristic function for A* will calculate portals and teleports without loss of accuracy for your unividual character.
+- Speed. Despite RuneScape's huge world of 10M tiles in a sparse map of **15000x15000x4**, my optimized engine will generate a path from any two points in less than **200ms**, guaranteed. My custom heuristic function for A* will calculate portals and teleports without loss of accuracy for your individual character.
 
 - Ease of use. Implement the engine into your script by simply calling:
 ```java8
