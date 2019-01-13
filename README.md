@@ -1,5 +1,5 @@
 # Runescape-Web-Walker-Engine
-**Insanely Fast Path Finding** for RuneScape's graph-based map with over **10 million** nodes.
+**Path Finding** for RuneScape's graph-based map with over **10 million** nodes optimized to generate any path in **<200ms**.
 
 ## Visit **[Explv's](https://explv.github.io/)** Project to check out pathfinding with Dax Path generation!
 <p align="center">
