@@ -1,4 +1,4 @@
-package scripts.dax_api.engine.utils.generator;
+package scripts.dax_api.walker.utils.generator;
 
 import org.tribot.api2007.Game;
 import org.tribot.api2007.PathFinding;

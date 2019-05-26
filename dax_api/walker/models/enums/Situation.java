@@ -1,9 +1,8 @@
-package scripts.dax_api.engine.models;
+package scripts.dax_api.walker.models.enums;
 
-public enum WalkTaskType {
+public enum Situation {
     COLLISION_BLOCKING,
     DISCONNECTED_PATH,
     NORMAL_PATH_HANDLING,
     PATH_TOO_FAR,
-
 }

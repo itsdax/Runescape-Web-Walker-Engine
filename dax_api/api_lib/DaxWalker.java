@@ -12,8 +12,7 @@ import scripts.dax_api.api_lib.models.PathStatus;
 import scripts.dax_api.api_lib.models.PlayerDetails;
 import scripts.dax_api.api_lib.models.Point3D;
 import scripts.dax_api.api_lib.models.RunescapeBank;
-import scripts.dax_api.engine.DaxWalkerEngine;
-import scripts.dax_api.engine.models.WalkTask;
+import scripts.dax_api.walker.DaxWalkerEngine;
 import scripts.dax_api.teleport_logic.TeleportManager;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.WalkerEngine;
@@ -23,6 +22,7 @@ import scripts.dax_api.walker_engine.navigation_utils.ShipUtils;
 public class DaxWalker {
 
     private static DaxWalker daxWalker;
+    private static DaxWalkerEngine daxWalkerEngine;
     private static DaxWalker getInstance() {
         return daxWalker != null ? daxWalker : (daxWalker = new DaxWalker());
     }
@@ -47,22 +47,6 @@ public class DaxWalker {
 
     public static void setCredentials(DaxCredentialsProvider daxCredentialsProvider) {
         WebWalkerServerApi.getInstance().setDaxCredentialsProvider(daxCredentialsProvider);
-    }
-
-    public static void walkToBeta(Positionable destination) {
-        Positionable start = Player.getPosition();
-        if (start.equals(destination)) {
-            return;
-        }
-
-        PathResult pathResult = WebWalkerServerApi.getInstance().getPath(Point3D.fromPositionable(start), Point3D.fromPositionable(destination), PlayerDetails.generate());
-
-        if (pathResult.getPathStatus() == PathStatus.SUCCESS && pathResult.getCost() < 50) {
-            DaxWalkerEngine.walkPath(pathResult.toRSTilePath());
-        }
-
-        ArrayList<RSTile> path = TeleportManager.getClosestPath(pathResult.getPathStatus() == PathStatus.SUCCESS ? pathResult.getCost() : Integer.MAX_VALUE, destination.getPosition());
-        DaxWalkerEngine.walkPath(path != null ? path : pathResult.toRSTilePath());
     }
 
     public static boolean walkTo(Positionable positionable) {

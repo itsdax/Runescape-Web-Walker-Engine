@@ -38,6 +38,17 @@ public class WorldHelper {
         return world != null && world.isMember();
     }
 
+
+    public static String getActivity(int worldNumber) {
+        World world = getWorld(worldNumber);
+        return world != null ? world.getActivity() : null;
+    }
+
+    public static boolean hasActivity(int worldNumber) {
+        World world = getWorld(worldNumber);
+        return world != null && world.getActivity() != null && world.getActivity().length() > 2;
+    }
+
     public static boolean isDeadMan(int worldNumber) {
         World world = getWorld(worldNumber);
         return world != null && world.isDeadman();

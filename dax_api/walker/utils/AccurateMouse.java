@@ -1,4 +1,4 @@
-package scripts.dax_api.walker_engine.interaction_handling;
+package scripts.dax_api.walker.utils;
 
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
@@ -247,9 +247,7 @@ public class AccurateMouse {
             return true;
         }
 
-        String regex = "("
-                + String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList()))
-                + ")" + " (-> )?" + (targetName != null ? Pattern.quote(targetName) : "") + "(.*)";
+        String regex = String.format("(%s) (-> )?%s(.*)", String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())), targetName != null ? Pattern.quote(targetName) : "");
 
         if (WaitFor.condition(80, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
             boolean multipleMatches = false;

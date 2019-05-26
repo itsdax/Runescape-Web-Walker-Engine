@@ -6,6 +6,7 @@ import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.*;
+import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.WalkerEngine;

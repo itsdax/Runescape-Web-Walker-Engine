@@ -13,7 +13,7 @@ import scripts.dax_api.shared.helpers.RSItemHelper;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.interaction_handling.AccurateMouse;
+import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import scripts.dax_api.shared.helpers.RSObjectHelper;
 
@@ -108,7 +108,7 @@ public class NavigationSpecialCase implements Loggable{
 
         PORT_SARIM_PAY_FARE (3029, 3217, 0),
         PORT_SARIM_PEST_CONTROL (3041, 3202, 0),
-        PORT_SARIM_VEOS (3057, 3192, 0),
+        PORT_SARIM_VEOS (3054, 3245, 0),
         KARAMJA_PAY_FARE (2953, 3146, 0),
         ARDOUGNE_PAY_FARE (2681, 3275, 0),
         BRIMHAVEN_PAY_FARE (2772, 3225, 0),
@@ -155,8 +155,6 @@ public class NavigationSpecialCase implements Loggable{
      * @return
      */
     public static boolean handle(SpecialLocation specialLocation){
-        String zeahBoatLocation = null;
-
         switch (specialLocation){
 
             case BRIMHAVEN_DUNGEON:
@@ -421,14 +419,16 @@ public class NavigationSpecialCase implements Loggable{
                         && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
             case PORT_SARIM_VEOS:
-                zeahBoatLocation = "Travel to Port Sarim.";
-                break;
+                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Port Sarim")), "Port Sarim")
+                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
             case GREAT_KOUREND:
-                zeahBoatLocation = "Travel to Port Piscarilius.";
-                break;
-            case LANDS_END:
-                zeahBoatLocation = "Travel to Land's End.";
-                break;
+                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Port Piscarilius")), "Port Piscarilius")
+                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
+                        case LANDS_END:
+                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Land's End")), "Land's End")
+                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
             case ARDY_LOG_WEST:
             case ARDY_LOG_EAST:
@@ -510,21 +510,9 @@ public class NavigationSpecialCase implements Loggable{
                 break;
         }
 
-        if (zeahBoatLocation != null){
-            return handleZeahBoats(zeahBoatLocation);
-        }
-
         return false;
     }
 
-    public static boolean handleZeahBoats(String locationOption){
-        if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{"Travel"}, new String[]{locationOption})
-                && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
-            WaitFor.milliseconds(1800, 2800);
-            return true;
-        }
-        return false;
-    }
 
     public static boolean handlePayFare(){
         String[] options = {"Pay-fare", "Pay-Fare"};

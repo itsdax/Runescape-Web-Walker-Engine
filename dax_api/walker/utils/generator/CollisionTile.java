@@ -1,4 +1,4 @@
-package scripts.dax_api.engine.utils.generator;
+package scripts.dax_api.walker.utils.generator;
 
 
 public class CollisionTile {

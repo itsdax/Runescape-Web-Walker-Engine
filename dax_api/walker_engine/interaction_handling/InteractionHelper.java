@@ -7,6 +7,7 @@ import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.*;
+import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker_engine.WaitFor;
 
 

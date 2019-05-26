@@ -1,4 +1,4 @@
-package scripts.dax_api.engine.utils;
+package scripts.dax_api.walker.utils.path;
 
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Game;
@@ -123,6 +123,7 @@ public class DaxPathFinder {
     }
 
     public static boolean canReach(Destination[][] map, RSTile tile) {
+        if (tile.getPlane() != Player.getPosition().getPlane()) return false;
         RSTile worldTile = tile.getType() != RSTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
         int x = worldTile.getX(), y = worldTile.getY();
         if (!validLocalBounds(tile)) {

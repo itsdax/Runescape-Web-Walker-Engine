@@ -1,16 +1,14 @@
-package scripts.dax_api.engine.utils;
+package scripts.dax_api.walker.utils.path;
 
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.api_lib.models.Point3D;
-import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static scripts.dax_api.engine.utils.DaxPathFinder.distance;
+import static scripts.dax_api.walker.utils.path.DaxPathFinder.distance;
 
 public class PathUtils {
 
@@ -22,13 +20,12 @@ public class PathUtils {
         }
 
         int next = index + 1;
-        return next <= path.size() ? path.get(next) : null;
+        return next < path.size() ? path.get(next) : null;
     }
 
     public static RSTile getClosestTileInPath(List<RSTile> path) {
         RSTile player = Player.getPosition();
         return path.stream().min(Comparator.comparingDouble(o -> o.distanceToDouble(player))).orElse(null);
-
     }
 
     public static RSTile getFurthestReachableTileInMinimap(List<RSTile> path) {
