@@ -5,7 +5,6 @@ import org.tribot.api.Screen;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Camera;
-import scripts.api_better.paint_utils.PaintUtils;
 
 import java.awt.*;
 
@@ -34,7 +33,7 @@ public class DaxCamera {
             rotationDirection = 1;
         }
 
-        if (!PaintUtils.getGameScreen().contains(Mouse.getPos())){
+        if (!getGameScreen().contains(Mouse.getPos())){
             Mouse.moveBox(Screen.getViewport());
         }
 
@@ -50,6 +49,10 @@ public class DaxCamera {
         Mouse.move(endingPoint);
         Mouse.sendRelease(endingPoint, 2);
 
+    }
+
+    public static Rectangle getGameScreen(){
+        return new Rectangle(0,0, 765, 503);
     }
 
     private static int rotationToPixel(int rotation){
