@@ -7,7 +7,7 @@ import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.types.RSVarBit;
-import scripts.api_better.movement.WalkingQueue;
+import scripts.dax_api.walker.utils.movement.WalkingQueue;
 import scripts.dax_api.walker_engine.WaitFor;
 
 import java.awt.*;

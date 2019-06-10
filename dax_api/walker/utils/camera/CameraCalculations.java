@@ -6,12 +6,10 @@ import org.tribot.api2007.Camera;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSCharacter;
 
-import static scripts.api_better.calculations.Calculations.limitRange;
-
 public class CameraCalculations {
 
     public static int normalizeAngle(int angle) {
-        return limitRange(angle, 0, 100);
+        return Calculations.limitRange(angle, 0, 100);
     }
 
     public static int normalizeRotation(int rotation) {
