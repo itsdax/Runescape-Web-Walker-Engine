@@ -5,7 +5,6 @@ import org.tribot.api.Screen;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Camera;
-import scripts.api_better.camera.CameraAction;
 import scripts.api_better.paint_utils.PaintUtils;
 
 import java.awt.*;
