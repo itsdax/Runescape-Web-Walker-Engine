@@ -422,16 +422,11 @@ public class NavigationSpecialCase implements Loggable{
                         && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
             case PORT_SARIM_VEOS:
-                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Port Sarim")), "Port Sarim")
-                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-
+                return handleZeahBoats("Travel to Port Sarim.");
             case GREAT_KOUREND:
-                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Port Piscarilius")), "Port Piscarilius")
-                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-
-                        case LANDS_END:
-                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Land's End")), "Land's End")
-                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                return handleZeahBoats("Travel to Port Piscarilius.");
+            case LANDS_END:
+                return handleZeahBoats("Travel to Land's End.");
 
             case ARDY_LOG_WEST:
             case ARDY_LOG_EAST:
@@ -535,6 +530,33 @@ public class NavigationSpecialCase implements Loggable{
         return false;
     }
 
+    public static boolean handleZeahBoats(String locationOption){
+        String travelOption = "Travel";
+        RSNPC[] npcs = NPCs.find("Veos","Captain Magoro");
+        if(npcs.length > 0){
+            String[] actions = npcs[0].getActions();
+            if(actions != null){
+                List<String> asList = Arrays.asList(actions);
+                if(asList.stream().anyMatch(a -> a.equals("Port Sarim") || a.equals("Land's End"))){
+                    if(locationOption.contains("Port Sarim")){
+                        travelOption = "Port Sarim";
+                    } else if(locationOption.contains("Piscarilius")){
+                        travelOption = "Port Piscarilius";
+                    } else if(locationOption.contains("Land")){
+                        travelOption = "Land's End";
+                    }
+                } else if(!asList.contains("Travel")){
+                    travelOption = "Talk-to";
+                }
+            }
+        }
+        if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{travelOption}, new String[]{locationOption,"Can you take me somewhere?","That's great, can you take me there please?"})
+                && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+            WaitFor.milliseconds(1800, 2800);
+            return true;
+        }
+        return false;
+    }
 
     public static boolean handlePayFare(){
         String[] options = {"Pay-fare", "Pay-Fare"};
