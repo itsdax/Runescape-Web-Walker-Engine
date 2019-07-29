@@ -406,10 +406,31 @@ public class NavigationSpecialCase implements Loggable{
 
 
             case KARAMJA_PAY_FARE:
+                if (handlePayFare("Karamja.")){
+                    getInstance().log("Successfully boarded ship!");
+                    return true;
+                } else {
+                    getInstance().log("Failed to pay fare.");
+                }
+                return false;
             case PORT_SARIM_PAY_FARE:
+                if (handlePayFare("Port Sarim.")){
+                    getInstance().log("Successfully boarded ship!");
+                    return true;
+                } else {
+                    getInstance().log("Failed to pay fare.");
+                }
+                return false;
             case ARDOUGNE_PAY_FARE:
+                if (handlePayFare("Ardougne.")){
+                    getInstance().log("Successfully boarded ship!");
+                    return true;
+                } else {
+                    getInstance().log("Failed to pay fare.");
+                }
+                return false;
             case BRIMHAVEN_PAY_FARE:
-                if (handlePayFare()){
+                if (handlePayFare("Brimhaven.")){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -558,9 +579,11 @@ public class NavigationSpecialCase implements Loggable{
         return false;
     }
 
-    public static boolean handlePayFare(){
+    public static boolean handlePayFare(String...actions){
         String[] options = {"Pay-fare", "Pay-Fare"};
-        if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), options, new String[]{"Yes please.", "Can I journey on this ship?", "Search away, I have nothing to hide.", "Ok."})
+        List<String> all = new ArrayList<>(Arrays.asList(actions));
+        all.addAll(Arrays.asList("Yes please.", "Can I journey on this ship?", "Search away, I have nothing to hide.", "Ok."));
+        if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), options, all.stream().toArray(String[]::new))
                 && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(1800, 2800);
             return true;
