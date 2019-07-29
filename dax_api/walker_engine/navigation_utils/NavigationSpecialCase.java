@@ -100,6 +100,9 @@ public class NavigationSpecialCase implements Loggable{
         GNOME_ENTRANCE (2461, 3382, 0), //entrance side
         GNOME_EXIT (2461, 3385, 0), //exit side
 
+        GNOME_SHORTCUT_ELKOY_ENTER (2504, 3191, 0),
+        GNOME_SHORTCUT_ELKOY_EXIT (2515, 3160, 0),
+
         GNOME_TREE_ENTRANCE (2465, 3493, 0), //entrance side
         GNOME_TREE_EXIT (2465, 3493, 0), //exit side
 
@@ -374,6 +377,17 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 break;
 
+            case GNOME_SHORTCUT_ELKOY_ENTER:
+            case GNOME_SHORTCUT_ELKOY_EXIT:
+                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Elkoy"), new String[]{"Follow"})){
+                    RSTile current = Player.getPosition();
+                    if(WaitFor.condition(8000, () ->  Player.getPosition().distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.FAIL) != WaitFor.Return.SUCCESS){
+                        return false;
+                    }
+                    WaitFor.milliseconds(1000, 2000);
+                    return true;
+                }
+                break;
 
             case GNOME_TREE_ENTRANCE:
             case GNOME_TREE_EXIT:
