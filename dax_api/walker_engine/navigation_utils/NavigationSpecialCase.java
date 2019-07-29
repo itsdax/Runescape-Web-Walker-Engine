@@ -126,7 +126,10 @@ public class NavigationSpecialCase implements Loggable{
         GNOME_DROPOFF (2393, 3466, 0),
 
         HAM_OUTSIDE (3166, 3251, 0),
-        HAM_INSIDE (3149, 9652, 0);
+        HAM_INSIDE (3149, 9652, 0),
+
+        CASTLE_WARS_DOOR_F2P(2444, 3090, 0),
+        CLAN_WARS_PORTAL_F2P(3368, 3175, 0);
 
 
 
@@ -505,6 +508,25 @@ public class NavigationSpecialCase implements Loggable{
                     if (InteractionHelper.click(RSObjectHelper.get(Filters.Objects.actionsContains("Climb-down")), "Climb-down")){
                         WaitFor.condition(3000, () -> HAM_INSIDE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         return true;
+                    }
+                }
+                break;
+
+            case CASTLE_WARS_DOOR_F2P:
+                if(NPCInteraction.isConversationWindowUp() || InteractionHelper.click(RSObjectHelper.get(Filters.Objects.nameEquals("Large door")), "Open")){
+                    if(WaitFor.condition(10000, () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                        NPCInteraction.handleConversationRegex("Yes");
+                        return WaitFor.condition(3000,
+                                () -> CLAN_WARS_PORTAL_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                    }
+                }
+                break;
+            case CLAN_WARS_PORTAL_F2P:
+                if(NPCInteraction.isConversationWindowUp() || InteractionHelper.click(RSObjectHelper.get(Filters.Objects.nameEquals("Castle Wars portal")), "Enter")){
+                    if(WaitFor.condition(10000, () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                        NPCInteraction.handleConversationRegex("Yes");
+                        return WaitFor.condition(3000,
+                                () -> CASTLE_WARS_DOOR_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                     }
                 }
                 break;
