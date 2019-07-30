@@ -100,6 +100,9 @@ public class NavigationSpecialCase implements Loggable{
         GNOME_ENTRANCE (2461, 3382, 0), //entrance side
         GNOME_EXIT (2461, 3385, 0), //exit side
 
+        GNOME_SHORTCUT_ELKOY_ENTER (2504, 3191, 0),
+        GNOME_SHORTCUT_ELKOY_EXIT (2515, 3160, 0),
+
         GNOME_TREE_ENTRANCE (2465, 3493, 0), //entrance side
         GNOME_TREE_EXIT (2465, 3493, 0), //exit side
 
@@ -126,7 +129,10 @@ public class NavigationSpecialCase implements Loggable{
         GNOME_DROPOFF (2393, 3466, 0),
 
         HAM_OUTSIDE (3166, 3251, 0),
-        HAM_INSIDE (3149, 9652, 0);
+        HAM_INSIDE (3149, 9652, 0),
+
+        CASTLE_WARS_DOOR_F2P(2444, 3090, 0),
+        CLAN_WARS_PORTAL_F2P(3368, 3175, 0);
 
 
 
@@ -371,6 +377,17 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 break;
 
+            case GNOME_SHORTCUT_ELKOY_ENTER:
+            case GNOME_SHORTCUT_ELKOY_EXIT:
+                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Elkoy"), new String[]{"Follow"})){
+                    RSTile current = Player.getPosition();
+                    if(WaitFor.condition(8000, () ->  Player.getPosition().distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.FAIL) != WaitFor.Return.SUCCESS){
+                        return false;
+                    }
+                    WaitFor.milliseconds(1000, 2000);
+                    return true;
+                }
+                break;
 
             case GNOME_TREE_ENTRANCE:
             case GNOME_TREE_EXIT:
@@ -403,10 +420,31 @@ public class NavigationSpecialCase implements Loggable{
 
 
             case KARAMJA_PAY_FARE:
+                if (handlePayFare("Karamja.")){
+                    getInstance().log("Successfully boarded ship!");
+                    return true;
+                } else {
+                    getInstance().log("Failed to pay fare.");
+                }
+                return false;
             case PORT_SARIM_PAY_FARE:
+                if (handlePayFare("Port Sarim.")){
+                    getInstance().log("Successfully boarded ship!");
+                    return true;
+                } else {
+                    getInstance().log("Failed to pay fare.");
+                }
+                return false;
             case ARDOUGNE_PAY_FARE:
+                if (handlePayFare("Ardougne.")){
+                    getInstance().log("Successfully boarded ship!");
+                    return true;
+                } else {
+                    getInstance().log("Failed to pay fare.");
+                }
+                return false;
             case BRIMHAVEN_PAY_FARE:
-                if (handlePayFare()){
+                if (handlePayFare("Brimhaven.")){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -419,16 +457,11 @@ public class NavigationSpecialCase implements Loggable{
                         && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
             case PORT_SARIM_VEOS:
-                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Port Sarim")), "Port Sarim")
-                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-
+                return handleZeahBoats("Travel to Port Sarim.");
             case GREAT_KOUREND:
-                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Port Piscarilius")), "Port Piscarilius")
-                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-
-                        case LANDS_END:
-                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Land's End")), "Land's End")
-                        && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                return handleZeahBoats("Travel to Port Piscarilius.");
+            case LANDS_END:
+                return handleZeahBoats("Travel to Land's End.");
 
             case ARDY_LOG_WEST:
             case ARDY_LOG_EAST:
@@ -508,15 +541,63 @@ public class NavigationSpecialCase implements Loggable{
                     }
                 }
                 break;
+
+            case CASTLE_WARS_DOOR_F2P:
+                if(NPCInteraction.isConversationWindowUp() || InteractionHelper.click(RSObjectHelper.get(Filters.Objects.nameEquals("Large door")), "Open")){
+                    if(WaitFor.condition(10000, () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                        NPCInteraction.handleConversationRegex("Yes");
+                        return WaitFor.condition(3000,
+                                () -> CLAN_WARS_PORTAL_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                    }
+                }
+                break;
+            case CLAN_WARS_PORTAL_F2P:
+                if(NPCInteraction.isConversationWindowUp() || InteractionHelper.click(RSObjectHelper.get(Filters.Objects.nameEquals("Castle Wars portal")), "Enter")){
+                    if(WaitFor.condition(10000, () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                        NPCInteraction.handleConversationRegex("Yes");
+                        return WaitFor.condition(3000,
+                                () -> CASTLE_WARS_DOOR_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                    }
+                }
+                break;
         }
 
         return false;
     }
 
+    public static boolean handleZeahBoats(String locationOption){
+        String travelOption = "Travel";
+        RSNPC[] npcs = NPCs.find("Veos","Captain Magoro");
+        if(npcs.length > 0){
+            String[] actions = npcs[0].getActions();
+            if(actions != null){
+                List<String> asList = Arrays.asList(actions);
+                if(asList.stream().anyMatch(a -> a.equals("Port Sarim") || a.equals("Land's End"))){
+                    if(locationOption.contains("Port Sarim")){
+                        travelOption = "Port Sarim";
+                    } else if(locationOption.contains("Piscarilius")){
+                        travelOption = "Port Piscarilius";
+                    } else if(locationOption.contains("Land")){
+                        travelOption = "Land's End";
+                    }
+                } else if(!asList.contains("Travel")){
+                    travelOption = "Talk-to";
+                }
+            }
+        }
+        if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{travelOption}, new String[]{locationOption,"Can you take me somewhere?","That's great, can you take me there please?"})
+                && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+            WaitFor.milliseconds(1800, 2800);
+            return true;
+        }
+        return false;
+    }
 
-    public static boolean handlePayFare(){
+    public static boolean handlePayFare(String...actions){
         String[] options = {"Pay-fare", "Pay-Fare"};
-        if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), options, new String[]{"Yes please.", "Can I journey on this ship?", "Search away, I have nothing to hide.", "Ok."})
+        List<String> all = new ArrayList<>(Arrays.asList(actions));
+        all.addAll(Arrays.asList("Yes please.", "Can I journey on this ship?", "Search away, I have nothing to hide.", "Ok."));
+        if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), options, all.stream().toArray(String[]::new))
                 && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(1800, 2800);
             return true;
