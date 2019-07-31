@@ -64,10 +64,10 @@ public class NPCInteraction implements Loggable {
      * @return
      */
     public static boolean clickNpcAndWaitChat(Filter<RSNPC> rsnpcFilter, String[] options) {
-        return clickNpcAndWait(rsnpcFilter, options) && waitForConversationWindow();
+        return clickNpc(rsnpcFilter, options) && waitForConversationWindow();
     }
 
-    public static boolean clickNpcAndWait(Filter<RSNPC> rsnpcFilter, String[] options) {
+    public static boolean clickNpc(Filter<RSNPC> rsnpcFilter, String[] options) {
         RSNPC[] rsnpcs = NPCs.findNearest(rsnpcFilter);
         if (rsnpcs.length < 1) {
             getInstance().log("Cannot find NPC.");
