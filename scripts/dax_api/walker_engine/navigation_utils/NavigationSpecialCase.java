@@ -5,20 +5,19 @@ import org.tribot.api.types.generic.Filter;
 import org.tribot.api.util.Sorting;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSObjectDefinition;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.*;
 import scripts.dax_api.shared.helpers.RSItemHelper;
-import scripts.dax_api.walker_engine.Loggable;
-import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker.utils.AccurateMouse;
-import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import scripts.dax_api.shared.helpers.RSObjectHelper;
+import scripts.dax_api.walker.utils.AccurateMouse;
+import scripts.dax_api.walker_engine.Loggable;
+import scripts.dax_api.walker_engine.WaitFor;
+import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
+import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
 
