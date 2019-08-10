@@ -32,6 +32,9 @@ public class PathObjectHandler implements Loggable {
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
                 "Investigate", "Operate"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin", "null"));
+                "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up","Walk-Up", "Travel", "Get in",
+                "Investigate", "Operate", "Climb-under","Jump"));
+        sortedBlackList = new TreeSet<>(Arrays.asList("Coffin","Drawers","null"));
         sortedBlackListOptions = new TreeSet<>(Arrays.asList("Chop down"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)"));
     }
@@ -117,6 +120,18 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Player.getPosition().getX() < 2565 && Player.getPosition().distanceTo(new RSTile(2565, 3356, 0)) < 3;
+            }
+        }),
+        YANILLE_DOOR_LOCK_SIDE("Door", "Pick-lock", new RSTile(2601, 9482, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return Player.getPosition().getY() <= 9481;
+            }
+        }),
+        YANILLE_DOOR_UNLOCKED_SIDE("Door", "Open", new RSTile(2601, 9482, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return Player.getPosition().getY() > 9481;
             }
         });
 

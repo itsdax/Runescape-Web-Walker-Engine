@@ -5,20 +5,19 @@ import org.tribot.api.types.generic.Filter;
 import org.tribot.api.util.Sorting;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSObjectDefinition;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.*;
 import scripts.dax_api.shared.helpers.RSItemHelper;
-import scripts.dax_api.walker_engine.Loggable;
-import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker.utils.AccurateMouse;
-import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import scripts.dax_api.shared.helpers.RSObjectHelper;
+import scripts.dax_api.walker.utils.AccurateMouse;
+import scripts.dax_api.walker_engine.Loggable;
+import scripts.dax_api.walker_engine.WaitFor;
+import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
+import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
 
@@ -379,7 +378,7 @@ public class NavigationSpecialCase implements Loggable{
 
             case GNOME_SHORTCUT_ELKOY_ENTER:
             case GNOME_SHORTCUT_ELKOY_EXIT:
-                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Elkoy"), new String[]{"Follow"})){
+                if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Elkoy"), new String[]{"Follow"})){
                     RSTile current = Player.getPosition();
                     if(WaitFor.condition(8000, () ->  Player.getPosition().distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.FAIL) != WaitFor.Return.SUCCESS){
                         return false;
@@ -483,7 +482,7 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
             case GNOME_WAYDAR:
-                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Daero"), new String[]{"Travel"})){
+                if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Daero"), new String[]{"Travel"})){
                     if (WaitFor.condition(5000, () -> Player.getPosition().distanceTo(GNOME_WAYDAR.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         break;
                     }
@@ -493,7 +492,7 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
             case CRASH_ISLAND:
-                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Waydar"), new String[]{"Travel"})){
+                if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Waydar"), new String[]{"Travel"})){
                     if (WaitFor.condition(5000, () -> Player.getPosition().distanceTo(CRASH_ISLAND.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         break;
                     }
@@ -503,7 +502,7 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
             case APE_ATOLL_GLIDER_CRASH:
-                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Lumdo"), new String[]{"Travel"})){
+                if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Lumdo"), new String[]{"Travel"})){
                     if (WaitFor.condition(5000, () -> Player.getPosition().distanceTo(APE_ATOLL_GLIDER_CRASH.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         break;
                     }
@@ -512,7 +511,7 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 break;
             case GNOME_DROPOFF:
-                if (NPCInteraction.clickNpcAndWait(Filters.NPCs.nameEquals("Waydar"), new String[]{"Travel"})){
+                if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Waydar"), new String[]{"Travel"})){
                     if (WaitFor.condition(5000, () -> Player.getPosition().distanceTo(CRASH_ISLAND.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         break;
                     }
@@ -564,7 +563,6 @@ public class NavigationSpecialCase implements Loggable{
 
         return false;
     }
-
     public static boolean handleZeahBoats(String locationOption){
         String travelOption = "Travel";
         RSNPC[] npcs = NPCs.find("Veos","Captain Magoro");
@@ -581,12 +579,28 @@ public class NavigationSpecialCase implements Loggable{
                         travelOption = "Land's End";
                     }
                 } else if(!asList.contains("Travel")){
-                    travelOption = "Talk-to";
+                    return handleFirstTripToZeah(locationOption);
                 }
             }
         }
-        if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{travelOption}, new String[]{locationOption,"Can you take me somewhere?","That's great, can you take me there please?"})
-                && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+        if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Veos", "Captain Magoro"),new String[]{travelOption})){
+            RSTile current = Player.getPosition();
+            if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || Player.getPosition().distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
+                return false;
+            }
+            WaitFor.milliseconds(1800, 2800);
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean handleFirstTripToZeah(String locationOption){
+        getInstance().log("First trip to zeah");
+        if(NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{"Talk-to"}, new String[]{locationOption,"Can you take me somewhere?","That's great, can you take me there please?"})) {
+            RSTile current = Player.getPosition();
+            if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || Player.getPosition().distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
+                return false;
+            }
             WaitFor.milliseconds(1800, 2800);
             return true;
         }

@@ -62,7 +62,7 @@ public class BankHelper {
         try {
             RSTile local = positionable.getPosition().toLocalTile();
             int localX = local.getX(), localY = local.getY(), localZ = local.getPlane();
-            if (localX == -1 || localY == -1 || localZ == -1){
+            if (localX < 0 || localY < 0 || localZ < 0){
                 return tiles;
             }
             if (sceneFlags.length <= localZ || sceneFlags[localZ].length <= localX || sceneFlags[localZ][localX].length <= localY){ //Not within bounds

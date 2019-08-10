@@ -79,7 +79,7 @@ public class TeleportManager implements Loggable {
     }
 
     public static ArrayList<RSTile> getClosestBankPath(RunescapeBank bank, int originalMoveCost) {
-        final int cost = originalMoveCost - 25;
+        final int cost = originalMoveCost - offset;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
         try {
