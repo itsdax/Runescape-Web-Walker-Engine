@@ -541,22 +541,20 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 break;
 
-            case CASTLE_WARS_DOOR_F2P:
-                if(NPCInteraction.isConversationWindowUp() || InteractionHelper.click(RSObjectHelper.get(Filters.Objects.nameEquals("Large door")), "Open")){
-                    if(WaitFor.condition(10000, () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
-                        NPCInteraction.handleConversationRegex("Yes");
-                        return WaitFor.condition(3000,
-                                () -> CLAN_WARS_PORTAL_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-                    }
+
+
+            case CLAN_WARS_PORTAL_F2P:
+                if(NPCInteraction.isConversationWindowUp() || clickObject(Filters.Objects.nameEquals("Large door"), "Open",() -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    NPCInteraction.handleConversationRegex("Yes");
+                    return WaitFor.condition(3000,
+                            () -> CLAN_WARS_PORTAL_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
-            case CLAN_WARS_PORTAL_F2P:
-                if(NPCInteraction.isConversationWindowUp() || InteractionHelper.click(RSObjectHelper.get(Filters.Objects.nameEquals("Castle Wars portal")), "Enter")){
-                    if(WaitFor.condition(10000, () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
-                        NPCInteraction.handleConversationRegex("Yes");
-                        return WaitFor.condition(3000,
-                                () -> CASTLE_WARS_DOOR_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-                    }
+            case CASTLE_WARS_DOOR_F2P:
+                if(NPCInteraction.isConversationWindowUp() || clickObject(Filters.Objects.nameEquals("Castle Wars portal"), "Enter", () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    NPCInteraction.handleConversationRegex("Yes");
+                    return WaitFor.condition(3000,
+                            () -> CASTLE_WARS_DOOR_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
         }
