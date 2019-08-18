@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -396,7 +395,7 @@ public class PathObjectHandler implements Loggable
 		return true;
 	}
 
-	public static RSObject[] getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails)
+	private static RSObject[] getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails)
 	{
 		final RSObject[] objects = interactiveObjectFilter(x, y, z, destinationDetails);
 		final RSTile base = new RSTile(x, y, z);
