@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="allatori-annotations">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/Allatori-6.7-Demo/Allatori-6.7-Demo/lib/allatori-annotations.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Allatori-6.7-Demo/Allatori-6.7-Demo/lib/allatori.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
