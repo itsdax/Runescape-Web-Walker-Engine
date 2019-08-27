@@ -1,21 +1,6 @@
 package scripts.dax_api.teleport_logic;
 
-import static scripts.dax_api.api_lib.models.PathStatus.RATE_LIMIT_EXCEEDED;
-import static scripts.dax_api.api_lib.models.PathStatus.SUCCESS;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-
 import org.tribot.api2007.types.RSTile;
-
 import scripts.dax_api.api_lib.WebWalkerServerApi;
 import scripts.dax_api.api_lib.models.PathResult;
 import scripts.dax_api.api_lib.models.PlayerDetails;
@@ -23,12 +8,18 @@ import scripts.dax_api.api_lib.models.Point3D;
 import scripts.dax_api.api_lib.models.RunescapeBank;
 import scripts.dax_api.walker_engine.Loggable;
 
+import java.util.*;
+import java.util.concurrent.*;
+
+import static scripts.dax_api.api_lib.models.PathStatus.RATE_LIMIT_EXCEEDED;
+import static scripts.dax_api.api_lib.models.PathStatus.SUCCESS;
+
 
 public class TeleportManager implements Loggable {
 
     public static TeleportAction previousAction;
 
-    private int offset;
+    private static int offset;
     private HashSet<TeleportMethod> blacklistTeleportMethods;
     private HashSet<TeleportLocation> blacklistTeleportLocations;
     private ExecutorService executorService;
