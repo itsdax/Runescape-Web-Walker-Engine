@@ -6,6 +6,7 @@ import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.shared.helpers.RSItemHelper;
 import scripts.dax_api.shared.helpers.magic.Spell;
 import scripts.dax_api.walker_engine.WaitFor;
@@ -48,6 +49,9 @@ public enum TeleportMethod implements Validatable {
             SKILLS_FILTER = Filters.Items.nameContains("Skills necklace").combine(Filters.Items.nameContains("("), true).combine(notNotedFilter(), false),
             WEALTH_FILTER = Filters.Items.nameContains("Ring of wealth").combine(Filters.Items.nameContains("("), true).combine(notNotedFilter(), false),
             BURNING_FILTER = Filters.Items.nameContains("Burning amulet").combine(Filters.Items.nameContains("("), true);
+
+    private static final int
+            GE_TELEPORT_VARBIT = 4585;
 
     public TeleportLocation[] getDestinations() {
         return destinations;
@@ -99,6 +103,9 @@ public enum TeleportMethod implements Validatable {
         switch (teleportLocation) {
 
             case VARROCK_CENTER:
+                if(isVarrockTeleportAtGE()){
+                    return RSItemHelper.click("Varrock t.*", "Varrock") || Spell.VARROCK_TELEPORT.cast();
+                }
                 return RSItemHelper.click("Varrock t.*", "Break") || Spell.VARROCK_TELEPORT.cast();
             case LUMBRIDGE_CASTLE:
                 return RSItemHelper.click("Lumbridge t.*", "Break") || Spell.LUMBRIDGE_TELEPORT.cast();
@@ -215,6 +222,10 @@ public enum TeleportMethod implements Validatable {
             }
             return WaitFor.Return.IGNORE;
         }) == WaitFor.Return.SUCCESS;
+    }
+
+    private boolean isVarrockTeleportAtGE(){
+        return RSVarBit.get(GE_TELEPORT_VARBIT).getValue() > 0;
     }
 
 }
