@@ -5,8 +5,11 @@ import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.*;
-import scripts.dax_api.walker.utils.AccurateMouse;
+import org.tribot.api2007.types.RSArea;
+import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSObjectDefinition;
+import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.shared.helpers.RSObjectHelper;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.WalkerEngine;
@@ -14,7 +17,6 @@ import scripts.dax_api.walker_engine.bfs.BFS;
 import scripts.dax_api.walker_engine.local_pathfinding.PathAnalyzer;
 import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
 import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import scripts.dax_api.shared.helpers.RSObjectHelper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,9 +31,6 @@ public class PathObjectHandler implements Loggable {
     private PathObjectHandler(){
         sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
-                "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up", "Travel", "Get in",
-                "Investigate", "Operate"));
-        sortedBlackList = new TreeSet<>(Arrays.asList("Coffin", "null"));
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up","Walk-Up", "Travel", "Get in",
                 "Investigate", "Operate", "Climb-under","Jump"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin","Drawers","null"));
@@ -125,13 +124,13 @@ public class PathObjectHandler implements Loggable {
         YANILLE_DOOR_LOCK_SIDE("Door", "Pick-lock", new RSTile(2601, 9482, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Player.getPosition().getY() <= 9481;
+                return Player.getPosition().getY() <= 9481 && Player.getPosition().distanceTo(new RSTile(2601, 9482, 0)) < 3;
             }
         }),
         YANILLE_DOOR_UNLOCKED_SIDE("Door", "Open", new RSTile(2601, 9482, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Player.getPosition().getY() > 9481;
+                return Player.getPosition().getY() > 9481 && Player.getPosition().distanceTo(new RSTile(2601, 9482, 0)) < 3;
             }
         });
 
@@ -232,7 +231,9 @@ public class PathObjectHandler implements Loggable {
                 case WEB:
                     List<RSObject> webs;
                     int iterations = 0;
-                    while ((webs = Arrays.stream(Objects.getAt(object.getPosition())).filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1)).anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
+                    while ((webs = Arrays.stream(Objects.getAt(object.getPosition()))
+                            .filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
+                                    .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
                         RSObject web = webs.get(0);
                         InteractionHelper.click(web, "Slash");
                         if (web.getPosition().distanceTo(Player.getPosition()) <= 1) {
@@ -240,7 +241,9 @@ public class PathObjectHandler implements Loggable {
                         } else {
                             WaitFor.milliseconds(2000, 4000);
                         }
-                        if (Reachable.getMap().getParent(destinationDetails.getAssumedX(), destinationDetails.getAssumedY()) != null){
+                        if (Reachable.getMap().getParent(destinationDetails.getAssumedX(), destinationDetails.getAssumedY()) != null &&
+                                (webs = Arrays.stream(Objects.getAt(object.getPosition())).filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
+                                        .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() == 0){
                             successfulClick = true;
                             break;
                         }
@@ -250,6 +253,7 @@ public class PathObjectHandler implements Loggable {
                     }
                     break;
                 case ARDY_DOOR_LOCK_SIDE:
+                case YANILLE_DOOR_LOCK_SIDE:
                     for (int i = 0; i < General.random(15, 25); i++) {
                         if (!clickOnObject(object, new String[]{specialObject.getAction()})){
                             continue;
@@ -422,7 +426,7 @@ public class PathObjectHandler implements Loggable {
         if (isClosedTrapDoor(object, options)){
             result = handleTrapDoor(object);
         } else {
-            result = AccurateMouse.click(object, options);
+            result = InteractionHelper.click(object, options);
             getInstance().log("Interacting with (" + RSObjectHelper.getName(object) + ") at " + object.getPosition() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
         }
 
@@ -492,7 +496,7 @@ public class PathObjectHandler implements Loggable {
             }
         }
         getInstance().log("Interacting with (" + object.getDefinition().getName() + ") at " + object.getPosition() + " with option: Climb-down");
-        return AccurateMouse.click(object, "Climb-down");
+        return InteractionHelper.click(object, "Climb-down");
     }
 
     public static List<String> getActions(RSObject object){

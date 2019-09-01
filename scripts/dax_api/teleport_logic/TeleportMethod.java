@@ -1,11 +1,11 @@
 package scripts.dax_api.teleport_logic;
 
 import org.tribot.api.General;
-import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.shared.helpers.RSItemHelper;
 import scripts.dax_api.shared.helpers.magic.Spell;
 import scripts.dax_api.walker_engine.WaitFor;
@@ -13,6 +13,7 @@ import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 import static scripts.dax_api.teleport_logic.TeleportLocation.*;
 
@@ -40,14 +41,17 @@ public enum TeleportMethod implements Validatable {
         this.destinations = destinations;
     }
 
-    private static final Filter<RSItem>
-            GLORY_FILTER = Filters.Items.nameContains("Glory").combine(Filters.Items.nameContains("("), true).combine(notNotedFilter(), false),
-            GAMES_FILTER = Filters.Items.nameContains("Games").combine(Filters.Items.nameContains("("), true).combine(notNotedFilter(), false),
-            DUELING_FILTER = Filters.Items.nameContains("dueling").combine(Filters.Items.nameContains("("), true).combine(notNotedFilter(), false),
-            COMBAT_FILTER = Filters.Items.nameContains("Combat b").combine(Filters.Items.nameContains("("), true).combine(notNotedFilter(), false),
-            SKILLS_FILTER = Filters.Items.nameContains("Skills necklace").combine(Filters.Items.nameContains("("), true).combine(notNotedFilter(), false),
-            WEALTH_FILTER = Filters.Items.nameContains("Ring of wealth").combine(Filters.Items.nameContains("("), true).combine(notNotedFilter(), false),
-            BURNING_FILTER = Filters.Items.nameContains("Burning amulet").combine(Filters.Items.nameContains("("), true);
+    private static final Predicate<RSItem>
+            GLORY_FILTER = Filters.Items.nameContains("Glory").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
+            GAMES_FILTER = Filters.Items.nameContains("Games").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
+            DUELING_FILTER = Filters.Items.nameContains("dueling").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
+            COMBAT_FILTER = Filters.Items.nameContains("Combat b").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
+            SKILLS_FILTER = Filters.Items.nameContains("Skills necklace").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
+            WEALTH_FILTER = Filters.Items.nameContains("Ring of wealth").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
+            BURNING_FILTER = Filters.Items.nameContains("Burning amulet").and(Filters.Items.nameContains("("));
+
+    private static final int
+            GE_TELEPORT_VARBIT = 4585;
 
     public TeleportLocation[] getDestinations() {
         return destinations;
@@ -99,6 +103,9 @@ public enum TeleportMethod implements Validatable {
         switch (teleportLocation) {
 
             case VARROCK_CENTER:
+                if(isVarrockTeleportAtGE()){
+                    return RSItemHelper.click("Varrock t.*", "Varrock") || Spell.VARROCK_TELEPORT.cast();
+                }
                 return RSItemHelper.click("Varrock t.*", "Break") || Spell.VARROCK_TELEPORT.cast();
             case LUMBRIDGE_CASTLE:
                 return RSItemHelper.click("Lumbridge t.*", "Break") || Spell.LUMBRIDGE_TELEPORT.cast();
@@ -176,13 +183,8 @@ public enum TeleportMethod implements Validatable {
         return WorldHopper.isMembers(WorldHopper.getWorld());
     }
 
-    private static Filter<RSItem> notNotedFilter() {
-        return new Filter<RSItem>() {
-            @Override
-            public boolean accept(RSItem rsItem) {
-                return rsItem.getDefinition() != null && !rsItem.getDefinition().isNoted();
-            }
-        };
+    private static Predicate<RSItem> notNotedFilter() {
+        return rsItem -> rsItem.getDefinition() != null && !rsItem.getDefinition().isNoted();
     }
 
     private static boolean itemAction(String name, String... actions) {
@@ -193,7 +195,7 @@ public enum TeleportMethod implements Validatable {
         return items[0].click(actions);
     }
 
-    private static boolean teleportWithItem(Filter<RSItem> itemFilter, String regex) {
+    private static boolean teleportWithItem(Predicate<RSItem> itemFilter, String regex) {
         ArrayList<RSItem> items = new ArrayList<>();
         items.addAll(Arrays.asList(Inventory.find(itemFilter)));
         items.addAll(Arrays.asList(Equipment.find(itemFilter)));
@@ -215,6 +217,10 @@ public enum TeleportMethod implements Validatable {
             }
             return WaitFor.Return.IGNORE;
         }) == WaitFor.Return.SUCCESS;
+    }
+
+    private boolean isVarrockTeleportAtGE(){
+        return RSVarBit.get(GE_TELEPORT_VARBIT).getValue() > 0;
     }
 
 }
