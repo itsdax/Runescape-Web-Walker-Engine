@@ -3,16 +3,19 @@ package scripts.dax_api.teleport_logic;
 import org.tribot.api.General;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
+import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
-import org.tribot.api2007.types.RSVarBit;
+import scripts.dax_api.shared.helpers.InterfaceHelper;
 import scripts.dax_api.shared.helpers.RSItemHelper;
 import scripts.dax_api.shared.helpers.magic.Spell;
+import scripts.dax_api.teleport_logic.teleport_utils.TeleportScrolls;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 import static scripts.dax_api.teleport_logic.TeleportLocation.*;
@@ -20,6 +23,7 @@ import static scripts.dax_api.teleport_logic.TeleportLocation.*;
 public enum TeleportMethod implements Validatable {
 
     VARROCK_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, VARROCK_CENTER),
+    GRAND_EXCHANGE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, GRAND_EXCHANGE),
     LUMBRIDGE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, LUMBRIDGE_CASTLE),
     FALADOR_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, FALADOR_CENTER),
     CAMELOT_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, CAMELOT),
@@ -31,7 +35,15 @@ public enum TeleportMethod implements Validatable {
     ECTOPHIAL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, ECTO),
     SKILLS_NECKLACE(TeleportConstants.LEVEL_30_WILDERNESS_LIMIT, FISHING_GUILD, MOTHERLOAD_MINE, CRAFTING_GUILD, COOKING_GUILD, WOOD_CUTTING_GUILD),
     RING_OF_WEALTH(TeleportConstants.LEVEL_30_WILDERNESS_LIMIT, GRAND_EXCHANGE, FALADOR_PARK),
-    BURNING_AMULET(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, CHAOS_TEMPLE, BANDIT_CAMP, LAVA_MAZE);
+    BURNING_AMULET(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, CHAOS_TEMPLE, BANDIT_CAMP, LAVA_MAZE),
+    DIGSITE_PENDANT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,DIGSITE_BARGE),
+    NECKLACE_OF_PASSAGE(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,OUTPOST),
+    ELF_CRYSTAL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,LLETYA),
+    KOUREND_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,KOUREND),
+    XERICS_TALISMAN(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,XERICS_INFERNO),
+    PISCATORIS_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,PISCATORIS),
+    NARDAH_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,NARDAH),
+    WEST_ARDOUGNE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,WEST_ARDOUGNE);
 
     private TeleportLocation[] destinations;
     private TeleportLimit teleportLimit;
@@ -48,10 +60,13 @@ public enum TeleportMethod implements Validatable {
             COMBAT_FILTER = Filters.Items.nameContains("Combat b").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
             SKILLS_FILTER = Filters.Items.nameContains("Skills necklace").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
             WEALTH_FILTER = Filters.Items.nameContains("Ring of wealth").and(Filters.Items.nameContains("(")).and(notNotedFilter()),
-            BURNING_FILTER = Filters.Items.nameContains("Burning amulet").and(Filters.Items.nameContains("("));
+            BURNING_FILTER = Filters.Items.nameContains("Burning amulet").and(Filters.Items.nameContains("(")),
+            DIGSITE_FILTER = Filters.Items.nameContains("Digsite pendant"),
+            PASSAGE_FILTER = Filters.Items.nameContains("Necklace of passage").and(notNotedFilter()),
+            TELEPORT_CRYSTAL_FILTER = Filters.Items.nameContains("Teleport crystal ("),
+            XERICS_TALISMAN_FILTER = Filters.Items.nameEquals("Xeric's talisman");
 
-    private static final int
-            GE_TELEPORT_VARBIT = 4585;
+    static boolean canTeleportToKourend = true;
 
     public TeleportLocation[] getDestinations() {
         return destinations;
@@ -68,6 +83,9 @@ public enum TeleportMethod implements Validatable {
         switch (this) {
             case ECTOPHIAL:
                 return Inventory.find(Filters.Items.nameContains("Ectophial")).length > 0;
+            case GRAND_EXCHANGE_TELEPORT:
+                if(!TeleportConstants.isVarrockTeleportAtGE())
+                    return false;
             case VARROCK_TELEPORT:
                 return Spell.VARROCK_TELEPORT.canUse() || Inventory.getCount("Varrock teleport") > 0;
             case LUMBRIDGE_TELEPORT:
@@ -91,7 +109,23 @@ public enum TeleportMethod implements Validatable {
             case RING_OF_WEALTH:
                 return Inventory.find(WEALTH_FILTER).length > 0 || Equipment.find(WEALTH_FILTER).length > 0;
             case BURNING_AMULET:
-                return Inventory.find(BURNING_FILTER).length > 0 || Equipment.find(BURNING_FILTER).length > 0;
+                return (Inventory.find(BURNING_FILTER).length > 0 || Equipment.find(BURNING_FILTER).length > 0) && inMembersWorld();
+            case DIGSITE_PENDANT:
+                return (Inventory.find(DIGSITE_FILTER).length > 0 || Equipment.isEquipped(DIGSITE_FILTER)) && inMembersWorld();
+            case NECKLACE_OF_PASSAGE:
+                return (Inventory.find(PASSAGE_FILTER).length > 0 || Equipment.isEquipped(PASSAGE_FILTER)) && inMembersWorld();
+            case ELF_CRYSTAL:
+                return Inventory.find(TELEPORT_CRYSTAL_FILTER).length > 0 && inMembersWorld();
+            case KOUREND_TELEPORT:
+                return Spell.KOUREND_TELEPORT.canUse() && canTeleportToKourend && inMembersWorld();
+            case XERICS_TALISMAN:
+                return (Inventory.find(XERICS_TALISMAN_FILTER).length > 0 || Equipment.isEquipped(XERICS_TALISMAN_FILTER)) && inMembersWorld();
+            case NARDAH_TELEPORT_SCROLL:
+                return TeleportScrolls.NARDAH.canUse() && inMembersWorld();
+            case PISCATORIS_TELEPORT_SCROLL:
+                return TeleportScrolls.PISCATORIS.canUse() && inMembersWorld();
+            case WEST_ARDOUGNE_TELEPORT:
+                return Inventory.getCount("West ardougne teleport") > 0 && inMembersWorld();
         }
         return false;
     }
@@ -103,7 +137,7 @@ public enum TeleportMethod implements Validatable {
         switch (teleportLocation) {
 
             case VARROCK_CENTER:
-                if(isVarrockTeleportAtGE()){
+                if(TeleportConstants.isVarrockTeleportAtGE()){
                     return RSItemHelper.click("Varrock t.*", "Varrock") || Spell.VARROCK_TELEPORT.cast();
                 }
                 return RSItemHelper.click("Varrock t.*", "Break") || Spell.VARROCK_TELEPORT.cast();
@@ -154,17 +188,20 @@ public enum TeleportMethod implements Validatable {
                 return RSItemHelper.click(Filters.Items.nameContains("Ectophial"), "Empty");
 
             case FISHING_GUILD:
-                return teleportWithItem(SKILLS_FILTER, "Fishing.*");
+                return teleportWithScrollInterface(SKILLS_FILTER, ".*Fishing.*");
             case MOTHERLOAD_MINE:
-                return teleportWithItem(SKILLS_FILTER, "Mining.*");
+                return teleportWithScrollInterface(SKILLS_FILTER, ".*Mining.*");
             case CRAFTING_GUILD:
-                return teleportWithItem(SKILLS_FILTER, "Crafting.*");
+                return teleportWithScrollInterface(SKILLS_FILTER, ".*Crafting.*");
             case COOKING_GUILD:
-                return teleportWithItem(SKILLS_FILTER, "Cooking.*");
+                return teleportWithScrollInterface(SKILLS_FILTER, ".*Cooking.*");
             case WOOD_CUTTING_GUILD:
-                return teleportWithItem(SKILLS_FILTER, "Woodcutting.*");
+                return teleportWithScrollInterface(SKILLS_FILTER, ".*Woodcutting.*");
 
             case GRAND_EXCHANGE:
+                if(TeleportConstants.isVarrockTeleportAtGE() && VARROCK_TELEPORT.canUse()){
+                    return RSItemHelper.click("Varrock t.*", "Break") || selectSpell("Varrock Teleport","Grand Exchange");
+                }
                 return teleportWithItem(WEALTH_FILTER, "Grand.*");
             case FALADOR_PARK:
                 return teleportWithItem(WEALTH_FILTER, "Falad.*");
@@ -175,6 +212,35 @@ public enum TeleportMethod implements Validatable {
                 return teleportWithItem(BURNING_FILTER, "(Bandit.*|Okay, teleport to level.*)");
             case LAVA_MAZE:
                 return teleportWithItem(BURNING_FILTER, "(Lava.*|Okay, teleport to level.*)");
+
+            case DIGSITE_BARGE:
+                return teleportWithItem(DIGSITE_FILTER,"Digsite");
+
+            case OUTPOST:
+                return teleportWithItem(PASSAGE_FILTER,"The Outpost");
+
+            case LLETYA:
+                return teleportWithItem(TELEPORT_CRYSTAL_FILTER,"Lletya");
+
+            case KOUREND:
+                if(Spell.KOUREND_TELEPORT.cast()){
+                    if(getMatchingChatInterface("This spell requires the caster to recite an incantation.") != null){
+                        canTeleportToKourend = false;
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+
+            case XERICS_INFERNO:
+                return teleportWithScrollInterface(XERICS_TALISMAN_FILTER, ".*Xeric's Inferno");
+            case NARDAH:
+                return TeleportScrolls.NARDAH.teleportTo(false);
+            case PISCATORIS:
+                return TeleportScrolls.PISCATORIS.teleportTo(false);
+
+            case WEST_ARDOUGNE:
+                return RSItemHelper.click("West ardougne t.*", "Break");
         }
         return false;
     }
@@ -219,8 +285,79 @@ public enum TeleportMethod implements Validatable {
         }) == WaitFor.Return.SUCCESS;
     }
 
-    private boolean isVarrockTeleportAtGE(){
-        return RSVarBit.get(GE_TELEPORT_VARBIT).getValue() > 0;
+    private static boolean teleportWithScrollInterface(Predicate<RSItem> itemFilter, String regex){
+        ArrayList<RSItem> items = new ArrayList<>();
+        items.addAll(Arrays.asList(Inventory.find(itemFilter)));
+        items.addAll(Arrays.asList(Equipment.find(itemFilter)));
+
+        if (items.size() == 0) {
+            return false;
+        }
+
+        if(!Interfaces.isInterfaceSubstantiated(187)){
+            RSItem teleportItem = items.get(0);
+            if (!RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")")) {
+                return false;
+            }
+        }
+
+        RSTile startingPosition = Player.getPosition();
+        return WaitFor.condition(General.random(3800, 4600), () -> {
+            if(!handleScrollInterface(regex))
+                return WaitFor.Return.FAIL;
+            if (startingPosition.distanceTo(Player.getPosition()) > 5) {
+                return WaitFor.Return.SUCCESS;
+            }
+            return WaitFor.Return.IGNORE;
+        }) == WaitFor.Return.SUCCESS;
     }
 
+    private static boolean handleScrollInterface(String regex){
+        RSInterface box = Interfaces.get(187, 3);
+        if(box == null)
+            return false;
+        RSInterface[] children = box.getChildren();
+        if(children == null)
+            return false;
+        for(RSInterface child:children){
+            String txt = child.getText();
+            if(txt != null && General.stripFormatting(txt).matches(regex)){
+                return child.click();
+            }
+        }
+        return false;
+    }
+
+    private static RSInterface getMatchingChatInterface(String text){
+        RSInterface chatBox = getChatBox();
+        if(chatBox == null)
+            return null;
+        for(RSInterface child: chatBox.getChildren()){
+            if(child.getIndex() > 10){
+                return null;
+            }
+            String txt = child.getText();
+            if(txt != null && txt.contains(text)){
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private static RSInterface getChatBox(){
+       return InterfaceHelper.getAllInterfaces(162).stream().filter(i -> {
+            RSInterface[] children = i.getChildren();
+            return children != null && children.length >= 900;
+        }).findFirst().orElse(null);
+    }
+
+
+    private static boolean selectSpell(String spellName, String action){
+        List<RSInterface> spells = InterfaceHelper.getAllInterfaces(TeleportConstants.SPELLBOOK_INTERFACE_MASTER);
+        RSInterface target = spells.stream().filter(spell -> {
+            String name = spell.getComponentName();
+            return name != null && name.contains(spellName) && !spell.isHidden();
+        }).findFirst().orElse(null);
+        return target != null && target.click(action);
+    }
 }
