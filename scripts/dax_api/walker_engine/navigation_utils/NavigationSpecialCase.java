@@ -419,15 +419,9 @@ public class NavigationSpecialCase implements Loggable{
 
 
             case KARAMJA_PAY_FARE:
-                if (handleKaramjaShip("Karamja.")){
-                    getInstance().log("Successfully boarded ship!");
-                    return true;
-                } else {
-                    getInstance().log("Failed to pay fare.");
-                }
-                return false;
             case PORT_SARIM_PAY_FARE:
-                if (handleKaramjaShip("Port Sarim.")){
+
+                if (handleKaramjaShip()){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -435,7 +429,7 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 return false;
             case ARDOUGNE_PAY_FARE:
-                if (handleKaramjaShip("Ardougne.")){
+                if (handleShip("Ardougne")){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -443,7 +437,7 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 return false;
             case BRIMHAVEN_PAY_FARE:
-                if (handleKaramjaShip("Brimhaven.")){
+                if (handleShip("Brimhaven")){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -451,7 +445,7 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 return false;
             case RIMMINGTON_PAY_FARE:
-                if (handleKaramjaShip("Rimmington")){
+                if (handleShip("Rimmington")){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -613,8 +607,22 @@ public class NavigationSpecialCase implements Loggable{
         return false;
     }
 
-    public static boolean handleKaramjaShip(String... targetLocation){
+    public static boolean handleShip(String... targetLocation){
         if (NPCInteraction.clickNpc(Filters.NPCs.actionsContains(targetLocation), targetLocation)
+                && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+            WaitFor.milliseconds(1800, 2800);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean handleKaramjaShip(){
+        String[] options = {"Pay-fare", "Pay-Fare"};
+        String[] chat = {"Yes please.", "Can I journey on this ship?", "Search away, I have nothing to hide.", "Ok."};
+        boolean pirateTreasureComplete = Game.getSetting(71) >= 4;
+        if(pirateTreasureComplete){
+            return handleShip("Pay-fare","Pay-Fare");
+        } else if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), options, chat)
                 && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(1800, 2800);
             return true;
