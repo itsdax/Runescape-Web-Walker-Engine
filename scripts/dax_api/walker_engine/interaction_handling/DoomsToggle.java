@@ -30,7 +30,7 @@ public class DoomsToggle implements Loggable {
     }
 
     public static void handle(int parentInterface, String... option){
-        if (!Interfaces.isInterfaceValid(parentInterface)){
+        if (!Interfaces.isInterfaceSubstantiated(parentInterface)){
             return;
         }
         getInstance().log("Handling Interface: " + parentInterface);
