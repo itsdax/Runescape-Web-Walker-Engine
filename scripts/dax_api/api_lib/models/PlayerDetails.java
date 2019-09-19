@@ -27,7 +27,7 @@ public class PlayerDetails {
                 440, 622, 131, 335, 299, 896, 671, 810, 17, 11, 347, 302, 111, 116, 482, 307, 165, 150, 425, 365, 1630)
                 .map(value -> new IntPair(value, Game.getSetting(value))).distinct().collect(Collectors.toList());
 
-        List<IntPair> varbit = Arrays.stream(new int[]{5087, 5088, 5089, 5090, 4895})
+        List<IntPair> varbit = Arrays.stream(new int[]{3741, 5087, 5088, 5089, 5090, 4895})
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(Collectors.toList());
 
         return new PlayerDetails(
