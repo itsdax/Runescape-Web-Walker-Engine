@@ -15,7 +15,6 @@ import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -114,6 +113,7 @@ public class NavigationSpecialCase implements Loggable{
         KARAMJA_PAY_FARE (2953, 3146, 0),
         ARDOUGNE_PAY_FARE (2681, 3275, 0),
         BRIMHAVEN_PAY_FARE (2772, 3225, 0),
+        RIMMINGTON_PAY_FARE(2915, 3225, 0),
         GREAT_KOUREND (1824, 3691, 0),
         LANDS_END (1504, 3399, 0),
         PEST_CONTROL (2659, 2676, 0),
@@ -419,15 +419,9 @@ public class NavigationSpecialCase implements Loggable{
 
 
             case KARAMJA_PAY_FARE:
-                if (handlePayFare("Karamja.")){
-                    getInstance().log("Successfully boarded ship!");
-                    return true;
-                } else {
-                    getInstance().log("Failed to pay fare.");
-                }
-                return false;
             case PORT_SARIM_PAY_FARE:
-                if (handlePayFare("Port Sarim.")){
+
+                if (handleKaramjaShip()){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -435,7 +429,7 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 return false;
             case ARDOUGNE_PAY_FARE:
-                if (handlePayFare("Ardougne.")){
+                if (handleShip("Ardougne")){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -443,7 +437,15 @@ public class NavigationSpecialCase implements Loggable{
                 }
                 return false;
             case BRIMHAVEN_PAY_FARE:
-                if (handlePayFare("Brimhaven.")){
+                if (handleShip("Brimhaven")){
+                    getInstance().log("Successfully boarded ship!");
+                    return true;
+                } else {
+                    getInstance().log("Failed to pay fare.");
+                }
+                return false;
+            case RIMMINGTON_PAY_FARE:
+                if (handleShip("Rimmington")){
                     getInstance().log("Successfully boarded ship!");
                     return true;
                 } else {
@@ -605,11 +607,22 @@ public class NavigationSpecialCase implements Loggable{
         return false;
     }
 
-    public static boolean handlePayFare(String...actions){
+    public static boolean handleShip(String... targetLocation){
+        if (NPCInteraction.clickNpc(Filters.NPCs.actionsContains(targetLocation), targetLocation)
+                && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+            WaitFor.milliseconds(1800, 2800);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean handleKaramjaShip(){
         String[] options = {"Pay-fare", "Pay-Fare"};
-        List<String> all = new ArrayList<>(Arrays.asList(actions));
-        all.addAll(Arrays.asList("Yes please.", "Can I journey on this ship?", "Search away, I have nothing to hide.", "Ok."));
-        if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), options, all.stream().toArray(String[]::new))
+        String[] chat = {"Yes please.", "Can I journey on this ship?", "Search away, I have nothing to hide.", "Ok."};
+        boolean pirateTreasureComplete = Game.getSetting(71) >= 4;
+        if(pirateTreasureComplete){
+            return handleShip("Pay-fare","Pay-Fare");
+        } else if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), options, chat)
                 && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(1800, 2800);
             return true;

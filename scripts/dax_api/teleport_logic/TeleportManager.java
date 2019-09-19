@@ -1,5 +1,7 @@
 package scripts.dax_api.teleport_logic;
 
+import org.tribot.api.General;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.WebWalkerServerApi;
 import scripts.dax_api.api_lib.models.PathResult;
@@ -7,6 +9,7 @@ import scripts.dax_api.api_lib.models.PlayerDetails;
 import scripts.dax_api.api_lib.models.Point3D;
 import scripts.dax_api.api_lib.models.RunescapeBank;
 import scripts.dax_api.walker_engine.Loggable;
+import scripts.dax_api.walker_engine.WaitFor;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -122,6 +125,8 @@ public class TeleportManager implements Loggable {
         if (!closest.getTeleportMethod().use(closest.getTeleportLocation())) {
             getInstance().log("Failed to teleport");
             return null;
+        } else {
+            WaitFor.condition(General.random(3000, 20000), () -> closest.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return closest.getPathResult().toRSTilePath();
@@ -183,6 +188,8 @@ public class TeleportManager implements Loggable {
         if (!closest.getTeleportMethod().use(closest.getTeleportLocation())) {
             getInstance().log("Failed to teleport");
             return null;
+        } else {
+            WaitFor.condition(General.random(3000, 20000), () -> closest.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return closest.getPathResult().toRSTilePath();
