@@ -11,7 +11,7 @@ public class TeleportConstants {
             LEVEL_30_WILDERNESS_LIMIT = () -> getWildernessLevel() <= 30;
 
     public static final int
-            GE_TELEPORT_VARBIT = 4585, SPELLBOOK_INTERFACE_MASTER = 218, SCROLL_INTERFACE_MASTER = 187;
+            GE_TELEPORT_VARBIT = 4585, SPELLBOOK_INTERFACE_MASTER = 218;
 
     private static int getWildernessLevel() {
         return Combat.getWildernessLevel();

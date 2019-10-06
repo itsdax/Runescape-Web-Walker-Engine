@@ -1,7 +1,6 @@
 package scripts.dax_api.teleport_logic;
 
 import org.tribot.api.General;
-import org.tribot.api.Timing;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
@@ -295,10 +294,9 @@ public enum TeleportMethod implements Validatable {
             return false;
         }
 
-        if(!Interfaces.isInterfaceSubstantiated(TeleportConstants.SCROLL_INTERFACE_MASTER)){
+        if(!Interfaces.isInterfaceSubstantiated(187)){
             RSItem teleportItem = items.get(0);
-            if (!RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")") ||
-                   !Timing.waitCondition(() -> Interfaces.isInterfaceSubstantiated(TeleportConstants.SCROLL_INTERFACE_MASTER),2500)) {
+            if (!RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")")) {
                 return false;
             }
         }
