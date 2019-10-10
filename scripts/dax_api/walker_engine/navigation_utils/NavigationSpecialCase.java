@@ -380,7 +380,7 @@ public class NavigationSpecialCase implements Loggable{
             case GNOME_SHORTCUT_ELKOY_EXIT:
                 if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Elkoy"), new String[]{"Follow"})){
                     RSTile current = Player.getPosition();
-                    if(WaitFor.condition(8000, () ->  Player.getPosition().distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.FAIL) != WaitFor.Return.SUCCESS){
+                    if(WaitFor.condition(8000, () ->  Player.getPosition().distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         return false;
                     }
                     WaitFor.milliseconds(1000, 2000);
