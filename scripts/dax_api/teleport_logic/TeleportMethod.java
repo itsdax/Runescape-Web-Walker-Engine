@@ -1,6 +1,7 @@
 package scripts.dax_api.teleport_logic;
 
 import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
@@ -294,22 +295,15 @@ public enum TeleportMethod implements Validatable {
             return false;
         }
 
-        if(!Interfaces.isInterfaceSubstantiated(187)){
+        if(!Interfaces.isInterfaceSubstantiated(TeleportConstants.SCROLL_INTERFACE_MASTER)){
             RSItem teleportItem = items.get(0);
-            if (!RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")")) {
+            if (!RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")") ||
+                    !Timing.waitCondition(() -> Interfaces.isInterfaceSubstantiated(TeleportConstants.SCROLL_INTERFACE_MASTER),2500)) {
                 return false;
             }
         }
 
-        RSTile startingPosition = Player.getPosition();
-        return WaitFor.condition(General.random(3800, 4600), () -> {
-            if(!handleScrollInterface(regex))
-                return WaitFor.Return.FAIL;
-            if (startingPosition.distanceTo(Player.getPosition()) > 5) {
-                return WaitFor.Return.SUCCESS;
-            }
-            return WaitFor.Return.IGNORE;
-        }) == WaitFor.Return.SUCCESS;
+        return handleScrollInterface(regex);
     }
 
     private static boolean handleScrollInterface(String regex){

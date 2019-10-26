@@ -88,7 +88,7 @@ public class WalkerEngine implements Loggable{
                 }
 
                 destinationDetails = PathAnalyzer.furthestReachableTile(path);
-                if (PathUtils.getFurthestReachableTileInMinimap(path) == null) {
+                if (PathUtils.getFurthestReachableTileInMinimap(path) == null || destinationDetails == null) {
                     log("Could not grab destination details.");
                     failedAttempt();
                     continue;

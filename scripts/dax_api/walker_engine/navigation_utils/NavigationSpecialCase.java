@@ -131,7 +131,10 @@ public class NavigationSpecialCase implements Loggable{
         HAM_INSIDE (3149, 9652, 0),
 
         CASTLE_WARS_DOOR_F2P(2444, 3090, 0),
-        CLAN_WARS_PORTAL_F2P(3368, 3175, 0);
+        CLAN_WARS_PORTAL_F2P(3368, 3175, 0),
+
+        FOSSIL_ISLAND_BARGE(3362, 3445, 0),
+        DIGSITE_BARGE(3724, 3808, 0);
 
 
 
@@ -380,7 +383,7 @@ public class NavigationSpecialCase implements Loggable{
             case GNOME_SHORTCUT_ELKOY_EXIT:
                 if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Elkoy"), new String[]{"Follow"})){
                     RSTile current = Player.getPosition();
-                    if(WaitFor.condition(8000, () ->  Player.getPosition().distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.FAIL) != WaitFor.Return.SUCCESS){
+                    if(WaitFor.condition(8000, () ->  Player.getPosition().distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         return false;
                     }
                     WaitFor.milliseconds(1000, 2000);
@@ -558,6 +561,22 @@ public class NavigationSpecialCase implements Loggable{
                     return WaitFor.condition(3000,
                             () -> CASTLE_WARS_DOOR_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
+                break;
+
+            case FOSSIL_ISLAND_BARGE:
+                if(clickObject(Filters.Objects.nameEquals("Rowboat"),"Travel",() -> NPCInteraction.isConversationWindowUp() ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    NPCInteraction.handleConversationRegex("Row to the barge and travel to the Digsite.");
+                    return WaitFor.condition(5000,
+                            () -> FOSSIL_ISLAND_BARGE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                }
+                break;
+            case DIGSITE_BARGE:
+                if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Barge guard"),new String[]{"Quick-Travel"})){
+                    return WaitFor.condition(5000,
+                            () -> DIGSITE_BARGE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                }
+
                 break;
         }
 
