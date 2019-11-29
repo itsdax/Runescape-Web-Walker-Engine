@@ -40,7 +40,7 @@ public class PathAnalyzer {
             if (current == null){
                 return null;
             }
-            if (i + 1 >= path.size() - 1){
+            if (i + 1 >= path.size()){
                 return new DestinationDetails(PathState.END_OF_PATH, current);
             }
             RSTile nextNode = path.get(i + 1);
