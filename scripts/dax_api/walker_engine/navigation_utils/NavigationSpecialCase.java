@@ -134,7 +134,11 @@ public class NavigationSpecialCase implements Loggable{
         CLAN_WARS_PORTAL_F2P(3368, 3175, 0),
 
         FOSSIL_ISLAND_BARGE(3362, 3445, 0),
-        DIGSITE_BARGE(3724, 3808, 0);
+        DIGSITE_BARGE(3724, 3808, 0),
+
+        PORT_SARIM_TO_ENTRANA(3048, 3234, 0),
+        ENTRANA_TO_PORT_SARIM(2834, 3335, 0)
+        ;
 
 
 
@@ -576,8 +580,19 @@ public class NavigationSpecialCase implements Loggable{
                     return WaitFor.condition(5000,
                             () -> DIGSITE_BARGE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
-
                 break;
+
+
+            case ENTRANA_TO_PORT_SARIM:
+            case PORT_SARIM_TO_ENTRANA:
+                if (handleShip("Take-boat")){
+                    getInstance().log("Successfully boarded ship!");
+                    return true;
+                } else {
+                    getInstance().log("Failed to take Entrana boat.");
+                }
+                break;
+
         }
 
         return false;

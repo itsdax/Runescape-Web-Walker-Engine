@@ -347,6 +347,9 @@ public enum TeleportMethod implements Validatable {
 
 
     private static boolean selectSpell(String spellName, String action){
+        if(!GameTab.TABS.MAGIC.open()){
+            return false;
+        }
         List<RSInterface> spells = InterfaceHelper.getAllInterfaces(TeleportConstants.SPELLBOOK_INTERFACE_MASTER);
         RSInterface target = spells.stream().filter(spell -> {
             String name = spell.getComponentName();

@@ -114,7 +114,7 @@ public class NPCInteraction implements Loggable {
 
             General.sleep(General.randomSD(350, 2250, 775, 350));
             getInstance().log("Replying with option: " + selectableOptions.get(0).getText());
-            Keyboard.typeString(selectableOptions.get(0).getComponentIndex() + "");
+            Keyboard.typeString(selectableOptions.get(0).getIndex() + "");
             waitForNextOption();
         }
     }
@@ -150,7 +150,7 @@ public class NPCInteraction implements Loggable {
                 General.sleep(General.randomSD(350, 2250, 775, 350));
                 getInstance().log("Replying with option: " + selected.getText());
                 blackList.add(selected.getText());
-                Keyboard.typeString(selected.getComponentIndex() + "");
+                Keyboard.typeString(selected.getIndex() + "");
                 waitForNextOption();
                 break;
             }
