@@ -189,7 +189,7 @@ public class TeleportManager implements Loggable {
             getInstance().log("Failed to teleport");
             return null;
         } else {
-            WaitFor.condition(General.random(3000, 20000), () -> closest.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            WaitFor.condition(General.random(3000, 20000), () -> closest.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 15 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return closest.getPathResult().toRSTilePath();

@@ -20,28 +20,28 @@ public class MasterScrollBook {
 			INTERFACE_MASTER = 597, DEFAULT_VARBIT = 5685,
 			SELECT_OPTION_MASTER = 219, SELECT_OPTION_CHILD = 1,
 			GAMETABS_INTERFACE_MASTER = 161;
-	private static Map<String, Integer> cache = new HashMap<String, Integer>();
+	private static Map<String,Integer> cache = new HashMap<String,Integer>();
 	
 	public enum Teleports {
-		NARDAH(5672,"Nardah",new RSTile(3419, 2916, 0)),
-		DIGSITE(5673,"Digsite",new RSTile(3325, 3411, 0)),
-		FELDIP_HILLS(5674,"Feldip Hills",new RSTile(2540, 2924, 0)),
-		LUNAR_ISLE(5675,"Lunar Isle",new RSTile(2095, 3913, 0)),
-		MORTTON(5676,"Mort'ton",new RSTile(3487, 3287, 0)),
-		PEST_CONTROL(5677,"Pest Control",new RSTile(2658, 2658, 0)),
-		PISCATORIS(5678,"Piscatoris",new RSTile(2340, 3650, 0)),
-		TAI_BWO_WANNAI(5679,"Tai Bwo Wannai",new RSTile(2789,3065,0)),
-		ELF_CAMP(5680,"Elf Camp",new RSTile(2193, 3258, 0)),
-		MOS_LE_HARMLESS(5681,"Mos Le'Harmless", new RSTile(3700, 2996, 0)),
-		LUMBERYARD(5682,"Lumberyard",new RSTile(3302, 3487, 0)),
-		ZULLANDRA(5683,"Zul-Andra",new RSTile(2195, 3055, 0)),
-		KEY_MASTER(5684,"Key Master",new RSTile(1311, 1251, 0)),
-		REVENANT_CAVES(6056,"Revenant cave",new RSTile(3130, 3832, 0));
+		NARDAH(5672,"Nardah", TeleportScrolls.NARDAH.getLocation()),
+		DIGSITE(5673,"Digsite", TeleportScrolls.DIGSITE.getLocation()),
+		FELDIP_HILLS(5674,"Feldip Hills", TeleportScrolls.FELDIP_HILLS.getLocation()),
+		LUNAR_ISLE(5675,"Lunar Isle", TeleportScrolls.LUNAR_ISLE.getLocation()),
+		MORTTON(5676,"Mort'ton", TeleportScrolls.MORTTON.getLocation()),
+		PEST_CONTROL(5677,"Pest Control", TeleportScrolls.PEST_CONTROL.getLocation()),
+		PISCATORIS(5678,"Piscatoris", TeleportScrolls.PISCATORIS.getLocation()),
+		TAI_BWO_WANNAI(5679,"Tai Bwo Wannai", TeleportScrolls.TAI_BWO_WANNAI.getLocation()),
+		ELF_CAMP(5680,"Elf Camp", TeleportScrolls.ELF_CAMP.getLocation()),
+		MOS_LE_HARMLESS(5681,"Mos Le'Harmless", TeleportScrolls.MOS_LE_HARMLESS.getLocation()),
+		LUMBERYARD(5682,"Lumberyard", TeleportScrolls.LUMBERYARD.getLocation()),
+		ZULLANDRA(5683,"Zul-Andra", TeleportScrolls.ZULLANDRA.getLocation()),
+		KEY_MASTER(5684,"Key Master", TeleportScrolls.KEY_MASTER.getLocation()),
+		REVENANT_CAVES(6056,"Revenant cave", TeleportScrolls.REVENANT_CAVES.getLocation());
 		
 		private int varbit;
 		private String name;
 		private RSTile destination;
-		Teleports(int varbit, String name, RSTile destination){
+		Teleports(int varbit,String name,RSTile destination){
 			this.varbit = varbit;
 			this.name = name;
 		}
@@ -88,8 +88,8 @@ public class MasterScrollBook {
 			}
 			if(this == REVENANT_CAVES) // bug where you can't activate it from the interface for whatever reason.
 				return setAsDefault() && use();
-			if(!isOpen())
-				openBook();
+			if(!isOpen() && !openBook())
+				return false;
 			RSInterface target = getInterface(this);
 			return target != null && click(target, "Activate") && waitTillAtDestination(this);
 		}
@@ -160,7 +160,11 @@ public class MasterScrollBook {
 		}
 		return book.length > 0 && click(book[0],"Open") && waitForBookToOpen();
 	}
-	
+
+	public static boolean has(){
+		return getBook().length > 0;
+	}
+
 	private static RSItem[] getBook(){
 		return Inventory.find("Master scroll book");
 	}
