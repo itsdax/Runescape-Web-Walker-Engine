@@ -25,7 +25,7 @@ public class PlayerDetails {
 
         List<IntPair> settings = Stream.of(176, 32, 71, 273, 144, 63, 179, 145, 68, 655, 10, 964, 399, 869, 314, 794,
                 440, 622, 131, 335, 299, 896, 671, 810, 17, 11, 347, 302, 111, 116, 482, 307, 165, 150, 425, 365, 1630,
-                101, 371, 351,1671)
+                101, 371, 351,1671, 1672)
                 .map(value -> new IntPair(value, Game.getSetting(value))).distinct().collect(Collectors.toList());
 
         List<IntPair> varbit = Arrays.stream(new int[]{3741, 5087, 5088, 5089, 5090, 4895})
