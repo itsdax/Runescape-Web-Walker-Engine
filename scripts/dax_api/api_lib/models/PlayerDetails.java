@@ -48,7 +48,7 @@ public class PlayerDetails {
                 Skills.getActualLevel(Skills.SKILLS.SMITHING),
                 Skills.getActualLevel(Skills.SKILLS.MINING),
                 Skills.getActualLevel(Skills.SKILLS.HERBLORE),
-                Skills.getActualLevel(Skills.SKILLS.AGILITY),
+                Skills.getCurrentLevel(Skills.SKILLS.AGILITY),
                 Skills.getActualLevel(Skills.SKILLS.THIEVING),
                 Skills.getActualLevel(Skills.SKILLS.SLAYER),
                 Skills.getActualLevel(Skills.SKILLS.FARMING),
