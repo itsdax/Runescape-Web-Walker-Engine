@@ -13,6 +13,10 @@ public class WorldHelper {
     private Map<Integer, World> worldList;
 
     private WorldHelper() {
+        updateWorldList();
+    }
+
+    private void updateWorldList(){
         try {
             worldList = loadWorldList();
         } catch (IOException e){
@@ -25,7 +29,13 @@ public class WorldHelper {
     }
 
     public static Map<Integer, World> getWorldList(){
-        return Collections.unmodifiableMap(getInstance().worldList);
+        try {
+            return Collections.unmodifiableMap(getInstance().worldList);
+        } catch(Exception e){
+            e.printStackTrace();
+            getInstance().updateWorldList();
+        }
+        return new HashMap<>();
     }
 
     public static boolean isSkillTotal(int worldNumber) {
