@@ -636,7 +636,8 @@ public class NavigationSpecialCase implements Loggable{
 
     private static boolean handleFirstTripToZeah(String locationOption){
         getInstance().log("First trip to zeah");
-        if(NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{"Talk-to"}, new String[]{locationOption,"Can you take me somewhere?","That's great, can you take me there please?"})) {
+        if(NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{"Talk-to"}, new String[]{
+                locationOption,"Can you take me somewhere?","That's great, can you take me there please?","Can you take me to Great Kourend?"})) {
             RSTile current = Player.getPosition();
             if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || Player.getPosition().distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
                 return false;
