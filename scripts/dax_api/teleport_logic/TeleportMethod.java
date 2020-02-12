@@ -10,6 +10,7 @@ import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.shared.helpers.InterfaceHelper;
 import scripts.dax_api.shared.helpers.RSItemHelper;
 import scripts.dax_api.shared.helpers.magic.Spell;
+import scripts.dax_api.teleport_logic.teleport_utils.MasterScrollBook;
 import scripts.dax_api.teleport_logic.teleport_utils.TeleportScrolls;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
@@ -42,9 +43,24 @@ public enum TeleportMethod implements Validatable {
     ELF_CRYSTAL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,LLETYA),
     KOUREND_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,KOUREND),
     XERICS_TALISMAN(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,XERICS_INFERNO),
+
     PISCATORIS_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,PISCATORIS),
     NARDAH_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,NARDAH),
-    WEST_ARDOUGNE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,WEST_ARDOUGNE);
+    DIGSITE_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,DIGSITE),
+    FELDIP_HILLS_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,FELDIP_HILLS),
+    LUNAR_ISLE_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,LUNAR_ISLE),
+    MORTTON_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,MORTTON),
+    PEST_CONTROL_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,PEST_CONTROL),
+    TAI_BWO_WANNAI_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,TAI_BWO_WANNAI),
+    ELF_CAMP_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,ELF_CAMP),
+    MOS_LE_HARMLESS_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,MOS_LE_HARMLESS),
+    LUMBERYARD_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,LUMBERYARD),
+    ZULLANDRA_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,ZULLANDRA),
+    KEY_MASTER_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,KEY_MASTER),
+    REVENANT_CAVES_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,REVENANT_CAVES),
+
+    WEST_ARDOUGNE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,WEST_ARDOUGNE)
+    ;
 
     private TeleportLocation[] destinations;
     private TeleportLimit teleportLimit;
@@ -125,6 +141,30 @@ public enum TeleportMethod implements Validatable {
                 return TeleportScrolls.NARDAH.canUse() && inMembersWorld();
             case PISCATORIS_TELEPORT_SCROLL:
                 return TeleportScrolls.PISCATORIS.canUse() && inMembersWorld();
+            case DIGSITE_TELEPORT_SCROLL:
+                return TeleportScrolls.DIGSITE.canUse() && inMembersWorld();
+            case FELDIP_HILLS_TELEPORT_SCROLL:
+                return TeleportScrolls.FELDIP_HILLS.canUse() && inMembersWorld();
+            case LUNAR_ISLE_TELEPORT_SCROLL:
+                return TeleportScrolls.LUNAR_ISLE.canUse() && inMembersWorld();
+            case MORTTON_TELEPORT_SCROLL:
+                return TeleportScrolls.MORTTON.canUse() && inMembersWorld();
+            case PEST_CONTROL_TELEPORT_SCROLL:
+                return TeleportScrolls.PEST_CONTROL.canUse() && inMembersWorld();
+            case TAI_BWO_WANNAI_TELEPORT_SCROLL:
+                return TeleportScrolls.TAI_BWO_WANNAI.canUse() && inMembersWorld();
+            case ELF_CAMP_TELEPORT_SCROLL:
+                return TeleportScrolls.ELF_CAMP.canUse() && inMembersWorld();
+            case MOS_LE_HARMLESS_TELEPORT_SCROLL:
+                return TeleportScrolls.MOS_LE_HARMLESS.canUse() && inMembersWorld();
+            case LUMBERYARD_TELEPORT_SCROLL:
+                return TeleportScrolls.LUMBERYARD.canUse() && inMembersWorld();
+            case ZULLANDRA_TELEPORT_SCROLL:
+                return TeleportScrolls.ZULLANDRA.canUse() && inMembersWorld();
+            case KEY_MASTER_TELEPORT_SCROLL:
+                return TeleportScrolls.KEY_MASTER.canUse() && inMembersWorld();
+            case REVENANT_CAVES_TELEPORT_SCROLL:
+                return TeleportScrolls.REVENANT_CAVES.canUse() && inMembersWorld();
             case WEST_ARDOUGNE_TELEPORT:
                 return Inventory.getCount("West ardougne teleport") > 0 && inMembersWorld();
         }
@@ -235,11 +275,35 @@ public enum TeleportMethod implements Validatable {
 
             case XERICS_INFERNO:
                 return teleportWithScrollInterface(XERICS_TALISMAN_FILTER, ".*Xeric's Inferno");
-            case NARDAH:
-                return TeleportScrolls.NARDAH.teleportTo(false);
-            case PISCATORIS:
-                return TeleportScrolls.PISCATORIS.teleportTo(false);
 
+            case NARDAH:
+                return MasterScrollBook.Teleports.NARDAH.use() || TeleportScrolls.NARDAH.teleportTo(false);
+            case DIGSITE:
+                return MasterScrollBook.Teleports.DIGSITE.use() || TeleportScrolls.DIGSITE.teleportTo(false);
+            case FELDIP_HILLS:
+                return MasterScrollBook.Teleports.FELDIP_HILLS.use() || TeleportScrolls.FELDIP_HILLS.teleportTo(false);
+            case LUNAR_ISLE:
+                return MasterScrollBook.Teleports.LUNAR_ISLE.use() || TeleportScrolls.LUNAR_ISLE.teleportTo(false);
+            case MORTTON:
+                return MasterScrollBook.Teleports.MORTTON.use() || TeleportScrolls.MORTTON.teleportTo(false);
+            case PEST_CONTROL:
+                return MasterScrollBook.Teleports.PEST_CONTROL.use() || TeleportScrolls.PEST_CONTROL.teleportTo(false);
+            case PISCATORIS:
+                return MasterScrollBook.Teleports.PISCATORIS.use() || TeleportScrolls.PISCATORIS.teleportTo(false);
+            case TAI_BWO_WANNAI:
+                return MasterScrollBook.Teleports.TAI_BWO_WANNAI.use() || TeleportScrolls.TAI_BWO_WANNAI.teleportTo(false);
+            case ELF_CAMP:
+                return MasterScrollBook.Teleports.ELF_CAMP.use() || TeleportScrolls.ELF_CAMP.teleportTo(false);
+            case MOS_LE_HARMLESS:
+                return MasterScrollBook.Teleports.MOS_LE_HARMLESS.use() || TeleportScrolls.MOS_LE_HARMLESS.teleportTo(false);
+            case LUMBERYARD:
+                return MasterScrollBook.Teleports.LUMBERYARD.use() || TeleportScrolls.LUMBERYARD.teleportTo(false);
+            case ZULLANDRA:
+                return MasterScrollBook.Teleports.ZULLANDRA.use() || TeleportScrolls.ZULLANDRA.teleportTo(false);
+            case KEY_MASTER:
+                return MasterScrollBook.Teleports.KEY_MASTER.use() || TeleportScrolls.KEY_MASTER.teleportTo(false);
+            case REVENANT_CAVES:
+                return MasterScrollBook.Teleports.REVENANT_CAVES.use() || TeleportScrolls.REVENANT_CAVES.teleportTo(false);
             case WEST_ARDOUGNE:
                 return RSItemHelper.click("West ardougne t.*", "Break");
         }

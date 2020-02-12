@@ -17,6 +17,7 @@ import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
 
@@ -320,8 +321,13 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
             case KALPHITE_TUNNEL:
+                if (clickObject(Filters.Objects.nameEquals("Rope"), "Climb-up", () -> Player.getPosition().getY() < 9000 ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+                    return true;
+                }
+                break;
             case KALPHITE_TUNNEL_INSIDE:
-                if (clickObject(Filters.Objects.nameEquals("Tunnel entrance"), "Climb-down", () -> Player.getPosition().getY() > 4000 ?
+                if (clickObject(Filters.Objects.nameEquals("Tunnel entrance").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down", () -> Player.getPosition().getY() > 4000 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 } else {
@@ -630,7 +636,8 @@ public class NavigationSpecialCase implements Loggable{
 
     private static boolean handleFirstTripToZeah(String locationOption){
         getInstance().log("First trip to zeah");
-        if(NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{"Talk-to"}, new String[]{locationOption,"Can you take me somewhere?","That's great, can you take me there please?"})) {
+        if(NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{"Talk-to"}, new String[]{
+                locationOption,"Can you take me somewhere?","That's great, can you take me there please?","Can you take me to Great Kourend?"})) {
             RSTile current = Player.getPosition();
             if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || Player.getPosition().distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
                 return false;
@@ -678,7 +685,7 @@ public class NavigationSpecialCase implements Loggable{
         return InteractionHelper.click(object, action, condition);
     }
 
-    public static boolean clickObject(Filter<RSObject> filter, String action, WaitFor.Condition condition) {
+    public static boolean clickObject(Predicate<RSObject> filter, String action, WaitFor.Condition condition) {
         RSObject[] objects = Objects.findNearest(15, filter);
         if (objects.length == 0){
             return false;
