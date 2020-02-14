@@ -1,6 +1,5 @@
 package scripts.dax_api.walker_engine.navigation_utils.fairyring;
 
-import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Objects;
@@ -32,7 +31,6 @@ public class FairyRing {
 	}
 
 	public static boolean takeFairyRing(Locations location){
-		General.println("Target location: " + location);
 		if(!hasInterface()){
 			if(hasCachedLocation(location)){
 				return takeLastDestination(location);
