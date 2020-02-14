@@ -21,13 +21,14 @@ import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.T
 public class FairyRing {
 
 	public static final int
-		INTERFACE_MASTER = 398;
+		INTERFACE_MASTER = 398,
+		TELEPORT_CHILD = 26;
 
 	private static RSObject[] ring;
 
 
 	private static RSInterface getTeleportButton() {
-		return Interfaces.get(398, 26);
+		return Interfaces.get(INTERFACE_MASTER, TELEPORT_CHILD);
 	}
 
 	public static boolean takeFairyRing(Locations location){
