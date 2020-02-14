@@ -50,7 +50,7 @@ public class FairyRing {
 	private static boolean hasCachedLocation(Locations location){
 		if(location == null)
 			return false;
-		ring = Objects.find(25,"Fairy ring");
+		ring = Objects.findNearest(25,"Fairy ring");
 		return ring.length > 0 && Filters.Objects.actionsContains(location.toString()).test(ring[0]);
 	}
 
