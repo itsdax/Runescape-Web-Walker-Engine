@@ -73,70 +73,71 @@ public class FairyRing {
 	}
 
 	public enum Locations {
-	    MUDSKIPPER_POINT(A,I,Q),
-	    ISLAND_SOUTHEAST_ARDOUGNE(A,I,R),
-	    DORGESH_KAAN_SOUTHERN_CAVE(A,J,Q),
-	    RELLEKKA_SLAYER_CAVE(A,J,R),
-	    MISCELLANIA_PENGUINS(A,J,S),
-	    PISCATORIS_HUNTER_AREA(A,K,Q),
-	    FELDIP_HILLS_HUNTER_AREA(A,K,S),
-	    LIGHTHOUSE(A,L,P),
-	    HAUNTED_WOODS(A,L,Q),
-	    ABYSSAL_AREA(A,L,R),
-	    MCGRUBOR_WOODS(A,L,S),
-	    MORT_MYRE_ISLAND(B,I,P),
-	    KALPHITE_HIVE(B,I,Q),
-	    ARDOUGNE_ZOO(B,I,S),
-	    FISHER_KINGS_REALM(B,J,R),
-	    ZUL_ANDRA(B,J,S),
-	    SOUTH_CASTLE_WARS(B,K,P),
-	    ENCHANTED_VALLEY(B,K,Q),
-	    MORT_MYRE_SWAMP(B,K,R),
-	    ZANARIS(B,K,S),
-	    TZHAAR(B,L,P),
-	    LEGENDS_GUILD(B,L,R),
-	    MISCELLANIA(C,I,P),
-	    YANILLE(C,I,Q),
-	    MOUNT_KARUULM(C,I,R),
-	    ARCEUUS_LIBRARY(C,I,S),
-	    SINCLAIR_MANSION(C,J,R),
-	    COSMIC_ENTITYS_PLANE(C,K,P),
-	    SHILO_VILLAGE(C,K,R),
-	    CANIFIS(C,K,S),
-	    DRAYNOR_VILLAGE_ISLAND(C,L,P),
-	    APE_ATOLL(C,L,R),
-	    HAZELMERE(C,L,S),
-	    ABYSSAL_NEXUS(D,I,P),
-	    POH(D,I,Q),
-	    GORAKS_PLANE(D,I,R),
-	    WIZARDS_TOWER(D,I,S),
-	    TOWER_OF_LIFE(D,J,P),
-	    CHASM_OF_FIRE(D,J,R),
-	    KARAMJA_KARAMBWAN_SPOT(D,K,P),
-	    EDGEVILLE(D,K,R),
-	    POLAR_HUNTER_AREA(D,K,S),
-	    NORTH_OF_NARDHA(D,L,Q),
-	    POISON_WASTE(D,L,R),
-	    MYREQUE_HIDEOUT(D,L,S)
-	    ;
-	    FirstLetter first;
-	    SecondLetter second;
-	    ThirdLetter third;
-	    Locations(FirstLetter first, SecondLetter second, ThirdLetter third){
-	        this.first = first;
-	        this.second = second;
-	        this.third = third;
-	    }
+		ABYSSAL_AREA(A, L, R),
+		ABYSSAL_NEXUS(D, I, P),
+		APE_ATOLL(C, L, R),
+		ARCEUUS_LIBRARY(C, I, S),
+		ARDOUGNE_ZOO(B, I, S),
+		CANIFIS(C, K, S),
+		CHASM_OF_FIRE(D, J, R),
+		COSMIC_ENTITYS_PLANE(C, K, P),
+		DORGESH_KAAN_SOUTHERN_CAVE(A, J, Q),
+		DRAYNOR_VILLAGE_ISLAND(C, L, P),
+		EDGEVILLE(D, K, R),
+		ENCHANTED_VALLEY(B, K, Q),
+		FELDIP_HILLS_HUNTER_AREA(A, K, S),
+		FISHER_KINGS_REALM(B, J, R),
+		GORAKS_PLANE(D, I, R),
+		HAUNTED_WOODS(A, L, Q),
+		HAZELMERE(C, L, S),
+		ISLAND_SOUTHEAST_ARDOUGNE(A, I, R),
+		KALPHITE_HIVE(B, I, Q),
+		KARAMJA_KARAMBWAN_SPOT(D, K, P),
+		LEGENDS_GUILD(B, L, R),
+		LIGHTHOUSE(A, L, P),
+		MCGRUBOR_WOODS(A, L, S),
+		MISCELLANIA(C, I, P),
+		MISCELLANIA_PENGUINS(A, J, S),
+		MORT_MYRE_ISLAND(B, I, P),
+		MORT_MYRE_SWAMP(B, K, R),
+		MOUNT_KARUULM(C, I, R),
+		MUDSKIPPER_POINT(A, I, Q),
+		MYREQUE_HIDEOUT(D, L, S),
+		NORTH_OF_NARDHA(D, L, Q),
+		PISCATORIS_HUNTER_AREA(A, K, Q),
+		POH(D, I, Q),
+		POISON_WASTE(D, L, R),
+		POLAR_HUNTER_AREA(D, K, S),
+		RELLEKKA_SLAYER_CAVE(A, J, R),
+		SHILO_VILLAGE(C, K, R),
+		SINCLAIR_MANSION(C, J, R),
+		SOUTH_CASTLE_WARS(B, K, P),
+		TOWER_OF_LIFE(D, J, P),
+		TZHAAR(B, L, P),
+		WIZARDS_TOWER(D, I, S),
+		YANILLE(C, I, Q),
+		ZANARIS(B, K, S),
+		ZUL_ANDRA(B, J, S);
 
-	    public boolean turnTo(){
-	        return first.turnTo() && WaitFor.milliseconds(200,800) != null &&
-			        second.turnTo() && WaitFor.milliseconds(200,800) != null &&
-			        third.turnTo() && WaitFor.milliseconds(200,800) != null;
-	    }
+		FirstLetter first;
+		SecondLetter second;
+		ThirdLetter third;
 
-	    @Override
-	    public String toString(){
-	        return "" + first + second + third;
-	    }
+		Locations(FirstLetter first, SecondLetter second, ThirdLetter third) {
+			this.first = first;
+			this.second = second;
+			this.third = third;
+		}
+
+		public boolean turnTo() {
+			return first.turnTo() && WaitFor.milliseconds(200, 800) != null &&
+					second.turnTo() && WaitFor.milliseconds(200, 800) != null &&
+					third.turnTo() && WaitFor.milliseconds(200, 800) != null;
+		}
+
+		@Override
+		public String toString() {
+			return "" + first + second + third;
+		}
 	}
 }
