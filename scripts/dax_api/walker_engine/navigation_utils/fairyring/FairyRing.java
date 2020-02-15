@@ -32,6 +32,8 @@ public class FairyRing {
 	}
 
 	public static boolean takeFairyRing(Locations location){
+		if(location == null)
+			return false;
 		if(!hasInterface()){
 			if(hasCachedLocation(location)){
 				return takeLastDestination(location);
@@ -48,8 +50,6 @@ public class FairyRing {
 	}
 
 	private static boolean hasCachedLocation(Locations location){
-		if(location == null)
-			return false;
 		ring = Objects.findNearest(25,"Fairy ring");
 		return ring.length > 0 && Filters.Objects.actionsContains(location.toString()).test(ring[0]);
 	}
