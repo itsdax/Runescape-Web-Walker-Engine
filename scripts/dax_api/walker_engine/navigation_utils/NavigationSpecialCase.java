@@ -138,7 +138,10 @@ public class NavigationSpecialCase implements Loggable{
         DIGSITE_BARGE(3724, 3808, 0),
 
         PORT_SARIM_TO_ENTRANA(3048, 3234, 0),
-        ENTRANA_TO_PORT_SARIM(2834, 3335, 0)
+        ENTRANA_TO_PORT_SARIM(2834, 3335, 0),
+
+        RELLEKKA_TO_MISCELLANIA(2629, 3693, 0),
+        MISCELLANIA_TO_RELLEKKA(2577, 3853, 0)
         ;
 
 
@@ -236,6 +239,17 @@ public class NavigationSpecialCase implements Loggable{
             case RELEKKA_WEST_BOAT:
                 if (NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"}, new String[0])){
                     WaitFor.milliseconds(2000, 3000);
+                }
+                break;
+
+            case MISCELLANIA_TO_RELLEKKA:
+            case RELLEKKA_TO_MISCELLANIA:
+                final RSTile curr = Player.getPosition();
+                if (NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"})){
+                    WaitFor.condition(10000,() -> Player.getPosition().distanceTo(curr) > 20 ?
+                                WaitFor.Return.SUCCESS :
+                                WaitFor.Return.IGNORE);
+                    WaitFor.milliseconds(4000, 5000);
                 }
                 break;
 
