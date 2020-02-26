@@ -1,6 +1,7 @@
 package scripts.dax_api.walker_engine.navigation_utils.fairyring;
 
 import org.tribot.api.Timing;
+import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
@@ -20,9 +21,12 @@ import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.T
 
 public class FairyRing {
 
-	public static final int
+	private static final int
 		INTERFACE_MASTER = 398,
 		TELEPORT_CHILD = 26;
+
+	private static final int[]
+			DRAMEN_STAFFS = {772,9084};
 
 	private static RSObject[] ring;
 
@@ -32,8 +36,14 @@ public class FairyRing {
 	}
 
 	public static boolean takeFairyRing(Locations location){
+
 		if(location == null)
 			return false;
+		if (Equipment.getCount(DRAMEN_STAFFS) == 0){
+			if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(DRAMEN_STAFFS)), "Wield")){
+				return false;
+			}
+		}
 		if(!hasInterface()){
 			if(hasCachedLocation(location)){
 				return takeLastDestination(location);
@@ -103,7 +113,7 @@ public class FairyRing {
 		MOUNT_KARUULM(C, I, R),
 		MUDSKIPPER_POINT(A, I, Q),
 		MYREQUE_HIDEOUT(D, L, S),
-		NORTH_OF_NARDHA(D, L, Q),
+		NORTH_OF_NARDAH(D, L, Q),
 		PISCATORIS_HUNTER_AREA(A, K, Q),
 		POH(D, I, Q),
 		POISON_WASTE(D, L, R),
