@@ -13,6 +13,7 @@ import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
+import scripts.dax_api.walker_engine.navigation_utils.fairyring.FairyRing;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;
@@ -138,7 +139,53 @@ public class NavigationSpecialCase implements Loggable{
         DIGSITE_BARGE(3724, 3808, 0),
 
         PORT_SARIM_TO_ENTRANA(3048, 3234, 0),
-        ENTRANA_TO_PORT_SARIM(2834, 3335, 0)
+        ENTRANA_TO_PORT_SARIM(2834, 3335, 0),
+
+        RELLEKKA_TO_MISCELLANIA(2629, 3693, 0),
+        MISCELLANIA_TO_RELLEKKA(2577, 3853, 0),
+
+        FAIRY_RING_ABYSSAL_AREA(3059, 4875, 0),
+        FAIRY_RING_ABYSSAL_NEXUS(3037, 4763, 0),
+        FAIRY_RING_APE_ATOLL(2740, 2738, 0),
+        FAIRY_RING_ARCEUUS_LIBRARY(1639, 3868, 0),
+        FAIRY_RING_ARDOUGNE_ZOO(2635, 3266, 0),
+        FAIRY_RING_CANIFIS(3447, 3470, 0),
+        FAIRY_RING_CHASM_OF_FIRE(1455, 3658, 0),
+        FAIRY_RING_COSMIC_ENTITYS_PLANE(2075, 4848, 0),
+        FAIRY_RING_DRAYNOR_VILLAGE_ISLAND(3082, 3206, 0),
+        FAIRY_RING_EDGEVILLE(3129, 3496, 0),
+        FAIRY_RING_ENCHANTED_VALLEY(3041, 4532, 0),
+        FAIRY_RING_FELDIP_HILLS_HUNTER_AREA(2571, 2956, 0),
+        FAIRY_RING_FISHER_KINGS_REALM(2650, 4730, 0),
+        FAIRY_RING_GORAKS_PLANE(3038, 5348, 0),
+        FAIRY_RING_HAUNTED_WOODS(3597, 3495, 0),
+        FAIRY_RING_HAZELMERE(2682, 3081, 0),
+        FAIRY_RING_ISLAND_SOUTHEAST_ARDOUGNE(2700, 3247, 0),
+        FAIRY_RING_KALPHITE_HIVE(3251, 3095, 0),
+        FAIRY_RING_KARAMJA_KARAMBWAN_SPOT(2900, 3111, 0),
+        FAIRY_RING_LEGENDS_GUILD(2740, 3351, 0),
+        FAIRY_RING_LIGHTHOUSE(2503, 3636, 0),
+        FAIRY_RING_MCGRUBOR_WOODS(2644, 3495, 0),
+        FAIRY_RING_MISCELLANIA(2513, 3884, 0),
+        FAIRY_RING_MISCELLANIA_PENGUINS(2500, 3896, 0),
+        FAIRY_RING_MORT_MYRE_ISLAND(3410, 3324, 0),
+        FAIRY_RING_MORT_MYRE_SWAMP(3469, 3431, 0),
+        FAIRY_RING_MOUNT_KARUULM(1302, 3762, 0),
+        FAIRY_RING_MUDSKIPPER_POINT(2996, 3114, 0),
+        FAIRY_RING_NORTH_OF_NARDAH(3423, 3016, 0),
+        FAIRY_RING_PISCATORIS_HUNTER_AREA(2319, 3619, 0),
+        FAIRY_RING_POISON_WASTE(2213, 3099, 0),
+        FAIRY_RING_POLAR_HUNTER_AREA(2744, 3719, 0),
+        FAIRY_RING_RELLEKKA_SLAYER_CAVE(2780, 3613, 0),
+        FAIRY_RING_SHILO_VILLAGE(2801, 3003, 0),
+        FAIRY_RING_SINCLAIR_MANSION(2705, 3576, 0),
+        FAIRY_RING_SOUTH_CASTLE_WARS(2385, 3035, 0),
+        FAIRY_RING_TOWER_OF_LIFE(2658, 3230, 0),
+        FAIRY_RING_TZHAAR(2437, 5126, 0),
+        FAIRY_RING_WIZARDS_TOWER(3108, 3149, 0),
+        FAIRY_RING_YANILLE(2528, 3127, 0),
+        FAIRY_RING_ZANARIS(2412, 4434, 0),
+        FAIRY_RING_ZUL_ANDRA(2150, 3070, 0)
         ;
 
 
@@ -236,6 +283,17 @@ public class NavigationSpecialCase implements Loggable{
             case RELEKKA_WEST_BOAT:
                 if (NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"}, new String[0])){
                     WaitFor.milliseconds(2000, 3000);
+                }
+                break;
+
+            case MISCELLANIA_TO_RELLEKKA:
+            case RELLEKKA_TO_MISCELLANIA:
+                final RSTile curr = Player.getPosition();
+                if (NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"})){
+                    WaitFor.condition(10000,() -> Player.getPosition().distanceTo(curr) > 20 ?
+                                WaitFor.Return.SUCCESS :
+                                WaitFor.Return.IGNORE);
+                    WaitFor.milliseconds(4000, 5000);
                 }
                 break;
 
@@ -598,6 +656,91 @@ public class NavigationSpecialCase implements Loggable{
                     getInstance().log("Failed to take Entrana boat.");
                 }
                 break;
+
+            case FAIRY_RING_ABYSSAL_AREA:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ABYSSAL_AREA);
+            case FAIRY_RING_ABYSSAL_NEXUS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ABYSSAL_NEXUS);
+            case FAIRY_RING_APE_ATOLL:
+                return FairyRing.takeFairyRing(FairyRing.Locations.APE_ATOLL);
+            case FAIRY_RING_ARCEUUS_LIBRARY:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ARCEUUS_LIBRARY);
+            case FAIRY_RING_ARDOUGNE_ZOO:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ARDOUGNE_ZOO);
+            case FAIRY_RING_CANIFIS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.CANIFIS);
+            case FAIRY_RING_CHASM_OF_FIRE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.CHASM_OF_FIRE);
+            case FAIRY_RING_COSMIC_ENTITYS_PLANE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.COSMIC_ENTITYS_PLANE);
+            case FAIRY_RING_DRAYNOR_VILLAGE_ISLAND:
+                return FairyRing.takeFairyRing(FairyRing.Locations.DRAYNOR_VILLAGE_ISLAND);
+            case FAIRY_RING_EDGEVILLE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.EDGEVILLE);
+            case FAIRY_RING_ENCHANTED_VALLEY:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ENCHANTED_VALLEY);
+            case FAIRY_RING_FELDIP_HILLS_HUNTER_AREA:
+                return FairyRing.takeFairyRing(FairyRing.Locations.FELDIP_HILLS_HUNTER_AREA);
+            case FAIRY_RING_FISHER_KINGS_REALM:
+                return FairyRing.takeFairyRing(FairyRing.Locations.FISHER_KINGS_REALM);
+            case FAIRY_RING_GORAKS_PLANE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.GORAKS_PLANE);
+            case FAIRY_RING_HAUNTED_WOODS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.HAUNTED_WOODS);
+            case FAIRY_RING_HAZELMERE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.HAZELMERE);
+            case FAIRY_RING_ISLAND_SOUTHEAST_ARDOUGNE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ISLAND_SOUTHEAST_ARDOUGNE);
+            case FAIRY_RING_KALPHITE_HIVE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.KALPHITE_HIVE);
+            case FAIRY_RING_KARAMJA_KARAMBWAN_SPOT:
+                return FairyRing.takeFairyRing(FairyRing.Locations.KARAMJA_KARAMBWAN_SPOT);
+            case FAIRY_RING_LEGENDS_GUILD:
+                return FairyRing.takeFairyRing(FairyRing.Locations.LEGENDS_GUILD);
+            case FAIRY_RING_LIGHTHOUSE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.LIGHTHOUSE);
+            case FAIRY_RING_MCGRUBOR_WOODS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.MCGRUBOR_WOODS);
+            case FAIRY_RING_MISCELLANIA:
+                return FairyRing.takeFairyRing(FairyRing.Locations.MISCELLANIA);
+            case FAIRY_RING_MISCELLANIA_PENGUINS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.MISCELLANIA_PENGUINS);
+            case FAIRY_RING_MORT_MYRE_ISLAND:
+                return FairyRing.takeFairyRing(FairyRing.Locations.MORT_MYRE_ISLAND);
+            case FAIRY_RING_MORT_MYRE_SWAMP:
+                return FairyRing.takeFairyRing(FairyRing.Locations.MORT_MYRE_SWAMP);
+            case FAIRY_RING_MOUNT_KARUULM:
+                return FairyRing.takeFairyRing(FairyRing.Locations. MOUNT_KARUULM);
+            case FAIRY_RING_MUDSKIPPER_POINT:
+                return FairyRing.takeFairyRing(FairyRing.Locations.MUDSKIPPER_POINT);
+            case FAIRY_RING_NORTH_OF_NARDAH:
+                return FairyRing.takeFairyRing(FairyRing.Locations.NORTH_OF_NARDAH);
+            case FAIRY_RING_PISCATORIS_HUNTER_AREA:
+                return FairyRing.takeFairyRing(FairyRing.Locations.PISCATORIS_HUNTER_AREA);
+            case FAIRY_RING_POISON_WASTE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.POISON_WASTE);
+            case FAIRY_RING_POLAR_HUNTER_AREA:
+                return FairyRing.takeFairyRing(FairyRing.Locations.POLAR_HUNTER_AREA);
+            case FAIRY_RING_RELLEKKA_SLAYER_CAVE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.RELLEKKA_SLAYER_CAVE);
+            case FAIRY_RING_SHILO_VILLAGE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.SHILO_VILLAGE);
+            case FAIRY_RING_SINCLAIR_MANSION:
+                return FairyRing.takeFairyRing(FairyRing.Locations.SINCLAIR_MANSION);
+            case FAIRY_RING_SOUTH_CASTLE_WARS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.SOUTH_CASTLE_WARS);
+            case FAIRY_RING_TOWER_OF_LIFE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.TOWER_OF_LIFE);
+            case FAIRY_RING_TZHAAR:
+                return FairyRing.takeFairyRing(FairyRing.Locations.TZHAAR);
+            case FAIRY_RING_WIZARDS_TOWER:
+                return FairyRing.takeFairyRing(FairyRing.Locations.WIZARDS_TOWER);
+            case FAIRY_RING_YANILLE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.YANILLE);
+            case FAIRY_RING_ZANARIS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ZANARIS);
+            case FAIRY_RING_ZUL_ANDRA:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ZUL_ANDRA);
 
         }
 

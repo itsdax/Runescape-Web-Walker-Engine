@@ -75,7 +75,7 @@ public class Reachable {
         if (x < 0 || y < 0) {
             return null;
         }
-        if (x >= 104 || y >= 104) {
+        if (x >= 104 || y >= 104 || x >= map.length || y >= map[x].length){
             return null;
         }
         return map[x][y];
@@ -121,7 +121,6 @@ public class Reachable {
         if (map[x][y] == null) {
             return null;
         }
-        int length = 0;
         RSTile tile = new RSTile(x, y, Player.getPosition().getPlane(), RSTile.TYPES.LOCAL);
         while ((tile = map[tile.getX()][tile.getY()]) != null) {
             path.add(tile.toWorldTile());
@@ -236,6 +235,9 @@ public class Reachable {
         RSTile[][] parentMap = new RSTile[104][104];
         Queue<RSTile> queue = new LinkedList<>();
         int[][] collisionData = PathFinding.getCollisionData();
+
+        if(collisionData == null)
+            return new RSTile[][]{};
 
         queue.add(localPlayerPosition);
         try {
