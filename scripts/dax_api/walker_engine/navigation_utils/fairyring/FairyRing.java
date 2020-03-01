@@ -21,7 +21,7 @@ import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.T
 
 public class FairyRing {
 
-	private static final int
+	public static final int
 		INTERFACE_MASTER = 398,
 		TELEPORT_CHILD = 26;
 
