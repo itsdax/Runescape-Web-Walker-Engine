@@ -161,6 +161,11 @@ public class MasterScrollBook {
 		return book.length > 0 && click(book[0],"Open") && waitForBookToOpen();
 	}
 
+
+	public static boolean hasBook(){
+		return getBook().length > 0;
+	}
+
 	public static boolean has(){
 		return getBook().length > 0;
 	}
