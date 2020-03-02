@@ -44,6 +44,7 @@ public class MasterScrollBook {
 		Teleports(int varbit,String name,RSTile destination){
 			this.varbit = varbit;
 			this.name = name;
+			this.destination = destination;
 		}
 		
 		//Returns the number of scrolls stored in the book.
