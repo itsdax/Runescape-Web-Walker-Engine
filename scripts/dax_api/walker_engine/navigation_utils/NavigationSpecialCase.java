@@ -185,7 +185,10 @@ public class NavigationSpecialCase implements Loggable{
         FAIRY_RING_WIZARDS_TOWER(3108, 3149, 0),
         FAIRY_RING_YANILLE(2528, 3127, 0),
         FAIRY_RING_ZANARIS(2412, 4434, 0),
-        FAIRY_RING_ZUL_ANDRA(2150, 3070, 0)
+        FAIRY_RING_ZUL_ANDRA(2150, 3070, 0),
+
+        WITCHHAVEN_FERRY(2720, 3303, 0),
+        FISHING_PLATFORM_FERRY(2785, 3275, 0)
         ;
 
 
@@ -742,6 +745,10 @@ public class NavigationSpecialCase implements Loggable{
             case FAIRY_RING_ZUL_ANDRA:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ZUL_ANDRA);
 
+            case WITCHHAVEN_FERRY:
+            case FISHING_PLATFORM_FERRY:
+                return handleFishingPlatform();
+
         }
 
         return false;
@@ -834,6 +841,25 @@ public class NavigationSpecialCase implements Loggable{
             return false;
         }
         return clickObject(objects[0], action, condition);
+    }
+
+    private static boolean handleFishingPlatform(){
+        RSNPC[] jeb = NPCs.find(Filters.NPCs.nameEquals("Jeb").and(Filters.NPCs.actionsEquals("Travel")));
+        if(jeb.length > 0){
+            return InteractionHelper.click(jeb[0],"Travel") &&
+                    WaitFor.condition(20000, () -> NPCChat.getMessage() != null ?
+                                    WaitFor.Return.SUCCESS :
+                                    WaitFor.Return.IGNORE
+
+                                     ) == WaitFor.Return.SUCCESS;
+        } else {
+            return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Holgart"),new String[]{"Travel"}) &&
+                    WaitFor.condition(20000, () -> NPCChat.getMessage() != null ?
+                                    WaitFor.Return.SUCCESS :
+                                    WaitFor.Return.IGNORE
+
+                                     ) == WaitFor.Return.SUCCESS;
+        }
     }
 
 }
