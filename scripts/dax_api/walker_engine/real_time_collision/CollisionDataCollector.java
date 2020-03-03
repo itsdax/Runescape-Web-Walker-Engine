@@ -29,6 +29,8 @@ public class CollisionDataCollector {
     public static void updateRealTimeCollision(){
         RSTile playerPosition = Player.getPosition();
         int[][] collisionData = PathFinding.getCollisionData();
+        if(collisionData == null)
+            return;
         for (int i = 0; i < collisionData.length; i++) {
             for (int j = 0; j < collisionData[i].length; j++) {
                 RSTile localTile = new RSTile(i, j, playerPosition.getPlane(), RSTile.TYPES.LOCAL);

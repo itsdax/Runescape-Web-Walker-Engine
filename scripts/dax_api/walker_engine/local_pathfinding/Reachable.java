@@ -168,6 +168,8 @@ public class Reachable {
         RSTile[][] parentMap = new RSTile[104][104];
         Queue<RSTile> queue = new LinkedList<>();
         int[][] collisionData = PathFinding.getCollisionData();
+        if(collisionData == null)
+            return null;
 
         queue.add(localPosition);
         try {

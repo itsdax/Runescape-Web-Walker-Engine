@@ -18,6 +18,8 @@ public class CollisionFileMaker {
     public static void getCollisionData(){
         try {
             int[][] collisionData = PathFinding.getCollisionData();
+            if(collisionData == null)
+                return;
             int baseX = Game.getBaseX();
             int baseY = Game.getBaseY();
             int baseZ = Player.getPosition().getPlane();
