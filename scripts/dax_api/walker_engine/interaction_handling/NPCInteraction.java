@@ -63,11 +63,11 @@ public class NPCInteraction implements Loggable {
      * @param options
      * @return
      */
-    public static boolean clickNpcAndWaitChat(Filter<RSNPC> rsnpcFilter, String[] options) {
+    public static boolean clickNpcAndWaitChat(Filter<RSNPC> rsnpcFilter, String... options) {
         return clickNpc(rsnpcFilter, options) && waitForConversationWindow();
     }
 
-    public static boolean clickNpc(Filter<RSNPC> rsnpcFilter, String[] options) {
+    public static boolean clickNpc(Filter<RSNPC> rsnpcFilter, String... options) {
         RSNPC[] rsnpcs = NPCs.findNearest(rsnpcFilter);
         if (rsnpcs.length < 1) {
             getInstance().log("Cannot find NPC.");
@@ -117,10 +117,6 @@ public class NPCInteraction implements Loggable {
             Keyboard.typeString(selectableOptions.get(0).getIndex() + "");
             waitForNextOption();
         }
-    }
-
-    public static void handleConversation(){
-        handleConversation(new String[]{});
     }
 
     public static void handleConversation(String... options){
@@ -240,7 +236,7 @@ public class NPCInteraction implements Loggable {
      * @param options
      * @return list of conversation clickable options that is contained in options.
      */
-    private static List<RSInterface> getAllOptions(String[] options){
+    private static List<RSInterface> getAllOptions(String... options){
         final List<String> optionList = Arrays.stream(options).map(String::toLowerCase).collect(Collectors.toList());
         List<RSInterface> list = getConversationDetails();
         return list != null ? list.stream().filter(rsInterface -> optionList.contains(rsInterface.getText().trim().toLowerCase())).collect(Collectors.toList()) : null;
