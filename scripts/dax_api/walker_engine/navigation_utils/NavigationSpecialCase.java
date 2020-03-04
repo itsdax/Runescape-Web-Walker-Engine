@@ -187,6 +187,9 @@ public class NavigationSpecialCase implements Loggable{
         FAIRY_RING_ZANARIS(2412, 4434, 0),
         FAIRY_RING_ZUL_ANDRA(2150, 3070, 0),
 
+        FOSSIL_ISLAND_FERRY_NORTH(3734, 3893, 0),
+        FOSSIL_ISLAND_FERRY_ISLAND(3769, 3898, 0),
+
         WITCHHAVEN_FERRY(2720, 3303, 0),
         FISHING_PLATFORM_FERRY(2785, 3275, 0)
         ;
@@ -749,6 +752,11 @@ public class NavigationSpecialCase implements Loggable{
             case FISHING_PLATFORM_FERRY:
                 return handleFishingPlatform();
 
+            case FOSSIL_ISLAND_FERRY_NORTH:
+                return takeFossilIslandBoat("Row to the north of the island.");
+            case FOSSIL_ISLAND_FERRY_ISLAND:
+                return takeFossilIslandBoat("Row out to sea.");
+
         }
 
         return false;
@@ -862,4 +870,17 @@ public class NavigationSpecialCase implements Loggable{
         }
     }
 
+    private static boolean takeFossilIslandBoat(String destination){
+        if(NPCInteraction.isConversationWindowUp() || clickObject(
+                Filters.Objects.nameEquals("Rowboat"),
+                "Travel",
+                () -> NPCInteraction.isConversationWindowUp() ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+            NPCInteraction.handleConversation(destination);
+            RSTile myPos = Player.getPosition();
+            return WaitFor.condition(5000,() -> Player.getPosition().distanceTo(myPos) > 10 ? WaitFor.Return.SUCCESS :
+                    WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+        }
+        return false;
+    }
 }
