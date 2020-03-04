@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
+import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.NEITIZNOT_DOCK;
 
 
 public class NavigationSpecialCase implements Loggable{
@@ -191,7 +192,11 @@ public class NavigationSpecialCase implements Loggable{
         FOSSIL_ISLAND_FERRY_ISLAND(3769, 3898, 0),
 
         WITCHHAVEN_FERRY(2720, 3303, 0),
-        FISHING_PLATFORM_FERRY(2785, 3275, 0)
+        FISHING_PLATFORM_FERRY(2785, 3275, 0),
+
+        RELLEKKA_DOCK_FROM_ISLES(2645, 3710, 0),
+        JATIZSO_DOCK(2418, 3782, 0),
+        NEITIZNOT_DOCK(2311, 3781, 0)
         ;
 
 
@@ -756,6 +761,18 @@ public class NavigationSpecialCase implements Loggable{
                 return takeFossilIslandBoat("Row to the north of the island.");
             case FOSSIL_ISLAND_FERRY_ISLAND:
                 return takeFossilIslandBoat("Row out to sea.");
+            case RELLEKKA_DOCK_FROM_ISLES:
+                return NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Rellekka"),"Rellekka") &&
+                        WaitFor.condition(15000,() -> RELLEKKA_DOCK_FROM_ISLES.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case JATIZSO_DOCK:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Mord Gunnars"),"Jatizso") &&
+                        WaitFor.condition(15000,() -> JATIZSO_DOCK.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case NEITIZNOT_DOCK:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Maria Gunnars"),"Neitiznot") &&
+                        WaitFor.condition(15000,() -> NEITIZNOT_DOCK.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
         }
 
