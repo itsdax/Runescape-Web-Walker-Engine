@@ -137,7 +137,7 @@ public class NavigationSpecialCase implements Loggable{
         CLAN_WARS_PORTAL_F2P(3368, 3175, 0),
 
         FOSSIL_ISLAND_BARGE(3362, 3445, 0),
-        DIGSITE_BARGE(3724, 3808, 0),
+//        DIGSITE_BARGE(3724, 3808, 0),
 
         PORT_SARIM_TO_ENTRANA(3048, 3234, 0),
         ENTRANA_TO_PORT_SARIM(2834, 3335, 0),
@@ -189,6 +189,7 @@ public class NavigationSpecialCase implements Loggable{
         FAIRY_RING_ZUL_ANDRA(2150, 3070, 0),
 
         FOSSIL_ISLAND_FERRY_NORTH(3734, 3893, 0),
+        FOSSIL_ISLAND_FERRY_CAMP(3724, 3808, 0),
         FOSSIL_ISLAND_FERRY_ISLAND(3769, 3898, 0),
 
         WITCHHAVEN_FERRY(2720, 3303, 0),
@@ -650,13 +651,6 @@ public class NavigationSpecialCase implements Loggable{
                             () -> FOSSIL_ISLAND_BARGE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
-            case DIGSITE_BARGE:
-                if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Barge guard"),new String[]{"Quick-Travel"})){
-                    return WaitFor.condition(5000,
-                            () -> DIGSITE_BARGE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-                }
-                break;
-
 
             case ENTRANA_TO_PORT_SARIM:
             case PORT_SARIM_TO_ENTRANA:
@@ -761,6 +755,17 @@ public class NavigationSpecialCase implements Loggable{
                 return takeFossilIslandBoat("Row to the north of the island.");
             case FOSSIL_ISLAND_FERRY_ISLAND:
                 return takeFossilIslandBoat("Row out to sea.");
+            case FOSSIL_ISLAND_FERRY_CAMP:
+                if(NPCs.find("Barge guard").length > 0){
+                    if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Barge guard"),"Quick-Travel")){
+                        General.println("Success");
+                        return WaitFor.condition(8000,
+                                () -> FOSSIL_ISLAND_FERRY_CAMP.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                    }
+                } else {
+                    return takeFossilIslandBoat("Row to the camp.");
+                }
+                break;
             case RELLEKKA_DOCK_FROM_ISLES:
                 return NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Rellekka"),"Rellekka") &&
                         WaitFor.condition(15000,() -> RELLEKKA_DOCK_FROM_ISLES.getRSTile().distanceTo(Player.getPosition()) < 10
@@ -893,8 +898,8 @@ public class NavigationSpecialCase implements Loggable{
                 "Travel",
                 () -> NPCInteraction.isConversationWindowUp() ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
-            NPCInteraction.handleConversation(destination);
             RSTile myPos = Player.getPosition();
+            NPCInteraction.handleConversation(destination);
             return WaitFor.condition(5000,() -> Player.getPosition().distanceTo(myPos) > 10 ? WaitFor.Return.SUCCESS :
                     WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
         }
