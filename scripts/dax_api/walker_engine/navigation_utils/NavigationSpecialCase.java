@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
-import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.NEITIZNOT_DOCK;
 
 
 public class NavigationSpecialCase implements Loggable{
@@ -197,7 +196,10 @@ public class NavigationSpecialCase implements Loggable{
 
         RELLEKKA_DOCK_FROM_ISLES(2645, 3710, 0),
         JATIZSO_DOCK(2418, 3782, 0),
-        NEITIZNOT_DOCK(2311, 3781, 0)
+        NEITIZNOT_DOCK(2311, 3781, 0),
+
+        OBSERVATORY_OUTSIDE(2449, 3155, 0),
+        OBSERVATORY_INSIDE(2444, 3165, 0)
         ;
 
 
@@ -778,6 +780,19 @@ public class NavigationSpecialCase implements Loggable{
                 return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Maria Gunnars"),"Neitiznot") &&
                         WaitFor.condition(15000,() -> NEITIZNOT_DOCK.getRSTile().distanceTo(Player.getPosition()) < 10
                                 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
+            case OBSERVATORY_INSIDE:
+                return clickObject(Filters.Objects.nameEquals("Rope"),"Climb", () -> OBSERVATORY_INSIDE.getRSTile().distanceTo(Player.getPosition()) < 5
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+            case OBSERVATORY_OUTSIDE:
+                return (NPCInteraction.isConversationWindowUp() ||  clickObject(Filters.Objects.nameEquals("Door"),"Open",
+                        () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE))
+                        && WaitFor.condition(15000,() -> {
+                    if(NPCInteraction.isConversationWindowUp())
+                        NPCInteraction.handleConversation("Yes.");
+                    return OBSERVATORY_OUTSIDE.getRSTile().distanceTo(Player.getPosition()) < 5
+                            ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                }) == WaitFor.Return.SUCCESS && WaitFor.milliseconds(600,1800) != null;
 
         }
 
