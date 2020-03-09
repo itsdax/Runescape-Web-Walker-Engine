@@ -136,6 +136,8 @@ public class MasterScrollBook {
 			return Interfaces.get(INTERFACE_MASTER,cache.get(teleport.getName()));
 		}
 		RSInterface master = Interfaces.get(INTERFACE_MASTER);
+		if(master == null)
+			return null;
 		for(RSInterface child:master.getChildren()){
 			String name = child.getComponentName();
 			if(name == null){
