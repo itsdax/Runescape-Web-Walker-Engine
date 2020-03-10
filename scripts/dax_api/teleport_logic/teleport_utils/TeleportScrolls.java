@@ -56,7 +56,7 @@ public enum TeleportScrolls implements Validatable {
 
 	@Override
 	public boolean canUse(){
-		return this.hasScroll() || this.scrollbookContains();
+		return this.hasScroll() || (MasterScrollBook.hasBook() && this.scrollbookContains());
 	}
 
 	public boolean scrollbookContains(){

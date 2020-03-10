@@ -59,7 +59,11 @@ public enum TeleportMethod implements Validatable {
     KEY_MASTER_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,KEY_MASTER),
     REVENANT_CAVES_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,REVENANT_CAVES),
 
-    WEST_ARDOUGNE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,WEST_ARDOUGNE)
+    WEST_ARDOUGNE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,WEST_ARDOUGNE),
+
+    RELLEKKA_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,RELLEKKA_POH),
+
+    RADAS_BLESSING(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,MOUNT_KARUULM,KOUREND_WOODLAND)
     ;
 
     private TeleportLocation[] destinations;
@@ -81,7 +85,8 @@ public enum TeleportMethod implements Validatable {
             DIGSITE_FILTER = Filters.Items.nameContains("Digsite pendant"),
             PASSAGE_FILTER = Filters.Items.nameContains("Necklace of passage").and(notNotedFilter()),
             TELEPORT_CRYSTAL_FILTER = Filters.Items.nameContains("Teleport crystal ("),
-            XERICS_TALISMAN_FILTER = Filters.Items.nameEquals("Xeric's talisman");
+            XERICS_TALISMAN_FILTER = Filters.Items.nameEquals("Xeric's talisman"),
+            RADAS_BLESSING_FILTER = Filters.Items.nameEquals("Rada's blessing 4");
 
     static boolean canTeleportToKourend = true;
 
@@ -167,6 +172,10 @@ public enum TeleportMethod implements Validatable {
                 return TeleportScrolls.REVENANT_CAVES.canUse() && inMembersWorld();
             case WEST_ARDOUGNE_TELEPORT:
                 return Inventory.getCount("West ardougne teleport") > 0 && inMembersWorld();
+            case RELLEKKA_TELEPORT:
+                return inMembersWorld() && Inventory.getCount("Rellekka teleport") > 0;
+            case RADAS_BLESSING:
+                return inMembersWorld() && (Inventory.find(RADAS_BLESSING_FILTER).length > 0 || Equipment.find(RADAS_BLESSING_FILTER).length > 0);
         }
         return false;
     }
@@ -306,6 +315,12 @@ public enum TeleportMethod implements Validatable {
                 return MasterScrollBook.Teleports.REVENANT_CAVES.use() || TeleportScrolls.REVENANT_CAVES.teleportTo(false);
             case WEST_ARDOUGNE:
                 return RSItemHelper.click("West ardougne t.*", "Break");
+            case RELLEKKA_POH:
+                return RSItemHelper.click("Rellekka teleport", "Break");
+            case KOUREND_WOODLAND:
+                return teleportWithItem(RADAS_BLESSING_FILTER, "Kourend .*");
+            case MOUNT_KARUULM:
+                return teleportWithItem(RADAS_BLESSING_FILTER, "Mount.*");
         }
         return false;
     }

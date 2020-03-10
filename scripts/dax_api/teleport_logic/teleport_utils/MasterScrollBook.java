@@ -44,6 +44,7 @@ public class MasterScrollBook {
 		Teleports(int varbit,String name,RSTile destination){
 			this.varbit = varbit;
 			this.name = name;
+			this.destination = destination;
 		}
 		
 		//Returns the number of scrolls stored in the book.
@@ -135,6 +136,8 @@ public class MasterScrollBook {
 			return Interfaces.get(INTERFACE_MASTER,cache.get(teleport.getName()));
 		}
 		RSInterface master = Interfaces.get(INTERFACE_MASTER);
+		if(master == null)
+			return null;
 		for(RSInterface child:master.getChildren()){
 			String name = child.getComponentName();
 			if(name == null){
@@ -159,6 +162,11 @@ public class MasterScrollBook {
 			resetUptext();
 		}
 		return book.length > 0 && click(book[0],"Open") && waitForBookToOpen();
+	}
+
+
+	public static boolean hasBook(){
+		return getBook().length > 0;
 	}
 
 	public static boolean has(){

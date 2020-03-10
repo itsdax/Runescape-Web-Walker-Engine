@@ -136,7 +136,7 @@ public class NavigationSpecialCase implements Loggable{
         CLAN_WARS_PORTAL_F2P(3368, 3175, 0),
 
         FOSSIL_ISLAND_BARGE(3362, 3445, 0),
-        DIGSITE_BARGE(3724, 3808, 0),
+//        DIGSITE_BARGE(3724, 3808, 0),
 
         PORT_SARIM_TO_ENTRANA(3048, 3234, 0),
         ENTRANA_TO_PORT_SARIM(2834, 3335, 0),
@@ -185,7 +185,21 @@ public class NavigationSpecialCase implements Loggable{
         FAIRY_RING_WIZARDS_TOWER(3108, 3149, 0),
         FAIRY_RING_YANILLE(2528, 3127, 0),
         FAIRY_RING_ZANARIS(2412, 4434, 0),
-        FAIRY_RING_ZUL_ANDRA(2150, 3070, 0)
+        FAIRY_RING_ZUL_ANDRA(2150, 3070, 0),
+
+        FOSSIL_ISLAND_FERRY_NORTH(3734, 3893, 0),
+        FOSSIL_ISLAND_FERRY_CAMP(3724, 3808, 0),
+        FOSSIL_ISLAND_FERRY_ISLAND(3769, 3898, 0),
+
+        WITCHHAVEN_FERRY(2720, 3303, 0),
+        FISHING_PLATFORM_FERRY(2785, 3275, 0),
+
+        RELLEKKA_DOCK_FROM_ISLES(2645, 3710, 0),
+        JATIZSO_DOCK(2418, 3782, 0),
+        NEITIZNOT_DOCK(2311, 3781, 0),
+
+        OBSERVATORY_OUTSIDE(2449, 3155, 0),
+        OBSERVATORY_INSIDE(2444, 3165, 0)
         ;
 
 
@@ -639,13 +653,6 @@ public class NavigationSpecialCase implements Loggable{
                             () -> FOSSIL_ISLAND_BARGE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
-            case DIGSITE_BARGE:
-                if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Barge guard"),new String[]{"Quick-Travel"})){
-                    return WaitFor.condition(5000,
-                            () -> DIGSITE_BARGE.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-                }
-                break;
-
 
             case ENTRANA_TO_PORT_SARIM:
             case PORT_SARIM_TO_ENTRANA:
@@ -742,6 +749,51 @@ public class NavigationSpecialCase implements Loggable{
             case FAIRY_RING_ZUL_ANDRA:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ZUL_ANDRA);
 
+            case WITCHHAVEN_FERRY:
+            case FISHING_PLATFORM_FERRY:
+                return handleFishingPlatform();
+
+            case FOSSIL_ISLAND_FERRY_NORTH:
+                return takeFossilIslandBoat("Row to the north of the island.");
+            case FOSSIL_ISLAND_FERRY_ISLAND:
+                return takeFossilIslandBoat("Row out to sea.");
+            case FOSSIL_ISLAND_FERRY_CAMP:
+                if(NPCs.find("Barge guard").length > 0){
+                    if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Barge guard"),"Quick-Travel")){
+                        General.println("Success");
+                        return WaitFor.condition(8000,
+                                () -> FOSSIL_ISLAND_FERRY_CAMP.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                    }
+                } else {
+                    return takeFossilIslandBoat("Row to the camp.");
+                }
+                break;
+            case RELLEKKA_DOCK_FROM_ISLES:
+                return NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Rellekka"),"Rellekka") &&
+                        WaitFor.condition(15000,() -> RELLEKKA_DOCK_FROM_ISLES.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case JATIZSO_DOCK:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Mord Gunnars"),"Jatizso") &&
+                        WaitFor.condition(15000,() -> JATIZSO_DOCK.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case NEITIZNOT_DOCK:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Maria Gunnars"),"Neitiznot") &&
+                        WaitFor.condition(15000,() -> NEITIZNOT_DOCK.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
+            case OBSERVATORY_INSIDE:
+                return clickObject(Filters.Objects.nameEquals("Rope"),"Climb", () -> OBSERVATORY_INSIDE.getRSTile().distanceTo(Player.getPosition()) < 5
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+            case OBSERVATORY_OUTSIDE:
+                return (NPCInteraction.isConversationWindowUp() ||  clickObject(Filters.Objects.nameEquals("Door"),"Open",
+                        () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE))
+                        && WaitFor.condition(15000,() -> {
+                    if(NPCInteraction.isConversationWindowUp())
+                        NPCInteraction.handleConversation("Yes.");
+                    return OBSERVATORY_OUTSIDE.getRSTile().distanceTo(Player.getPosition()) < 5
+                            ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                }) == WaitFor.Return.SUCCESS && WaitFor.milliseconds(600,1800) != null;
+
         }
 
         return false;
@@ -836,4 +888,36 @@ public class NavigationSpecialCase implements Loggable{
         return clickObject(objects[0], action, condition);
     }
 
+    private static boolean handleFishingPlatform(){
+        RSNPC[] jeb = NPCs.find(Filters.NPCs.nameEquals("Jeb").and(Filters.NPCs.actionsEquals("Travel")));
+        if(jeb.length > 0){
+            return InteractionHelper.click(jeb[0],"Travel") &&
+                    WaitFor.condition(20000, () -> NPCChat.getMessage() != null ?
+                                    WaitFor.Return.SUCCESS :
+                                    WaitFor.Return.IGNORE
+
+                                     ) == WaitFor.Return.SUCCESS;
+        } else {
+            return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Holgart"),new String[]{"Travel"}) &&
+                    WaitFor.condition(20000, () -> NPCChat.getMessage() != null ?
+                                    WaitFor.Return.SUCCESS :
+                                    WaitFor.Return.IGNORE
+
+                                     ) == WaitFor.Return.SUCCESS;
+        }
+    }
+
+    private static boolean takeFossilIslandBoat(String destination){
+        if(NPCInteraction.isConversationWindowUp() || clickObject(
+                Filters.Objects.nameEquals("Rowboat"),
+                "Travel",
+                () -> NPCInteraction.isConversationWindowUp() ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+            RSTile myPos = Player.getPosition();
+            NPCInteraction.handleConversation(destination);
+            return WaitFor.condition(5000,() -> Player.getPosition().distanceTo(myPos) > 10 ? WaitFor.Return.SUCCESS :
+                    WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+        }
+        return false;
+    }
 }
