@@ -10,6 +10,7 @@ import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.shared.PathFindingNode;
 import scripts.dax_api.teleport_logic.TeleportLocation;
+import scripts.dax_api.teleport_logic.TeleportManager;
 import scripts.dax_api.teleport_logic.TeleportMethod;
 import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker.utils.path.PathUtils;
@@ -236,8 +237,8 @@ public class WalkerEngine implements Loggable{
     boolean isDestinationClose(PathFindingNode pathFindingNode){
         final RSTile playerPosition = Player.getPosition();
         return new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()).isClickable()
-                && playerPosition.distanceTo(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 6
-                && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 49));
+                && playerPosition.distanceTo(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
+                && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 200));
     }
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){
@@ -319,7 +320,7 @@ public class WalkerEngine implements Loggable{
             if (!teleport.canUse()) continue;
             TeleportLocation target = teleport.getLocation(startPosition);
             if (teleport.isAtTeleportSpot(startPosition)) {
-                if(teleport.isAtTeleportSpot(playerPosition)){
+                if(target.getRSTile().distanceTo(playerPosition) < TeleportManager.getOffset()){
                     return true;
                 }
                 log("Using teleport method: " + teleport);
