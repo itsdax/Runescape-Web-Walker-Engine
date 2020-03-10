@@ -2,6 +2,8 @@ package scripts.dax_api.teleport_logic;
 
 import org.tribot.api2007.types.RSTile;
 
+import java.util.Arrays;
+
 
 public enum TeleportLocation {
 
@@ -83,6 +85,11 @@ public enum TeleportLocation {
 
     public RSTile getRSTile(){
         return new RSTile(x, y, z);
+    }
+
+    public boolean canTeleportTo(){
+        return Arrays.stream(TeleportMethod.values())
+                .anyMatch(m -> Arrays.asList(m.getDestinations()).contains(this) && m.canUse());
     }
 
 }

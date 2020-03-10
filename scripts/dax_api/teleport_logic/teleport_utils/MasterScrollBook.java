@@ -20,7 +20,7 @@ public class MasterScrollBook {
 			INTERFACE_MASTER = 597, DEFAULT_VARBIT = 5685,
 			SELECT_OPTION_MASTER = 219, SELECT_OPTION_CHILD = 1,
 			GAMETABS_INTERFACE_MASTER = 161;
-	private static Map<String,Integer> cache = new HashMap<String,Integer>();
+	private static Map<String, Integer> cache = new HashMap<String, Integer>();
 	
 	public enum Teleports {
 		NARDAH(5672,"Nardah", TeleportScrolls.NARDAH.getLocation()),
@@ -41,7 +41,7 @@ public class MasterScrollBook {
 		private int varbit;
 		private String name;
 		private RSTile destination;
-		Teleports(int varbit,String name,RSTile destination){
+		Teleports(int varbit, String name, RSTile destination){
 			this.varbit = varbit;
 			this.name = name;
 			this.destination = destination;

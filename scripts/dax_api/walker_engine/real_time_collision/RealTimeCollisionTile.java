@@ -60,6 +60,8 @@ public class RealTimeCollisionTile extends PathFindingNode {
     }
 
     public static boolean isWalkable(int collisionData){
+//        if(!isInitialized(collisionData))
+//            return true;
         return !(CollisionFlags.check(collisionData, CollisionFlags.OCCUPIED)
                 || CollisionFlags.check(collisionData, CollisionFlags.SOLID)
                 || CollisionFlags.check(collisionData, CollisionFlags.BLOCKED)

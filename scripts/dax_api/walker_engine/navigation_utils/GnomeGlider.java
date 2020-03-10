@@ -6,9 +6,9 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.shared.helpers.InterfaceHelper;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
-import scripts.dax_api.shared.helpers.InterfaceHelper;
 
 import java.util.Arrays;
 
@@ -27,7 +27,7 @@ public class GnomeGlider {
 
         private int x, y, z;
         private String name;
-        Location (String name, int x, int y, int z){
+        Location(String name, int x, int y, int z){
             this.x = x;
             this.y = y;
             this.z = z;

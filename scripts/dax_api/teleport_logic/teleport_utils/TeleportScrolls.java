@@ -25,7 +25,7 @@ public enum TeleportScrolls implements Validatable {
 	;
 	private String name;
 	private RSTile location;
-	TeleportScrolls(String name,RSTile location){
+	TeleportScrolls(String name, RSTile location){
 		this.name = name;
 		this.location = location;
 	}

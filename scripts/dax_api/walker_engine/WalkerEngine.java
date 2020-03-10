@@ -3,23 +3,29 @@ package scripts.dax_api.walker_engine;
 
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
-import org.tribot.api2007.*;
+import org.tribot.api2007.Camera;
+import org.tribot.api2007.Login;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.shared.PathFindingNode;
+import scripts.dax_api.teleport_logic.TeleportLocation;
+import scripts.dax_api.teleport_logic.TeleportMethod;
+import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker.utils.path.PathUtils;
 import scripts.dax_api.walker_engine.bfs.BFS;
-import scripts.dax_api.walker.utils.AccurateMouse;
+import scripts.dax_api.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.dax_api.walker_engine.local_pathfinding.PathAnalyzer;
 import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
 import scripts.dax_api.walker_engine.navigation_utils.Charter;
 import scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase;
 import scripts.dax_api.walker_engine.navigation_utils.ShipUtils;
-import scripts.dax_api.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import scripts.dax_api.shared.PathFindingNode;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class WalkerEngine implements Loggable{
 
@@ -60,6 +66,13 @@ public class WalkerEngine implements Loggable{
             log("Path is empty");
             return false;
         }
+
+
+        if (!handleTeleports(path)) {
+            log(Level.WARNING, "Failed to handle teleports...");
+            return false;
+        }
+
 
         navigating = true;
         currentPath = path;
@@ -295,6 +308,29 @@ public class WalkerEngine implements Loggable{
     @Override
     public String getName() {
         return "Walker Engine";
+    }
+
+    private boolean handleTeleports(List<RSTile> path) {
+        RSTile startPosition = path.get(0);
+        RSTile playerPosition = Player.getPosition();
+        if(startPosition.equals(playerPosition))
+            return true;
+        for (TeleportMethod teleport : TeleportMethod.values()) {
+            if (!teleport.canUse()) continue;
+            TeleportLocation target = teleport.getLocation(startPosition);
+            if (teleport.isAtTeleportSpot(startPosition)) {
+                if(teleport.isAtTeleportSpot(playerPosition)){
+                    return true;
+                }
+                log("Using teleport method: " + teleport);
+                if (!teleport.use(target)) return false;
+                WaitFor.condition(General.random(3000, 20000),
+                        () -> target.getRSTile().distanceTo(Player.getPosition()) < 10 ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                return true;
+            }
+        }
+        return false;
     }
 
 }

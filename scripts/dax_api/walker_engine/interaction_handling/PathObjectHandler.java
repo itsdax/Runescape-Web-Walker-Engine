@@ -29,7 +29,8 @@ public class PathObjectHandler implements Loggable {
     private final TreeSet<String> sortedOptions, sortedBlackList, sortedBlackListOptions, sortedHighPriorityOptions;
 
     private PathObjectHandler(){
-        sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
+        sortedOptions = new TreeSet<>(
+		        Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up","Walk-Up", "Travel", "Get in",
                 "Investigate", "Operate", "Climb-under","Jump","Crawl-down","Crawl-through","Activate","Push","Squeeze-past"));
@@ -38,7 +39,7 @@ public class PathObjectHandler implements Loggable {
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)","Squeeze-past"));
     }
 
-    private static PathObjectHandler getInstance (){
+    private static PathObjectHandler getInstance(){
         return instance != null ? instance : (instance = new PathObjectHandler());
     }
 
@@ -200,7 +201,8 @@ public class PathObjectHandler implements Loggable {
         }
 
         StringBuilder stringBuilder = new StringBuilder("Sort Order: ");
-        Arrays.stream(interactiveObjects).forEach(rsObject -> stringBuilder.append(rsObject.getDefinition().getName()).append(" ").append(Arrays.asList(rsObject.getDefinition().getActions())).append(", "));
+        Arrays.stream(interactiveObjects).forEach(rsObject -> stringBuilder.append(rsObject.getDefinition().getName()).append(" ").append(
+		        Arrays.asList(rsObject.getDefinition().getActions())).append(", "));
         getInstance().log(stringBuilder);
 
         return handle(path, interactiveObjects[0], destinationDetails, action, specialObject);
@@ -271,7 +273,9 @@ public class PathObjectHandler implements Loggable {
         }
 
         if (!successfulClick){
-            String[] validOptions = action != null ? new String[]{action} : getViableOption(Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(Collectors.toList()), destinationDetails);
+            String[] validOptions = action != null ? new String[]{action} : getViableOption(
+		            Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(
+				            Collectors.toList()), destinationDetails);
             if (!clickOnObject(object, validOptions)) {
                 return false;
             }

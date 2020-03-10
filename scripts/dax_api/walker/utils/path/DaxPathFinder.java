@@ -11,8 +11,9 @@ import scripts.dax_api.walker_engine.local_pathfinding.AStarNode;
 import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.Queue;
+import java.util.*;
 
 /**
  * For local pathing ONLY. Anything outside your region will return unexpected results.

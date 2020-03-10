@@ -3,10 +3,10 @@ package scripts.dax_api.walker_engine.local_pathfinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.shared.PathFindingNode;
 import scripts.dax_api.walker_engine.bfs.BFS;
 import scripts.dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import scripts.dax_api.shared.PathFindingNode;
 
 import java.util.ArrayList;
 
@@ -44,6 +44,9 @@ public class PathAnalyzer {
                 return new DestinationDetails(PathState.END_OF_PATH, current);
             }
             RSTile nextNode = path.get(i + 1);
+            if(!isLoaded(nextNode)){
+                return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
+            }
             RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.getPlane());
             Direction direction = directionTo(current.getRSTile(), nextNode);
             if (direction == Direction.UNKNOWN){
@@ -74,7 +77,8 @@ public class PathAnalyzer {
                 if (next != null) {
                     return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current, next);
                 }
-                return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+                return new DestinationDetails(
+		                PathState.FURTHEST_CLICKABLE_TILE, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
             }
         }
         return null;
@@ -215,5 +219,9 @@ public class PathAnalyzer {
         }
     }
 
+    private static boolean isLoaded(RSTile tile){
+        final RSTile local = tile.toLocalTile();
+        return local.getX() >= 0 && local.getX() < 104 && local.getY() >= 0 && local.getY() < 104;
+    }
 
 }

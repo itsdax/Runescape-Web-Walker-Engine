@@ -4,7 +4,6 @@ import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSVarBit;
-import scripts.dax_api.shared.helpers.WorldHelper;
 import scripts.dax_api.shared.jsonSimple.JSONObject;
 import scripts.dax_api.shared.jsonSimple.JSONValue;
 

@@ -2,8 +2,8 @@ package scripts.dax_api.walker_engine.interaction_handling;
 
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterface;
-import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.shared.helpers.InterfaceHelper;
+import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
 
 import java.util.Arrays;

@@ -7,7 +7,8 @@ public interface Loggable {
     enum Level {
         VERBOSE,
         INFO,
-        SEVERE
+        SEVERE,
+        WARNING;
     }
 
     String getName();

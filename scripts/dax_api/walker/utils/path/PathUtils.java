@@ -5,10 +5,10 @@ import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-import static scripts.dax_api.walker.utils.path.DaxPathFinder.distance;
 
 public class PathUtils {
 

@@ -5,11 +5,11 @@ import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.shared.helpers.InterfaceHelper;
 import scripts.dax_api.walker_engine.Loggable;
-import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
-import scripts.dax_api.shared.helpers.InterfaceHelper;
+import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -63,7 +63,8 @@ public class Charter implements Loggable {
                 && rsInterface.isTextShadowed())
 
                 .collect(Collectors.toList())
-                .forEach(rsInterface -> locations.put(LocationProperty.stringToLocation(rsInterface.getText()), new Location(rsInterface)));
+                .forEach(rsInterface -> locations.put(
+		                LocationProperty.stringToLocation(rsInterface.getText()), new Location(rsInterface)));
         return locations;
     }
 

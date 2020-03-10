@@ -36,7 +36,8 @@ public class AsynchronousCamera {
             return null;
         }
         Camera.setRotationMethod(Camera.ROTATION_METHOD.ONLY_KEYS);
-            return getInstance().angleTask = getInstance().executorService.submit(() -> Camera.setCameraAngle(CameraCalculations.normalizeAngle(angle + General.random(-tolerance, tolerance))));
+            return getInstance().angleTask = getInstance().executorService.submit(() -> Camera.setCameraAngle(
+		            CameraCalculations.normalizeAngle(angle + General.random(-tolerance, tolerance))));
     }
 
     public static synchronized Future setCameraRotation(int degrees, int tolerance){
@@ -44,7 +45,8 @@ public class AsynchronousCamera {
             return null;
         }
         Camera.setRotationMethod(Camera.ROTATION_METHOD.ONLY_KEYS);
-        return getInstance().rotationTask = getInstance().executorService.submit(() -> Camera.setCameraRotation(CameraCalculations.normalizeRotation(degrees + General.random(-tolerance, tolerance))));
+        return getInstance().rotationTask = getInstance().executorService.submit(() -> Camera.setCameraRotation(
+		        CameraCalculations.normalizeRotation(degrees + General.random(-tolerance, tolerance))));
     }
 
 }

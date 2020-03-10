@@ -24,7 +24,8 @@ public abstract class PathFindingNode implements Comparable {
     }
 
     public int distance(PathFindingNode pathFindingNode){
-        return (int)((Math.sqrt(Math.pow((pathFindingNode.getX() - getX()), 2) + (Math.pow((pathFindingNode.getY() - getY()), 2)))) * 10);
+        return (int)((Math.sqrt(
+		        Math.pow((pathFindingNode.getX() - getX()), 2) + (Math.pow((pathFindingNode.getY() - getY()), 2)))) * 10);
     }
 
     public int moveCostDistance(PathFindingNode pathFindingNode){
