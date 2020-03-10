@@ -44,7 +44,7 @@ public class PathAnalyzer {
                 return new DestinationDetails(PathState.END_OF_PATH, current);
             }
             RSTile nextNode = path.get(i + 1);
-            if(!isLoaded(nextNode)){
+            if(!isLoaded(nextNode) && nextNode.isOnScreen()){
                 return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
             }
             RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.getPlane());
