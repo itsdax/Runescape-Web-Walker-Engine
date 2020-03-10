@@ -98,6 +98,14 @@ public enum TeleportMethod implements Validatable {
         return teleportLimit;
     }
 
+    public boolean isAtTeleportSpot(RSTile tile){
+        return Arrays.stream(getDestinations()).anyMatch(location -> tile.distanceTo(location.getRSTile()) < 10);
+    }
+
+    public TeleportLocation getLocation(RSTile tile){
+        return Arrays.stream(getDestinations()).filter(location -> tile.equals(location.getRSTile())).findFirst().orElse(null);
+    }
+
     @Override
     public boolean canUse() {
         if (!this.getLimit().canCast())
@@ -377,7 +385,8 @@ public enum TeleportMethod implements Validatable {
         if(!Interfaces.isInterfaceSubstantiated(TeleportConstants.SCROLL_INTERFACE_MASTER)){
             RSItem teleportItem = items.get(0);
             if (!RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")") ||
-                    !Timing.waitCondition(() -> Interfaces.isInterfaceSubstantiated(TeleportConstants.SCROLL_INTERFACE_MASTER),2500)) {
+                    !Timing.waitCondition(() -> Interfaces.isInterfaceSubstantiated(
+		                    TeleportConstants.SCROLL_INTERFACE_MASTER),2500)) {
                 return false;
             }
         }

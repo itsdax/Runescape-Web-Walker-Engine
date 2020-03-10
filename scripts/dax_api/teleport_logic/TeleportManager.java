@@ -4,10 +4,7 @@ import org.tribot.api.General;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.WebWalkerServerApi;
-import scripts.dax_api.api_lib.models.PathResult;
-import scripts.dax_api.api_lib.models.PlayerDetails;
-import scripts.dax_api.api_lib.models.Point3D;
-import scripts.dax_api.api_lib.models.RunescapeBank;
+import scripts.dax_api.api_lib.models.*;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
 
@@ -23,15 +20,15 @@ public class TeleportManager implements Loggable {
     public static TeleportAction previousAction;
 
     private static int offset;
-    private HashSet<TeleportMethod> blacklistTeleportMethods;
-    private HashSet<TeleportLocation> blacklistTeleportLocations;
+    public HashSet<TeleportMethod> blacklistTeleportMethods;
+    public HashSet<TeleportLocation> blacklistTeleportLocations;
     private ExecutorService executorService;
     private ExecutorService customThreadPool = new ForkJoinPool(10);
 
 
     private static TeleportManager teleportManager;
 
-    private static TeleportManager getInstance() {
+    public static TeleportManager getInstance() {
         return teleportManager != null ? teleportManager : (teleportManager = new TeleportManager());
     }
 
@@ -72,12 +69,17 @@ public class TeleportManager implements Loggable {
         getInstance().offset = offset;
     }
 
+    public static int getOffset(){
+        return offset;
+    }
+
     public static ArrayList<RSTile> getClosestBankPath(RunescapeBank bank, int originalMoveCost) {
         final int cost = originalMoveCost - offset;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
         try {
-            getInstance().customThreadPool.submit(() -> Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
+            getInstance().customThreadPool.submit(() -> Arrays.stream(
+		            TeleportMethod.values()).parallel().forEach(teleportMethod -> {
                 if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
                     return;
                 }
@@ -92,7 +94,7 @@ public class TeleportManager implements Loggable {
                             Point3D.fromPositionable(teleportLocation.getRSTile()),
                             bank,
                             PlayerDetails.generate()
-                    );
+                                                                                        );
                     teleport.add(new TeleportWrapper(pathResult, teleportMethod, teleportLocation));
                 }
             })).get();
@@ -126,18 +128,21 @@ public class TeleportManager implements Loggable {
             getInstance().log("Failed to teleport");
             return null;
         } else {
-            WaitFor.condition(General.random(3000, 20000), () -> closest.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            WaitFor.condition(General.random(3000, 20000),
+                    () -> closest.teleportLocation.getRSTile().distanceTo(Player.getPosition()) < 10 ?
+                            WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return closest.getPathResult().toRSTilePath();
     }
 
     public static ArrayList<RSTile> getClosestPath(int originalMoveCost, RSTile destination) {
-        final int cost = originalMoveCost - 25;
+        final int cost = originalMoveCost - offset;
         List<TeleportWrapper> teleport = new CopyOnWriteArrayList<>();
 
         try {
-            getInstance().customThreadPool.submit(() -> Arrays.stream(TeleportMethod.values()).parallel().forEach(teleportMethod -> {
+            getInstance().customThreadPool.submit(() -> Arrays.stream(
+		            TeleportMethod.values()).parallel().forEach(teleportMethod -> {
                 if (getInstance().blacklistTeleportMethods.contains(teleportMethod)) {
                     return;
                 }
@@ -154,13 +159,32 @@ public class TeleportManager implements Loggable {
                             Point3D.fromPositionable(teleportLocation.getRSTile()),
                             Point3D.fromPositionable(destination),
                             PlayerDetails.generate()
-                    );
+                                                                                    );
                     teleport.add(new TeleportWrapper(pathResult, teleportMethod, teleportLocation));
                 }
             })).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        List<PathRequestPair> pairs = new ArrayList<>();
+
+        Arrays.stream(TeleportMethod.values()).forEach(teleportMethod -> {
+            for (TeleportLocation teleportLocation : teleportMethod.getDestinations()) {
+                if (getInstance().blacklistTeleportLocations.contains(teleportLocation)) {
+                    continue;
+                }
+                PathRequestPair pair = new PathRequestPair(Point3D.fromPositionable(teleportLocation.getRSTile()),
+                        Point3D.fromPositionable(destination));
+                pairs.add(pair);
+            }
+        });
+
+        List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(PlayerDetails.generate(),pairs));
+
+        pathResults.stream().forEach(p -> {
+//            teleport.add(new TeleportWrapper(p,))
+        });
 
 
         boolean[] rateLimit = new boolean[]{false};
