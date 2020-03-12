@@ -319,6 +319,9 @@ public class WalkerEngine implements Loggable{
         for (TeleportMethod teleport : TeleportMethod.values()) {
             if (!teleport.canUse()) continue;
             TeleportLocation target = teleport.getLocation(startPosition);
+            if(target == null) {
+                continue;
+            }
             if (teleport.isAtTeleportSpot(startPosition)) {
                 if(target.getRSTile().distanceTo(playerPosition) < TeleportManager.getOffset()){
                     return true;
@@ -331,7 +334,7 @@ public class WalkerEngine implements Loggable{
                 return true;
             }
         }
-        return false;
+        return true;
     }
 
 }
