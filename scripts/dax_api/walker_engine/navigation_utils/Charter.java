@@ -78,7 +78,7 @@ public class Charter implements Loggable {
         PORT_PHASMATYS ("Port Phasmatys", new RSTile(3702, 3503, 0)),
         CATHERBY ("Catherby", new RSTile(2796, 3414, 0)),
         SHIPYARD ("Shipyard", null),
-        KARAMJA ("Karamja", new RSTile(2956, 3146, 0)),
+        KARAMJA ("Musa Point", new RSTile(2956, 3146, 0)),
         BRIMHAVEN ("Brimhaven", new RSTile(2760, 3237, 0)),
         PORT_KHAZARD ("Port Khazard", new RSTile(2674, 3149, 0)),
         PORT_SARIM ("Port Sarim", new RSTile(3041, 3193, 0)),
