@@ -196,7 +196,7 @@ public enum TeleportMethod implements Validatable {
 
             case VARROCK_CENTER:
                 if(TeleportConstants.isVarrockTeleportAtGE()){
-                    return RSItemHelper.click("Varrock t.*", "Varrock") || Spell.VARROCK_TELEPORT.cast();
+                    return RSItemHelper.click("Varrock t.*", "Varrock") || selectSpell("Varrock Teleport","Cast");
                 }
                 return RSItemHelper.click("Varrock t.*", "Break") || Spell.VARROCK_TELEPORT.cast();
             case LUMBRIDGE_CASTLE:
