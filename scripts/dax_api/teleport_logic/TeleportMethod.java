@@ -61,9 +61,18 @@ public enum TeleportMethod implements Validatable {
 
     WEST_ARDOUGNE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,WEST_ARDOUGNE),
 
+    RIMMINGTON_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,RIMMINGTON_POH),
+    TAVERLY_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,TAVERLY_POH),
     RELLEKKA_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,RELLEKKA_POH),
+    BRIMHAVEN_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,BRIMHAVEN_POH),
+    HOSIDIUS_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,HOSIDIUS_POH),
+    YANILLE_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,YANILLE_POH),
+    POLLNIVNEACH_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,POLLNIVNEACH_POH),
 
-    RADAS_BLESSING(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,MOUNT_KARUULM,KOUREND_WOODLAND)
+    RADAS_BLESSING(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,MOUNT_KARUULM,KOUREND_WOODLAND),
+
+    CONSTRUCTION_CAPE(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,RELLEKKA_POH,BRIMHAVEN_POH,RIMMINGTON_POH,
+            TAVERLY_POH,YANILLE_POH,HOSIDIUS_POH, POLLNIVNEACH_POH)
     ;
 
     private TeleportLocation[] destinations;
@@ -86,7 +95,8 @@ public enum TeleportMethod implements Validatable {
             PASSAGE_FILTER = Filters.Items.nameContains("Necklace of passage").and(notNotedFilter()),
             TELEPORT_CRYSTAL_FILTER = Filters.Items.nameContains("Teleport crystal ("),
             XERICS_TALISMAN_FILTER = Filters.Items.nameEquals("Xeric's talisman"),
-            RADAS_BLESSING_FILTER = Filters.Items.nameEquals("Rada's blessing 4");
+            RADAS_BLESSING_FILTER = Filters.Items.nameEquals("Rada's blessing 4"),
+            CONSTRUCTION_CAPE_FILTER = Filters.Items.nameContains("Construct. cape");
 
     static boolean canTeleportToKourend = true;
 
@@ -180,8 +190,22 @@ public enum TeleportMethod implements Validatable {
                 return TeleportScrolls.REVENANT_CAVES.canUse() && inMembersWorld();
             case WEST_ARDOUGNE_TELEPORT:
                 return Inventory.getCount("West ardougne teleport") > 0 && inMembersWorld();
+            case CONSTRUCTION_CAPE:
+                return inMembersWorld() && (Inventory.find(CONSTRUCTION_CAPE_FILTER).length > 0 || Equipment.find(CONSTRUCTION_CAPE_FILTER).length > 0);
+            case RIMMINGTON_TELEPORT:
+                return inMembersWorld() && Inventory.getCount("Rimmington teleport") > 0;
+            case TAVERLY_TELEPORT:
+                return inMembersWorld() && Inventory.getCount("Taverly teleport") > 0;
             case RELLEKKA_TELEPORT:
                 return inMembersWorld() && Inventory.getCount("Rellekka teleport") > 0;
+            case BRIMHAVEN_TELEPORT:
+                return inMembersWorld() && Inventory.getCount("Brimhaven teleport") > 0;
+            case HOSIDIUS_TELEPORT:
+                return inMembersWorld() && Inventory.getCount("Hosidius teleport") > 0;
+            case YANILLE_TELEPORT:
+                return inMembersWorld() && Inventory.getCount("Yanille teleport") > 0;
+            case POLLNIVNEACH_TELEPORT:
+                return inMembersWorld() && Inventory.getCount("Pollnivneache teleport") > 0;
             case RADAS_BLESSING:
                 return inMembersWorld() && (Inventory.find(RADAS_BLESSING_FILTER).length > 0 || Equipment.find(RADAS_BLESSING_FILTER).length > 0);
         }
@@ -323,12 +347,31 @@ public enum TeleportMethod implements Validatable {
                 return MasterScrollBook.Teleports.REVENANT_CAVES.use() || TeleportScrolls.REVENANT_CAVES.teleportTo(false);
             case WEST_ARDOUGNE:
                 return RSItemHelper.click("West ardougne t.*", "Break");
-            case RELLEKKA_POH:
-                return RSItemHelper.click("Rellekka teleport", "Break");
-            case KOUREND_WOODLAND:
+           case KOUREND_WOODLAND:
                 return teleportWithItem(RADAS_BLESSING_FILTER, "Kourend .*");
             case MOUNT_KARUULM:
                 return teleportWithItem(RADAS_BLESSING_FILTER, "Mount.*");
+            case RIMMINGTON_POH:
+                return teleportWithScrollInterface(CONSTRUCTION_CAPE_FILTER,".*Rimmington") ||
+                        RSItemHelper.click("Rimmington teleport", "Break");
+            case TAVERLY_POH:
+                return teleportWithScrollInterface(CONSTRUCTION_CAPE_FILTER,".*Taverly") ||
+                        RSItemHelper.click("Taverly teleport", "Break");
+            case POLLNIVNEACH_POH:
+                return teleportWithScrollInterface(CONSTRUCTION_CAPE_FILTER,".*Pollnivneach") ||
+                        RSItemHelper.click("Pollnivneach teleport", "Break");
+            case HOSIDIUS_POH:
+                return teleportWithScrollInterface(CONSTRUCTION_CAPE_FILTER,".*Hosidius") ||
+                        RSItemHelper.click("Hosidius teleport", "Break");
+            case RELLEKKA_POH:
+                return teleportWithScrollInterface(CONSTRUCTION_CAPE_FILTER,".*Rellekka") ||
+                        RSItemHelper.click("Rellekka teleport", "Break");
+            case BRIMHAVEN_POH:
+                return teleportWithScrollInterface(CONSTRUCTION_CAPE_FILTER,".*Brimhaven") ||
+                        RSItemHelper.click("Brimhaven teleport", "Break");
+            case YANILLE_POH:
+                return teleportWithScrollInterface(CONSTRUCTION_CAPE_FILTER,".*Yanille") ||
+                        RSItemHelper.click("Yanille teleport", "Break");
         }
         return false;
     }
