@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public enum TeleportLocation {
 
-    AL_KHARID(3292, 3168, 0),
+    AL_KHARID(3292, 3163, 0),
     VARROCK_CENTER (3212, 3424, 0),
     LUMBRIDGE_CASTLE (3221, 3218, 0),
     DUEL_ARENA (3316, 3235, 0),
