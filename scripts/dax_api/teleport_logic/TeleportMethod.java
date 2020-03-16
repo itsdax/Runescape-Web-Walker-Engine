@@ -72,7 +72,12 @@ public enum TeleportMethod implements Validatable {
     RADAS_BLESSING(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,MOUNT_KARUULM,KOUREND_WOODLAND),
 
     CONSTRUCTION_CAPE(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,RELLEKKA_POH,BRIMHAVEN_POH,RIMMINGTON_POH,
-            TAVERLY_POH,YANILLE_POH,HOSIDIUS_POH, POLLNIVNEACH_POH)
+            TAVERLY_POH,YANILLE_POH,HOSIDIUS_POH, POLLNIVNEACH_POH),
+    CRAFTING_CAPE(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,CRAFTING_GUILD_INTERIOR),
+
+    EXPLORERS_RING(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,CABBAGE_PATCH),
+
+    QUEST_CAPE(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT, LEGENDS_GUILD),
     ;
 
     private TeleportLocation[] destinations;
@@ -96,7 +101,10 @@ public enum TeleportMethod implements Validatable {
             TELEPORT_CRYSTAL_FILTER = Filters.Items.nameContains("Teleport crystal ("),
             XERICS_TALISMAN_FILTER = Filters.Items.nameEquals("Xeric's talisman"),
             RADAS_BLESSING_FILTER = Filters.Items.nameEquals("Rada's blessing 4"),
-            CONSTRUCTION_CAPE_FILTER = Filters.Items.nameContains("Construct. cape");
+            CONSTRUCTION_CAPE_FILTER = Filters.Items.nameContains("Construct. cape"),
+            CRAFTING_CAPE_FILTER = Filters.Items.nameContains("Crafting cape"),
+            EXPLORERS_RING_FILTER = Filters.Items.nameContains("Explorer's ring"),
+            QUEST_CAPE_FILTER = Filters.Items.nameContains("Quest point cape");
 
     static boolean canTeleportToKourend = true;
 
@@ -208,6 +216,12 @@ public enum TeleportMethod implements Validatable {
                 return inMembersWorld() && Inventory.getCount("Pollnivneache teleport") > 0;
             case RADAS_BLESSING:
                 return inMembersWorld() && (Inventory.find(RADAS_BLESSING_FILTER).length > 0 || Equipment.find(RADAS_BLESSING_FILTER).length > 0);
+            case CRAFTING_CAPE:
+                return inMembersWorld() && (Inventory.find(CRAFTING_CAPE_FILTER).length > 0 || Equipment.find(CRAFTING_CAPE_FILTER).length > 0);
+            case EXPLORERS_RING:
+                return inMembersWorld() && (Inventory.find(EXPLORERS_RING_FILTER).length > 0 || Equipment.find(EXPLORERS_RING_FILTER).length > 0);
+            case QUEST_CAPE:
+                return inMembersWorld() && (Inventory.find(QUEST_CAPE_FILTER).length > 0 || Equipment.find(QUEST_CAPE_FILTER).length > 0);
         }
         return false;
     }
@@ -372,6 +386,12 @@ public enum TeleportMethod implements Validatable {
             case YANILLE_POH:
                 return teleportWithScrollInterface(CONSTRUCTION_CAPE_FILTER,".*Yanille") ||
                         RSItemHelper.click("Yanille teleport", "Break");
+            case CRAFTING_GUILD_INTERIOR:
+                return teleportWithItem(CRAFTING_CAPE_FILTER, "Teleport");
+            case CABBAGE_PATCH:
+                return teleportWithItem(EXPLORERS_RING_FILTER, "Teleport");
+            case LEGENDS_GUILD:
+                return teleportWithItem(QUEST_CAPE_FILTER, "Teleport");
         }
         return false;
     }
