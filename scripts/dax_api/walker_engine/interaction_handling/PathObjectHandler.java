@@ -2,13 +2,10 @@ package scripts.dax_api.walker_engine.interaction_handling;
 
 import org.tribot.api.General;
 import org.tribot.api.types.generic.Filter;
+import org.tribot.api2007.*;
 import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSArea;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSObjectDefinition;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.*;
 import scripts.dax_api.shared.helpers.RSObjectHelper;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
@@ -238,7 +235,14 @@ public class PathObjectHandler implements Loggable {
                             .filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
                                     .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
                         RSObject web = webs.get(0);
-                        InteractionHelper.click(web, "Slash");
+                        if (canLeftclickWeb()) {
+                            InteractionHelper.click(web, "Slash");
+                        } else {
+                            useBladeOnWeb(web);
+                        }
+                        if(Game.isUptext("->")){
+                            Walking.blindWalkTo(Player.getPosition());
+                        }
                         if (web.getPosition().distanceTo(Player.getPosition()) <= 1) {
                             WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
                         } else {
@@ -524,4 +528,20 @@ public class PathObjectHandler implements Loggable {
     public String getName() {
         return "Object Handler";
     }
+
+    private static List<Integer> SLASH_WEAPONS = new ArrayList<>(Arrays.asList(1,4,9,10,12,17,20,21));
+
+    private static boolean canLeftclickWeb(){
+        RSVarBit weaponType = RSVarBit.get(357);
+        return (weaponType != null && SLASH_WEAPONS.contains(weaponType.getValue())) || Inventory.find("Knife").length > 0;
+    }
+    private static boolean useBladeOnWeb(RSObject web){
+        if(!Game.isUptext("->")){
+            RSItem[] slashable = Inventory.find(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier"));
+            if(slashable.length == 0 || !slashable[0].click("Use"))
+                return false;
+        }
+        return InteractionHelper.click(web, Game.getUptext());
+    }
+
 }
