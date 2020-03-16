@@ -27,6 +27,7 @@ public enum TeleportLocation {
     CHAMPIONS_GUILD (3191, 3366, 0),
     MONASTRY_EDGE (3053, 3489, 0),
     EDGEVILLE (3087, 3497, 0),
+
     ECTO (3660, 3524, 0),
 
     FISHING_GUILD (2610, 3391, 0),
@@ -51,6 +52,8 @@ public enum TeleportLocation {
     KOUREND(1639,3672,0),
 
     XERICS_INFERNO(1505,3809,0),
+    XERICS_GLADE(1753, 3565, 0),
+    XERICS_LOOKOUT(1575, 3531, 0),
 
     NARDAH(3419, 2916, 0),
     DIGSITE(3325, 3411, 0),

@@ -42,7 +42,7 @@ public enum TeleportMethod implements Validatable {
     NECKLACE_OF_PASSAGE(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,OUTPOST),
     ELF_CRYSTAL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,LLETYA),
     KOUREND_TELEPORT(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,KOUREND),
-    XERICS_TALISMAN(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,XERICS_INFERNO),
+    XERICS_TALISMAN(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,XERICS_INFERNO,XERICS_LOOKOUT,XERICS_GLADE),
 
     PISCATORIS_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,PISCATORIS),
     NARDAH_TELEPORT_SCROLL(TeleportConstants.LEVEL_20_WILDERNESS_LIMIT,NARDAH),
@@ -330,6 +330,10 @@ public enum TeleportMethod implements Validatable {
 
             case XERICS_INFERNO:
                 return teleportWithScrollInterface(XERICS_TALISMAN_FILTER, ".*Xeric's Inferno");
+            case XERICS_GLADE:
+                return teleportWithScrollInterface(XERICS_TALISMAN_FILTER, ".*Xeric's Glade");
+            case XERICS_LOOKOUT:
+                return teleportWithScrollInterface(XERICS_TALISMAN_FILTER, ".*Xeric's Look-out");
 
             case NARDAH:
                 return MasterScrollBook.Teleports.NARDAH.use() || TeleportScrolls.NARDAH.teleportTo(false);
