@@ -437,6 +437,7 @@ public class PathObjectHandler implements Loggable {
         } else {
             result = InteractionHelper.click(object, options);
             getInstance().log("Interacting with (" + RSObjectHelper.getName(object) + ") at " + object.getPosition() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
+            WaitFor.milliseconds(250,800);
         }
 
         return result;
