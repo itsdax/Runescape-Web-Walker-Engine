@@ -440,43 +440,43 @@ public enum Teleport {
 	CONSTRUCTION_CAPE_RIMMINGTON(
 			35, new RSTile(2954,3224, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rimmington")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rimmington")
 	),
 
 	CONSTRUCTION_CAPE_TAVERLY(
 			35, new RSTile(2894, 3465, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Taverly")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Taverly")
 	),
 
 	CONSTRUCTION_CAPE_RELLEKKA(
 			35, new RSTile(2668, 3631, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rellekka")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rellekka")
 	),
 
 	CONSTRUCTION_CAPE_BRIMHAVEN(
 			35, new RSTile(2758, 3178, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Hosidius")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Hosidius")
 	),
 
 	CONSTRUCTION_CAPE_POLLNIVNEACH(
 			35, new RSTile(3340, 3004, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Pollnivneach")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Pollnivneach")
 	),
 
 	CONSTRUCTION_CAPE_YANILLE(
 			35, new RSTile(2544, 3095, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Yanille")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Yanille")
 	),
 
 	CONSTRUCTION_CAPE_HOSIDIUS(
 			35, new RSTile(1744, 3517, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Hosidius")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Hosidius")
 	),
 
 	;
