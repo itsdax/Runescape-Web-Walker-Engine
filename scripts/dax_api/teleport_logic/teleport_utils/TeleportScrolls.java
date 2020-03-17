@@ -21,7 +21,8 @@ public enum TeleportScrolls implements Validatable {
 	LUMBERYARD("Lumberyard teleport",new RSTile(3302, 3487, 0)),
 	ZULLANDRA("Zul-andra teleport",new RSTile(2195, 3055, 0)),
 	KEY_MASTER("Key master teleport",new RSTile(1311, 1251, 0)),
-	REVENANT_CAVES("Revenant cave teleport",new RSTile(3130, 3832, 0))
+	REVENANT_CAVES("Revenant cave teleport",new RSTile(3130, 3832, 0)),
+	WATSON("Watson teleport", new RSTile(1645, 3579,0))
 	;
 	private String name;
 	private RSTile location;

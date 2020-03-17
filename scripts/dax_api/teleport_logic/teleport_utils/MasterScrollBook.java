@@ -36,7 +36,8 @@ public class MasterScrollBook {
 		LUMBERYARD(5682,"Lumberyard", TeleportScrolls.LUMBERYARD.getLocation()),
 		ZULLANDRA(5683,"Zul-Andra", TeleportScrolls.ZULLANDRA.getLocation()),
 		KEY_MASTER(5684,"Key Master", TeleportScrolls.KEY_MASTER.getLocation()),
-		REVENANT_CAVES(6056,"Revenant cave", TeleportScrolls.REVENANT_CAVES.getLocation());
+		REVENANT_CAVES(6056,"Revenant cave", TeleportScrolls.REVENANT_CAVES.getLocation()),
+		WATSON(8253, "Watson", TeleportScrolls.WATSON.getLocation());
 		
 		private int varbit;
 		private String name;
