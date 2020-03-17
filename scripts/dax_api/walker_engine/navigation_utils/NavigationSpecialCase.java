@@ -202,7 +202,10 @@ public class NavigationSpecialCase implements Loggable {
         NEITIZNOT_DOCK(2311, 3781, 0),
 
         OBSERVATORY_OUTSIDE(2449, 3155, 0),
-        OBSERVATORY_INSIDE(2444, 3165, 0)
+        OBSERVATORY_INSIDE(2444, 3165, 0),
+
+        MOSS_GIANT_ISLAND_ROPE(2709, 3209, 0),
+        MOSS_GIANT_ISLAND_ROPE_LANDING(2704, 3209, 0)
         ;
 
 
@@ -808,6 +811,17 @@ public class NavigationSpecialCase implements Loggable {
                             ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                 }) == WaitFor.Return.SUCCESS && WaitFor.milliseconds(600,1800) != null;
 
+            case MOSS_GIANT_ISLAND_ROPE:
+            case MOSS_GIANT_ISLAND_ROPE_LANDING:
+                if(Player.getPosition().distanceTo(MOSS_GIANT_ISLAND_ROPE.getRSTile()) >= 2){
+                    Walking.blindWalkTo(MOSS_GIANT_ISLAND_ROPE.getRSTile());
+                    WaitFor.milliseconds(200,400);
+                }
+                if (clickObject(Filters.Objects.nameEquals("Ropeswing"), "Swing-on", () -> Player.getPosition().getX() < 2708 ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+                    return true;
+                }
+                return false;
         }
 
         return false;
