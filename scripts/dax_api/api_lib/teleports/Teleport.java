@@ -2,6 +2,7 @@ package scripts.dax_api.api_lib.teleports;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
+import org.tribot.api.input.Keyboard;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
@@ -458,7 +459,7 @@ public enum Teleport {
 	CONSTRUCTION_CAPE_BRIMHAVEN(
 			35, new RSTile(2758, 3178, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Hosidius")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Brimhaven")
 	),
 
 	CONSTRUCTION_CAPE_POLLNIVNEACH(
@@ -592,7 +593,7 @@ public enum Teleport {
 
 		if(!Interfaces.isInterfaceSubstantiated(TeleportConstants.SCROLL_INTERFACE_MASTER)){
 			RSItem teleportItem = items.get(0);
-			if (!RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")") ||
+			if (!RSItemHelper.clickMatch(teleportItem, "(Rub|Teleport|" + regex + ")") ||
 					!Timing.waitCondition(() -> Interfaces.isInterfaceSubstantiated(
 							TeleportConstants.SCROLL_INTERFACE_MASTER),2500)) {
 				return false;
@@ -612,7 +613,8 @@ public enum Teleport {
 		for(RSInterface child:children){
 			String txt = child.getText();
 			if(txt != null && General.stripFormatting(txt).matches(regex)){
-				return child.click();
+				Keyboard.typeString(General.stripFormatting(txt).substring(0,1));
+				return true;
 			}
 		}
 		return false;
