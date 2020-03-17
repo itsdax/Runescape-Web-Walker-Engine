@@ -1,10 +1,15 @@
 package scripts.dax_api.api_lib.teleports;
 
+import org.tribot.api.General;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.shared.helpers.RSItemHelper;
+import scripts.dax_api.walker_engine.WaitFor;
+import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +48,7 @@ public class WearableItemTeleport {
 		return teleportWithItem(filter,action);
 	}
 
+
 	private static boolean teleportWithItem(Predicate<RSItem> itemFilter, String regex) {
 		ArrayList<RSItem> items = new ArrayList<>();
 		items.addAll(Arrays.asList(Inventory.find(itemFilter)));
@@ -53,7 +59,16 @@ public class WearableItemTeleport {
 		}
 
 		RSItem teleportItem = items.get(0);
-		return RSItemHelper.clickMatch(teleportItem, "(Rub|" + regex + ")");
+		final RSTile startingPosition = Player.getPosition();
+
+		return RSItemHelper.clickMatch(teleportItem, "(Rub|Teleport|" + regex + ")") && WaitFor.condition(
+				General.random(3800, 4600), () -> {
+					NPCInteraction.handleConversationRegex(regex);
+					if (startingPosition.distanceTo(Player.getPosition()) > 5) {
+						return WaitFor.Return.SUCCESS;
+					}
+					return WaitFor.Return.IGNORE;
+				}) == WaitFor.Return.SUCCESS;
 	}
 
 }
