@@ -8,10 +8,8 @@ import org.tribot.api2007.Login;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.api_lib.teleports.Teleport;
 import scripts.dax_api.shared.PathFindingNode;
-import scripts.dax_api.teleport_logic.TeleportLocation;
-import scripts.dax_api.teleport_logic.TeleportManager;
-import scripts.dax_api.teleport_logic.TeleportMethod;
 import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker.utils.path.PathUtils;
 import scripts.dax_api.walker_engine.bfs.BFS;
@@ -316,22 +314,14 @@ public class WalkerEngine implements Loggable{
         RSTile playerPosition = Player.getPosition();
         if(startPosition.equals(playerPosition))
             return true;
-        for (TeleportMethod teleport : TeleportMethod.values()) {
-            if (!teleport.canUse()) continue;
-            TeleportLocation target = teleport.getLocation(startPosition);
-            if(target == null) {
-                continue;
-            }
-            if (teleport.isAtTeleportSpot(startPosition)) {
-                if(target.getRSTile().distanceTo(playerPosition) < TeleportManager.getOffset()){
-                    return true;
-                }
+        for (Teleport teleport : Teleport.values()) {
+            if (!teleport.getRequirement().satisfies()) continue;
+            if(teleport.isAtTeleportSpot(startPosition)){
                 log("Using teleport method: " + teleport);
-                if (!teleport.use(target)) return false;
+                teleport.trigger();
                 WaitFor.condition(General.random(3000, 20000),
-                        () -> target.getRSTile().distanceTo(Player.getPosition()) < 10 ?
+                        () -> startPosition.distanceTo(Player.getPosition()) < 10 ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
-                return true;
             }
         }
         return true;

@@ -4,6 +4,7 @@ import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.models.*;
+import scripts.dax_api.api_lib.teleports.Teleport;
 import scripts.dax_api.teleport_logic.TeleportLocation;
 import scripts.dax_api.teleport_logic.TeleportManager;
 import scripts.dax_api.walker.DaxWalkerEngine;
@@ -123,9 +124,9 @@ public class DaxWalker implements Loggable {
     }
 
     private List<PathRequestPair> getPathTeleports(RSTile start) {
-        return Arrays.stream(TeleportLocation.values())
-                .filter(TeleportLocation::canTeleportTo)
-                .map(position -> new PathRequestPair(Point3D.fromPositionable(position.getRSTile()),
+        return Arrays.stream(Teleport.values())
+                .filter(t -> t.getRequirement().satisfies())
+                .map(t -> new PathRequestPair(Point3D.fromPositionable(t.getLocation()),
                         Point3D.fromPositionable(start)))
                 .collect(Collectors.toList());
     }
