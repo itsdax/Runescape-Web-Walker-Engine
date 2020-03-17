@@ -338,7 +338,7 @@ public enum Teleport {
 			() -> WearableItemTeleport.has(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER, "Lletya")
 	),
-	
+
 	XERICS_GLADE(
 			35, new RSTile(1753, 3565, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.XERICS_TALISMAN_FILTER),
@@ -389,11 +389,11 @@ public enum Teleport {
 			() -> WearableItemTeleport.has(WearableItemTeleport.QUEST_CAPE_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.QUEST_CAPE_FILTER, "Teleport")
 	),
-
-	KANDARIN_MONASTARY_TELEPORT(
+	
+	KANDARIN_MONASTERY_TELEPORT(
 			0, new RSTile(2606, 3216, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER, "Teleport")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER, "Monastery.*")
 	),
 
 	RIMMINGTON_TELEPORT_TAB(
