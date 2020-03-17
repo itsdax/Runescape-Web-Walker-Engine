@@ -148,7 +148,7 @@ public enum Teleport {
 
 	RING_OF_WEALTH_MISCELLANIA(
 			35, new RSTile(2535, 3861, 0),
-			() -> WearableItemTeleport.has(WearableItemTeleport.RING_OF_WEALTH_FILTER),
+			() -> WearableItemTeleport.has(WearableItemTeleport.RING_OF_WEALTH_FILTER) && Game.getSetting(359) >= 100,
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_WEALTH_FILTER, "(?i)misc.*"),
 			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
@@ -389,7 +389,7 @@ public enum Teleport {
 			() -> WearableItemTeleport.has(WearableItemTeleport.QUEST_CAPE_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.QUEST_CAPE_FILTER, "Teleport")
 	),
-	
+
 	KANDARIN_MONASTERY_TELEPORT(
 			0, new RSTile(2606, 3216, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER),
