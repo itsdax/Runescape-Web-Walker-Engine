@@ -5,8 +5,6 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.models.*;
 import scripts.dax_api.api_lib.teleports.Teleport;
-import scripts.dax_api.teleport_logic.TeleportLocation;
-import scripts.dax_api.teleport_logic.TeleportManager;
 import scripts.dax_api.walker.DaxWalkerEngine;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
@@ -20,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class DaxWalker implements Loggable {
 
-    private static Map<RSTile, TeleportLocation> map;
+    private static Map<RSTile, Teleport> map;
     private static DaxWalker daxWalker;
     private static DaxWalkerEngine daxWalkerEngine;
     public static DaxWalker getInstance() {
@@ -35,8 +33,8 @@ public class DaxWalker implements Loggable {
         globalWalkingCondition = () -> WalkingCondition.State.CONTINUE_WALKER;
 
         map = new ConcurrentHashMap<>();
-        for (TeleportLocation teleport : TeleportLocation.values()) {
-            map.put(teleport.getRSTile(), teleport);
+        for (Teleport teleport : Teleport.values()) {
+            map.put(teleport.getLocation(), teleport);
         }
     }
 
@@ -132,9 +130,9 @@ public class DaxWalker implements Loggable {
     }
 
     private List<BankPathRequestPair> getBankPathTeleports() {
-        return Arrays.stream(TeleportLocation.values())
-                .filter(TeleportLocation::canTeleportTo)
-                .map(location -> new BankPathRequestPair(Point3D.fromPositionable(location.getRSTile()), null))
+        return Arrays.stream(Teleport.values())
+                .filter(teleport -> teleport.getRequirement().satisfies())
+                .map(teleport -> new BankPathRequestPair(Point3D.fromPositionable(teleport.getLocation()), null))
                 .collect(Collectors.toList());
     }
 
@@ -153,9 +151,9 @@ public class DaxWalker implements Loggable {
 
     private int getPathMoveCost(PathResult pathResult) {
         if (Player.getPosition().equals(pathResult.getPath().get(0).toPositionable().getPosition())) return pathResult.getCost();
-        TeleportLocation teleport = map.get(pathResult.getPath().get(0).toPositionable().getPosition());
+        Teleport teleport = map.get(pathResult.getPath().get(0).toPositionable().getPosition());
         if (teleport == null) return pathResult.getCost();
-        return TeleportManager.getOffset() + pathResult.getCost();
+        return teleport.getMoveCost() + pathResult.getCost();
     }
 
     @Override
