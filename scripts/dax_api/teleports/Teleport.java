@@ -325,7 +325,7 @@ public enum Teleport {
 			35, new RSTile(3346,3445,0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.DIGSITE_PENDANT_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.DIGSITE_PENDANT_FILTER, "Digsite")
-    ),
+	),
 
 	ECTOPHIAL (
 			0, new RSTile(3660, 3524, 0),
@@ -373,25 +373,25 @@ public enum Teleport {
 	),
 
 	CRAFTING_CAPE_TELEPORT(
-			35, new RSTile(2931, 3286, 0),
+			0, new RSTile(2931, 3286, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CRAFTING_CAPE_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.CRAFTING_CAPE_FILTER, "Teleport")
 	),
 
 	CABBAGE_PATCH_TELEPORT(
-			35, new RSTile(3049, 3287, 0),
+			0, new RSTile(3049, 3287, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.EXPLORERS_RING_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.EXPLORERS_RING_FILTER, "Teleport")
 	),
 
 	LEGENDS_GUILD_TELEPORT(
-			35, new RSTile(2729, 3348, 0),
+			0, new RSTile(2729, 3348, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.QUEST_CAPE_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.QUEST_CAPE_FILTER, "Teleport")
 	),
 
 	KANDARIN_MONASTARY_TELEPORT(
-			35, new RSTile(2606, 3216, 0),
+			0, new RSTile(2606, 3216, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER, "Teleport")
 	),
@@ -402,10 +402,10 @@ public enum Teleport {
 			() -> RSItemHelper.click("Rimmington t.*", "Break")
 	),
 
-	TAVERLY_TELEPORT_TAB(
+	TAVERLEY_TELEPORT_TAB(
 			35, new RSTile(2894, 3465, 0),
-			() -> inMembersWorld() && Inventory.getCount("Taverly teleport") > 0,
-			() -> RSItemHelper.click("Taverly t.*", "Break")
+			() -> inMembersWorld() && Inventory.getCount("Taverley teleport") > 0,
+			() -> RSItemHelper.click("Taverley t.*", "Break")
 	),
 
 	RELLEKKA_TELEPORT_TAB(
@@ -439,43 +439,43 @@ public enum Teleport {
 	),
 
 	CONSTRUCTION_CAPE_RIMMINGTON(
-			35, new RSTile(2954,3224, 0),
+			0, new RSTile(2954,3224, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
 			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rimmington")
 	),
 
-	CONSTRUCTION_CAPE_TAVERLY(
-			35, new RSTile(2894, 3465, 0),
+	CONSTRUCTION_CAPE_TAVERLEY(
+			0, new RSTile(2894, 3465, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
-			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Taverly")
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Taverley")
 	),
 
 	CONSTRUCTION_CAPE_RELLEKKA(
-			35, new RSTile(2668, 3631, 0),
+			0, new RSTile(2668, 3631, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
 			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rellekka")
 	),
 
 	CONSTRUCTION_CAPE_BRIMHAVEN(
-			35, new RSTile(2758, 3178, 0),
+			0, new RSTile(2758, 3178, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
 			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Brimhaven")
 	),
 
 	CONSTRUCTION_CAPE_POLLNIVNEACH(
-			35, new RSTile(3340, 3004, 0),
+			0, new RSTile(3340, 3004, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
 			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Pollnivneach")
 	),
 
 	CONSTRUCTION_CAPE_YANILLE(
-			35, new RSTile(2544, 3095, 0),
+			0, new RSTile(2544, 3095, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
 			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Yanille")
 	),
 
 	CONSTRUCTION_CAPE_HOSIDIUS(
-			35, new RSTile(1744, 3517, 0),
+			0, new RSTile(1744, 3517, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
 			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Hosidius")
 	),
