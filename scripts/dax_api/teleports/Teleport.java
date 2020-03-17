@@ -338,21 +338,21 @@ public enum Teleport {
 			() -> WearableItemTeleport.has(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER, "Lletya")
 	),
-
+	
 	XERICS_GLADE(
 			35, new RSTile(1753, 3565, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.XERICS_TALISMAN_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Glade")
+			() -> teleportWithScrollInterface(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Glade")
 	),
 	XERICS_INFERNO(
 			35, new RSTile(1505,3809,0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.XERICS_TALISMAN_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Inferno")
+			() -> teleportWithScrollInterface(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Inferno")
 	),
 	XERICS_LOOKOUT(
 			35, new RSTile(1575, 3531, 0),
 			() -> WearableItemTeleport.has(WearableItemTeleport.XERICS_TALISMAN_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Look-out")
+			() -> teleportWithScrollInterface(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Look-out")
 	),
 
 	WEST_ARDOUGNE_TELEPORT_TAB(
