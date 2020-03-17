@@ -131,6 +131,18 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Player.getPosition().getY() > 9481 && Player.getPosition().distanceTo(new RSTile(2601, 9482, 0)) < 3;
             }
+        }),
+        EDGEVILLE_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new RSTile(3138, 3516, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getAssumed().equals(new RSTile(3138, 3516, 0));
+            }
+        }),
+        VARROCK_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new RSTile(3141, 3513, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getAssumed().equals(new RSTile(3141, 3513, 0 ));
+            }
         });
 
         private String name, action;
@@ -273,6 +285,24 @@ public class PathObjectHandler implements Loggable {
                             break;
                         }
                     }
+                    break;
+                case VARROCK_UNDERWALL_TUNNEL:
+                    if(!clickOnObject(object,specialObject.getAction())){
+                        return false;
+                    }
+                    successfulClick = true;
+                    WaitFor.condition(10000, () ->
+                            SpecialObject.EDGEVILLE_UNDERWALL_TUNNEL.getLocation().equals(Player.getPosition()) ?
+                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    break;
+                case EDGEVILLE_UNDERWALL_TUNNEL:
+                    if(!clickOnObject(object,specialObject.getAction())){
+                        return false;
+                    }
+                    successfulClick = true;
+                    WaitFor.condition(10000, () ->
+                            SpecialObject.VARROCK_UNDERWALL_TUNNEL.getLocation().equals(Player.getPosition()) ?
+                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     break;
             }
         }
@@ -429,7 +459,7 @@ public class PathObjectHandler implements Loggable {
         return options;
     }
 
-    private static boolean clickOnObject(RSObject object, String[] options){
+    private static boolean clickOnObject(RSObject object, String... options){
         boolean result;
 
         if (isClosedTrapDoor(object, options)){
