@@ -3,10 +3,7 @@ package scripts.dax_api.walker_engine;
 
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
-import org.tribot.api2007.Camera;
-import org.tribot.api2007.Login;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.Projection;
+import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.teleports.Teleport;
 import scripts.dax_api.shared.PathFindingNode;
@@ -314,6 +311,8 @@ public class WalkerEngine implements Loggable{
         RSTile playerPosition = Player.getPosition();
         if(startPosition.equals(playerPosition))
             return true;
+        if(Banking.isBankScreenOpen())
+            Banking.close();
         for (Teleport teleport : Teleport.values()) {
             if (!teleport.getRequirement().satisfies()) continue;
             if(teleport.isAtTeleportSpot(startPosition)){
