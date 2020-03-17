@@ -35,6 +35,12 @@ public enum Teleport {
 			() -> RSItemHelper.click("Varrock t.*", "Break")
 	),
 
+	VARROCK_TELEPORT_GRAND_EXCHANGE(
+			35, new RSTile(3161, 3478, 0),
+			() -> Spell.VARROCK_TELEPORT.canUse() && TeleportConstants.isVarrockTeleportAtGE(),
+			() -> selectSpell("Varrock Teleport","Grand Exchange")
+	),
+
 	LUMBRIDGE_TELEPORT(
 			35, new RSTile(3225, 3219, 0),
 			Spell.LUMBRIDGE_TELEPORT::canUse,
