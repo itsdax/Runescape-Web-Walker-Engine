@@ -1,4 +1,4 @@
-package scripts.dax_api.teleport_logic.teleport_utils;
+package scripts.dax_api.teleports.teleport_utils;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;

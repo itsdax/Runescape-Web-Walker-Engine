@@ -1,11 +1,11 @@
-package scripts.dax_api.teleport_logic.teleport_utils;
+package scripts.dax_api.teleports.teleport_utils;
 
 import org.tribot.api.Timing;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.teleport_logic.Validatable;
+import scripts.dax_api.shared.helpers.magic.Validatable;
 
 public enum TeleportScrolls implements Validatable {
 	NARDAH("Nardah teleport",new RSTile(3419, 2916, 0)),

@@ -4,7 +4,7 @@ import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.models.*;
-import scripts.dax_api.api_lib.teleports.Teleport;
+import scripts.dax_api.teleports.Teleport;
 import scripts.dax_api.walker.DaxWalkerEngine;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;

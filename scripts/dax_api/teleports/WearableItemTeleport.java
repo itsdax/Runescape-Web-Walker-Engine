@@ -1,4 +1,4 @@
-package scripts.dax_api.api_lib.teleports;
+package scripts.dax_api.teleports;
 
 import org.tribot.api.General;
 import org.tribot.api2007.Equipment;

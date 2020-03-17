@@ -5,7 +5,7 @@ import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.api_lib.teleports.Teleport;
+import scripts.dax_api.teleports.Teleport;
 import scripts.dax_api.shared.PathFindingNode;
 import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker.utils.path.PathUtils;
