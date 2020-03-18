@@ -205,7 +205,10 @@ public class NavigationSpecialCase implements Loggable {
         OBSERVATORY_INSIDE(2444, 3165, 0),
 
         MOSS_GIANT_ISLAND_ROPE(2709, 3209, 0),
-        MOSS_GIANT_ISLAND_ROPE_LANDING(2704, 3209, 0)
+        MOSS_GIANT_ISLAND_ROPE_LANDING(2704, 3209, 0),
+
+        SHANTAY_PASS_ENTRANCE(3304, 3117, 0),
+        SHANTAY_PASS_EXIT(3304, 3115, 0)
         ;
 
 
@@ -822,6 +825,16 @@ public class NavigationSpecialCase implements Loggable {
                     return true;
                 }
                 return false;
+            case SHANTAY_PASS_ENTRANCE:
+            case SHANTAY_PASS_EXIT:
+                if(Player.getPosition().getY() < 3117){
+                    return clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> SHANTAY_PASS_ENTRANCE.getRSTile().equals(Player.getPosition())
+                            ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+                } else if(Inventory.getCount(1854) == 0){
+                    NPCInteraction.talkTo(Filters.NPCs.nameEquals("Shantay"),new String[]{"Buy-pass"}, new String[]{});
+                }
+                return Inventory.getCount(1854) > 0 && clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> SHANTAY_PASS_EXIT.getRSTile().equals(Player.getPosition())
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;
