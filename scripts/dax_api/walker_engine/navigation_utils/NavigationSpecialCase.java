@@ -11,6 +11,7 @@ import scripts.dax_api.shared.helpers.RSObjectHelper;
 import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
+import scripts.dax_api.walker_engine.interaction_handling.DoomsToggle;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 import scripts.dax_api.walker_engine.navigation_utils.fairyring.FairyRing;
@@ -833,8 +834,11 @@ public class NavigationSpecialCase implements Loggable {
                 } else if(Inventory.getCount(1854) == 0){
                     NPCInteraction.talkTo(Filters.NPCs.nameEquals("Shantay"),new String[]{"Buy-pass"}, new String[]{});
                 }
-                return Inventory.getCount(1854) > 0 && clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> SHANTAY_PASS_EXIT.getRSTile().equals(Player.getPosition())
-                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+                return Inventory.getCount(1854) > 0 && clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> {
+                    DoomsToggle.handleToggle();
+                    return SHANTAY_PASS_EXIT.getRSTile().equals(Player.getPosition())
+                            ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                }) && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;
