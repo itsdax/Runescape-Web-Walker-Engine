@@ -4,6 +4,7 @@ import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSVarBit;
+import scripts.dax_api.shared.helpers.WorldHelper;
 import scripts.dax_api.shared.jsonSimple.JSONObject;
 import scripts.dax_api.shared.jsonSimple.JSONValue;
 
@@ -25,7 +26,7 @@ public class PlayerInformation {
         try {
             RSPlayer rsPlayer = Player.getRSPlayer();
             return new PlayerInformation(
-                    WorldHopper.isMembers(WorldHopper.getWorld()),
+                    WorldHelper.isMember(WorldHopper.getWorld()),
                     rsPlayer.getCombatLevel(),
                     Skills.SKILLS.values(),
                     grabSettings(),

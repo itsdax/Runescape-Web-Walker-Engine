@@ -11,6 +11,7 @@ import org.tribot.api2007.types.RSTile;
 import scripts.dax_api.api_lib.models.Requirement;
 import scripts.dax_api.shared.helpers.InterfaceHelper;
 import scripts.dax_api.shared.helpers.RSItemHelper;
+import scripts.dax_api.shared.helpers.WorldHelper;
 import scripts.dax_api.shared.helpers.magic.Spell;
 import scripts.dax_api.teleports.teleport_utils.TeleportConstants;
 import scripts.dax_api.teleports.teleport_utils.TeleportLimit;
@@ -571,7 +572,7 @@ public enum Teleport {
 	}
 
 	private static boolean inMembersWorld() {
-		return WorldHopper.isMembers(WorldHopper.getWorld());
+		return WorldHelper.isMember(WorldHopper.getWorld());
 	}
 
 	private static Predicate<RSItem> notNotedFilter() {
