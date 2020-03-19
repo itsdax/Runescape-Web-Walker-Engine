@@ -558,10 +558,21 @@ public enum Teleport {
 		Arrays.stream(values()).forEach(t -> t.setMoveCost(moveCost));
 	}
 
+	private static List<Teleport> blacklist = new ArrayList<>();
+
+	public static void blacklistTeleports(Teleport... teleports){
+		blacklist.addAll(Arrays.asList(teleports));
+	}
+
+	public static void clearTeleportBlacklist(){
+		blacklist.clear();
+	}
+
 	public static List<RSTile> getValidStartingRSTiles() {
 		List<RSTile> RSTiles = new ArrayList<>();
 		for (Teleport teleport : values()) {
-			if (!teleport.teleportLimit.canCast() || !teleport.canUse || !teleport.requirement.satisfies()) continue;
+			if (blacklist.contains(teleport) || !teleport.teleportLimit.canCast() ||
+					!teleport.canUse || !teleport.requirement.satisfies()) continue;
 			RSTiles.add(teleport.location);
 		}
 		return RSTiles;

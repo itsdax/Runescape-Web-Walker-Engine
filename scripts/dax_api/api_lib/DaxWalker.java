@@ -122,17 +122,15 @@ public class DaxWalker implements Loggable {
     }
 
     private List<PathRequestPair> getPathTeleports(RSTile start) {
-        return Arrays.stream(Teleport.values())
-                .filter(t -> t.getRequirement().satisfies())
-                .map(t -> new PathRequestPair(Point3D.fromPositionable(t.getLocation()),
+        return Teleport.getValidStartingRSTiles().stream()
+                .map(t -> new PathRequestPair(Point3D.fromPositionable(t),
                         Point3D.fromPositionable(start)))
                 .collect(Collectors.toList());
     }
 
     private List<BankPathRequestPair> getBankPathTeleports() {
-        return Arrays.stream(Teleport.values())
-                .filter(teleport -> teleport.getRequirement().satisfies())
-                .map(teleport -> new BankPathRequestPair(Point3D.fromPositionable(teleport.getLocation()), null))
+        return Teleport.getValidStartingRSTiles().stream()
+                .map(t -> new BankPathRequestPair(Point3D.fromPositionable(t), null))
                 .collect(Collectors.toList());
     }
 
