@@ -8,6 +8,7 @@ import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.api_lib.models.Requirement;
 import scripts.dax_api.shared.helpers.InterfaceHelper;
 import scripts.dax_api.shared.helpers.RSItemHelper;
@@ -77,6 +78,12 @@ public enum Teleport {
 			35, new RSTile(2757, 3479, 0),
 			() -> inMembersWorld() && Inventory.getCount("Camelot teleport") > 0,
 			() -> RSItemHelper.click("Camelot t.*", "Break")
+	),
+
+	SEERS_TELEPORT(
+			35, new RSTile(2757, 3479, 0),
+			() -> inMembersWorld() && Spell.CAMELOT_TELEPORT.canUse() && RSVarBit.get(4560).getValue() == 1,
+			() -> selectSpell("Camelot Teleport","Seers'")
 	),
 
 	ARDOUGNE_TELEPORT(
