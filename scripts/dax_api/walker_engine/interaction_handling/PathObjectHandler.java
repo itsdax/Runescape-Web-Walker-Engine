@@ -383,15 +383,23 @@ public class PathObjectHandler implements Loggable {
                 if (actions2.contains("Climb-up")){
                     return 1;
                 }
-            }
-
-            if (assumedZ < destinationZ){
+            } else if (assumedZ < destinationZ){
                 if (actions1.contains("Climb-down")){
                     return -1;
                 }
                 if (actions2.contains("Climb-down")){
                     return 1;
                 }
+            } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getRSTile()) > 20){
+                if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
+                    return -1;
+                } else if(actions2.contains("Climb-up") || actions2.contains("Climb-down")){
+                    return 1;
+                }
+            } else if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
+                return 1;
+            } else if(actions2.contains("Climb-up") || actions2.contains("Climb-down")){
+                return -1;
             }
             return c;
         });
