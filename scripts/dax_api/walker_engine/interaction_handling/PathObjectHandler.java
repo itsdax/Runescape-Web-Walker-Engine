@@ -143,6 +143,13 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getAssumed().equals(new RSTile(3141, 3513, 0 ));
             }
+        }),
+        GAMES_ROOM_STAIRS("Stairs", "Climb-down", new RSTile(2899, 3565, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getDestination().getRSTile().equals(new RSTile(2899, 3565, 0)) &&
+                    destinationDetails.getAssumed().equals(new RSTile(2205, 4934, 1));
+            }
         });
 
         private String name, action;
