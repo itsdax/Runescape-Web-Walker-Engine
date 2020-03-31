@@ -127,7 +127,7 @@ public class DaxPathFinder {
         if (tile.getPlane() != Player.getPosition().getPlane()) return false;
         RSTile worldTile = tile.getType() != RSTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
         int x = worldTile.getX(), y = worldTile.getY();
-        if (!validLocalBounds(tile)) {
+        if (!validLocalBounds(tile) || x > map.length || y > map[x].length) {
             return false;
         }
         Destination destination = map[x][y];
