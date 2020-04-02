@@ -165,7 +165,7 @@ public class DaxPathFinder {
         final RSTile home = Player.getPosition().toLocalTile();
         Destination[][] map = new Destination[104][104];
         int[][] collisionData = PathFinding.getCollisionData();
-        if(collisionData == null){
+        if(collisionData == null || collisionData.length < home.getX() || collisionData[home.getX()].length < home.getY()){
             return map;
         }
 
