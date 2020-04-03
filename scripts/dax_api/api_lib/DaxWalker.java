@@ -38,7 +38,7 @@ public class DaxWalker implements Loggable {
         }
     }
 
-    public WalkingCondition getGlobalWalkingCondition() {
+    public static WalkingCondition getGlobalWalkingCondition() {
         return getInstance().globalWalkingCondition;
     }
 
@@ -46,19 +46,19 @@ public class DaxWalker implements Loggable {
         WebWalkerServerApi.getInstance().setTestMode(b);
     }
 
-    public void setGlobalWalkingCondition(WalkingCondition walkingCondition) {
+    public static void setGlobalWalkingCondition(WalkingCondition walkingCondition) {
         getInstance().globalWalkingCondition = walkingCondition;
     }
 
-    public void setCredentials(DaxCredentialsProvider daxCredentialsProvider) {
+    public static void setCredentials(DaxCredentialsProvider daxCredentialsProvider) {
         WebWalkerServerApi.getInstance().setDaxCredentialsProvider(daxCredentialsProvider);
     }
 
-    public boolean walkTo(Positionable positionable) {
+    public static boolean walkTo(Positionable positionable) {
         return walkTo(positionable, null);
     }
 
-    public boolean walkTo(Positionable destination, WalkingCondition walkingCondition) {
+    public static boolean walkTo(Positionable destination, WalkingCondition walkingCondition) {
         if (ShipUtils.isOnShip()) {
             ShipUtils.crossGangplank();
             WaitFor.milliseconds(500, 1200);
@@ -68,36 +68,36 @@ public class DaxWalker implements Loggable {
             return true;
         }
 
-        List<PathRequestPair> pathRequestPairs = getPathTeleports(destination.getPosition());
+        List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(destination.getPosition());
 
         pathRequestPairs.add(new PathRequestPair(Point3D.fromPositionable(start), Point3D.fromPositionable(destination)));
 
 	    List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(PlayerDetails.generate(),pathRequestPairs));
 
-	    List<PathResult> validPaths = validPaths(pathResults);
+	    List<PathResult> validPaths = getInstance().validPaths(pathResults);
 
-	    PathResult pathResult = getBestPath(validPaths);
+	    PathResult pathResult = getInstance().getBestPath(validPaths);
 	    if (pathResult == null) {
-		    log(Level.WARNING, "No valid path found");
+            getInstance().log(Level.WARNING, "No valid path found");
 		    return false;
 	    }
 
 	    return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
     }
 
-    public boolean walkToBank() {
+    public static boolean walkToBank() {
         return walkToBank(null, null);
     }
 
-    public boolean walkToBank(RunescapeBank bank) {
+    public static boolean walkToBank(RunescapeBank bank) {
         return walkToBank(bank, null);
     }
 
-    public boolean walkToBank(WalkingCondition walkingCondition) {
+    public static boolean walkToBank(WalkingCondition walkingCondition) {
         return walkToBank(null, walkingCondition);
     }
 
-    public boolean walkToBank(RunescapeBank bank, WalkingCondition walkingCondition) {
+    public static boolean walkToBank(RunescapeBank bank, WalkingCondition walkingCondition) {
         if (ShipUtils.isOnShip()) {
             ShipUtils.crossGangplank();
             WaitFor.milliseconds(500, 1200);
@@ -106,16 +106,16 @@ public class DaxWalker implements Loggable {
         if(bank != null)
             return walkTo(bank.getPosition());
 
-        List<BankPathRequestPair> pathRequestPairs = getBankPathTeleports();
+        List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports();
 
         pathRequestPairs.add(new BankPathRequestPair(Point3D.fromPositionable(Player.getPosition()),null));
 
         List<PathResult> pathResults = WebWalkerServerApi.getInstance().getBankPaths(new BulkBankPathRequest(PlayerDetails.generate(),pathRequestPairs));
 
-        List<PathResult> validPaths = validPaths(pathResults);
-        PathResult pathResult = getBestPath(validPaths);
+        List<PathResult> validPaths = getInstance().validPaths(pathResults);
+        PathResult pathResult = getInstance().getBestPath(validPaths);
         if (pathResult == null) {
-            log(Level.WARNING, "No valid path found");
+            getInstance().log(Level.WARNING, "No valid path found");
             return false;
         }
         return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
