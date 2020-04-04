@@ -11,8 +11,9 @@ import scripts.dax_api.walker_engine.local_pathfinding.AStarNode;
 import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.Queue;
+import java.util.*;
 
 /**
  * For local pathing ONLY. Anything outside your region will return unexpected results.
@@ -126,7 +127,7 @@ public class DaxPathFinder {
         if (tile.getPlane() != Player.getPosition().getPlane()) return false;
         RSTile worldTile = tile.getType() != RSTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
         int x = worldTile.getX(), y = worldTile.getY();
-        if (!validLocalBounds(tile)) {
+        if (!validLocalBounds(tile) || x > map.length || y > map[x].length) {
             return false;
         }
         Destination destination = map[x][y];
@@ -164,7 +165,7 @@ public class DaxPathFinder {
         final RSTile home = Player.getPosition().toLocalTile();
         Destination[][] map = new Destination[104][104];
         int[][] collisionData = PathFinding.getCollisionData();
-        if(collisionData == null){
+        if(collisionData == null || collisionData.length < home.getX() || collisionData[home.getX()].length < home.getY()){
             return map;
         }
 

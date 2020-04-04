@@ -5,8 +5,8 @@ import org.tribot.api2007.Player;
 import scripts.dax_api.walker.handlers.passive_action.PassiveAction;
 import scripts.dax_api.walker.models.MoveTask;
 import scripts.dax_api.walker.models.WaitCondition;
-import scripts.dax_api.walker.models.enums.MoveActionResult;
 import scripts.dax_api.walker.models.enums.ActionResult;
+import scripts.dax_api.walker.models.enums.MoveActionResult;
 import scripts.dax_api.walker_engine.WaitFor;
 
 import java.util.ArrayList;
@@ -23,7 +23,8 @@ public interface MoveTaskHandler {
      * @param passiveActionList
      * @return If player stops moving, return fail condition.
      */
-    default ActionResult waitForConditionOrNoMovement(WaitCondition waitCondition, long timeout, List<PassiveAction> passiveActionList) {
+    default ActionResult waitForConditionOrNoMovement(WaitCondition waitCondition, long timeout,
+                                                      List<PassiveAction> passiveActionList) {
         if (passiveActionList == null) passiveActionList = new ArrayList<>();
         long startTime = System.currentTimeMillis();
         AtomicLong lastMoved = new AtomicLong(System.currentTimeMillis());

@@ -1,13 +1,10 @@
 package scripts.dax_api.api_lib.models;
 
 import com.allatori.annotations.DoNotRename;
-import org.tribot.api.General;
 import scripts.dax_api.api_lib.json.JsonArray;
 import scripts.dax_api.api_lib.json.JsonObject;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 @DoNotRename

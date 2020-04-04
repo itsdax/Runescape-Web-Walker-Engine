@@ -16,7 +16,8 @@ public class DaxCamera {
     private static float PIXEL_TO_ANGLE_RATIO = 2.253731343283582F, PIXEL_TO_ROTATION_RATIO = 2.966666666666667F;
 
     public static void focus(Positionable positionable){
-        positionCamera(CameraCalculations.getAngleToTile(positionable), CameraCalculations.getRotationToTile(positionable));
+        positionCamera(
+		        CameraCalculations.getAngleToTile(positionable), CameraCalculations.getRotationToTile(positionable));
     }
 
     public static void positionCamera(int angle, int rotation){

@@ -2,13 +2,10 @@ package scripts.dax_api.walker_engine.interaction_handling;
 
 import org.tribot.api.General;
 import org.tribot.api.types.generic.Filter;
+import org.tribot.api2007.*;
 import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSArea;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSObjectDefinition;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.*;
 import scripts.dax_api.shared.helpers.RSObjectHelper;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
@@ -29,16 +26,18 @@ public class PathObjectHandler implements Loggable {
     private final TreeSet<String> sortedOptions, sortedBlackList, sortedBlackListOptions, sortedHighPriorityOptions;
 
     private PathObjectHandler(){
-        sortedOptions = new TreeSet<>(Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
+        sortedOptions = new TreeSet<>(
+		        Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up","Walk-Up", "Travel", "Get in",
-                "Investigate", "Operate", "Climb-under","Jump","Crawl-down","Crawl-through","Activate","Push","Squeeze-past"));
+                "Investigate", "Operate", "Climb-under","Jump","Crawl-down","Crawl-through","Activate","Push","Squeeze-past","Walk-Down",
+                "Swing-on", "Climb up"));
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin","Drawers","null"));
         sortedBlackListOptions = new TreeSet<>(Arrays.asList("Chop down"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)","Squeeze-past"));
     }
 
-    private static PathObjectHandler getInstance (){
+    private static PathObjectHandler getInstance(){
         return instance != null ? instance : (instance = new PathObjectHandler());
     }
 
@@ -132,6 +131,25 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Player.getPosition().getY() > 9481 && Player.getPosition().distanceTo(new RSTile(2601, 9482, 0)) < 3;
             }
+        }),
+        EDGEVILLE_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new RSTile(3138, 3516, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getAssumed().equals(new RSTile(3138, 3516, 0));
+            }
+        }),
+        VARROCK_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new RSTile(3141, 3513, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getAssumed().equals(new RSTile(3141, 3513, 0 ));
+            }
+        }),
+        GAMES_ROOM_STAIRS("Stairs", "Climb-down", new RSTile(2899, 3565, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getDestination().getRSTile().equals(new RSTile(2899, 3565, 0)) &&
+                    destinationDetails.getAssumed().equals(new RSTile(2205, 4934, 1));
+            }
         });
 
         private String name, action;
@@ -200,7 +218,8 @@ public class PathObjectHandler implements Loggable {
         }
 
         StringBuilder stringBuilder = new StringBuilder("Sort Order: ");
-        Arrays.stream(interactiveObjects).forEach(rsObject -> stringBuilder.append(rsObject.getDefinition().getName()).append(" ").append(Arrays.asList(rsObject.getDefinition().getActions())).append(", "));
+        Arrays.stream(interactiveObjects).forEach(rsObject -> stringBuilder.append(rsObject.getDefinition().getName()).append(" ").append(
+		        Arrays.asList(rsObject.getDefinition().getActions())).append(", "));
         getInstance().log(stringBuilder);
 
         return handle(path, interactiveObjects[0], destinationDetails, action, specialObject);
@@ -235,7 +254,14 @@ public class PathObjectHandler implements Loggable {
                             .filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
                                     .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
                         RSObject web = webs.get(0);
-                        InteractionHelper.click(web, "Slash");
+                        if (canLeftclickWeb()) {
+                            InteractionHelper.click(web, "Slash");
+                        } else {
+                            useBladeOnWeb(web);
+                        }
+                        if(Game.isUptext("->")){
+                            Walking.blindWalkTo(Player.getPosition());
+                        }
                         if (web.getPosition().distanceTo(Player.getPosition()) <= 1) {
                             WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
                         } else {
@@ -267,11 +293,31 @@ public class PathObjectHandler implements Loggable {
                         }
                     }
                     break;
+                case VARROCK_UNDERWALL_TUNNEL:
+                    if(!clickOnObject(object,specialObject.getAction())){
+                        return false;
+                    }
+                    successfulClick = true;
+                    WaitFor.condition(10000, () ->
+                            SpecialObject.EDGEVILLE_UNDERWALL_TUNNEL.getLocation().equals(Player.getPosition()) ?
+                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    break;
+                case EDGEVILLE_UNDERWALL_TUNNEL:
+                    if(!clickOnObject(object,specialObject.getAction())){
+                        return false;
+                    }
+                    successfulClick = true;
+                    WaitFor.condition(10000, () ->
+                            SpecialObject.VARROCK_UNDERWALL_TUNNEL.getLocation().equals(Player.getPosition()) ?
+                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    break;
             }
         }
 
         if (!successfulClick){
-            String[] validOptions = action != null ? new String[]{action} : getViableOption(Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(Collectors.toList()), destinationDetails);
+            String[] validOptions = action != null ? new String[]{action} : getViableOption(
+		            Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(
+				            Collectors.toList()), destinationDetails);
             if (!clickOnObject(object, validOptions)) {
                 return false;
             }
@@ -337,15 +383,23 @@ public class PathObjectHandler implements Loggable {
                 if (actions2.contains("Climb-up")){
                     return 1;
                 }
-            }
-
-            if (assumedZ < destinationZ){
+            } else if (assumedZ < destinationZ){
                 if (actions1.contains("Climb-down")){
                     return -1;
                 }
                 if (actions2.contains("Climb-down")){
                     return 1;
                 }
+            } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getRSTile()) > 20){
+                if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
+                    return -1;
+                } else if(actions2.contains("Climb-up") || actions2.contains("Climb-down")){
+                    return 1;
+                }
+            } else if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
+                return 1;
+            } else if(actions2.contains("Climb-up") || actions2.contains("Climb-down")){
+                return -1;
             }
             return c;
         });
@@ -420,7 +474,7 @@ public class PathObjectHandler implements Loggable {
         return options;
     }
 
-    private static boolean clickOnObject(RSObject object, String[] options){
+    private static boolean clickOnObject(RSObject object, String... options){
         boolean result;
 
         if (isClosedTrapDoor(object, options)){
@@ -428,6 +482,7 @@ public class PathObjectHandler implements Loggable {
         } else {
             result = InteractionHelper.click(object, options);
             getInstance().log("Interacting with (" + RSObjectHelper.getName(object) + ") at " + object.getPosition() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
+            WaitFor.milliseconds(250,800);
         }
 
         return result;
@@ -519,4 +574,20 @@ public class PathObjectHandler implements Loggable {
     public String getName() {
         return "Object Handler";
     }
+
+    private static List<Integer> SLASH_WEAPONS = new ArrayList<>(Arrays.asList(1,4,9,10,12,17,20,21));
+
+    private static boolean canLeftclickWeb(){
+        RSVarBit weaponType = RSVarBit.get(357);
+        return (weaponType != null && SLASH_WEAPONS.contains(weaponType.getValue())) || Inventory.find("Knife").length > 0;
+    }
+    private static boolean useBladeOnWeb(RSObject web){
+        if(!Game.isUptext("->")){
+            RSItem[] slashable = Inventory.find(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier"));
+            if(slashable.length == 0 || !slashable[0].click("Use"))
+                return false;
+        }
+        return InteractionHelper.click(web, Game.getUptext());
+    }
+
 }

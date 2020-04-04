@@ -91,7 +91,7 @@ public class DefaultObjectHandler implements MoveTaskHandler, DaxLogger {
             RSObjectDefinition definition = rsObject.getDefinition();
             return Stream.of(definition).anyMatch(rsObjectDefinition ->
                     Arrays.stream(rsObjectDefinition.getActions()).anyMatch(MATCHES::contains)
-            );
+                                                 );
         };
     }
 
@@ -107,11 +107,13 @@ public class DefaultObjectHandler implements MoveTaskHandler, DaxLogger {
         String[] clickActions = action;
 
         if (getDirection(moveTask) == Direction.UP) {
-            clickActions = TribotUtil.getActions(object).stream().filter(s -> s.toLowerCase().contains("up")).toArray(String[]::new);
+            clickActions = TribotUtil.getActions(object).stream().filter(s -> s.toLowerCase().contains("up")).toArray(
+		            String[]::new);
         }
 
         if (getDirection(moveTask) == Direction.DOWN) {
-            clickActions = TribotUtil.getActions(object).stream().filter(s -> s.toLowerCase().contains("down")).toArray(String[]::new);
+            clickActions = TribotUtil.getActions(object).stream().filter(s -> s.toLowerCase().contains("down")).toArray(
+		            String[]::new);
         }
 
         log(String.format("Clicking %s with %s", TribotUtil.getName(object), Arrays.toString(clickActions)));

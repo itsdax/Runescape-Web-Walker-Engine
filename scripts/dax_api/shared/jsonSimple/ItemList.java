@@ -26,12 +26,12 @@ public class ItemList {
 		this.split(s,sp,items);
 	}
 	
-	public ItemList(String s,String sp){
+	public ItemList(String s, String sp){
 		this.sp=s;
 		this.split(s,sp,items);
 	}
 	
-	public ItemList(String s,String sp,boolean isMultiToken){
+	public ItemList(String s, String sp, boolean isMultiToken){
 		split(s,sp,items,isMultiToken);
 	}
 	
@@ -43,7 +43,7 @@ public class ItemList {
 		return (String[])this.items.toArray();
 	}
 	
-	public void split(String s,String sp,List append,boolean isMultiToken){
+	public void split(String s, String sp, List append, boolean isMultiToken){
 		if(s==null || sp==null)
 			return;
 		if(isMultiToken){
@@ -57,7 +57,7 @@ public class ItemList {
 		}
 	}
 	
-	public void split(String s,String sp,List append){
+	public void split(String s, String sp, List append){
 		if(s==null || sp==null)
 			return;
 		int pos=0;
@@ -77,7 +77,7 @@ public class ItemList {
 		this.sp=sp;
 	}
 	
-	public void add(int i,String item){
+	public void add(int i, String item){
 		if(item==null)
 			return;
 		items.add(i,item.trim());
@@ -97,11 +97,11 @@ public class ItemList {
 		this.split(s,sp,items);
 	}
 	
-	public void addAll(String s,String sp){
+	public void addAll(String s, String sp){
 		this.split(s,sp,items);
 	}
 	
-	public void addAll(String s,String sp,boolean isMultiToken){
+	public void addAll(String s, String sp, boolean isMultiToken){
 		this.split(s,sp,items,isMultiToken);
 	}
 	

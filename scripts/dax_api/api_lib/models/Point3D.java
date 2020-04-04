@@ -3,7 +3,6 @@ package scripts.dax_api.api_lib.models;
 import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.types.RSTile;
 

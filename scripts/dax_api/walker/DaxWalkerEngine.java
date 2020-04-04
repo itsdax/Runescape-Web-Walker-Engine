@@ -2,16 +2,17 @@ package scripts.dax_api.walker;
 
 import org.tribot.api2007.Game;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.walker.handlers.move_task.impl.DefaultObjectHandler;
+import scripts.dax_api.walker.handlers.move_task.impl.DefaultWalkHandler;
 import scripts.dax_api.walker.handlers.passive_action.PassiveAction;
 import scripts.dax_api.walker.handlers.special_cases.SpecialCaseHandler;
 import scripts.dax_api.walker.handlers.special_cases.SpecialCaseHandlers;
 import scripts.dax_api.walker.models.DaxLogger;
-import scripts.dax_api.walker.models.enums.MoveActionResult;
 import scripts.dax_api.walker.models.MoveTask;
+import scripts.dax_api.walker.models.enums.MoveActionResult;
 import scripts.dax_api.walker.models.enums.Situation;
 import scripts.dax_api.walker.utils.path.DaxPathFinder;
 import scripts.dax_api.walker.utils.path.PathUtils;
-import scripts.dax_api.walker.handlers.move_task.impl.*;
 
 import java.util.ArrayList;
 import java.util.List;

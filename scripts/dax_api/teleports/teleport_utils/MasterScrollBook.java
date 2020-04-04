@@ -1,4 +1,4 @@
-package scripts.dax_api.teleport_logic.teleport_utils;
+package scripts.dax_api.teleports.teleport_utils;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
@@ -20,7 +20,7 @@ public class MasterScrollBook {
 			INTERFACE_MASTER = 597, DEFAULT_VARBIT = 5685,
 			SELECT_OPTION_MASTER = 219, SELECT_OPTION_CHILD = 1,
 			GAMETABS_INTERFACE_MASTER = 161;
-	private static Map<String,Integer> cache = new HashMap<String,Integer>();
+	private static Map<String, Integer> cache = new HashMap<String, Integer>();
 	
 	public enum Teleports {
 		NARDAH(5672,"Nardah", TeleportScrolls.NARDAH.getLocation()),
@@ -36,12 +36,13 @@ public class MasterScrollBook {
 		LUMBERYARD(5682,"Lumberyard", TeleportScrolls.LUMBERYARD.getLocation()),
 		ZULLANDRA(5683,"Zul-Andra", TeleportScrolls.ZULLANDRA.getLocation()),
 		KEY_MASTER(5684,"Key Master", TeleportScrolls.KEY_MASTER.getLocation()),
-		REVENANT_CAVES(6056,"Revenant cave", TeleportScrolls.REVENANT_CAVES.getLocation());
+		REVENANT_CAVES(6056,"Revenant cave", TeleportScrolls.REVENANT_CAVES.getLocation()),
+		WATSON(8253, "Watson", TeleportScrolls.WATSON.getLocation());
 		
 		private int varbit;
 		private String name;
 		private RSTile destination;
-		Teleports(int varbit,String name,RSTile destination){
+		Teleports(int varbit, String name, RSTile destination){
 			this.varbit = varbit;
 			this.name = name;
 			this.destination = destination;

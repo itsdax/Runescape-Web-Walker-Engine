@@ -4,7 +4,6 @@ import org.tribot.api2007.Game;
 import org.tribot.api2007.Magic;
 import org.tribot.api2007.Skills;
 import scripts.dax_api.shared.Pair;
-import scripts.dax_api.teleport_logic.Validatable;
 
 
 public enum Spell implements Validatable {

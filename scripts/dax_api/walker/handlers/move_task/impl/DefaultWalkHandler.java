@@ -6,8 +6,8 @@ import scripts.dax_api.walker.handlers.move_task.MoveTaskHandler;
 import scripts.dax_api.walker.handlers.passive_action.PassiveAction;
 import scripts.dax_api.walker.models.MoveTask;
 import scripts.dax_api.walker.models.enums.MoveActionResult;
-import scripts.dax_api.walker.utils.path.DaxPathFinder;
 import scripts.dax_api.walker.utils.AccurateMouse;
+import scripts.dax_api.walker.utils.path.DaxPathFinder;
 
 import java.util.List;
 

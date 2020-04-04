@@ -26,7 +26,7 @@ public class PlayerInformation {
         try {
             RSPlayer rsPlayer = Player.getRSPlayer();
             return new PlayerInformation(
-                    WorldHopper.isMembers(WorldHopper.getWorld()),
+                    WorldHelper.isMember(WorldHopper.getWorld()),
                     rsPlayer.getCombatLevel(),
                     Skills.SKILLS.values(),
                     grabSettings(),

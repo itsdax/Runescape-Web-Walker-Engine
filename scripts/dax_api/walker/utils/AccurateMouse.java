@@ -6,17 +6,17 @@ import org.tribot.api.interfaces.Clickable;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.*;
-import org.tribot.api2007.Objects;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.*;
-import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.shared.helpers.RSItemHelper;
 import scripts.dax_api.shared.helpers.RSNPCHelper;
 import scripts.dax_api.shared.helpers.RSObjectHelper;
+import scripts.dax_api.walker_engine.WaitFor;
 
 import java.awt.*;
 import java.awt.geom.Area;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -104,7 +104,7 @@ public class AccurateMouse {
         return false;
     }
 
-    private static boolean action(Clickable clickable, boolean hover, String... clickActions) {
+    public static boolean action(Clickable clickable, boolean hover, String... clickActions) {
         if (clickable == null) {
             return false;
         }
@@ -247,7 +247,8 @@ public class AccurateMouse {
             return true;
         }
 
-        String regex = String.format("(%s) (.*-> )?%s(.*)", String.join("|", Arrays.stream(clickActions).map(Pattern::quote).collect(Collectors.toList())), targetName != null ? Pattern.quote(targetName) : "");
+        String regex = String.format("(%s) (.*-> )?%s(.*)", String.join("|", Arrays.stream(clickActions).map(
+		        Pattern::quote).collect(Collectors.toList())), targetName != null ? Pattern.quote(targetName) : "");
 
         if (WaitFor.condition(80, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
             boolean multipleMatches = false;
@@ -389,9 +390,15 @@ public class AccurateMouse {
                 continue;
             }
             polygons.add(Projection.getTileBoundsPoly(tile, 0));
-            polygons.addAll(Arrays.stream(Objects.getAt(tile)).filter(object -> RSObjectHelper.getActions(object).length > 0).map(RSObject::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(Collectors.toList()));
-            polygons.addAll(Arrays.stream(GroundItems.getAt(tile)).filter(object -> RSItemHelper.getItemActions(object).length > 0).map(RSGroundItem::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(Collectors.toList()));
-            polygons.addAll(Arrays.stream(NPCs.find(Filters.NPCs.tileEquals(tile))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(Collectors.toList()));
+            polygons.addAll(
+		            Arrays.stream(Objects.getAt(tile)).filter(object -> RSObjectHelper.getActions(object).length > 0).map(RSObject::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
+				            Collectors.toList()));
+            polygons.addAll(
+		            Arrays.stream(GroundItems.getAt(tile)).filter(object -> RSItemHelper.getItemActions(object).length > 0).map(RSGroundItem::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
+				            Collectors.toList()));
+            polygons.addAll(
+		            Arrays.stream(NPCs.find(Filters.NPCs.tileEquals(tile))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
+				            Collectors.toList()));
         }
 
         outterLoop:

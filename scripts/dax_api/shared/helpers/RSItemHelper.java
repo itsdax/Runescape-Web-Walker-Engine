@@ -13,7 +13,8 @@ import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSMenuNode;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 

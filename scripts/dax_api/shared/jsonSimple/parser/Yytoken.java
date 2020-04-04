@@ -20,7 +20,7 @@ public class Yytoken {
 	public int type=0;
 	public Object value=null;
 	
-	public Yytoken(int type,Object value){
+	public Yytoken(int type, Object value){
 		this.type=type;
 		this.value=value;
 	}

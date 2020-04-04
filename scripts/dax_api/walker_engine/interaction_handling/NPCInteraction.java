@@ -10,11 +10,14 @@ import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSPlayer;
+import scripts.dax_api.shared.helpers.InterfaceHelper;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.shared.helpers.InterfaceHelper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -202,7 +205,8 @@ public class NPCInteraction implements Loggable {
                 return text != null && text.length() > 0;
             }).collect(Collectors.toList());
             if (details.size() > 0) {
-                getInstance().log("Conversation Options: [" + details.stream().map(RSInterface::getText).collect(Collectors.joining(", ")) + "]");
+                getInstance().log("Conversation Options: [" + details.stream().map(RSInterface::getText).collect(
+		                Collectors.joining(", ")) + "]");
                 return details;
             }
         }
@@ -228,7 +232,8 @@ public class NPCInteraction implements Loggable {
      */
     private static List<RSInterface> getAllOptions(String regex){
         List<RSInterface> list = getConversationDetails();
-        return list != null ? list.stream().filter(rsInterface -> rsInterface.getText().matches(regex)).collect(Collectors.toList()) : null;
+        return list != null ? list.stream().filter(rsInterface -> rsInterface.getText().matches(regex)).collect(
+		        Collectors.toList()) : null;
     }
 
     /**
@@ -239,7 +244,8 @@ public class NPCInteraction implements Loggable {
     private static List<RSInterface> getAllOptions(String... options){
         final List<String> optionList = Arrays.stream(options).map(String::toLowerCase).collect(Collectors.toList());
         List<RSInterface> list = getConversationDetails();
-        return list != null ? list.stream().filter(rsInterface -> optionList.contains(rsInterface.getText().trim().toLowerCase())).collect(Collectors.toList()) : null;
+        return list != null ? list.stream().filter(rsInterface -> optionList.contains(rsInterface.getText().trim().toLowerCase())).collect(
+		        Collectors.toList()) : null;
     }
 
     @Override

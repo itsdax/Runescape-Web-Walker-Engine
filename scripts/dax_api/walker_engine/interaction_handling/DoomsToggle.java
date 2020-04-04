@@ -2,8 +2,8 @@ package scripts.dax_api.walker_engine.interaction_handling;
 
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterface;
-import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.shared.helpers.InterfaceHelper;
+import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
 
 import java.util.Arrays;
@@ -12,9 +12,10 @@ import java.util.Optional;
 
 public class DoomsToggle implements Loggable {
 
-    private static final int STRONGHOLD_TOGGLE = 579, WILDERNESS_TOGGLE = 475, SHANTY_TOGGLE = 565, WATERBIRTH = 574, MORT_MYRE = 580, LUMBRIDGE_SWAMP = 572;
+    private static final int STRONGHOLD_TOGGLE = 579, WILDERNESS_TOGGLE = 475, SHANTY_TOGGLE = 565, WATERBIRTH = 574, MORT_MYRE = 580, LUMBRIDGE_SWAMP = 572,
+            OBSERVATORY_TOGGLE = 560;
 
-    private static final int[] GENERAL_CASES = {STRONGHOLD_TOGGLE, WILDERNESS_TOGGLE, SHANTY_TOGGLE, WATERBIRTH, MORT_MYRE, LUMBRIDGE_SWAMP};
+    private static final int[] GENERAL_CASES = {STRONGHOLD_TOGGLE, WILDERNESS_TOGGLE, SHANTY_TOGGLE, WATERBIRTH, MORT_MYRE, LUMBRIDGE_SWAMP, OBSERVATORY_TOGGLE};
 
     private static DoomsToggle instance;
 
@@ -25,7 +26,8 @@ public class DoomsToggle implements Loggable {
 
     public static void handleToggle(){
         for (int generalCase : GENERAL_CASES){
-            handle(generalCase, "Yes", "Enter Wilderness","Enter the swamp.","I'll be fine without a tinderbox.");
+            handle(generalCase, "Yes", "Enter Wilderness","Enter the swamp.","I'll be fine without a tinderbox.",
+                    "Proceed regardless");
         }
     }
 

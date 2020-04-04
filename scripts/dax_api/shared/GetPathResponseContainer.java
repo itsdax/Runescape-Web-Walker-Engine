@@ -18,7 +18,7 @@ public class GetPathResponseContainer {
     public static GetPathResponseContainer CLIENT_ERROR = new GetPathResponseContainer(Status.CLIENT_ERROR, "No problem with server. Client issue.", new ArrayList<>(), null, true);
 
     public GetPathResponseContainer(Status status, String response, ArrayList<PathFindingNode> path, PlayerInformation playerInformation){
-        this (status, response, new ArrayList<>(), playerInformation, false);
+        this(status, response, new ArrayList<>(), playerInformation, false);
         if (path != null) {
             for (PathFindingNode pathFindingNode : path) {
                 this.path.add(pathFindingNode.getX() + " " + pathFindingNode.getY() + " " + pathFindingNode.getZ());

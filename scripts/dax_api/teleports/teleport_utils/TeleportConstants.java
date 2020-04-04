@@ -1,4 +1,4 @@
-package scripts.dax_api.teleport_logic;
+package scripts.dax_api.teleports.teleport_utils;
 
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.types.RSVarBit;

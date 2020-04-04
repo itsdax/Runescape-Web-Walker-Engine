@@ -71,11 +71,11 @@ public class JSONParser {
 		return lexer.getPosition();
 	}
 	
-	public Object parse(String s) throws ParseException{
+	public Object parse(String s) throws ParseException {
 		return parse(s, (ContainerFactory)null);
 	}
 	
-	public Object parse(String s, ContainerFactory containerFactory) throws ParseException{
+	public Object parse(String s, ContainerFactory containerFactory) throws ParseException {
 		StringReader in=new StringReader(s);
 		try{
 			return parse(in, containerFactory);
@@ -88,7 +88,7 @@ public class JSONParser {
 		}
 	}
 	
-	public Object parse(Reader in) throws IOException, ParseException{
+	public Object parse(Reader in) throws IOException, ParseException {
 		return parse(in, (ContainerFactory)null);
 	}
 	
@@ -108,7 +108,7 @@ public class JSONParser {
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	public Object parse(Reader in, ContainerFactory containerFactory) throws IOException, ParseException{
+	public Object parse(Reader in, ContainerFactory containerFactory) throws IOException, ParseException {
 		reset(in);
 		LinkedList statusStack = new LinkedList();
 		LinkedList valueStack = new LinkedList();
@@ -140,7 +140,7 @@ public class JSONParser {
 					break;
 					
 				case S_IN_FINISHED_VALUE:
-					if(token.type==Yytoken.TYPE_EOF)
+					if(token.type== Yytoken.TYPE_EOF)
 						return valueStack.removeFirst();
 					else
 						throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
@@ -256,7 +256,7 @@ public class JSONParser {
 				if(status==S_IN_ERROR){
 					throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 				}
-			}while(token.type!=Yytoken.TYPE_EOF);
+			}while(token.type!= Yytoken.TYPE_EOF);
 		}
 		catch(IOException ie){
 			throw ie;
@@ -265,7 +265,7 @@ public class JSONParser {
 		throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 	}
 	
-	private void nextToken() throws ParseException, IOException{
+	private void nextToken() throws ParseException, IOException {
 		token = lexer.yylex();
 		if(token == null)
 			token = new Yytoken(Yytoken.TYPE_EOF, null);
@@ -291,11 +291,11 @@ public class JSONParser {
 		return l;
 	}
 	
-	public void parse(String s, ContentHandler contentHandler) throws ParseException{
+	public void parse(String s, ContentHandler contentHandler) throws ParseException {
 		parse(s, contentHandler, false);
 	}
 	
-	public void parse(String s, ContentHandler contentHandler, boolean isResume) throws ParseException{
+	public void parse(String s, ContentHandler contentHandler, boolean isResume) throws ParseException {
 		StringReader in=new StringReader(s);
 		try{
 			parse(in, contentHandler, isResume);
@@ -308,7 +308,7 @@ public class JSONParser {
 		}
 	}
 	
-	public void parse(Reader in, ContentHandler contentHandler) throws IOException, ParseException{
+	public void parse(Reader in, ContentHandler contentHandler) throws IOException, ParseException {
 		parse(in, contentHandler, false);
 	}
 	
@@ -326,7 +326,7 @@ public class JSONParser {
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	public void parse(Reader in, ContentHandler contentHandler, boolean isResume) throws IOException, ParseException{
+	public void parse(Reader in, ContentHandler contentHandler, boolean isResume) throws IOException, ParseException {
 		if(!isResume){
 			reset(in);
 			handlerStatusStack = new LinkedList();
@@ -339,7 +339,7 @@ public class JSONParser {
 			}
 		}
 		
-		LinkedList statusStack = handlerStatusStack;	
+		LinkedList statusStack = handlerStatusStack;
 		
 		try{
 			do{
@@ -373,7 +373,7 @@ public class JSONParser {
 					
 				case S_IN_FINISHED_VALUE:
 					nextToken();
-					if(token.type==Yytoken.TYPE_EOF){
+					if(token.type== Yytoken.TYPE_EOF){
 						contentHandler.endJSON();
 						status = S_END;
 						return;
@@ -508,7 +508,7 @@ public class JSONParser {
 				if(status==S_IN_ERROR){
 					throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 				}
-			}while(token.type!=Yytoken.TYPE_EOF);
+			}while(token.type!= Yytoken.TYPE_EOF);
 		}
 		catch(IOException ie){
 			status = S_IN_ERROR;
