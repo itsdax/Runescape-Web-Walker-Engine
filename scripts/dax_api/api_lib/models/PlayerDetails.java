@@ -29,7 +29,7 @@ public class PlayerDetails {
                                        .map(value -> new IntPair(value, Game.getSetting(value))).distinct().collect(Collectors.toList());
 
         List<IntPair> varbit = Arrays.stream(new int[]{
-            197,
+            192,
             199,
             357,
             2328,
