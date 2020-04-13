@@ -1,30 +1,25 @@
 package scripts.dax_api.api_lib;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import scripts.dax_api.api_lib.json.Json;
+import scripts.dax_api.api_lib.json.JsonValue;
+import scripts.dax_api.api_lib.json.ParseException;
+import scripts.dax_api.api_lib.models.*;
+import scripts.dax_api.api_lib.utils.IOHelper;
+import scripts.dax_api.walker_engine.Loggable;
+
+import javax.net.ssl.HttpsURLConnection;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.HashMap;
-
-import javax.net.ssl.HttpsURLConnection;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
-import scripts.dax_api.api_lib.json.Json;
-import scripts.dax_api.api_lib.json.JsonValue;
-import scripts.dax_api.api_lib.json.ParseException;
-import scripts.dax_api.api_lib.models.RunescapeBank;
-import scripts.dax_api.api_lib.models.DaxCredentialsProvider;
-import scripts.dax_api.api_lib.models.PathResult;
-import scripts.dax_api.api_lib.models.PathStatus;
-import scripts.dax_api.api_lib.models.PlayerDetails;
-import scripts.dax_api.api_lib.models.Point3D;
-import scripts.dax_api.api_lib.models.ServerResponse;
-import scripts.dax_api.api_lib.utils.IOHelper;
-import scripts.dax_api.walker_engine.Loggable;
+import java.util.List;
 
 public class WebWalkerServerApi implements Loggable {
 
@@ -52,6 +47,24 @@ public class WebWalkerServerApi implements Loggable {
 
     public void setDaxCredentialsProvider(DaxCredentialsProvider daxCredentialsProvider) {
         this.daxCredentialsProvider = daxCredentialsProvider;
+    }
+
+    public List<PathResult> getPaths(BulkPathRequest bulkPathRequest) {
+        try {
+            return parseResults(post(gson.toJson(bulkPathRequest),WALKER_ENDPOINT + "/walker/generatePaths"));
+        } catch(IOException e){
+            getInstance().log("Is server down? Spam dax.");
+            return Collections.singletonList(new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER));
+        }
+    }
+
+    public List<PathResult> getBankPaths(BulkBankPathRequest bulkBankPathRequest) {
+        try {
+            return parseResults(post(gson.toJson(bulkBankPathRequest),WALKER_ENDPOINT + "/walker/generateBankPaths"));
+        } catch(IOException e){
+            getInstance().log("Is server down? Spam dax.");
+            return Collections.singletonList(new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER));
+        }
     }
 
     public PathResult getPath(Point3D start, Point3D end, PlayerDetails playerDetails) {
@@ -101,6 +114,40 @@ public class WebWalkerServerApi implements Loggable {
         isTestMode = testMode;
     }
 
+    private List<PathResult> parseResults(ServerResponse serverResponse){
+        if (!serverResponse.isSuccess()) {
+            JsonValue jsonValue  = null;
+            try{
+                jsonValue = Json.parse(serverResponse.getContents());
+            } catch(Exception | Error e){
+                jsonValue = Json.NULL;
+            }
+            if (!jsonValue.isNull()) {
+                getInstance().log("[Error] " + jsonValue.asObject().getString(
+                        "message",
+                        "Could not generate path: " + serverResponse.getContents()
+                                                                             ));
+            }
+
+            switch (serverResponse.getCode()) {
+                case 429:
+                    return Collections.singletonList(new PathResult(PathStatus.RATE_LIMIT_EXCEEDED));
+                case 400:
+                case 401:
+                case 404:
+                    return Collections.singletonList(new PathResult(PathStatus.INVALID_CREDENTIALS));
+            }
+        }
+
+        try {
+            return gson.fromJson(serverResponse.getContents(), new TypeToken<List<PathResult>>() {}.getType());
+        } catch (ParseException e) {
+            PathResult pathResult = new PathResult(PathStatus.UNKNOWN);
+            log("Error: " + pathResult.getPathStatus());
+            return Collections.singletonList(pathResult);
+        }
+    }
+
     private PathResult parseResult(ServerResponse serverResponse) {
         if (!serverResponse.isSuccess()) {
             JsonValue jsonValue  = null;
@@ -142,9 +189,13 @@ public class WebWalkerServerApi implements Loggable {
     }
 
     private ServerResponse post(com.google.gson.JsonObject jsonObject, String endpoint) throws IOException {
-        getInstance().log("Generating path: " + jsonObject.toString());
-        if (cache.containsKey(jsonObject.toString())) {
-            return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(jsonObject.toString()));
+        return post(gson.toJson(jsonObject),endpoint);
+    }
+
+    private ServerResponse post(String json, String endpoint) throws IOException {
+        getInstance().log("Generating path: " + json);
+        if (cache.containsKey(json)) {
+            return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(json.toString()));
         }
 
         URL myurl = new URL(endpoint);
@@ -159,7 +210,7 @@ public class WebWalkerServerApi implements Loggable {
         IOHelper.appendAuth(connection, daxCredentialsProvider);
 
         try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
-            outputStream.write(jsonObject.toString().getBytes(StandardCharsets.UTF_8));
+            outputStream.write(json.getBytes(StandardCharsets.UTF_8));
         }
 
         int responseCode = connection.getResponseCode();
@@ -168,7 +219,7 @@ public class WebWalkerServerApi implements Loggable {
         }
 
         String contents = IOHelper.readInputStream(connection.getInputStream());
-        cache.put(jsonObject.toString(), contents);
+        cache.put(json, contents);
         return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
     }
 

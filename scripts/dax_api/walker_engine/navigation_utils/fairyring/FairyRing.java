@@ -9,6 +9,7 @@ import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.FirstLetter;
@@ -23,8 +24,8 @@ public class FairyRing {
 
 	public static final int
 		INTERFACE_MASTER = 398,
-		TELEPORT_CHILD = 26;
-
+		TELEPORT_CHILD = 26,
+		ELITE_DIARY_VARBIT = 4538;
 	private static final int[]
 			DRAMEN_STAFFS = {772,9084};
 
@@ -39,7 +40,7 @@ public class FairyRing {
 
 		if(location == null)
 			return false;
-		if (Equipment.getCount(DRAMEN_STAFFS) == 0){
+		if (RSVarBit.get(ELITE_DIARY_VARBIT).getValue() == 0 && Equipment.getCount(DRAMEN_STAFFS) == 0){
 			if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(DRAMEN_STAFFS)), "Wield")){
 				return false;
 			}

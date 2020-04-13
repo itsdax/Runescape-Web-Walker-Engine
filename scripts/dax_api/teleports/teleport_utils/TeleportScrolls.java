@@ -1,11 +1,11 @@
-package scripts.dax_api.teleport_logic.teleport_utils;
+package scripts.dax_api.teleports.teleport_utils;
 
 import org.tribot.api.Timing;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.teleport_logic.Validatable;
+import scripts.dax_api.shared.helpers.magic.Validatable;
 
 public enum TeleportScrolls implements Validatable {
 	NARDAH("Nardah teleport",new RSTile(3419, 2916, 0)),
@@ -21,11 +21,12 @@ public enum TeleportScrolls implements Validatable {
 	LUMBERYARD("Lumberyard teleport",new RSTile(3302, 3487, 0)),
 	ZULLANDRA("Zul-andra teleport",new RSTile(2195, 3055, 0)),
 	KEY_MASTER("Key master teleport",new RSTile(1311, 1251, 0)),
-	REVENANT_CAVES("Revenant cave teleport",new RSTile(3130, 3832, 0))
+	REVENANT_CAVES("Revenant cave teleport",new RSTile(3130, 3832, 0)),
+	WATSON("Watson teleport", new RSTile(1645, 3579,0))
 	;
 	private String name;
 	private RSTile location;
-	TeleportScrolls(String name,RSTile location){
+	TeleportScrolls(String name, RSTile location){
 		this.name = name;
 		this.location = location;
 	}

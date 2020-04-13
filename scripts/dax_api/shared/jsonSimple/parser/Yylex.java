@@ -27,7 +27,7 @@ class Yylex {
   /** 
    * Translates characters to character classes
    */
-  private static final String ZZ_CMAP_PACKED = 
+  private static final String ZZ_CMAP_PACKED =
     "\11\0\1\7\1\7\2\0\1\7\22\0\1\7\1\0\1\11\10\0"+
     "\1\6\1\31\1\2\1\4\1\12\12\3\1\32\6\0\4\1\1\5"+
     "\1\1\24\0\1\27\1\10\1\30\3\0\1\22\1\13\2\1\1\21"+
@@ -587,7 +587,7 @@ int getPosition(){
           }
         case 28: break;
         case 23: 
-          { Boolean val=Boolean.valueOf(yytext()); return new Yytoken(Yytoken.TYPE_VALUE, val);
+          { Boolean val= Boolean.valueOf(yytext()); return new Yytoken(Yytoken.TYPE_VALUE, val);
           }
         case 29: break;
         case 22: 
@@ -603,7 +603,7 @@ int getPosition(){
           }
         case 32: break;
         case 21: 
-          { Double val=Double.valueOf(yytext()); return new Yytoken(Yytoken.TYPE_VALUE, val);
+          { Double val= Double.valueOf(yytext()); return new Yytoken(Yytoken.TYPE_VALUE, val);
           }
         case 33: break;
         case 1: 
@@ -640,7 +640,7 @@ int getPosition(){
         case 41: break;
         case 24: 
           { try{
-														int ch=Integer.parseInt(yytext().substring(2),16);
+														int ch= Integer.parseInt(yytext().substring(2),16);
 														sb.append((char)ch);
 													}
 													catch(Exception e){
@@ -657,7 +657,7 @@ int getPosition(){
           }
         case 44: break;
         case 2: 
-          { Long val=Long.valueOf(yytext()); return new Yytoken(Yytoken.TYPE_VALUE, val);
+          { Long val= Long.valueOf(yytext()); return new Yytoken(Yytoken.TYPE_VALUE, val);
           }
         case 45: break;
         case 18: 

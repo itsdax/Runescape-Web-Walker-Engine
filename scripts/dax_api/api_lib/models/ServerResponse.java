@@ -2,8 +2,6 @@ package scripts.dax_api.api_lib.models;
 
 import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
 @DoNotRename
 public class ServerResponse {

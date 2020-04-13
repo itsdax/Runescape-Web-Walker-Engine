@@ -3,9 +3,9 @@ package scripts.dax_api.walker_engine;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.shared.NodeInfo;
 import scripts.dax_api.walker_engine.local_pathfinding.PathAnalyzer;
 import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import scripts.dax_api.shared.NodeInfo;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

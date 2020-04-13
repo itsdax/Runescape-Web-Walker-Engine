@@ -7,14 +7,11 @@ package scripts.dax_api.shared.jsonSimple;
 import scripts.dax_api.shared.jsonSimple.parser.JSONParser;
 import scripts.dax_api.shared.jsonSimple.parser.ParseException;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.Collection;
-// import java.util.List;
 import java.util.Map;
+
+// import java.util.List;
 
 
 /**
@@ -123,7 +120,7 @@ public class JSONValue {
 			return;
 		}
 		
-		if(value instanceof String){		
+		if(value instanceof String){
             out.write('\"');
 			out.write(escape((String)value));
             out.write('\"');
@@ -299,7 +296,7 @@ public class JSONValue {
 			default:
                 //Reference: http://www.unicode.org/versions/Unicode5.1.0/
 				if((ch>='\u0000' && ch<='\u001F') || (ch>='\u007F' && ch<='\u009F') || (ch>='\u2000' && ch<='\u20FF')){
-					String ss=Integer.toHexString(ch);
+					String ss= Integer.toHexString(ch);
 					sb.append("\\u");
 					for(int k=0;k<4-ss.length();k++){
 						sb.append('0');

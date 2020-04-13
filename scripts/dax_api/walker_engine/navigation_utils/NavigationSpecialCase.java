@@ -11,6 +11,7 @@ import scripts.dax_api.shared.helpers.RSObjectHelper;
 import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker_engine.Loggable;
 import scripts.dax_api.walker_engine.WaitFor;
+import scripts.dax_api.walker_engine.interaction_handling.DoomsToggle;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 import scripts.dax_api.walker_engine.navigation_utils.fairyring.FairyRing;
@@ -23,7 +24,7 @@ import java.util.function.Predicate;
 import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
 
 
-public class NavigationSpecialCase implements Loggable{
+public class NavigationSpecialCase implements Loggable {
 
     private static NavigationSpecialCase instance = null;
 
@@ -70,10 +71,13 @@ public class NavigationSpecialCase implements Loggable{
         SPIRIT_TREE_VILLAGE (2542, 3170, 0),
 
         GNOME_TREE_GLIDER (GnomeGlider.Location.TA_QUIR_PRIW.getX(), GnomeGlider.Location.TA_QUIR_PRIW.getY(), GnomeGlider.Location.TA_QUIR_PRIW.getZ()),
-        AL_KHARID_GLIDER (GnomeGlider.Location.KAR_HEWO.getX(), GnomeGlider.Location.KAR_HEWO.getY(), GnomeGlider.Location.KAR_HEWO.getZ()),
+        AL_KHARID_GLIDER (
+		        GnomeGlider.Location.KAR_HEWO.getX(), GnomeGlider.Location.KAR_HEWO.getY(), GnomeGlider.Location.KAR_HEWO.getZ()),
         DIG_SITE_GLIDER (GnomeGlider.Location.LEMANTO_ANDRA.getX(), GnomeGlider.Location.LEMANTO_ANDRA.getY(), GnomeGlider.Location.LEMANTO_ANDRA.getZ()),
-        WOLF_MOUNTAIN_GLIDER (GnomeGlider.Location.SINDARPOS.getX(), GnomeGlider.Location.SINDARPOS.getY(), GnomeGlider.Location.SINDARPOS.getZ()),
-        GANDIUS_GLIDER (GnomeGlider.Location.GANDIUS.getX(), GnomeGlider.Location.GANDIUS.getY(), GnomeGlider.Location.GANDIUS.getZ()),
+        WOLF_MOUNTAIN_GLIDER (
+		        GnomeGlider.Location.SINDARPOS.getX(), GnomeGlider.Location.SINDARPOS.getY(), GnomeGlider.Location.SINDARPOS.getZ()),
+        GANDIUS_GLIDER (
+		        GnomeGlider.Location.GANDIUS.getX(), GnomeGlider.Location.GANDIUS.getY(), GnomeGlider.Location.GANDIUS.getZ()),
 
         ZANARIS_RING (2452, 4473, 0),
         LUMBRIDGE_ZANARIS_SHED (3201, 3169, 0),
@@ -199,7 +203,13 @@ public class NavigationSpecialCase implements Loggable{
         NEITIZNOT_DOCK(2311, 3781, 0),
 
         OBSERVATORY_OUTSIDE(2449, 3155, 0),
-        OBSERVATORY_INSIDE(2444, 3165, 0)
+        OBSERVATORY_INSIDE(2444, 3165, 0),
+
+        MOSS_GIANT_ISLAND_ROPE(2709, 3209, 0),
+        MOSS_GIANT_ISLAND_ROPE_LANDING(2704, 3209, 0),
+
+        SHANTAY_PASS_ENTRANCE(3304, 3117, 0),
+        SHANTAY_PASS_EXIT(3304, 3115, 0)
         ;
 
 
@@ -250,14 +260,16 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
             case RELLEKA_UPPER_PORT:
-                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{"That's fine, I'm just going to Pirates' Cove."})){
+                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{
+                		"That's fine, I'm just going to Pirates' Cove."})){
                     System.out.println("Was not able to travel with Lokar");
                     break;
                 }
                 WaitFor.milliseconds(3300, 5200);
                 break;
             case SMALL_PIRATES_COVE_AREA:
-                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{"That's fine, I'm just going to Pirates' Cove."})){
+                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{
+                		"That's fine, I'm just going to Pirates' Cove."})){
                     System.out.println("Was not able to travel with Lokar");
                     break;
                 }
@@ -312,7 +324,8 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
             case WATERBIRTH:
-                String option = NPCs.find(Filters.NPCs.nameContains("Jarvald").combine(Filters.NPCs.actionsContains("Travel"),true)).length > 0 ? "Travel" : "Talk-to";
+                String option = NPCs.find(Filters.NPCs.nameContains("Jarvald").combine(Filters.NPCs.actionsContains(
+                		"Travel"),true)).length > 0 ? "Travel" : "Talk-to";
                 if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Jarvald"), new String[]{option}, new String[]{
                         "What Jarvald is doing.",
                         "Can I come?",
@@ -341,12 +354,14 @@ public class NavigationSpecialCase implements Loggable{
                         break;
                     }
                 }
-                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> ZANARIS_RING.getRSTile().distanceTo(Player.getPosition()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                if (InteractionHelper.click(
+		                InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> ZANARIS_RING.getRSTile().distanceTo(Player.getPosition()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 break;
             case LUMBRIDGE_ZANARIS_SHED:
-                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Fairy ring")), "Use", () -> LUMBRIDGE_ZANARIS_SHED.getRSTile().distanceTo(Player.getPosition()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Fairy ring")),
+		                "Use", () -> LUMBRIDGE_ZANARIS_SHED.getRSTile().distanceTo(Player.getPosition()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 break;
@@ -355,8 +370,10 @@ public class NavigationSpecialCase implements Loggable{
                 break;
             case FINISHED_ROPE_TO_ROCK:
                 if (RSItemHelper.use(954)){
-                    InteractionHelper.focusCamera(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")));
-                    if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")), "Use Rope", () -> Player.getPosition().equals(new RSTile(2513, 3468, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    InteractionHelper.focusCamera(
+		                    InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")));
+                    if (InteractionHelper.click(
+		                    InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")), "Use Rope", () -> Player.getPosition().equals(new RSTile(2513, 3468, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                         return true;
                     }
                 }
@@ -380,7 +397,8 @@ public class NavigationSpecialCase implements Loggable{
                 break;
 
             case WATERFALL_DUNGEON:
-                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.idEquals(2010)), "Open", () -> Player.getPosition().getX() == WATERFALL_DUNGEON.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                if (InteractionHelper.click(
+		                InteractionHelper.getRSObject(Filters.Objects.idEquals(2010)), "Open", () -> Player.getPosition().getX() == WATERFALL_DUNGEON.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 getInstance().log("Failed to get to waterfall dungeon");
@@ -447,7 +465,8 @@ public class NavigationSpecialCase implements Loggable{
 
             case GNOME_ENTRANCE:
             case GNOME_EXIT:
-                if (clickObject(Filters.Objects.nameEquals("Gate").combine(Filters.Objects.actionsContains("Open"), true), "Open",
+                if (clickObject(Filters.Objects.nameEquals("Gate").combine(Filters.Objects.actionsContains("Open"),
+		                true), "Open",
                         () -> {
                             if (NPCInteraction.isConversationWindowUp()) {
                                 NPCInteraction.handleConversation(NPCInteraction.GENERAL_RESPONSES);
@@ -539,7 +558,8 @@ public class NavigationSpecialCase implements Loggable{
                 return false;
             case PEST_CONTROL:
             case PORT_SARIM_PEST_CONTROL:
-                return InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Travel").combine(Filters.NPCs.nameEquals("Squire"), true)), "Travel")
+                return InteractionHelper.click(
+		                InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Travel").combine(Filters.NPCs.nameEquals("Squire"), true)), "Travel")
                         && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
             case PORT_SARIM_VEOS:
@@ -617,7 +637,8 @@ public class NavigationSpecialCase implements Loggable{
             case HAM_INSIDE:
                 if (RSObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock"))){
                     if (InteractionHelper.click(RSObjectHelper.get(Filters.Objects.actionsContains("Pick-Lock")), "Pick-Lock")){
-                        WaitFor.condition(WaitFor.random(6000, 9000), () -> !RSObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock")) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        WaitFor.condition(
+		                        WaitFor.random(6000, 9000), () -> !RSObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock")) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         return true;
                     }
                 } else {
@@ -794,6 +815,30 @@ public class NavigationSpecialCase implements Loggable{
                             ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                 }) == WaitFor.Return.SUCCESS && WaitFor.milliseconds(600,1800) != null;
 
+            case MOSS_GIANT_ISLAND_ROPE:
+            case MOSS_GIANT_ISLAND_ROPE_LANDING:
+                if(Player.getPosition().distanceTo(MOSS_GIANT_ISLAND_ROPE.getRSTile()) >= 2){
+                    Walking.blindWalkTo(MOSS_GIANT_ISLAND_ROPE.getRSTile());
+                    WaitFor.milliseconds(200,400);
+                }
+                if (clickObject(Filters.Objects.nameEquals("Ropeswing"), "Swing-on", () -> Player.getPosition().getX() < 2708 ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+                    return true;
+                }
+                return false;
+            case SHANTAY_PASS_ENTRANCE:
+            case SHANTAY_PASS_EXIT:
+                if(Player.getPosition().getY() < 3117){
+                    return clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> SHANTAY_PASS_ENTRANCE.getRSTile().equals(Player.getPosition())
+                            ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+                } else if(Inventory.getCount(1854) == 0){
+                    NPCInteraction.talkTo(Filters.NPCs.nameEquals("Shantay"),new String[]{"Buy-pass"}, new String[]{});
+                }
+                return Inventory.getCount(1854) > 0 && clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> {
+                    DoomsToggle.handleToggle();
+                    return SHANTAY_PASS_EXIT.getRSTile().equals(Player.getPosition())
+                            ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                }) && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;

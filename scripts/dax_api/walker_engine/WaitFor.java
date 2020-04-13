@@ -7,7 +7,10 @@ import org.tribot.api.interfaces.Clickable07;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.types.*;
+import org.tribot.api2007.types.RSCharacter;
+import org.tribot.api2007.types.RSGroundItem;
+import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSTile;
 
 import java.util.Random;
 

@@ -5,21 +5,23 @@ import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSTile;
+import scripts.dax_api.teleports.Teleport;
+import scripts.dax_api.shared.PathFindingNode;
+import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker.utils.path.PathUtils;
 import scripts.dax_api.walker_engine.bfs.BFS;
-import scripts.dax_api.walker.utils.AccurateMouse;
+import scripts.dax_api.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.dax_api.walker_engine.local_pathfinding.PathAnalyzer;
 import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
 import scripts.dax_api.walker_engine.navigation_utils.Charter;
 import scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase;
 import scripts.dax_api.walker_engine.navigation_utils.ShipUtils;
-import scripts.dax_api.walker_engine.interaction_handling.PathObjectHandler;
 import scripts.dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import scripts.dax_api.shared.PathFindingNode;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class WalkerEngine implements Loggable{
 
@@ -60,6 +62,13 @@ public class WalkerEngine implements Loggable{
             log("Path is empty");
             return false;
         }
+
+
+        if (!handleTeleports(path)) {
+            log(Level.WARNING, "Failed to handle teleports...");
+            return false;
+        }
+
 
         navigating = true;
         currentPath = path;
@@ -223,8 +232,8 @@ public class WalkerEngine implements Loggable{
     boolean isDestinationClose(PathFindingNode pathFindingNode){
         final RSTile playerPosition = Player.getPosition();
         return new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()).isClickable()
-                && playerPosition.distanceTo(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 6
-                && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 49));
+                && playerPosition.distanceTo(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
+                && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 200));
     }
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){
@@ -295,6 +304,26 @@ public class WalkerEngine implements Loggable{
     @Override
     public String getName() {
         return "Walker Engine";
+    }
+
+    private boolean handleTeleports(List<RSTile> path) {
+        RSTile startPosition = path.get(0);
+        RSTile playerPosition = Player.getPosition();
+        if(startPosition.equals(playerPosition))
+            return true;
+        if(Banking.isBankScreenOpen())
+            Banking.close();
+        for (Teleport teleport : Teleport.values()) {
+            if (!teleport.getRequirement().satisfies()) continue;
+            if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
+                log("Using teleport method: " + teleport);
+                teleport.trigger();
+                return WaitFor.condition(General.random(3000, 20000),
+                    () -> startPosition.distanceTo(Player.getPosition()) < 10 ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            }
+        }
+        return true;
     }
 
 }
