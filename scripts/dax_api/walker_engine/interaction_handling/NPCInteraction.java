@@ -126,13 +126,15 @@ public class NPCInteraction implements Loggable {
         getInstance().log("Handling... " + Arrays.asList(options));
         List<String> blackList = new ArrayList<>();
         int limit = 0;
-        while (limit++ < 25){
+        while (limit++ < 50){
             if (WaitFor.condition(General.random(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                getInstance().log("Conversation window not up.");
                 break;
             }
 
             if (getClickHereToContinue() != null){
                 clickHereToContinue();
+                limit = 0;
                 continue;
             }
 
@@ -151,8 +153,13 @@ public class NPCInteraction implements Loggable {
                 blackList.add(selected.getText());
                 Keyboard.typeString(selected.getIndex() + "");
                 waitForNextOption();
+                limit = 0;
                 break;
             }
+            General.sleep(10,20);
+        }
+        if(limit > 50){
+            getInstance().log("Reached conversation limit.");
         }
     }
 
