@@ -617,7 +617,7 @@ public enum Teleport {
 	}
 
 	private static boolean inMembersWorld() {
-		return WorldHelper.isMember(WorldHopper.getWorld());
+		return WorldHopper.isMembers(WorldHopper.getWorld());
 	}
 
 	private static Predicate<RSItem> notNotedFilter() {
