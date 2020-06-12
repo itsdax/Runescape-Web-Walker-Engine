@@ -195,7 +195,7 @@ public class PathObjectHandler implements Loggable {
         abstract boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails);
     }
 
-    public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, ArrayList<RSTile> path){
+    public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, List<RSTile> path){
         RealTimeCollisionTile start = destinationDetails.getDestination(), end = destinationDetails.getNextTile();
 
         RSObject[] interactiveObjects = null;
@@ -226,7 +226,7 @@ public class PathObjectHandler implements Loggable {
         return handle(path, interactiveObjects[0], destinationDetails, action, specialObject);
     }
 
-    private static boolean handle(ArrayList<RSTile> path, RSObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
+    private static boolean handle(List<RSTile> path, RSObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
         PathAnalyzer.DestinationDetails current = PathAnalyzer.furthestReachableTile(path);
 
         if (current == null){

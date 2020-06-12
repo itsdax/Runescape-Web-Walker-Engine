@@ -30,7 +30,7 @@ public class WalkerEngine implements Loggable{
     private int attemptsForAction;
     private final int failThreshold;
     private boolean navigating;
-    private ArrayList<RSTile> currentPath;
+    private List<RSTile> currentPath;
 
     private WalkerEngine(){
         attemptsForAction = 0;
@@ -43,11 +43,11 @@ public class WalkerEngine implements Loggable{
         return walkerEngine != null ? walkerEngine : (walkerEngine = new WalkerEngine());
     }
 
-    public boolean walkPath(ArrayList<RSTile> path){
+    public boolean walkPath(List<RSTile> path){
         return walkPath(path, null);
     }
 
-    public ArrayList<RSTile> getCurrentPath() {
+    public List<RSTile> getCurrentPath() {
         return currentPath;
     }
 
@@ -57,7 +57,7 @@ public class WalkerEngine implements Loggable{
      * @param walkingCondition
      * @return
      */
-    public boolean walkPath(ArrayList<RSTile> path, WalkingCondition walkingCondition){
+    public boolean walkPath(List<RSTile> path, WalkingCondition walkingCondition){
         if (path.size() == 0) {
             log("Path is empty");
             return false;
