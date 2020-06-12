@@ -58,6 +58,7 @@ public class NavigationSpecialCase implements Loggable {
         UZER (3468, 3110, 0),
         BEDABIN_CAMP (3181, 3043, 0),
         POLLNIVNEACH (3350, 3002, 0),
+        NARDAH(3400, 2917, 0),
 
         SHILO_ENTRANCE (2881, 2953, 0),
         SHILO_INSIDE (2864, 2955, 0),
@@ -260,28 +261,15 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case RELLEKA_UPPER_PORT:
-                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{
-                		"That's fine, I'm just going to Pirates' Cove."})){
-                    System.out.println("Was not able to travel with Lokar");
-                    break;
-                }
-                WaitFor.milliseconds(3300, 5200);
-                break;
             case SMALL_PIRATES_COVE_AREA:
                 if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{
-                		"That's fine, I'm just going to Pirates' Cove."})){
+                    "That's fine, I'm just going to Pirates' Cove."})){
                     System.out.println("Was not able to travel with Lokar");
                     break;
                 }
                 WaitFor.milliseconds(3300, 5200);
                 break;
             case CAPTAIN_BENTLY_PIRATES_COVE:
-                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Captain"), new String[]{"Travel"}, new String[]{})){
-                    System.out.println("Was not able to travel with Captain");
-                    break;
-                }
-                WaitFor.milliseconds(5300, 7200);
-                break;
             case CAPTAIN_BENTLY_LUNAR_ISLE:
                 if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Captain"), new String[]{"Travel"}, new String[]{})){
                     System.out.println("Was not able to travel with Captain");
@@ -290,16 +278,19 @@ public class NavigationSpecialCase implements Loggable {
                 WaitFor.milliseconds(5300, 7200);
                 break;
             case SHANTAY_PASS:
+                handleCarpetRide("Shantay Pass");
+                break;
             case UZER:
+                handleCarpetRide("Uzer");
+                break;
             case BEDABIN_CAMP:
+                handleCarpetRide("Bebadin camp");
+                break;
             case POLLNIVNEACH:
-                String carpetDestination = specialLocation == SHANTAY_PASS ? "Shantay Pass" : specialLocation == UZER ? "Uzer" : specialLocation == BEDABIN_CAMP ? "Bedabin camp" : "Pollnivneach";
-                if (NPCInteraction.talkTo(Filters.NPCs.actionsContains("Travel"), new String[]{"Travel"}, new String[]{carpetDestination})){
-                    WaitFor.milliseconds(3500, 5000); //wait for board carpet before starting moving condition
-                    WaitFor.condition(30000, WaitFor.getNotMovingCondition());
-                    WaitFor.milliseconds(2250, 3250);
-                    return true;
-                }
+                handleCarpetRide("Pollnivneach");
+                break;
+            case NARDAH:
+                handleCarpetRide("Nardah");
                 break;
 
 
@@ -962,6 +953,16 @@ public class NavigationSpecialCase implements Loggable {
             NPCInteraction.handleConversation(destination);
             return WaitFor.condition(5000,() -> Player.getPosition().distanceTo(myPos) > 10 ? WaitFor.Return.SUCCESS :
                     WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+        }
+        return false;
+    }
+
+    private static boolean handleCarpetRide(String carpetDestination){
+        if (NPCInteraction.talkTo(Filters.NPCs.actionsContains("Travel"), new String[]{"Travel"}, new String[]{carpetDestination})){
+            WaitFor.milliseconds(3500, 5000); //wait for board carpet before starting moving condition
+            WaitFor.condition(30000, WaitFor.getNotMovingCondition());
+            WaitFor.milliseconds(2250, 3250);
+            return true;
         }
         return false;
     }
