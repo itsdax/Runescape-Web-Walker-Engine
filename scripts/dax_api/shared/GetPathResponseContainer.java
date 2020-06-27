@@ -6,7 +6,7 @@ import scripts.dax_api.shared.jsonSimple.JSONValue;
 
 import java.util.ArrayList;
 
-
+@Deprecated
 public class GetPathResponseContainer {
 
     private Status status;
