@@ -75,7 +75,7 @@ public class AccurateMouse {
         if (tile == null) {
             return false;
         }
-        for (int i = 0; i < General.random(4, 6); i++) {
+        for (int i = 0; i < General.random(7, 10); i++) {
             RSTile currentDestination = Game.getDestination();
             if (currentDestination != null && currentDestination.equals(tile)) {
                 return true;
