@@ -210,10 +210,7 @@ public class NavigationSpecialCase implements Loggable {
         MOSS_GIANT_ISLAND_ROPE_LANDING(2704, 3209, 0),
 
         SHANTAY_PASS_ENTRANCE(3304, 3117, 0),
-        SHANTAY_PASS_EXIT(3304, 3115, 0),
-
-        PATERDOMUS_EAST_EXIT(3423, 3485, 0),
-        PATERDOMUS_EAST_ENTRANCE(3440, 9887, 0)
+        SHANTAY_PASS_EXIT(3304, 3115, 0)
         ;
 
 
@@ -833,13 +830,6 @@ public class NavigationSpecialCase implements Loggable {
                     return SHANTAY_PASS_EXIT.getRSTile().equals(Player.getPosition())
                             ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                 }) && WaitFor.milliseconds(600,1800) != null;
-
-            case PATERDOMUS_EAST_ENTRANCE:
-                return clickObject(Filters.Objects.nameEquals("Trapdoor"), new String[]{"Open","Climb-down"}, () -> PATERDOMUS_EAST_ENTRANCE.getRSTile().equals(Player.getPosition())
-                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
-            case PATERDOMUS_EAST_EXIT:
-                return clickObject(Filters.Objects.nameEquals("Holy barrier"), "Pass-through", () -> PATERDOMUS_EAST_EXIT.getRSTile().equals(Player.getPosition())
-                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;
@@ -927,15 +917,11 @@ public class NavigationSpecialCase implements Loggable {
     }
 
     public static boolean clickObject(Predicate<RSObject> filter, String action, WaitFor.Condition condition) {
-        return clickObject(filter, new String[]{action}, condition);
-    }
-
-    public static boolean clickObject(Predicate<RSObject> filter, String[] action, WaitFor.Condition condition){
         RSObject[] objects = Objects.findNearest(15, filter);
         if (objects.length == 0){
             return false;
         }
-        return InteractionHelper.click(objects[0], action, condition);
+        return clickObject(objects[0], action, condition);
     }
 
     private static boolean handleFishingPlatform(){
