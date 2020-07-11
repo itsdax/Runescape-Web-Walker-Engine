@@ -58,6 +58,7 @@ public class NavigationSpecialCase implements Loggable {
         UZER (3468, 3110, 0),
         BEDABIN_CAMP (3181, 3043, 0),
         POLLNIVNEACH (3350, 3002, 0),
+        NARDAH(3400, 2917, 0),
 
         SHILO_ENTRANCE (2881, 2953, 0),
         SHILO_INSIDE (2864, 2955, 0),
@@ -209,7 +210,10 @@ public class NavigationSpecialCase implements Loggable {
         MOSS_GIANT_ISLAND_ROPE_LANDING(2704, 3209, 0),
 
         SHANTAY_PASS_ENTRANCE(3304, 3117, 0),
-        SHANTAY_PASS_EXIT(3304, 3115, 0)
+        SHANTAY_PASS_EXIT(3304, 3115, 0),
+
+        PATERDOMUS_EAST_EXIT(3423, 3485, 0),
+        PATERDOMUS_EAST_ENTRANCE(3440, 9887, 0)
         ;
 
 
@@ -247,7 +251,7 @@ public class NavigationSpecialCase implements Loggable {
                         getInstance().log("Could not pay saniboch");
                         break;
                     }
-                    NPCInteraction.handleConversation();
+                    NPCInteraction.handleConversation("Yes");
                     return true;
                 } else {
                     if (clickObject(Filters.Objects.nameEquals("Dungeon entrance"), "Enter", () -> Player.getPosition().getY() > 4000 ?
@@ -260,28 +264,15 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case RELLEKA_UPPER_PORT:
-                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{
-                		"That's fine, I'm just going to Pirates' Cove."})){
-                    System.out.println("Was not able to travel with Lokar");
-                    break;
-                }
-                WaitFor.milliseconds(3300, 5200);
-                break;
             case SMALL_PIRATES_COVE_AREA:
                 if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{
-                		"That's fine, I'm just going to Pirates' Cove."})){
+                    "That's fine, I'm just going to Pirates' Cove."})){
                     System.out.println("Was not able to travel with Lokar");
                     break;
                 }
                 WaitFor.milliseconds(3300, 5200);
                 break;
             case CAPTAIN_BENTLY_PIRATES_COVE:
-                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Captain"), new String[]{"Travel"}, new String[]{})){
-                    System.out.println("Was not able to travel with Captain");
-                    break;
-                }
-                WaitFor.milliseconds(5300, 7200);
-                break;
             case CAPTAIN_BENTLY_LUNAR_ISLE:
                 if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Captain"), new String[]{"Travel"}, new String[]{})){
                     System.out.println("Was not able to travel with Captain");
@@ -290,16 +281,19 @@ public class NavigationSpecialCase implements Loggable {
                 WaitFor.milliseconds(5300, 7200);
                 break;
             case SHANTAY_PASS:
+                handleCarpetRide("Shantay Pass");
+                break;
             case UZER:
+                handleCarpetRide("Uzer");
+                break;
             case BEDABIN_CAMP:
+                handleCarpetRide("Bebadin camp");
+                break;
             case POLLNIVNEACH:
-                String carpetDestination = specialLocation == SHANTAY_PASS ? "Shantay Pass" : specialLocation == UZER ? "Uzer" : specialLocation == BEDABIN_CAMP ? "Bedabin camp" : "Pollnivneach";
-                if (NPCInteraction.talkTo(Filters.NPCs.actionsContains("Travel"), new String[]{"Travel"}, new String[]{carpetDestination})){
-                    WaitFor.milliseconds(3500, 5000); //wait for board carpet before starting moving condition
-                    WaitFor.condition(30000, WaitFor.getNotMovingCondition());
-                    WaitFor.milliseconds(2250, 3250);
-                    return true;
-                }
+                handleCarpetRide("Pollnivneach");
+                break;
+            case NARDAH:
+                handleCarpetRide("Nardah");
                 break;
 
 
@@ -839,6 +833,13 @@ public class NavigationSpecialCase implements Loggable {
                     return SHANTAY_PASS_EXIT.getRSTile().equals(Player.getPosition())
                             ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                 }) && WaitFor.milliseconds(600,1800) != null;
+
+            case PATERDOMUS_EAST_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Trapdoor"), new String[]{"Open","Climb-down"}, () -> PATERDOMUS_EAST_ENTRANCE.getRSTile().equals(Player.getPosition())
+                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+            case PATERDOMUS_EAST_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Holy barrier"), "Pass-through", () -> PATERDOMUS_EAST_EXIT.getRSTile().equals(Player.getPosition())
+                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;
@@ -926,12 +927,17 @@ public class NavigationSpecialCase implements Loggable {
     }
 
     public static boolean clickObject(Predicate<RSObject> filter, String action, WaitFor.Condition condition) {
+        return clickObject(filter, new String[]{action}, condition);
+    }
+
+    public static boolean clickObject(Predicate<RSObject> filter, String[] action, WaitFor.Condition condition){
         RSObject[] objects = Objects.findNearest(15, filter);
         if (objects.length == 0){
             return false;
         }
-        return clickObject(objects[0], action, condition);
+        return InteractionHelper.click(objects[0], action, condition);
     }
+
 
     private static boolean handleFishingPlatform(){
         RSNPC[] jeb = NPCs.find(Filters.NPCs.nameEquals("Jeb").and(Filters.NPCs.actionsEquals("Travel")));
@@ -962,6 +968,16 @@ public class NavigationSpecialCase implements Loggable {
             NPCInteraction.handleConversation(destination);
             return WaitFor.condition(5000,() -> Player.getPosition().distanceTo(myPos) > 10 ? WaitFor.Return.SUCCESS :
                     WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+        }
+        return false;
+    }
+
+    private static boolean handleCarpetRide(String carpetDestination){
+        if (NPCInteraction.talkTo(Filters.NPCs.actionsContains("Travel"), new String[]{"Travel"}, new String[]{carpetDestination})){
+            WaitFor.milliseconds(3500, 5000); //wait for board carpet before starting moving condition
+            WaitFor.condition(30000, WaitFor.getNotMovingCondition());
+            WaitFor.milliseconds(2250, 3250);
+            return true;
         }
         return false;
     }

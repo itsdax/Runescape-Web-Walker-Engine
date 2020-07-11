@@ -10,7 +10,7 @@ import scripts.dax_api.shared.jsonSimple.JSONValue;
 
 import java.util.HashMap;
 
-
+@Deprecated
 public class PlayerInformation {
 
     private static final int[] SETTINGS = {176, 32, 71, 273, 144, 63, 179, 145, 68, 655, 10, 964, 399, 869, 314, 794,

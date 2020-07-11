@@ -9,13 +9,14 @@ import scripts.dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PathAnalyzer {
 
     public static RealTimeCollisionTile closestToPlayer = null, furthestReachable = null;
 
-    public static RealTimeCollisionTile closestTileInPathToPlayer(ArrayList<RSTile> path) {
+    public static RealTimeCollisionTile closestTileInPathToPlayer(List<RSTile> path) {
         CollisionDataCollector.generateRealTimeCollision();
         final RSTile playerPosition = Player.getPosition();
         closestToPlayer = (RealTimeCollisionTile) BFS.bfsClosestToPath(path, RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()));
@@ -23,12 +24,12 @@ public class PathAnalyzer {
     }
 
 
-    public static DestinationDetails furthestReachableTile(ArrayList<RSTile> path){
+    public static DestinationDetails furthestReachableTile(List<RSTile> path){
         return furthestReachableTile(path, closestTileInPathToPlayer(path));
     }
 
 
-    public static DestinationDetails furthestReachableTile(ArrayList<RSTile> path, PathFindingNode currentPosition){
+    public static DestinationDetails furthestReachableTile(List<RSTile> path, PathFindingNode currentPosition){
         if (path == null || currentPosition == null){
             System.out.println("PathAnalyzer attempt to find closest tile in path: " + currentPosition + " " + path);
             return null;
