@@ -137,8 +137,8 @@ public class NavigationSpecialCase implements Loggable {
         HAM_OUTSIDE (3166, 3251, 0),
         HAM_INSIDE (3149, 9652, 0),
 
-        CASTLE_WARS_DOOR_F2P(2444, 3090, 0),
-        CLAN_WARS_PORTAL_F2P(3368, 3175, 0),
+        CASTLE_WARS_DOOR(2444, 3090, 0),
+        FEROX_ENCLAVE_PORTAL_F2P(3141, 3627, 0),
 
         FOSSIL_ISLAND_BARGE(3362, 3445, 0),
 //        DIGSITE_BARGE(3724, 3808, 0),
@@ -645,18 +645,18 @@ public class NavigationSpecialCase implements Loggable {
 
 
 
-            case CLAN_WARS_PORTAL_F2P:
+            case FEROX_ENCLAVE_PORTAL_F2P:
                 if(NPCInteraction.isConversationWindowUp() || clickObject(Filters.Objects.nameEquals("Large door"), "Open",() -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     NPCInteraction.handleConversationRegex("Yes");
                     return WaitFor.condition(3000,
-                            () -> CLAN_WARS_PORTAL_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                            () -> FEROX_ENCLAVE_PORTAL_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
-            case CASTLE_WARS_DOOR_F2P:
+            case CASTLE_WARS_DOOR:
                 if(NPCInteraction.isConversationWindowUp() || clickObject(Filters.Objects.nameEquals("Castle Wars portal"), "Enter", () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     NPCInteraction.handleConversationRegex("Yes");
                     return WaitFor.condition(3000,
-                            () -> CASTLE_WARS_DOOR_F2P.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                            () -> CASTLE_WARS_DOOR.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
 
