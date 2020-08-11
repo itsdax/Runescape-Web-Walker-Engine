@@ -287,7 +287,7 @@ public class NavigationSpecialCase implements Loggable {
                 handleCarpetRide("Uzer");
                 break;
             case BEDABIN_CAMP:
-                handleCarpetRide("Bebadin camp");
+                handleCarpetRide("Bedabin camp");
                 break;
             case POLLNIVNEACH:
                 handleCarpetRide("Pollnivneach");
