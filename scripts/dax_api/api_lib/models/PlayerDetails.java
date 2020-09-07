@@ -43,7 +43,8 @@ public class PlayerDetails {
             5088,
             5089,
             5090,
-            5810
+            5810,
+            9016
         })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
