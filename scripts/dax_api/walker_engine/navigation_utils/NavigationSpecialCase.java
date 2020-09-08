@@ -251,7 +251,7 @@ public class NavigationSpecialCase implements Loggable {
                         getInstance().log("Could not pay saniboch");
                         break;
                     }
-                    NPCInteraction.handleConversation("Yes");
+                    NPCInteraction.handleConversation("Yes","Pay 875 coins to enter once");
                     return true;
                 } else {
                     if (clickObject(Filters.Objects.nameEquals("Dungeon entrance"), "Enter", () -> Player.getPosition().getY() > 4000 ?
