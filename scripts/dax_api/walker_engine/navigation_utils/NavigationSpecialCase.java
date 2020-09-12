@@ -309,10 +309,10 @@ public class NavigationSpecialCase implements Loggable {
             case MISCELLANIA_TO_RELLEKKA:
             case RELLEKKA_TO_MISCELLANIA:
                 final RSTile curr = Player.getPosition();
-                if (NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"})){
+                if (NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Rellekka","Miscellania"), "Rellekka","Miscellania")){
                     WaitFor.condition(10000,() -> Player.getPosition().distanceTo(curr) > 20 ?
-                                WaitFor.Return.SUCCESS :
-                                WaitFor.Return.IGNORE);
+                        WaitFor.Return.SUCCESS :
+                        WaitFor.Return.IGNORE);
                     WaitFor.milliseconds(4000, 5000);
                 }
                 break;
