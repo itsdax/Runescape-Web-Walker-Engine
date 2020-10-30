@@ -246,7 +246,7 @@ public enum Teleport {
 
 	GAMES_NECK_WINTERTODT (
 		35, new RSTile(1623, 3937, 0),
-		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.GAMES_NECKLACE_FILTER),
+		() -> inMembersWorld() && hasBeenToZeah() && WearableItemTeleport.has(WearableItemTeleport.GAMES_NECKLACE_FILTER),
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.GAMES_NECKLACE_FILTER, "(?i).*wintertodt.*")
 	),
 
@@ -695,5 +695,9 @@ public enum Teleport {
 			return name != null && name.contains(spellName) && !spell.isHidden();
 		}).findFirst().orElse(null);
 		return target != null && target.click(action);
+	}
+
+	private static boolean hasBeenToZeah(){
+		return RSVarBit.get(4897).getValue() > 0;
 	}
 }
