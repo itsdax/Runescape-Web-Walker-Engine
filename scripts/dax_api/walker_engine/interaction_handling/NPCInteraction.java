@@ -156,7 +156,7 @@ public class NPCInteraction implements Loggable {
                 limit = 0;
                 break;
             }
-            General.sleep(10,20);
+            General.sleep(20,40);
         }
         if(limit > 50){
             getInstance().log("Reached conversation limit.");
