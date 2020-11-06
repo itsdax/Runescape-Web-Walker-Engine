@@ -141,7 +141,7 @@ public class WebWalkerServerApi implements Loggable {
 
         try {
             return gson.fromJson(serverResponse.getContents(), new TypeToken<List<PathResult>>() {}.getType());
-        } catch (ParseException e) {
+        } catch (ParseException | IllegalStateException e) {
             PathResult pathResult = new PathResult(PathStatus.UNKNOWN);
             log("Error: " + pathResult.getPathStatus());
             return Collections.singletonList(pathResult);
@@ -177,7 +177,7 @@ public class WebWalkerServerApi implements Loggable {
         JsonElement jsonObject;
         try {
             jsonObject = new JsonParser().parse(serverResponse.getContents());
-        } catch (ParseException e) {
+        } catch (ParseException | IllegalStateException e) {
             pathResult = new PathResult(PathStatus.UNKNOWN);
             log("Error: " + pathResult.getPathStatus());
             return pathResult;
