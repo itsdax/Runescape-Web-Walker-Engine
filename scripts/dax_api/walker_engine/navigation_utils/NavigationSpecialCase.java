@@ -213,7 +213,10 @@ public class NavigationSpecialCase implements Loggable {
         SHANTAY_PASS_EXIT(3304, 3115, 0),
 
         PATERDOMUS_EAST_EXIT(3423, 3485, 0),
-        PATERDOMUS_EAST_ENTRANCE(3440, 9887, 0)
+        PATERDOMUS_EAST_ENTRANCE(3440, 9887, 0),
+
+        SWAMP_BOATY(3500, 3380, 0),
+        SWAMP_BOATY_MORTTON(3522, 3285, 0)
         ;
 
 
@@ -840,6 +843,13 @@ public class NavigationSpecialCase implements Loggable {
             case PATERDOMUS_EAST_EXIT:
                 return clickObject(Filters.Objects.nameEquals("Holy barrier"), "Pass-through", () -> PATERDOMUS_EAST_EXIT.getRSTile().equals(Player.getPosition())
                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+
+            case SWAMP_BOATY:
+                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Swamp Boaty")), "Quick-board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY.getRSTile().distanceTo(Player.getPosition()) < 5
+                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
+            case SWAMP_BOATY_MORTTON:
+                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Swamp Boaty")), "Board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY_MORTTON.getRSTile().distanceTo(Player.getPosition()) < 5
+                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;
