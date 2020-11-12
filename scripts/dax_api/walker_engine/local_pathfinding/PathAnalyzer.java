@@ -59,7 +59,7 @@ public class PathAnalyzer {
                     RSTile nextInPath = path.get(i + j);
                     RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.getPlane());
                     if (nextInPathCollision != null && nextInPathCollision.isWalkable()){
-                        if (BFS.isReachable(current, nextInPathCollision, 360)) {
+                        if (BFS.isReachable(current, nextInPathCollision, 200)) {
                             i += j-2;
                             continue outside;
                         }
@@ -215,7 +215,7 @@ public class PathAnalyzer {
             if (realTimeCollisionTile.getNeighbors().contains(destination)){
                 return true;
             }
-            return BFS.isReachable(realTimeCollisionTile, destination, 225);
+            return BFS.isReachable(realTimeCollisionTile, destination, 150);
         }
     }
 
