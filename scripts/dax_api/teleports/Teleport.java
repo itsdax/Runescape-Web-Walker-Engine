@@ -246,7 +246,7 @@ public enum Teleport {
 
 	GAMES_NECK_WINTERTODT (
 		35, new RSTile(1623, 3937, 0),
-		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.GAMES_NECKLACE_FILTER),
+		() -> inMembersWorld() && hasBeenToZeah() && WearableItemTeleport.has(WearableItemTeleport.GAMES_NECKLACE_FILTER),
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.GAMES_NECKLACE_FILTER, "(?i).*wintertodt.*")
 	),
 
@@ -286,33 +286,39 @@ public enum Teleport {
 	),
 
 	SKILLS_MINING_GUILD (
-		35, new RSTile(3293, 3163, 0),
+		35, new RSTile(3052, 9764, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Mining.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
 	SKILLS_CRAFTING_GUILD (
-		35, new RSTile(3293, 3163, 0),
+		35, new RSTile(2935, 3293, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Craft.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
 	SKILLS_COOKING_GUILD (
-		35, new RSTile(3293, 3163, 0),
+		35, new RSTile(3145, 3442, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Cooking.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
 	SKILLS_WOODCUTTING_GUILD (
-		35, new RSTile(3293, 3163, 0),
+		35, new RSTile(1663, 3507, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Woodcutting.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
+	SKILLS_FARMING_GUILD (
+		35, new RSTile(1248, 3719, 0),
+		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
+		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Farming.*"),
+		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
+	),
 	BURNING_AMULET_CHAOS_TEMPLE (
 		35, new RSTile(3236, 3635, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
@@ -689,5 +695,9 @@ public enum Teleport {
 			return name != null && name.contains(spellName) && !spell.isHidden();
 		}).findFirst().orElse(null);
 		return target != null && target.click(action);
+	}
+
+	private static boolean hasBeenToZeah(){
+		return RSVarBit.get(4897).getValue() > 0;
 	}
 }

@@ -213,7 +213,10 @@ public class NavigationSpecialCase implements Loggable {
         SHANTAY_PASS_EXIT(3304, 3115, 0),
 
         PATERDOMUS_EAST_EXIT(3423, 3485, 0),
-        PATERDOMUS_EAST_ENTRANCE(3440, 9887, 0)
+        PATERDOMUS_EAST_ENTRANCE(3440, 9887, 0),
+
+        SWAMP_BOATY(3500, 3380, 0),
+        SWAMP_BOATY_MORTTON(3522, 3285, 0)
         ;
 
 
@@ -251,7 +254,7 @@ public class NavigationSpecialCase implements Loggable {
                         getInstance().log("Could not pay saniboch");
                         break;
                     }
-                    NPCInteraction.handleConversation("Yes");
+                    NPCInteraction.handleConversation("Yes","Pay 875 coins to enter once");
                     return true;
                 } else {
                     if (clickObject(Filters.Objects.nameEquals("Dungeon entrance"), "Enter", () -> Player.getPosition().getY() > 4000 ?
@@ -287,7 +290,7 @@ public class NavigationSpecialCase implements Loggable {
                 handleCarpetRide("Uzer");
                 break;
             case BEDABIN_CAMP:
-                handleCarpetRide("Bebadin camp");
+                handleCarpetRide("Bedabin camp");
                 break;
             case POLLNIVNEACH:
                 handleCarpetRide("Pollnivneach");
@@ -309,10 +312,10 @@ public class NavigationSpecialCase implements Loggable {
             case MISCELLANIA_TO_RELLEKKA:
             case RELLEKKA_TO_MISCELLANIA:
                 final RSTile curr = Player.getPosition();
-                if (NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"})){
+                if (NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Rellekka","Miscellania"), "Rellekka","Miscellania")){
                     WaitFor.condition(10000,() -> Player.getPosition().distanceTo(curr) > 20 ?
-                                WaitFor.Return.SUCCESS :
-                                WaitFor.Return.IGNORE);
+                        WaitFor.Return.SUCCESS :
+                        WaitFor.Return.IGNORE);
                     WaitFor.milliseconds(4000, 5000);
                 }
                 break;
@@ -840,6 +843,13 @@ public class NavigationSpecialCase implements Loggable {
             case PATERDOMUS_EAST_EXIT:
                 return clickObject(Filters.Objects.nameEquals("Holy barrier"), "Pass-through", () -> PATERDOMUS_EAST_EXIT.getRSTile().equals(Player.getPosition())
                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+
+            case SWAMP_BOATY:
+                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Swamp Boaty")), "Quick-board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY.getRSTile().distanceTo(Player.getPosition()) < 5
+                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
+            case SWAMP_BOATY_MORTTON:
+                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Swamp Boaty")), "Board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY_MORTTON.getRSTile().distanceTo(Player.getPosition()) < 5
+                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;

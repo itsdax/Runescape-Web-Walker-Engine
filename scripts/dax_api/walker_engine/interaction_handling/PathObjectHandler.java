@@ -31,7 +31,7 @@ public class PathObjectHandler implements Loggable {
                 "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through",
                 "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up","Walk-Up", "Travel", "Get in",
                 "Investigate", "Operate", "Climb-under","Jump","Crawl-down","Crawl-through","Activate","Push","Squeeze-past","Walk-Down",
-                "Swing-on", "Climb up"));
+                "Swing-on", "Climb up", "Ascend", "Descend","Channel","Teleport"));
 
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin","Drawers","null"));
         sortedBlackListOptions = new TreeSet<>(Arrays.asList("Chop down"));
@@ -150,6 +150,13 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getRSTile().equals(new RSTile(2899, 3565, 0)) &&
                     destinationDetails.getAssumed().equals(new RSTile(2205, 4934, 1));
+            }
+        }),
+        CANIFIS_BASEMENT_WALL("Wall", "Search", new RSTile(3480, 9836, 0),new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getDestination().getRSTile().equals(new RSTile(3480, 9836, 0)) ||
+                    destinationDetails.getAssumed().equals(new RSTile(3480, 9836, 0));
             }
         });
 

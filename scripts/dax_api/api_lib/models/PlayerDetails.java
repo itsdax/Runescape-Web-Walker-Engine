@@ -23,8 +23,8 @@ public class PlayerDetails {
                 .map(rsItem -> new IntPair(rsItem.getID(), rsItem.getStack())).collect(Collectors.toList());
 
         List<IntPair> settings = Stream.of(10, 11, 17, 32, 63, 68, 71, 101, 111, 116, 131, 144, 145, 150, 165, 176,
-            179, 273, 299, 302, 307, 314, 335, 347, 351, 365, 371, 399, 425, 437, 440, 482, 622, 655, 671, 794, 810,
-            869, 896, 964, 1630, 1671, 1672)
+            179, 273, 299, 302, 307, 314, 335, 347, 351, 365, 371, 387, 399, 425, 437, 440, 482, 622, 655, 671, 705, 794, 810,
+            869, 896, 964, 970, 1630, 1671, 1672)
                                        .map(value -> new IntPair(value, Game.getSetting(value))).distinct().collect(Collectors.toList());
 
         List<IntPair> varbit = Arrays.stream(new int[]{
@@ -43,7 +43,8 @@ public class PlayerDetails {
             5088,
             5089,
             5090,
-            5810
+            5810,
+            9016
         })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());

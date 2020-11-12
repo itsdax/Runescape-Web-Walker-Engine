@@ -8,7 +8,6 @@ import scripts.dax_api.walker_engine.bfs.BFS;
 import scripts.dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,12 +55,12 @@ public class PathAnalyzer {
             }
             if (!direction.confirmTileMovable(RealTimeCollisionTile.get(current.getX(), current.getY(), current.getZ()))){
 
-                for (int j = 2; j < 6 && j + i < path.size(); j++) {
+                for (int j = 1; j < 5 && j + i < path.size(); j++) {
                     RSTile nextInPath = path.get(i + j);
                     RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.getPlane());
                     if (nextInPathCollision != null && nextInPathCollision.isWalkable()){
                         if (BFS.isReachable(current, nextInPathCollision, 360)) {
-                            i += j-1;
+                            i += j-2;
                             continue outside;
                         }
                     }
