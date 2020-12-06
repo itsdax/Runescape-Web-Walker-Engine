@@ -178,10 +178,10 @@ public enum Teleport {
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*Castle Wars.*")
 	),
 
-	RING_OF_DUELING_CLAN_WARS (
-		35, new RSTile(3388, 3161, 0),
+	RING_OF_DUELING_FEROX_ENCLAVE (
+		35, new RSTile(3150, 3635, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.RING_OF_DUELING_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*Clan Wars.*")
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*Ferox Enclave.*")
 	),
 
 	NECKLACE_OF_PASSAGE_WIZARD_TOWER (
