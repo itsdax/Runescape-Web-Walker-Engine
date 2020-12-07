@@ -57,7 +57,8 @@ public class NavigationSpecialCase implements Loggable {
         SHANTAY_PASS(3311, 3109, 0),
         UZER (3468, 3110, 0),
         BEDABIN_CAMP (3181, 3043, 0),
-        POLLNIVNEACH (3350, 3002, 0),
+        POLLNIVNEACH_NORTH(3350, 3002, 0),
+        POLLNIVNEACH_SOUTH(3352, 2941, 0),
         NARDAH(3400, 2917, 0),
 
         SHILO_ENTRANCE (2881, 2953, 0),
@@ -292,7 +293,8 @@ public class NavigationSpecialCase implements Loggable {
             case BEDABIN_CAMP:
                 handleCarpetRide("Bedabin camp");
                 break;
-            case POLLNIVNEACH:
+            case POLLNIVNEACH_NORTH:
+            case POLLNIVNEACH_SOUTH:
                 handleCarpetRide("Pollnivneach");
                 break;
             case NARDAH:
