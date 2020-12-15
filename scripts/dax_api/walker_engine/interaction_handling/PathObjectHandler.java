@@ -158,6 +158,13 @@ public class PathObjectHandler implements Loggable {
                 return destinationDetails.getDestination().getRSTile().equals(new RSTile(3480, 9836, 0)) ||
                     destinationDetails.getAssumed().equals(new RSTile(3480, 9836, 0));
             }
+        }),
+        BRINE_RAT_CAVE_BOULDER("Cave", "Exit", new RSTile(2690, 10125, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getDestination().getRSTile().equals(new RSTile(2690, 10125, 0))
+                    && NPCs.find(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll"))).length > 0;
+            }
         });
 
         private String name, action;
@@ -318,6 +325,16 @@ public class PathObjectHandler implements Loggable {
                     WaitFor.condition(10000, () ->
                             SpecialObject.VARROCK_UNDERWALL_TUNNEL.getLocation().equals(Player.getPosition()) ?
                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    break;
+                case BRINE_RAT_CAVE_BOULDER:
+                    RSNPC boulder = InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll")));
+                    if(InteractionHelper.click(boulder, "Roll")){
+                        if(WaitFor.condition(12000,
+                            () -> NPCs.find(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll"))).length == 0 ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                            WaitFor.milliseconds(3500, 6000);
+                        }
+                    }
                     break;
             }
         }
