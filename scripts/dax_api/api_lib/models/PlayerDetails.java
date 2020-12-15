@@ -33,6 +33,7 @@ public class PlayerDetails {
             357,
             2310,
             2328,
+            3534,
             3741,
             4538,
             4566,
