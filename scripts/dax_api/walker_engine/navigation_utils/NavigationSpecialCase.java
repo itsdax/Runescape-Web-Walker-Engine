@@ -217,7 +217,10 @@ public class NavigationSpecialCase implements Loggable {
         PATERDOMUS_EAST_ENTRANCE(3440, 9887, 0),
 
         SWAMP_BOATY(3500, 3380, 0),
-        SWAMP_BOATY_MORTTON(3522, 3285, 0)
+        SWAMP_BOATY_MORTTON(3522, 3285, 0),
+
+        BRINE_RAT_CAVE_TREE(2748, 3733, 0),
+        BRINE_RAT_CAVE_ENTER(2697, 10120, 0)
         ;
 
 
@@ -852,6 +855,19 @@ public class NavigationSpecialCase implements Loggable {
             case SWAMP_BOATY_MORTTON:
                 return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Swamp Boaty")), "Board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY_MORTTON.getRSTile().distanceTo(Player.getPosition()) < 5
                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
+
+            case BRINE_RAT_CAVE_TREE:
+            case BRINE_RAT_CAVE_ENTER:
+                if(Player.getPosition().distanceTo(BRINE_RAT_CAVE_TREE.getRSTile()) >= 2){
+                    if(Walking.blindWalkTo(BRINE_RAT_CAVE_TREE.getRSTile())){
+                        WaitFor.condition(6000,
+                            () -> Player.getPosition().distanceTo(BRINE_RAT_CAVE_TREE.getRSTile()) <= 2 ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    }
+                }
+                return RSItemHelper.click("Spade","Dig") && WaitFor.condition(10000,
+                    () -> Player.getPosition().distanceTo(BRINE_RAT_CAVE_ENTER.getRSTile()) < 5 ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS && WaitFor.milliseconds(1500, 2500) != null;
         }
 
         return false;
