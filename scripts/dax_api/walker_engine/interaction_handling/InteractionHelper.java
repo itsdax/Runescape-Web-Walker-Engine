@@ -10,6 +10,8 @@ import org.tribot.api2007.types.*;
 import scripts.dax_api.walker.utils.AccurateMouse;
 import scripts.dax_api.walker_engine.WaitFor;
 
+import java.util.function.Predicate;
+
 
 public class InteractionHelper {
 
@@ -73,17 +75,17 @@ public class InteractionHelper {
         return condition == null || WaitFor.condition(General.random(7000, 8500), condition) == WaitFor.Return.SUCCESS;
     }
 
-    public static RSItem getRSItem(Filter<RSItem> filter){
+    public static RSItem getRSItem(Predicate<RSItem> filter){
         RSItem[] rsItems = Inventory.find(filter);
         return rsItems.length > 0 ? rsItems[0] : null;
     }
 
-    public static RSNPC getRSNPC(Filter<RSNPC> filter){
+    public static RSNPC getRSNPC(Predicate<RSNPC> filter){
         RSNPC[] rsnpcs = NPCs.findNearest(filter);
         return rsnpcs.length > 0 ? rsnpcs[0] : null;
     }
 
-    public static RSObject getRSObject(Filter<RSObject> filter){
+    public static RSObject getRSObject(Predicate<RSObject> filter){
         RSObject[] objects = Objects.findNearest(15, filter);
         return objects.length > 0 ? objects[0] : null;
     }
