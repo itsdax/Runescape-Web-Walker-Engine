@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSVarBit;
+import scripts.dax_api.shared.helpers.WorldHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +77,7 @@ public class PlayerDetails {
                 Skills.getActualLevel(Skills.SKILLS.CONSTRUCTION),
                 settings,
                 varbit,
-                WorldHopper.isMembers(WorldHopper.getWorld()),
+                WorldHelper.isMember(Game.getCurrentWorld()),
                 equipment,
                 inventory
         );
