@@ -240,7 +240,7 @@ public enum Teleport {
 	),
 
 	GAMES_NECK_CORPOREAL (
-		35, new RSTile(2965, 4832, 2),
+		35, new RSTile(2965, 4382, 2),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.GAMES_NECKLACE_FILTER),
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.GAMES_NECKLACE_FILTER, "(?i).*corpreal.*")
 	),
