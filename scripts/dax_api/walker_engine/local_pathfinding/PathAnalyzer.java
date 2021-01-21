@@ -59,7 +59,7 @@ public class PathAnalyzer {
                     RSTile nextInPath = path.get(i + j);
                     RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.getPlane());
                     if (nextInPathCollision != null && nextInPathCollision.isWalkable()){
-                        if (BFS.isReachable(current, nextInPathCollision, 200)) {
+                        if (BFS.isReachable(current, nextInPathCollision, 150)) {
                             i += j-2;
                             continue outside;
                         }
