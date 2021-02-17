@@ -64,7 +64,7 @@ public class NavigationSpecialCase implements Loggable {
         SHILO_ENTRANCE (2881, 2953, 0),
         SHILO_INSIDE (2864, 2955, 0),
 
-        RELEKKA_WEST_BOAT (2621, 3682, 0),
+        RELLEKKA_WEST_BOAT(2621, 3682, 0),
         WATERBIRTH (2546, 3760, 0),
 
         SPIRIT_TREE_GRAND_EXCHANGE (3183, 3508, 0),
@@ -308,8 +308,8 @@ public class NavigationSpecialCase implements Loggable {
             case SHILO_ENTRANCE: break;
             case SHILO_INSIDE: return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mosol Rei"), new String[]{"Talk-to"}, new String[]{"Yes, Ok, I'll go into the village!"});
 
-            case RELEKKA_WEST_BOAT:
-                if (NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"}, new String[0])){
+            case RELLEKKA_WEST_BOAT:
+                if (NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Waterbirth"), new String[]{"Waterbirth"}, new String[0])){
                     WaitFor.milliseconds(2000, 3000);
                 }
                 break;
