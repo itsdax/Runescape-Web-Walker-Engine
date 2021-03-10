@@ -586,6 +586,7 @@ public enum Teleport {
 				canUse = false;
 			}
 		}
+		failedAttempts = 0;
 		return value;
 	}
 
