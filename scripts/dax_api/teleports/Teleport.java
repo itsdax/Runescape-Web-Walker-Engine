@@ -12,7 +12,6 @@ import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.api_lib.models.Requirement;
 import scripts.dax_api.shared.helpers.InterfaceHelper;
 import scripts.dax_api.shared.helpers.RSItemHelper;
-import scripts.dax_api.shared.helpers.WorldHelper;
 import scripts.dax_api.shared.helpers.magic.Spell;
 import scripts.dax_api.teleports.teleport_utils.TeleportConstants;
 import scripts.dax_api.teleports.teleport_utils.TeleportLimit;
@@ -631,7 +630,7 @@ public enum Teleport {
 		if(lastWorldChecked == current)
 			return value;
 		lastWorldChecked = current;
-		value = WorldHelper.isMember(Game.getCurrentWorld());
+		value = WorldHopper.isCurrentWorldMembers().orElse(false);
 		return value;
 	}
 

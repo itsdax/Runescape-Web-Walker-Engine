@@ -79,7 +79,7 @@ public class PlayerDetails {
                 Skills.getActualLevel(Skills.SKILLS.CONSTRUCTION),
                 settings,
                 varbit,
-                WorldHelper.isMember(Game.getCurrentWorld()),
+                WorldHopper.isCurrentWorldMembers().orElse(false),
                 equipment,
                 inventory
         );
