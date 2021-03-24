@@ -220,7 +220,15 @@ public class NavigationSpecialCase implements Loggable {
         SWAMP_BOATY_MORTTON(3522, 3285, 0),
 
         BRINE_RAT_CAVE_TREE(2748, 3733, 0),
-        BRINE_RAT_CAVE_ENTER(2697, 10120, 0)
+        BRINE_RAT_CAVE_ENTER(2697, 10120, 0),
+
+        FERRY_AL_KHARID_TO_UNKAH(3148, 2842, 0),
+        FERRY_UNKAH_TO_AL_KHARID(3271, 3144, 0),
+
+        UNKAH_SHANTAY_PASS_SOUTH_ENTRANCE(3167, 2819, 0),
+        UNKAH_SHANTAY_PASS_SOUTH_EXIT(3167, 2816, 0),
+        UNKAH_SHANTAY_PASS_EAST_ENTRANCE(3193, 2842, 0),
+        UNKAH_SHANTAY_PASS_EAST_EXIT(3196, 2842, 0),
         ;
 
 
@@ -834,7 +842,7 @@ public class NavigationSpecialCase implements Loggable {
                     return clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> SHANTAY_PASS_ENTRANCE.getRSTile().equals(Player.getPosition())
                             ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
                 } else if(Inventory.getCount(1854) == 0){
-                    NPCInteraction.talkTo(Filters.NPCs.nameEquals("Shantay"),new String[]{"Buy-pass"}, new String[]{});
+                    NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Buy-pass"),new String[]{"Buy-pass"}, new String[]{});
                 }
                 return Inventory.getCount(1854) > 0 && clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> {
                     DoomsToggle.handleToggle();
@@ -868,6 +876,43 @@ public class NavigationSpecialCase implements Loggable {
                 return RSItemHelper.click("Spade","Dig") && WaitFor.condition(10000,
                     () -> Player.getPosition().distanceTo(BRINE_RAT_CAVE_ENTER.getRSTile()) < 5 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS && WaitFor.milliseconds(1500, 2500) != null;
+
+            case FERRY_AL_KHARID_TO_UNKAH:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Ferryman Sathwood"),"Ferry") &&
+                    WaitFor.condition(15000,() -> FERRY_AL_KHARID_TO_UNKAH.getRSTile().distanceTo(Player.getPosition()) < 10
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case FERRY_UNKAH_TO_AL_KHARID:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Ferryman Nathwood"),"Ferry") &&
+                    WaitFor.condition(15000,() -> FERRY_UNKAH_TO_AL_KHARID.getRSTile().distanceTo(Player.getPosition()) < 10
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
+
+            case UNKAH_SHANTAY_PASS_EAST_ENTRANCE:
+            case UNKAH_SHANTAY_PASS_EAST_EXIT:
+                if(Player.getPosition().getX() > 3195){
+                    return clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> UNKAH_SHANTAY_PASS_EAST_ENTRANCE.getRSTile().equals(Player.getPosition())
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+                } else if(Inventory.getCount(1854) == 0){
+                    NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Buy-pass"),new String[]{"Buy-pass"}, new String[]{});
+                }
+                return Inventory.getCount(1854) > 0 && clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> {
+                    DoomsToggle.handleToggle();
+                    return UNKAH_SHANTAY_PASS_EAST_EXIT.getRSTile().equals(Player.getPosition())
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                }) && WaitFor.milliseconds(600,1800) != null;
+            case UNKAH_SHANTAY_PASS_SOUTH_ENTRANCE:
+            case UNKAH_SHANTAY_PASS_SOUTH_EXIT:
+                if(Player.getPosition().getX() > 3195){
+                    return clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> UNKAH_SHANTAY_PASS_SOUTH_ENTRANCE.getRSTile().equals(Player.getPosition())
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
+                } else if(Inventory.getCount(1854) == 0){
+                    NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Buy-pass"),new String[]{"Buy-pass"}, new String[]{});
+                }
+                return Inventory.getCount(1854) > 0 && clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> {
+                    DoomsToggle.handleToggle();
+                    return UNKAH_SHANTAY_PASS_SOUTH_EXIT.getRSTile().equals(Player.getPosition())
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                }) && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;
