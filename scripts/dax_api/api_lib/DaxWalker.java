@@ -104,7 +104,7 @@ public class DaxWalker implements Loggable {
         }
 
         if(bank != null)
-            return walkTo(bank.getPosition());
+            return walkTo(bank.getPosition(), walkingCondition);
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports();
 
