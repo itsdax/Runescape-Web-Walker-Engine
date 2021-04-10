@@ -4,6 +4,7 @@ package scripts.dax_api.shared.helpers.magic;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
 
@@ -36,6 +37,8 @@ public enum RuneElement {
         RSItem[] items = Inventory.find(new Filter<RSItem>() {
             @Override
             public boolean accept(RSItem rsItem) {
+                if(rsItem.getDefinition().isMembersOnly() && !WorldHopper.isCurrentWorldMembers().orElse(false))
+                    return false;
                 String name = getItemName(rsItem).toLowerCase();
 
                 if (!name.contains("rune")) {
@@ -57,6 +60,8 @@ public enum RuneElement {
         return Equipment.find(new Filter<RSItem>() {
             @Override
             public boolean accept(RSItem rsItem) {
+                if(rsItem.getDefinition().isMembersOnly() && !WorldHopper.isCurrentWorldMembers().orElse(false))
+                    return false;
                 String name = getItemName(rsItem).toLowerCase();
                 if (!name.contains("staff")) {
                     return false;
