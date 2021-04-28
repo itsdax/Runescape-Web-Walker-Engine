@@ -95,7 +95,7 @@ public class NPCInteraction implements Loggable {
     }
 
     public static boolean isConversationWindowUp(){
-        return Arrays.stream(ALL_WINDOWS).anyMatch(Interfaces::isInterfaceValid);
+        return Arrays.stream(ALL_WINDOWS).anyMatch(Interfaces::isInterfaceSubstantiated);
     };
 
     public static void handleConversationRegex(String regex){
