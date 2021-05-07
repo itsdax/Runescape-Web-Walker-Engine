@@ -74,6 +74,7 @@ public class NPCInteraction implements Loggable {
         RSNPC[] rsnpcs = NPCs.findNearest(rsnpcFilter);
         if (rsnpcs.length < 1) {
             getInstance().log("Cannot find NPC.");
+            return false;
         }
 
         RSNPC npc = rsnpcs[0];
