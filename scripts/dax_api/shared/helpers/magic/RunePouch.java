@@ -71,7 +71,7 @@ public class RunePouch{
     }
 
     private static boolean hasPouch(){
-        return Inventory.getCount("Rune pouch") > 0;
+        return Inventory.getCount("Rune pouch") > 0 && WorldHopper.isCurrentWorldMembers().orElse(false);
     }
 
 
