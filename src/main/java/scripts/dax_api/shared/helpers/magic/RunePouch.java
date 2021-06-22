@@ -1,6 +1,7 @@
 package scripts.dax_api.shared.helpers.magic;
 
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.WorldHopper;
 import org.tribot.api2007.types.RSVarBit;
 
 import java.util.Arrays;

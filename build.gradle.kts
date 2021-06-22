@@ -7,23 +7,17 @@ plugins {
 group = "org.tribot"
 version = "1.0-SNAPSHOT"
 
+val baseDir = projectDir
+
 repositories {
     mavenCentral()
+    // Tribot Central
+    maven {
+        setUrl("https://gitlab.com/api/v4/projects/20741387/packages/maven")
+    }
 }
 
-allprojects {
-    apply(plugin = "java")
-    apply(plugin = "io.freefair.lombok")
-
-    repositories {
-        mavenCentral()
-        // Tribot Central
-        maven {
-            setUrl("https://gitlab.com/api/v4/projects/20741387/packages/maven")
-        }
-    }
-
-    dependencies {
-        compileOnly("org.tribot:tribot-client:+")
-    }
+dependencies {
+    compileOnly("org.tribot:tribot-client:+")
+    compileOnly(files("${baseDir.absolutePath}/allatori-annotations-7.5.jar"))
 }
