@@ -6,7 +6,6 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSPlayer;
-import scripts.dax_api.api_lib.models.*;
 import dax.api_lib.utils.DaxTrackerProperty;
 
 import java.util.ArrayList;

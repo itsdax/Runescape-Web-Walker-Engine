@@ -10,7 +10,6 @@ import dax.walker_engine.navigation_utils.ShipUtils;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.api_lib.models.*;
 import dax.walker.DaxWalkerEngine;
 
 import java.util.*;

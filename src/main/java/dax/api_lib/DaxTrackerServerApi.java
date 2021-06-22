@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import dax.api_lib.models.*;
 import dax.walker_engine.Loggable;
-import scripts.dax_api.api_lib.models.*;
 import dax.api_lib.utils.IOHelper;
 
 import java.io.IOException;

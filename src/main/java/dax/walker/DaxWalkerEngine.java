@@ -68,14 +68,14 @@ public class DaxWalkerEngine implements DaxLogger {
 
         switch (moveTask.getSituation()) {
 
-            case Situation.COLLISION_BLOCKING:
-            case Situation.DISCONNECTED_PATH:
+            case COLLISION_BLOCKING:
+            case DISCONNECTED_PATH:
                 return new DefaultObjectHandler().handle(moveTask, passiveActions);
 
-            case Situation.NORMAL_PATH_HANDLING:
+            case NORMAL_PATH_HANDLING:
                 return new DefaultWalkHandler().handle(moveTask, passiveActions);
 
-            case Situation.PATH_TOO_FAR:
+            case PATH_TOO_FAR:
 
             default:
                 return MoveActionResult.FAILED;
