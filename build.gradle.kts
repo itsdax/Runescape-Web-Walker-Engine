@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.tribot"
-version = "1.0-SNAPSHOT"
+version = project.version
 
 val baseDir = projectDir
 
