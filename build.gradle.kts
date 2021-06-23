@@ -30,11 +30,11 @@ publishing {
             pom {
                 artifactId = "tribot-dax-walker"
                 name.set("Tribot Dax Walker Engine")
-                description.set("Tribot's fork of DaxWalker Engine")
+                description.set("The original DaxWalker Engine, built for Tribot")
                 url.set("https://tribot.org/")
                 licenses {
                     license {
-                        name.set("Apache License, Version 2.0")
+                        name.set("Apache License 2.0")
                         url.set("https://www.apache.org/licenses/LICENSE-2.0")
                     }
                 }
