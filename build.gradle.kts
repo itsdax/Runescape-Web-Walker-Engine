@@ -34,8 +34,8 @@ publishing {
                 url.set("https://tribot.org/")
                 licenses {
                     license {
-                        name.set("TRiBot End-User License Agreement")
-                        url.set("https://tribot.org/pages/eula")
+                        name.set("Apache License, Version 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0")
                     }
                 }
             }

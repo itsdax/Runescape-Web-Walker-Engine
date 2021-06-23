@@ -7,6 +7,7 @@ import dax.walker_engine.WaitFor;
 import dax.walker_engine.WalkerEngine;
 import dax.walker_engine.WalkingCondition;
 import dax.walker_engine.navigation_utils.ShipUtils;
+import org.tribot.api.ScriptCache;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
@@ -18,11 +19,19 @@ import java.util.stream.Collectors;
 
 public class DaxWalker implements Loggable {
 
-    private static Map<RSTile, Teleport> map;
+    private final Map<RSTile, Teleport> map;
     private static DaxWalker daxWalker;
     private static DaxWalkerEngine daxWalkerEngine;
     public static DaxWalker getInstance() {
-        return daxWalker != null ? daxWalker : (daxWalker = new DaxWalker());
+        Map<String, Object> cache = ScriptCache.get();
+        DaxWalker daxWalker = (DaxWalker)cache.get("daxwalker");
+
+        if (daxWalker == null) {
+            daxWalker = new DaxWalker();
+            cache.put("daxwalker", daxWalker);
+        }
+
+        return daxWalker;
     }
 
     public boolean useRun = true;
