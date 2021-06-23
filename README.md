@@ -13,9 +13,9 @@
   <img src="https://i.imgur.com/80Qo9nY.png"/>
 </p>
 
-## Importing to Tribot.
-- **DO NOT CLONE INTO SCRIPTS DIRECTORY!** Tribot will not be able to detect it.
-- Copy the dax_api package inside your scripts directory. If you need further help, the visit the [Tribot Forums](https://tribot.org/forums/topic/68923-universal-web-walker-open-source/). 
+## Using Daxwalker with Tribot
+Daxwalker is included in the Tribot installation. It is released via [Tribot Central](https://gitlab.com/rune-automation/tribot/tribot-central/-/packages?type=&sort=desc&orderBy=created_at&search[]=dax&search[]=).
+You can reference this library via Gradle/Maven through Tribot Central, or reference the JAR itself from the ``.tribot/install/tribot-client/lib`` directory.
 
 ## Documentation
 View [JavaDocs](https://itsdax.github.io/Runescape-Web-Walker-Engine/)
