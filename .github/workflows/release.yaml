@@ -9,6 +9,6 @@ jobs:
     steps:
       - name: Checkout master
         uses: actions/checkout@v2
-      - uses: OrangeLabs-moe/gradle-actions@v5.0-openjdk-15
+      - uses: OrangeLabs-moe/gradle-actions@v5.0-openjdk-11
         with:
           args: publish -PtribotDeployToken=${{ secrets.MavenDeployKey }} -Pversion=${{ github.event.release.tag_name }}
