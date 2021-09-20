@@ -239,7 +239,7 @@ public class AccurateMouse {
             Mouse.move(point);
         }
 
-        if (!model.getEnclosedArea().contains(point)) {
+        if (model != null && !model.getEnclosedArea().contains(point)) {
             return false;
         }
 
