@@ -2,6 +2,7 @@ package dax.walker_engine;
 
 import dax.walker_engine.local_pathfinding.PathAnalyzer;
 import dax.walker_engine.real_time_collision.RealTimeCollisionTile;
+import org.tribot.api.ScriptCache;
 import org.tribot.api2007.Camera;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
@@ -27,9 +28,6 @@ public class WebWalkerPaint {
     private RSTile playerPosition;
     private int lastChange;
 
-
-    private static WebWalkerPaint instance;
-
     private WebWalkerPaint(){
         nonDisplayableMapImage = new BufferedImage(REGION_SIZE * TILE_WIDTH, REGION_SIZE * TILE_WIDTH, BufferedImage.TYPE_INT_ARGB);
         mapDisplay = new BufferedImage(REGION_SIZE * TILE_WIDTH, REGION_SIZE * TILE_WIDTH, BufferedImage.TYPE_INT_ARGB);
@@ -41,7 +39,7 @@ public class WebWalkerPaint {
     }
 
     public static WebWalkerPaint getInstance(){
-        return instance != null ? instance : (instance = new WebWalkerPaint());
+        return (WebWalkerPaint) ScriptCache.get().computeIfAbsent("DaxWalker.WebWalkerPaint", k -> new WebWalkerPaint());
     }
 
     public void drawDebug(Graphics graphics) {

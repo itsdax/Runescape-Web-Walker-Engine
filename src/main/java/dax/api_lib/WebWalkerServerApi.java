@@ -10,6 +10,7 @@ import dax.api_lib.json.Json;
 import dax.api_lib.json.JsonValue;
 import dax.api_lib.json.ParseException;
 import dax.api_lib.utils.IOHelper;
+import org.tribot.api.ScriptCache;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.DataOutputStream;
@@ -20,14 +21,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WebWalkerServerApi implements Loggable {
 
-    private static WebWalkerServerApi webWalkerServerApi;
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public static WebWalkerServerApi getInstance() {
-        return webWalkerServerApi != null ? webWalkerServerApi : (webWalkerServerApi = new WebWalkerServerApi());
+        return (WebWalkerServerApi) ScriptCache.get().computeIfAbsent("DaxWalker.WebWalkerServerApi", k -> new WebWalkerServerApi());
     }
 
     private static final String WALKER_ENDPOINT = "https://api.dax.cloud", TEST_ENDPOINT = "http://localhost:8080";

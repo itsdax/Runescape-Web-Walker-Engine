@@ -2,6 +2,7 @@ package dax.walker.utils.camera;
 
 
 import org.tribot.api.General;
+import org.tribot.api.ScriptCache;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Camera;
 
@@ -13,12 +14,11 @@ import static dax.walker.utils.camera.CameraCalculations.getRotationToTile;
 
 public class AsynchronousCamera {
 
-    private static AsynchronousCamera instance = null;
     private ExecutorService executorService;
     private Future angleTask, rotationTask;
 
     private static AsynchronousCamera getInstance(){
-        return instance != null ? instance : (instance = new AsynchronousCamera());
+        return (AsynchronousCamera) ScriptCache.get().computeIfAbsent("DaxWalker.AsynchronousCamera", k -> new AsynchronousCamera());
     }
 
     private AsynchronousCamera(){
