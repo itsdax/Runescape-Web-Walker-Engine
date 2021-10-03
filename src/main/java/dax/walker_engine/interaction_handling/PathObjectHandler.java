@@ -7,6 +7,7 @@ import dax.walker_engine.local_pathfinding.PathAnalyzer;
 import dax.walker_engine.local_pathfinding.Reachable;
 import dax.walker_engine.real_time_collision.RealTimeCollisionTile;
 import org.tribot.api.General;
+import org.tribot.api.ScriptCache;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.*;
 import org.tribot.api2007.Objects;
@@ -20,8 +21,6 @@ import java.util.stream.Collectors;
 
 
 public class PathObjectHandler implements Loggable {
-
-    private static PathObjectHandler instance;
 
     private final TreeSet<String> sortedOptions, sortedBlackList, sortedBlackListOptions, sortedHighPriorityOptions;
 
@@ -39,7 +38,7 @@ public class PathObjectHandler implements Loggable {
     }
 
     private static PathObjectHandler getInstance(){
-        return instance != null ? instance : (instance = new PathObjectHandler());
+        return (PathObjectHandler) ScriptCache.get().computeIfAbsent("DaxWalker.PathObjectHandler", k -> new PathObjectHandler());
     }
 
     private enum SpecialObject {

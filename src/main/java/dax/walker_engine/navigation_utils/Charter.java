@@ -1,6 +1,7 @@
 package dax.walker_engine.navigation_utils;
 
 import dax.walker_engine.Loggable;
+import org.tribot.api.ScriptCache;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSArea;
@@ -17,10 +18,9 @@ import java.util.stream.Collectors;
 public class Charter implements Loggable {
 
     private static final int CHARTER_INTERFACE_MASTER = 72;
-    private static Charter instance;
 
     private static Charter getInstance(){
-        return instance != null ? instance : (instance = new Charter());
+        return (Charter) ScriptCache.get().computeIfAbsent("DaxWalker.Charter", k -> new Charter());
     }
 
     public static boolean to(LocationProperty locationProperty){

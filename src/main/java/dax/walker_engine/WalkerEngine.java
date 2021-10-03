@@ -2,6 +2,7 @@ package dax.walker_engine;
 
 
 import org.tribot.api.General;
+import org.tribot.api.ScriptCache;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSTile;
@@ -24,8 +25,6 @@ import java.util.List;
 
 public class WalkerEngine implements Loggable{
 
-    private static WalkerEngine walkerEngine;
-
     private int attemptsForAction;
     private final int failThreshold;
     private boolean navigating;
@@ -39,7 +38,7 @@ public class WalkerEngine implements Loggable{
     }
 
     public static WalkerEngine getInstance(){
-        return walkerEngine != null ? walkerEngine : (walkerEngine = new WalkerEngine());
+        return (WalkerEngine) ScriptCache.get().computeIfAbsent("DaxWalker.WalkerEngine", k -> new WalkerEngine());
     }
 
     public boolean walkPath(List<RSTile> path){

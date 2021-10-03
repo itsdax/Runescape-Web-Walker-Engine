@@ -2,6 +2,7 @@ package dax.walker_engine.interaction_handling;
 
 import dax.walker_engine.Loggable;
 import org.tribot.api.General;
+import org.tribot.api.ScriptCache;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Interfaces;
@@ -34,15 +35,12 @@ public class NPCInteraction implements Loggable {
 
     private static final int[] ALL_WINDOWS = new int[]{ITEM_ACTION_INTERFACE_WINDOW, NPC_TALKING_INTERFACE_WINDOW, PLAYER_TALKING_INTERFACE_WINDOW, SELECT_AN_OPTION_INTERFACE_WINDOW, SINGLE_OPTION_DIALOGUE_WINDOW};
 
-
-    private static NPCInteraction instance;
-
     private NPCInteraction(){
 
     }
 
     private static NPCInteraction getInstance(){
-        return instance != null ? instance : (instance = new NPCInteraction());
+        return (NPCInteraction) ScriptCache.get().computeIfAbsent("DaxWalker.NpcInteraction", k -> new NPCInteraction());
     }
 
     /**
