@@ -1,6 +1,7 @@
 package dax.walker_engine.interaction_handling;
 
 import dax.walker_engine.Loggable;
+import org.tribot.api.ScriptCache;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterface;
 import dax.shared.helpers.InterfaceHelper;
@@ -17,10 +18,8 @@ public class DoomsToggle implements Loggable {
 
     private static final int[] GENERAL_CASES = {STRONGHOLD_TOGGLE, WILDERNESS_TOGGLE, SHANTY_TOGGLE, WATERBIRTH, MORT_MYRE, LUMBRIDGE_SWAMP, OBSERVATORY_TOGGLE};
 
-    private static DoomsToggle instance;
-
-    private static DoomsToggle getInstance(){
-        return instance != null ? instance : (instance = new DoomsToggle());
+    private static DoomsToggle getInstance() {
+        return (DoomsToggle) ScriptCache.get().computeIfAbsent("DaxWalker.DoomsToggle", k -> new DoomsToggle());
     }
 
 

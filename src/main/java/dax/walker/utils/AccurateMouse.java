@@ -265,7 +265,7 @@ public class AccurateMouse {
 
             if (uptext.matches(regex) && !hover && !multipleMatches) {
                 click(1);
-                return waitResponse() == State.RED;
+                return waitResponse() == (clickable instanceof RSTile ? State.YELLOW : State.RED);
             }
 
             click(3);

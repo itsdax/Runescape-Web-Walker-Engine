@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 public class DaxWalker implements Loggable {
 
     private final Map<RSTile, Teleport> map;
-    private static DaxWalker daxWalker;
-    private static DaxWalkerEngine daxWalkerEngine;
     public static DaxWalker getInstance() {
         Map<String, Object> cache = ScriptCache.get();
         DaxWalker daxWalker = (DaxWalker)cache.get("daxwalker");
@@ -33,8 +31,6 @@ public class DaxWalker implements Loggable {
 
         return daxWalker;
     }
-
-    public boolean useRun = true;
 
     private WalkingCondition globalWalkingCondition;
 

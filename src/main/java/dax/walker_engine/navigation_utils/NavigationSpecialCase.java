@@ -3,6 +3,7 @@ package dax.walker_engine.navigation_utils;
 import dax.walker_engine.Loggable;
 import dax.walker_engine.navigation_utils.fairyring.FairyRing;
 import org.tribot.api.General;
+import org.tribot.api.ScriptCache;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api.util.Sorting;
 import org.tribot.api2007.*;
@@ -26,14 +27,12 @@ import static dax.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLo
 
 public class NavigationSpecialCase implements Loggable {
 
-    private static NavigationSpecialCase instance = null;
-
     private NavigationSpecialCase(){
 
     }
 
     private static NavigationSpecialCase getInstance(){
-        return instance != null ? instance : (instance = new NavigationSpecialCase());
+        return (NavigationSpecialCase) ScriptCache.get().computeIfAbsent("DaxWalker.NavigationSpecialCase", k -> new NavigationSpecialCase());
     }
 
     @Override
