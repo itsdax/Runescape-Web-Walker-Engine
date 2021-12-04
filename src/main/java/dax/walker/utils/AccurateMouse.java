@@ -126,6 +126,8 @@ public class AccurateMouse {
             model = rsObject.getModel();
         } else if (clickable instanceof RSItem) {
             name = RSItemHelper.getItemName((RSItem) clickable);
+        } else if (clickable instanceof RSTile) {
+            name = "";
         }
         return action(model, clickable, name, hover, clickActions);
     }
