@@ -521,7 +521,14 @@ public enum Teleport {
 		35, new RSTile(3432, 3460, 0),
 		() -> inMembersWorld() && Inventory.getCount("Salve graveyard teleport") > 0,
 		() -> RSItemHelper.click("Salve graveyard t.*", "Break")
-	)
+	),
+
+	ENCHANTED_LYRE_RELLEKA(
+			35, new RSTile(2661, 3465, 0),
+			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.ENCHANTED_LYRE_FILTER),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.ENCHANTED_LYRE_FILTER, "Play|Rellekka.*")
+	),
+
 
 	;
 	private int moveCost;
