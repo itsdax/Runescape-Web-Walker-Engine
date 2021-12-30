@@ -322,22 +322,19 @@ public enum Teleport {
 	BURNING_AMULET_CHAOS_TEMPLE (
 		35, new RSTile(3236, 3635, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Chaos.*|Okay, teleport to level.*)"),
-		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Chaos.*|Okay, teleport to level.*)")
 	),
 
 	BURNING_AMULET_BANDIT_CAMP (
 		35, new RSTile(3039, 3652, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Bandit.*|Okay, teleport to level.*)"),
-		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Bandit.*|Okay, teleport to level.*)")
 	),
 
 	BURNING_AMULET_LAVA_MAZE (
 		35, new RSTile(3029, 3843, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Lava.*|Okay, teleport to level.*)"),
-		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Lava.*|Okay, teleport to level.*)")
 	),
 
 	DIGSITE_PENDANT (
