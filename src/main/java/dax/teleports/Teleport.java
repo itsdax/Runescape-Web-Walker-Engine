@@ -319,6 +319,7 @@ public enum Teleport {
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Farming.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
+	
 	BURNING_AMULET_CHAOS_TEMPLE (
 		35, new RSTile(3236, 3635, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
