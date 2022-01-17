@@ -164,6 +164,18 @@ public class PathObjectHandler implements Loggable {
                 return destinationDetails.getDestination().getRSTile().equals(new RSTile(2690, 10125, 0))
                     && NPCs.find(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll"))).length > 0;
             }
+        }),
+        FOSSIL_ISLAND_LADDER_DOWN_WEST("Ladder", "Climb Down", new RSTile(3730, 3831, 1), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getDestination().getRSTile().equals(new RSTile(3728, 3831, 0));
+            }
+        }),
+        FOSSIL_ISLAND_LADDER_DOWN_EAST("Ladder", "Climb Down", new RSTile(3745, 3831, 1), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getDestination().getRSTile().equals(new RSTile(3747, 3831, 0));
+            }
         });
 
         private String name, action;
@@ -333,6 +345,16 @@ public class PathObjectHandler implements Loggable {
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                             WaitFor.milliseconds(3500, 6000);
                         }
+                    }
+                    break;
+                case FOSSIL_ISLAND_LADDER_DOWN_WEST:
+                case FOSSIL_ISLAND_LADDER_DOWN_EAST:
+                    RSObject ladder = InteractionHelper.getRSObject(Filters.Objects.nameEquals("Ladder").and(Filters.Objects.actionsContains("Climb Down")));
+                    if(ladder == null)
+                        return false;
+                    ladder.setClickHeight(General.random(-100, -40));
+                    if(InteractionHelper.click(ladder, "Climb Down")){
+                        WaitFor.condition(10000, () -> Game.getPlane() == 0 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     }
                     break;
             }
