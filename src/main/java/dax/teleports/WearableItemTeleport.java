@@ -37,6 +37,7 @@ public class WearableItemTeleport {
 	public static final Predicate<RSItem> ARDOUGNE_CLOAK_FILTER = Filters.Items.nameContains("Ardougne cloak");
 	public static final Predicate<RSItem> CONSTRUCTION_CAPE_FILTER = Filters.Items.nameContains("Construct. cape");
 	public static final Predicate<RSItem> SLAYER_RING = Filters.Items.nameContains("Slayer ring");
+	public static final Predicate<RSItem> ENCHANTED_LYRE_FILTER = Filters.Items.nameContains("Enchanted lyre");
 
 
 	private WearableItemTeleport() {

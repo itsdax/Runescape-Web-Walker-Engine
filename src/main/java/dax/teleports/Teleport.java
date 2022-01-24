@@ -319,25 +319,23 @@ public enum Teleport {
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Farming.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
+	
 	BURNING_AMULET_CHAOS_TEMPLE (
 		35, new RSTile(3236, 3635, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Chaos.*|Okay, teleport to level.*)"),
-		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Chaos.*|Okay, teleport to level.*)")
 	),
 
 	BURNING_AMULET_BANDIT_CAMP (
 		35, new RSTile(3039, 3652, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Bandit.*|Okay, teleport to level.*)"),
-		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Bandit.*|Okay, teleport to level.*)")
 	),
 
 	BURNING_AMULET_LAVA_MAZE (
 		35, new RSTile(3029, 3843, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Lava.*|Okay, teleport to level.*)"),
-		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Lava.*|Okay, teleport to level.*)")
 	),
 
 	DIGSITE_PENDANT (
@@ -521,7 +519,14 @@ public enum Teleport {
 		35, new RSTile(3432, 3460, 0),
 		() -> inMembersWorld() && Inventory.getCount("Salve graveyard teleport") > 0,
 		() -> RSItemHelper.click("Salve graveyard t.*", "Break")
-	)
+	),
+
+	ENCHANTED_LYRE_RELLEKA(
+			35, new RSTile(2661, 3465, 0),
+			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.ENCHANTED_LYRE_FILTER),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.ENCHANTED_LYRE_FILTER, "Play|Rellekka.*")
+	),
+
 
 	;
 	private int moveCost;

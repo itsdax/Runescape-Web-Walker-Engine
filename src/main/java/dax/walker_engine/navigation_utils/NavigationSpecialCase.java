@@ -228,6 +228,11 @@ public class NavigationSpecialCase implements Loggable {
         UNKAH_SHANTAY_PASS_SOUTH_EXIT(3167, 2816, 0),
         UNKAH_SHANTAY_PASS_EAST_ENTRANCE(3193, 2842, 0),
         UNKAH_SHANTAY_PASS_EAST_EXIT(3196, 2842, 0),
+
+        YANILLE_BALANCE_EDGE_NORTH(2580, 9520, 0),
+        YANILLE_BALANCE_EDGE_SOUTH(2580, 9512, 0),
+        YANILLE_MONKEY_BARS_WEST(2572, 9506, 0),
+        YANILLE_MONKEY_BARS_EAST(2578, 9506, 0)
         ;
 
 
@@ -912,6 +917,19 @@ public class NavigationSpecialCase implements Loggable {
                     return UNKAH_SHANTAY_PASS_SOUTH_EXIT.getRSTile().equals(Player.getPosition())
                         ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                 }) && WaitFor.milliseconds(600,1800) != null;
+
+            case YANILLE_BALANCE_EDGE_SOUTH:
+                return clickObject(Filters.Objects.nameEquals("Balancing ledge"), "Walk-across",
+                        () -> Player.getPosition().distanceTo(YANILLE_BALANCE_EDGE_NORTH.getRSTile()) <= 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case YANILLE_BALANCE_EDGE_NORTH:
+                return clickObject(Filters.Objects.nameEquals("Balancing edge"), "Walk-across",
+                        () -> Player.getPosition().distanceTo(YANILLE_BALANCE_EDGE_SOUTH.getRSTile()) <= 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case YANILLE_MONKEY_BARS_EAST:
+                return clickObject(Filters.Objects.nameEquals("Monkeybars"), "Swing across",
+                        () -> Player.getPosition().distanceTo(YANILLE_MONKEY_BARS_WEST.getRSTile()) <= 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case YANILLE_MONKEY_BARS_WEST:
+                return clickObject(Filters.Objects.nameEquals("Monkeybars"), "Swing across",
+                        () -> Player.getPosition().distanceTo(YANILLE_MONKEY_BARS_EAST.getRSTile()) <= 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
