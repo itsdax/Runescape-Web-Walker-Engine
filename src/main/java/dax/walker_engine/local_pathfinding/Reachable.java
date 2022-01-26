@@ -26,7 +26,7 @@ public class Reachable {
             homeTile = Player.getPosition();
         }
         this.homeTile = homeTile;
-        map = generateMap(homeTile );
+        map = generateMap(homeTile);
     }
 
     public boolean canReach(RSTile position) {
