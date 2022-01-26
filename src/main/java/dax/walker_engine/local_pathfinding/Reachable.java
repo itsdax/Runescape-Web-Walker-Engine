@@ -11,7 +11,8 @@ import java.util.*;
 
 public class Reachable {
 
-    private RSTile[][] map;
+    private final RSTile homeTile;
+    private final RSTile[][] map;
 
     /**
      * Generates reachable map from player position
@@ -21,12 +22,16 @@ public class Reachable {
     }
 
     private Reachable(RSTile homeTile) {
-        map = generateMap(homeTile != null ? homeTile : Player.getPosition());
+        if (homeTile == null) {
+            homeTile = Player.getPosition();
+        }
+        this.homeTile = homeTile;
+        map = generateMap(homeTile );
     }
 
     public boolean canReach(RSTile position) {
         position = position.toWorldTile();
-        RSTile playerPosition = Player.getPosition();
+        RSTile playerPosition = homeTile.toWorldTile();
         if (playerPosition.getX() == position.getX() && playerPosition.getY() == position.getY()) {
             return true;
         }
@@ -34,7 +39,7 @@ public class Reachable {
     }
 
     public boolean canReach(int x, int y) {
-        RSTile playerPosition = Player.getPosition();
+        RSTile playerPosition = homeTile;
         if (playerPosition.getX() == x && playerPosition.getY() == y) {
             return true;
         }
@@ -45,7 +50,7 @@ public class Reachable {
     public RSTile closestTile(Collection<RSTile> tiles) {
         RSTile closest = null;
         double closestDistance = Integer.MAX_VALUE;
-        RSTile playerPosition = Player.getPosition();
+        RSTile playerPosition = homeTile;
         for (RSTile positionable : tiles) {
             double distance = playerPosition.distanceToDouble(positionable);
             if (distance < closestDistance) {
@@ -108,7 +113,7 @@ public class Reachable {
      */
     public ArrayList<RSTile> getPath(int x, int y) {
         ArrayList<RSTile> path = new ArrayList<>();
-        RSTile playerPos = Player.getPosition().toLocalTile();
+        RSTile playerPos = homeTile.toLocalTile();
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return path;
         }
@@ -132,7 +137,7 @@ public class Reachable {
     public int getDistance(Positionable positionable) {
         RSTile position = convertToLocal(positionable.getPosition().getX(), positionable.getPosition().getY());
         int x = position.getX(), y = position.getY();
-        RSTile playerPos = Player.getPosition().toLocalTile();
+        RSTile playerPos = homeTile.toLocalTile();
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return 0;
         }
