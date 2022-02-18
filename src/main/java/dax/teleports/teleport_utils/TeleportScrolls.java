@@ -43,7 +43,7 @@ public enum TeleportScrolls implements Validatable {
 	
 	public boolean teleportTo(boolean shouldWait){
 		RSItem[] scroll = Inventory.find(this.name);
-		return scroll[0].click() && (!shouldWait || Timing.waitCondition(() -> this.location.distanceTo(Player.getPosition()) < 15, 8000));
+		return scroll[0].click("Teleport") && (!shouldWait || Timing.waitCondition(() -> this.location.distanceTo(Player.getPosition()) < 15, 8000));
 	}
 	
 	public boolean hasScroll(){
