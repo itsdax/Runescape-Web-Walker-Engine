@@ -24,8 +24,8 @@ public enum TeleportScrolls implements Validatable {
 	REVENANT_CAVES("Revenant cave teleport",new RSTile(3130, 3832, 0)),
 	WATSON("Watson teleport", new RSTile(1645, 3579,0))
 	;
-	private String name;
-	private RSTile location;
+	private final String name;
+	private final RSTile location;
 	TeleportScrolls(String name, RSTile location){
 		this.name = name;
 		this.location = location;
@@ -42,6 +42,55 @@ public enum TeleportScrolls implements Validatable {
 	}
 	
 	public boolean teleportTo(boolean shouldWait){
+		if(scrollbookContains()){
+			switch(this){
+				case NARDAH -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.NARDAH);
+				}
+				case DIGSITE -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.DIGSITE);
+				}
+				case FELDIP_HILLS -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.FELDIP_HILLS);
+				}
+				case LUNAR_ISLE -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.LUNAR_ISLE);
+				}
+				case MORTTON -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.MORTTON);
+				}
+				case PEST_CONTROL -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.PEST_CONTROL);
+				}
+				case PISCATORIS -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.PISCATORIS);
+				}
+				case TAI_BWO_WANNAI -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.TAI_BWO_WANNAI);
+				}
+				case ELF_CAMP -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.ELF_CAMP);
+				}
+				case MOS_LE_HARMLESS -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.MOS_LE_HARMLESS);
+				}
+				case LUMBERYARD -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.LUMBERYARD);
+				}
+				case ZULLANDRA -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.ZULLANDRA);
+				}
+				case KEY_MASTER -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.KEY_MASTER);
+				}
+				case REVENANT_CAVES -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.REVENANT_CAVES);
+				}
+				case WATSON -> {
+					return MasterScrollBook.teleport(MasterScrollBook.Teleports.WATSON);
+				}
+			}
+		}
 		RSItem[] scroll = Inventory.find(this.name);
 		return scroll[0].click("Teleport") && (!shouldWait || Timing.waitCondition(() -> this.location.distanceTo(Player.getPosition()) < 15, 8000));
 	}
@@ -57,7 +106,7 @@ public enum TeleportScrolls implements Validatable {
 
 	@Override
 	public boolean canUse(){
-		return this.hasScroll() || (MasterScrollBook.hasBook() && this.scrollbookContains());
+		return this.hasScroll() || this.scrollbookContains();
 	}
 
 	public boolean scrollbookContains(){
