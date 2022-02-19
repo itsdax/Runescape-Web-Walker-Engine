@@ -44,51 +44,51 @@ public enum TeleportScrolls implements Validatable {
 	public boolean teleportTo(boolean shouldWait){
 		if(scrollbookContains()){
 			switch(this){
-				case NARDAH -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.NARDAH);
-				}
-				case DIGSITE -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.DIGSITE);
-				}
-				case FELDIP_HILLS -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.FELDIP_HILLS);
-				}
-				case LUNAR_ISLE -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.LUNAR_ISLE);
-				}
-				case MORTTON -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.MORTTON);
-				}
-				case PEST_CONTROL -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.PEST_CONTROL);
-				}
-				case PISCATORIS -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.PISCATORIS);
-				}
-				case TAI_BWO_WANNAI -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.TAI_BWO_WANNAI);
-				}
-				case ELF_CAMP -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.ELF_CAMP);
-				}
-				case MOS_LE_HARMLESS -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.MOS_LE_HARMLESS);
-				}
-				case LUMBERYARD -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.LUMBERYARD);
-				}
-				case ZULLANDRA -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.ZULLANDRA);
-				}
-				case KEY_MASTER -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.KEY_MASTER);
-				}
-				case REVENANT_CAVES -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.REVENANT_CAVES);
-				}
-				case WATSON -> {
-					return MasterScrollBook.teleport(MasterScrollBook.Teleports.WATSON);
-				}
+				case NARDAH:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.NARDAH);
+					break;
+				case DIGSITE:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.DIGSITE);
+					break;
+				case FELDIP_HILLS:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.FELDIP_HILLS);
+					break;
+				case LUNAR_ISLE:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.LUNAR_ISLE);
+					break;
+				case MORTTON:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.MORTTON);
+					break;
+				case PEST_CONTROL:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.PEST_CONTROL);
+					break;
+				case PISCATORIS:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.PISCATORIS);
+					break;
+				case TAI_BWO_WANNAI:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.TAI_BWO_WANNAI);
+					break;
+				case ELF_CAMP:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.ELF_CAMP);
+					break;
+				case MOS_LE_HARMLESS:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.MOS_LE_HARMLESS);
+					break;
+				case LUMBERYARD:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.LUMBERYARD);
+					break;
+				case ZULLANDRA:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.ZULLANDRA);
+					break;
+				case KEY_MASTER:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.KEY_MASTER);
+					break;
+				case REVENANT_CAVES:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.REVENANT_CAVES);
+					break;
+				case WATSON:
+					MasterScrollBook.teleport(MasterScrollBook.Teleports.WATSON);
+					break;
 			}
 		}
 		RSItem[] scroll = Inventory.find(this.name);
