@@ -89,7 +89,7 @@ public class FairyRing {
 		ring = Objects.findNearest(25,"Fairy ring");
 		final RSTile myPos = Player.getPosition();
 		return ring.length > 0 &&
-				InteractionHelper.click(ring[0],"Configure") &&
+				InteractionHelper.click(ring[0],"Zanaris") &&
 				Timing.waitCondition(() -> myPos.distanceTo(Player.getPosition()) > 20,8000);
 	}
 
