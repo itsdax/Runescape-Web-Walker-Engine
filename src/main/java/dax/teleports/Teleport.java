@@ -410,7 +410,7 @@ public enum Teleport {
 	KANDARIN_MONASTERY_TELEPORT(
 		0, new RSTile(2606, 3216, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER, "Monastery.*")
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER, ".*Monastery.*")
 	),
 
 	RIMMINGTON_TELEPORT_TAB(
