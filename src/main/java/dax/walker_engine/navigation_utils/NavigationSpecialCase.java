@@ -232,7 +232,13 @@ public class NavigationSpecialCase implements Loggable {
         YANILLE_BALANCE_EDGE_NORTH(2580, 9520, 0),
         YANILLE_BALANCE_EDGE_SOUTH(2580, 9512, 0),
         YANILLE_MONKEY_BARS_WEST(2572, 9506, 0),
-        YANILLE_MONKEY_BARS_EAST(2578, 9506, 0)
+        YANILLE_MONKEY_BARS_EAST(2578, 9506, 0),
+
+        LIZARDMAN_CANYON_EAST(1475, 3687, 0),
+        LIZARDMAN_CANYON_WEST(1470, 3687, 0),
+
+        LIZARDMAN_SHAMANS_CANYON_EAST(1460, 3690, 0),
+        LIZARDMAN_SHAMANS_CANYON_WEST(1456, 3690, 0)
         ;
 
 
@@ -930,6 +936,19 @@ public class NavigationSpecialCase implements Loggable {
             case YANILLE_MONKEY_BARS_WEST:
                 return clickObject(Filters.Objects.nameEquals("Monkeybars"), "Swing across",
                         () -> Player.getPosition().distanceTo(YANILLE_MONKEY_BARS_EAST.getRSTile()) <= 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case LIZARDMAN_CANYON_WEST:
+                return clickObject(Filters.Objects.nameEquals("Handholds"), "Climb",
+                        () -> Player.getPosition().equals(LIZARDMAN_CANYON_EAST.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case LIZARDMAN_CANYON_EAST:
+                return clickObject(Filters.Objects.nameEquals("Handholds"), "Climb",
+                        () -> Player.getPosition().equals(LIZARDMAN_CANYON_WEST.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case LIZARDMAN_SHAMANS_CANYON_EAST:
+                return clickObject(Filters.Objects.nameEquals("Handholds"), "Climb",
+                        () -> Player.getPosition().equals(LIZARDMAN_SHAMANS_CANYON_WEST.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case LIZARDMAN_SHAMANS_CANYON_WEST:
+                return clickObject(Filters.Objects.nameEquals("Handholds"), "Climb",
+                        () -> Player.getPosition().equals(LIZARDMAN_SHAMANS_CANYON_EAST.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;

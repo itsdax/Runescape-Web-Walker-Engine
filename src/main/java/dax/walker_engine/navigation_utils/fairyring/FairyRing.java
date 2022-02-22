@@ -37,13 +37,15 @@ public class FairyRing {
 	}
 
 	public static boolean takeFairyRing(Locations location){
-
 		if(location == null)
 			return false;
 		if (RSVarBit.get(ELITE_DIARY_VARBIT).getValue() == 0 && Equipment.getCount(DRAMEN_STAFFS) == 0){
 			if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(DRAMEN_STAFFS)), "Wield")){
 				return false;
 			}
+		}
+		if(location == Locations.ZANARIS){
+			return travelToZanaris();
 		}
 		if(!hasInterface()){
 			if(hasCachedLocation(location)){
@@ -81,6 +83,14 @@ public class FairyRing {
 			return false;
 		return InteractionHelper.click(ring[0],"Configure") &&
 				Timing.waitCondition(() -> Interfaces.isInterfaceSubstantiated(INTERFACE_MASTER),10000);
+	}
+
+	private static boolean travelToZanaris(){
+		ring = Objects.findNearest(25,"Fairy ring");
+		final RSTile myPos = Player.getPosition();
+		return ring.length > 0 &&
+				InteractionHelper.click(ring[0],"Zanaris") &&
+				Timing.waitCondition(() -> myPos.distanceTo(Player.getPosition()) > 20,8000);
 	}
 
 	public enum Locations {

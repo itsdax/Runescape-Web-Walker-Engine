@@ -411,7 +411,7 @@ public enum Teleport {
 	KANDARIN_MONASTERY_TELEPORT(
 		0, new RSTile(2606, 3216, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER, "Monastery.*")
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER, ".*Monastery.*")
 	),
 
 	RIMMINGTON_TELEPORT_TAB(
@@ -527,6 +527,18 @@ public enum Teleport {
 			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.ENCHANTED_LYRE_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.ENCHANTED_LYRE_FILTER, "Play|Rellekka.*")
 	),
+
+	FARMING_CAPE_TELEPORT(
+			0, new RSTile(1248, 3726, 0),
+			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.FARMING_CAPE_FILTER),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.FARMING_CAPE_FILTER, "Teleport")
+	),
+
+	ROYAL_SEED_POD(
+			0, new RSTile(2465, 3495, 0),
+			() -> inMembersWorld() && Inventory.getCount("Royal seed pod") > 0,
+			() -> RSItemHelper.click("Royal seed.*", "Commune")
+	)
 
 
 	;
