@@ -537,6 +537,20 @@ public enum Teleport {
 			0, new RSTile(2465, 3495, 0),
 			() -> inMembersWorld() && Inventory.getCount("Royal seed pod") > 0,
 			() -> RSItemHelper.click("Royal seed.*", "Commune")
+	),
+
+	DRAKANS_MEDALLION_VER_SINHAZA(
+			0, new RSTile(3649, 3230, 0),
+			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER),
+			() -> RSItemHelper.click("Drakan's.*", "Ver Sinhaza")
+
+	),
+
+	DRAKANS_MEDALLION_DARKMEYER(
+			0, new RSTile(3592, 3337, 0),
+			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER),
+			() -> RSItemHelper.click("Drakan's.*", "Darkmeyer")
+
 	)
 
 
