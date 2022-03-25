@@ -305,6 +305,21 @@ public class PathObjectHandler implements Loggable {
                     }
                     break;
                 case ARDY_DOOR_LOCK_SIDE:
+                    for (int i = 0; i < General.random(15, 25); i++) {
+                        if (!clickOnObject(object, new String[]{specialObject.getAction()})){
+                            continue;
+                        }
+                        if (Player.getPosition().distanceTo(specialObject.getLocation()) > 1){
+                            WaitFor.condition(General.random(3000, 4000), () -> Player.getPosition().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        } else {
+                            WaitFor.milliseconds(400, 1200);
+                        }
+                        if (Player.getPosition().equals(new RSTile(2564, 3356, 0))){
+                            successfulClick = true;
+                            break;
+                        }
+                    }
+                    break;
                 case YANILLE_DOOR_LOCK_SIDE:
                     for (int i = 0; i < General.random(15, 25); i++) {
                         if (!clickOnObject(object, new String[]{specialObject.getAction()})){
@@ -312,8 +327,10 @@ public class PathObjectHandler implements Loggable {
                         }
                         if (Player.getPosition().distanceTo(specialObject.getLocation()) > 1){
                             WaitFor.condition(General.random(3000, 4000), () -> Player.getPosition().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        } else {
+                            WaitFor.milliseconds(400, 1200);
                         }
-                        if (Player.getPosition().equals(new RSTile(2564, 3356, 0))){
+                        if (Player.getPosition().equals(new RSTile(2601, 9482, 0))){
                             successfulClick = true;
                             break;
                         }
