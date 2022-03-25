@@ -47,7 +47,8 @@ public class PlayerDetails {
             5810,
             6104,
             7255,
-            9016
+            9016,
+            10150,//we've paid 1m to Andras for free boat rides to Slepe
         })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
