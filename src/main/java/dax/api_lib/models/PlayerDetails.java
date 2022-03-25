@@ -44,11 +44,12 @@ public class PlayerDetails {
             5088,
             5089,
             5090,
+            5800, //fossil island- museum camp bank has been built if this is 1
             5810,
             6104,
             7255,
             9016,
-            10150,//we've paid 1m to Andras for free boat rides to Slepe
+            10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
         })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
