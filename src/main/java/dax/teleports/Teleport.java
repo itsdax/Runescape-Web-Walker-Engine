@@ -1,5 +1,12 @@
 package dax.teleports;
 
+import dax.api_lib.models.Requirement;
+import dax.shared.helpers.InterfaceHelper;
+import dax.shared.helpers.RSItemHelper;
+import dax.shared.helpers.magic.Spell;
+import dax.teleports.teleport_utils.TeleportConstants;
+import dax.teleports.teleport_utils.TeleportLimit;
+import dax.teleports.teleport_utils.TeleportScrolls;
 import org.tribot.api.General;
 import org.tribot.api.ScriptCache;
 import org.tribot.api.Timing;
@@ -10,13 +17,6 @@ import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.types.RSVarBit;
-import dax.api_lib.models.Requirement;
-import dax.shared.helpers.InterfaceHelper;
-import dax.shared.helpers.RSItemHelper;
-import dax.shared.helpers.magic.Spell;
-import dax.teleports.teleport_utils.TeleportConstants;
-import dax.teleports.teleport_utils.TeleportLimit;
-import dax.teleports.teleport_utils.TeleportScrolls;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -522,6 +522,42 @@ public enum Teleport {
 		() -> RSItemHelper.click("Salve graveyard t.*", "Break")
 	),
 
+	FENKENSTRAINS_CASTLE_TAB(
+			35, new RSTile(3547, 3528, 0),
+			() -> inMembersWorld() && Inventory.getCount("Fenkenstrain's castle teleport") > 0,
+			() -> RSItemHelper.click("Fenkenstrain's castle t.*", "Break")
+	),
+
+	BARROWS_TAB(
+			35, new RSTile(3565, 3314, 0),
+			() -> inMembersWorld() && Inventory.getCount("Barrows teleport") > 0,
+			() -> RSItemHelper.click("Barrows t.*", "Break")
+	),
+
+	ARCEUUS_LIBRARY_TAB(
+			35, new RSTile(1632, 3838, 0),
+			() -> inMembersWorld() && Inventory.getCount("Arceuus library teleport") > 0,
+			() -> RSItemHelper.click("Arceuus library t.*", "Break")
+	),
+
+	BATTLEFRONT_TAB(
+			35, new RSTile(1349,3738,0),
+			() -> inMembersWorld() && Inventory.getCount("Battlefront teleport") > 0,
+			() -> RSItemHelper.click("Battlefront t.*", "Break")
+	),
+
+	DRAYNOR_MANOR_TAB(
+			35, new RSTile(3109,3352,0),
+			() -> inMembersWorld() && Inventory.getCount("Draynor manor teleport") > 0,
+			() -> RSItemHelper.click("Draynor manor t.*", "Break")
+	),
+
+	MIND_ALTAR_TAB(
+			35, new RSTile(2980, 3510, 0),
+			() -> inMembersWorld() && Inventory.getCount("Mind altar teleport") > 0,
+			() -> RSItemHelper.click("Mind altar t.*", "Break")
+	),
+
 	ENCHANTED_LYRE_RELLEKA(
 			35, new RSTile(2661, 3465, 0),
 			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.ENCHANTED_LYRE_FILTER),
@@ -538,6 +574,20 @@ public enum Teleport {
 			0, new RSTile(2465, 3495, 0),
 			() -> inMembersWorld() && Inventory.getCount("Royal seed pod") > 0,
 			() -> RSItemHelper.click("Royal seed.*", "Commune")
+	),
+
+	DRAKANS_MEDALLION_VER_SINHAZA(
+			0, new RSTile(3649, 3230, 0),
+			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER),
+			() -> RSItemHelper.click("Drakan's.*", "Ver Sinhaza")
+
+	),
+
+	DRAKANS_MEDALLION_DARKMEYER(
+			0, new RSTile(3592, 3337, 0),
+			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER),
+			() -> RSItemHelper.click("Drakan's.*", "Darkmeyer")
+
 	)
 
 

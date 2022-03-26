@@ -238,7 +238,10 @@ public class NavigationSpecialCase implements Loggable {
         LIZARDMAN_CANYON_WEST(1470, 3687, 0),
 
         LIZARDMAN_SHAMANS_CANYON_EAST(1460, 3690, 0),
-        LIZARDMAN_SHAMANS_CANYON_WEST(1456, 3690, 0)
+        LIZARDMAN_SHAMANS_CANYON_WEST(1456, 3690, 0),
+
+        SLEPE_BOAT_FROM_PORT(3671, 3542, 0),
+        SLEPE_BOAT_FROM_SLEPE(3661, 3277, 0),
         ;
 
 
@@ -949,6 +952,13 @@ public class NavigationSpecialCase implements Loggable {
             case LIZARDMAN_SHAMANS_CANYON_WEST:
                 return clickObject(Filters.Objects.nameEquals("Handholds"), "Climb",
                         () -> Player.getPosition().equals(LIZARDMAN_SHAMANS_CANYON_EAST.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case SLEPE_BOAT_FROM_PORT:
+                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Row boat")), "Travel") && WaitFor.condition( 15000,  () -> SLEPE_BOAT_FROM_SLEPE.getRSTile().distanceTo(Player.getPosition()) < 5
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
+            case SLEPE_BOAT_FROM_SLEPE:
+                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Row boat")), "Travel") && WaitFor.condition( 15000,  () -> SLEPE_BOAT_FROM_PORT.getRSTile().distanceTo(Player.getPosition()) < 5
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
         }
 
         return false;

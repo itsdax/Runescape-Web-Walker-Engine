@@ -44,10 +44,12 @@ public class PlayerDetails {
             5088,
             5089,
             5090,
+            5800, //fossil island- museum camp bank has been built if this is 1
             5810,
             6104,
             7255,
-            9016
+            9016,
+            10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
         })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
@@ -318,6 +320,38 @@ public class PlayerDetails {
 
     public JsonElement toJson() {
         return new Gson().toJsonTree(this);
+    }
+
+
+
+    public enum UserVars {
+        SPIRIT_TREE_PORT_SARIM(0),
+        SPIRIT_TREE_BRIMHAVEN(1),
+        SPIRIT_TREE_ETCETERIA(2),
+        SPIRIT_TREE_HOSIDIUS(3),
+        SPIRIT_TREE_FARMING_GUILD(4),
+        MYCELIUM_HOUSE_ON_THE_HILL(5),
+        MYCELIUM_VERDANT_VALLEY(6),
+        MYCELIUM_STICKY_SWAMP(7),
+        MYCELIUM_MUSHROOM_MEADOW(8)
+        ;
+        boolean canUse = false;
+        int id;
+        UserVars(int id){
+            this.id = id;
+        }
+
+        public boolean canUse(){
+            return canUse;
+        }
+
+        public void setCanUse(boolean value){
+            this.canUse = value;
+        }
+
+        public int getId(){
+            return id;
+        }
     }
 
 }
