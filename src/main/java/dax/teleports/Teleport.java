@@ -629,7 +629,7 @@ public enum Teleport {
 	}
 
 	private void incrementFailedAttempts() {
-		ScriptCache.get().compute("DaxWalkerTeleport." + this.name() + ".failedAttempts", (prev, key) -> prev != null ? prev + 1 : 1);
+		ScriptCache.get().compute("DaxWalkerTeleport." + this.name() + ".failedAttempts", (key, prev) -> prev != null ? (Integer)prev + 1 : 1);
 	}
 
 	private void resetFailedAttempts() {
