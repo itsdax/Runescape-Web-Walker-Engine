@@ -651,8 +651,9 @@ public enum Teleport {
 			if(failedAttempts > 3){
 				canUse = false;
 			}
+		} else {
+			failedAttempts = 0;
 		}
-		failedAttempts = 0;
 		return value;
 	}
 
