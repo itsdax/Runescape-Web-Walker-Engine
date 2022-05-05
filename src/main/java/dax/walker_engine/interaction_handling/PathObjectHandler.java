@@ -168,13 +168,20 @@ public class PathObjectHandler implements Loggable {
         FOSSIL_ISLAND_LADDER_DOWN_WEST("Ladder", "Climb Down", new RSTile(3730, 3831, 1), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getRSTile().equals(new RSTile(3728, 3831, 0));
+                return destinationDetails.getNextTile().getRSTile().equals(new RSTile(3728, 3831, 0));
             }
         }),
         FOSSIL_ISLAND_LADDER_DOWN_EAST("Ladder", "Climb Down", new RSTile(3745, 3831, 1), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getRSTile().equals(new RSTile(3747, 3831, 0));
+                return destinationDetails.getNextTile().getRSTile().equals(new RSTile(3747, 3831, 0));
+            }
+        }),
+        HAM_JAIL("Door","Pick-lock",new RSTile(3183, 9611, 0), new PathObjectHandler.SpecialCondition() {
+
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getNextTile().getRSTile().equals(new RSTile(3182, 9611, 0));
             }
         });
 
