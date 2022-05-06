@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import dax.api_lib.models.*;
-import dax.walker_engine.Loggable;
 import dax.api_lib.json.Json;
 import dax.api_lib.json.JsonValue;
 import dax.api_lib.json.ParseException;
+import dax.api_lib.models.*;
 import dax.api_lib.utils.IOHelper;
+import dax.walker_engine.Loggable;
 import org.tribot.api.ScriptCache;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -21,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class WebWalkerServerApi implements Loggable {
 
@@ -203,6 +202,8 @@ public class WebWalkerServerApi implements Loggable {
         HttpURLConnection connection = (isTestMode ? (HttpURLConnection) myurl.openConnection() : (HttpsURLConnection) myurl.openConnection());
         connection.setDoOutput(true);
         connection.setDoInput(true);
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(30000);
 
         connection.setRequestProperty("Method", "POST");
         connection.setRequestProperty("Content-Type", "application/json");
