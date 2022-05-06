@@ -8,6 +8,7 @@ import dax.teleports.teleport_utils.TeleportConstants;
 import dax.teleports.teleport_utils.TeleportLimit;
 import dax.teleports.teleport_utils.TeleportScrolls;
 import org.tribot.api.General;
+import org.tribot.api.ScriptCache;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api2007.*;
@@ -319,7 +320,7 @@ public enum Teleport {
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Farming.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
-	
+
 	BURNING_AMULET_CHAOS_TEMPLE (
 		35, new RSTile(3236, 3635, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
@@ -591,18 +592,14 @@ public enum Teleport {
 
 
 	;
-	private int moveCost;
-	private RSTile location;
-	private Requirement requirement;
-	private Action action;
-	private TeleportLimit teleportLimit;
 
-	private boolean canUse = true;
-
-	private int failedAttempts = 0;
+	private final RSTile location;
+	private final Requirement requirement;
+	private final Action action;
+	private final TeleportLimit teleportLimit;
 
 	Teleport(int moveCost, RSTile location, Requirement requirement, Action action) {
-		this.moveCost = moveCost;
+		setMoveCost(moveCost);
 		this.location = location;
 		this.requirement = requirement;
 		this.action = action;
@@ -610,30 +607,59 @@ public enum Teleport {
 	}
 
 	Teleport(int moveCost, RSTile location, Requirement requirement, Action action, TeleportLimit limit) {
-		this.moveCost = moveCost;
+		setMoveCost(moveCost);
 		this.location = location;
 		this.requirement = requirement;
 		this.action = action;
 		this.teleportLimit = limit;
 	}
 
-	Teleport(int movecost, TeleportScrolls scroll){
-		this.moveCost = movecost;
+	Teleport(int movecost, TeleportScrolls scroll) {
+		setMoveCost(movecost);
 		this.location = scroll.getLocation();
 		this.requirement = () -> inMembersWorld() && scroll.canUse();
 		this.action = () -> scroll.teleportTo(false);
 		this.teleportLimit = TeleportConstants.LEVEL_20_WILDERNESS_LIMIT;
 	}
 
-
-	public int getMoveCost() {
-		return moveCost;
+	private int getFailedAttempts() {
+		return (int) ScriptCache.get().getOrDefault(
+				"DaxWalkerTeleport." + this.name() + ".failedAttempts",
+				0);
 	}
 
-	public void setMoveCost(int cost){
-		if(this.moveCost == 0)
+	private void incrementFailedAttempts() {
+		ScriptCache.get().compute("DaxWalkerTeleport." + this.name() + ".failedAttempts", (key, prev) -> prev != null ? (Integer)prev + 1 : 1);
+	}
+
+	private void resetFailedAttempts() {
+		ScriptCache.get().remove("DaxWalkerTeleport." + this.name());
+	}
+
+	private boolean canUse() {
+		return (boolean) ScriptCache.get().getOrDefault(
+				"DaxWalkerTeleport." + this.name() + ".canUse",
+				true);
+	}
+
+	private void setCanUse(boolean canUse) {
+		ScriptCache.get().put(
+				"DaxWalkerTeleport." + this.name() + ".canUse",
+				canUse);
+	}
+
+	public int getMoveCost() {
+		return (int) ScriptCache.get().getOrDefault(
+				"DaxWalkerTeleport." + this.name() + ".moveCost",
+				0);
+	}
+
+	public void setMoveCost(int cost) {
+		if (getMoveCost() == 0)
 			return;
-		this.moveCost = cost;
+		ScriptCache.get().put(
+				"DaxWalkerTeleport." + this.name() + ".moveCost",
+				cost);
 	}
 
 	public RSTile getLocation() {
@@ -646,13 +672,14 @@ public enum Teleport {
 
 	public boolean trigger() {
 		boolean value = this.action.trigger();
-		if(!value){
-			failedAttempts++;
-			if(failedAttempts > 3){
-				canUse = false;
+		if (!value){
+			incrementFailedAttempts();
+			if (getFailedAttempts() > 3) {
+				setCanUse(false);
 			}
-		} else {
-			failedAttempts = 0;
+		}
+		else {
+			resetFailedAttempts();
 		}
 		return value;
 	}
@@ -665,22 +692,26 @@ public enum Teleport {
 		Arrays.stream(values()).forEach(t -> t.setMoveCost(moveCost));
 	}
 
-	private static List<Teleport> blacklist = new ArrayList<>();
+	private static List<Teleport> getBlacklist() {
+		return (List<Teleport>) ScriptCache.get().computeIfAbsent(
+				"DaxWalkerTeleport.blacklist",
+				key -> new ArrayList<>());
+	}
 
 	public static void blacklistTeleports(Teleport... teleports){
-		blacklist.addAll(Arrays.asList(teleports));
+		getBlacklist().addAll(Arrays.asList(teleports));
 	}
 
 	public static void clearTeleportBlacklist(){
-		blacklist.clear();
+		getBlacklist().clear();
 	}
 
 	public static List<RSTile> getValidStartingRSTiles() {
 		List<RSTile> RSTiles = new ArrayList<>();
 		for (Teleport teleport : values()) {
 
-			if (blacklist.contains(teleport) || !teleport.teleportLimit.canCast() ||
-				!teleport.canUse || !teleport.requirement.satisfies()) continue;
+			if (getBlacklist().contains(teleport) || !teleport.teleportLimit.canCast() ||
+				!teleport.canUse() || !teleport.requirement.satisfies()) continue;
 			RSTiles.add(teleport.location);
 		}
 		return RSTiles;
