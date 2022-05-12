@@ -2,6 +2,7 @@ package dax.walker_engine.real_time_collision;
 
 import dax.shared.PathFindingNode;
 import dax.shared.RSRegion;
+import org.tribot.api.ScriptCache;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -161,11 +162,8 @@ public class RealTimeCollisionTile extends PathFindingNode {
         return neighbors;
     }
 
-    private static HashMap<Integer, HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>>> xMap = new HashMap<>();
-    private static HashSet<RealTimeCollisionTile> allCached = new HashSet<>();
-
     public static RealTimeCollisionTile get(int x, int y, int z){
-        HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>> yMap = xMap.get(x);
+        HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>> yMap = getXMap().get(x);
         if (yMap == null){
             return null;
         }
@@ -181,20 +179,29 @@ public class RealTimeCollisionTile extends PathFindingNode {
         if (!realTimeCollisionTile.isInitialized()){
             return null;
         }
-        HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>> yMap = xMap.computeIfAbsent(realTimeCollisionTile.getX(), k -> new HashMap<>());
+        HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>> yMap = getXMap().computeIfAbsent(realTimeCollisionTile.getX(), k -> new HashMap<>());
         HashMap<Integer, RealTimeCollisionTile> zMap = yMap.computeIfAbsent(realTimeCollisionTile.getY(), k -> new HashMap<>());
         zMap.put(realTimeCollisionTile.getZ(), realTimeCollisionTile);
-        allCached.add(realTimeCollisionTile);
+        getAllInitialized().add(realTimeCollisionTile);
         return realTimeCollisionTile;
     }
 
-    public static HashSet<RealTimeCollisionTile> getAllInitialized(){
-        return allCached;
+    private static final String allCachedKey = "dax.walker_engine.real_time_collision.RealTimeCollisionTile.allCached";
+    private static final String xMapKey = "dax.walker_engine.real_time_collision.RealTimeCollisionTile.xMap";
+
+    public static HashSet<RealTimeCollisionTile> getAllInitialized() {
+        return (HashSet<RealTimeCollisionTile>) ScriptCache.get()
+                .computeIfAbsent("dax.walker_engine.real_time_collision.RealTimeCollisionTile.allCached", k -> new HashSet<>());
     }
 
-    public static void clearMemory(){
-        xMap = new HashMap<>();
-        allCached = new HashSet<>();
+    public static void clearMemory() {
+        ScriptCache.get().put(xMapKey, new HashMap<>());
+        ScriptCache.get().put(allCachedKey, new HashSet<>());
+    }
+
+    private static HashMap<Integer, HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>>> getXMap() {
+        return (HashMap<Integer, HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>>>)
+                ScriptCache.get().computeIfAbsent(xMapKey, k -> new HashMap<>());
     }
 
 }
