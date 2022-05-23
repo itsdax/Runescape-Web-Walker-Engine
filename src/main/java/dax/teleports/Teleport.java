@@ -622,32 +622,6 @@ public enum Teleport {
 		this.teleportLimit = TeleportConstants.LEVEL_20_WILDERNESS_LIMIT;
 	}
 
-	private int getFailedAttempts() {
-		return (int) ScriptCache.get().getOrDefault(
-				"DaxWalkerTeleport." + this.name() + ".failedAttempts",
-				0);
-	}
-
-	private void incrementFailedAttempts() {
-		ScriptCache.get().compute("DaxWalkerTeleport." + this.name() + ".failedAttempts", (key, prev) -> prev != null ? (Integer)prev + 1 : 1);
-	}
-
-	private void resetFailedAttempts() {
-		ScriptCache.get().remove("DaxWalkerTeleport." + this.name());
-	}
-
-	private boolean canUse() {
-		return (boolean) ScriptCache.get().getOrDefault(
-				"DaxWalkerTeleport." + this.name() + ".canUse",
-				true);
-	}
-
-	private void setCanUse(boolean canUse) {
-		ScriptCache.get().put(
-				"DaxWalkerTeleport." + this.name() + ".canUse",
-				canUse);
-	}
-
 	public int getMoveCost() {
 		return (int) ScriptCache.get().getOrDefault(
 				"DaxWalkerTeleport." + this.name() + ".moveCost",
@@ -671,17 +645,7 @@ public enum Teleport {
 	}
 
 	public boolean trigger() {
-		boolean value = this.action.trigger();
-		if (!value){
-			incrementFailedAttempts();
-			if (getFailedAttempts() > 3) {
-				setCanUse(false);
-			}
-		}
-		else {
-			resetFailedAttempts();
-		}
-		return value;
+		return this.action.trigger();
 	}
 
 	public boolean isAtTeleportSpot(RSTile tile) {
@@ -711,7 +675,7 @@ public enum Teleport {
 		for (Teleport teleport : values()) {
 
 			if (getBlacklist().contains(teleport) || !teleport.teleportLimit.canCast() ||
-				!teleport.canUse() || !teleport.requirement.satisfies()) continue;
+					!teleport.requirement.satisfies()) continue;
 			RSTiles.add(teleport.location);
 		}
 		return RSTiles;
