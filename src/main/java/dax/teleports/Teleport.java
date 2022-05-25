@@ -55,6 +55,15 @@ public enum Teleport {
 		() -> RSItemHelper.click("Lumbridge t.*", "Break")
 	),
 
+	LUMBRIDGE_HOME_TELEPORT(
+		150, new RSTile(3225, 3219, 0),
+		() -> ((long) Game.getSetting(892) * 60 * 1000) + (30 * 60 * 1000) < Timing.currentTimeMillis(),
+		() -> {
+			final RSTile myPos = Player.getPosition();
+			return selectSpell("Lumbridge Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+		}
+	),
+
 	FALADOR_TELEPORT(
 		35, new RSTile(2966, 3379, 0),
 		Spell.FALADOR_TELEPORT::canUse,
