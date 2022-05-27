@@ -19,8 +19,10 @@ repositories {
 }
 
 dependencies {
+    compileOnly("org.tribot:tribot-script-sdk:+")
     compileOnly("org.tribot:tribot-client:+")
     compileOnly(files("${baseDir.absolutePath}/allatori-annotations-7.5.jar"))
+
 }
 
 publishing {
