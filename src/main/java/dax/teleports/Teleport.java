@@ -4,9 +4,11 @@ import dax.api_lib.models.Requirement;
 import dax.shared.helpers.InterfaceHelper;
 import dax.shared.helpers.RSItemHelper;
 import dax.shared.helpers.magic.Spell;
+import dax.shared.helpers.questing.QuestHelper;
 import dax.teleports.teleport_utils.TeleportConstants;
 import dax.teleports.teleport_utils.TeleportLimit;
 import dax.teleports.teleport_utils.TeleportScrolls;
+import dax.walker_engine.interaction_handling.NPCInteraction;
 import org.tribot.api.General;
 import org.tribot.api.ScriptCache;
 import org.tribot.api.Timing;
@@ -17,6 +19,8 @@ import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.types.RSVarBit;
+import org.tribot.script.sdk.Minigame;
+import org.tribot.script.sdk.Quest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -597,9 +601,29 @@ public enum Teleport {
 			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER),
 			() -> RSItemHelper.click("Drakan's.*", "Darkmeyer")
 
-	)
+	),
 
-
+	BARBARIAN_ASSASULT_MINIGAME(Minigame.BARBARIAN_ASSAULT, new RSTile(2532, 3577, 0), () -> RSVarBit.get(3251).getValue() > 0),
+	BLAST_FURNACE_MINIGAME(Minigame.BLAST_FURNACE, new RSTile(0, 0 ,0), () -> RSVarBit.get(575).getValue() >= 1),
+	BURTHROPE_GAMES_ROOM_MINIGAME(Minigame.BURTHORPE_GAMES_ROOM, new RSTile(2207, 4938, 0)),
+	CASTLE_WARS_MINIGAME(Minigame.CASTLE_WARS, new RSTile(2442, 3092, 0)),
+	CLAN_WARS_MINIGAME(Minigame.CLAN_WARS, new RSTile(3149, 3635, 0)),
+	FISHING_TRAWLER_MINIGAME(Minigame.FISHING_TRAWLER, new RSTile(2660, 3158, 0), () -> Skills.SKILLS.FISHING.getActualLevel() >= 15),
+//	GUARDIANS_OF_THE_RIFT_MINIGAME(Minigame.GUARDIANS_OF_THE_RIFT, new RSTile(0, 0, 0), () -> Quest.TEMPLE_OF_THE_EYE.getState() == Quest.State.COMPLETE),
+	LAST_MAN_STANDING_MINIGAME(Minigame.LAST_MAN_STANDING, new RSTile(3151, 3635, 0)),
+	NMZ_MINIGAME(Minigame.NIGHTMARE_ZONE, new RSTile(2611, 3122, 0), () -> QuestHelper.getNmzQuestsCompleted() >= 5),
+	PEST_CONTROL_MINIGAME(Minigame.PEST_CONTROL, new RSTile(2653, 2656, 0), () -> Player.getRSPlayer().getCombatLevel() >= 40),
+//	RAT_PITS_ARDOUGNE_MINIGAME(Minigame.RAT_PITS, new RSTile(0, 0, 0)),
+//	RAT_PITS_VARROCK_MINIGAME(Minigame.RAT_PITS, new RSTile(0, 0, 0)),
+//	RAT_PITS_KELDAGRIM_MINIGAME(Minigame.RAT_PITS, new RSTile(0, 0, 0)),
+//	RAT_PITS_PORT_SARIM_MINIGAME(Minigame.RAT_PITS, new RSTile(0, 0, 0)),
+	SHADES_OF_MORTTON_MINIGAME(Minigame.SHADES_OF_MORTON, new RSTile(3499, 3298, 0),
+			() -> Quest.SHADES_OF_MORTTON.getState() == Quest.State.COMPLETE),
+	SOUL_WARS_MINIGAME(Minigame.SOUL_WARS, new RSTile(2210, 2857, 0)),
+//	TITHE_FARM_MINIGAME(Minigame.TITHE_FARM, new RSTile(0, 0, 0),) I didn't see a way to determine if we've unlocked it.
+	TROUBLE_BREWING_MINIGAME(Minigame.TROUBLE_BREWING, new RSTile(3817, 3025, 0),
+		() -> Quest.CABIN_FEVER.getState() == Quest.State.COMPLETE && Skills.SKILLS.COOKING.getActualLevel() >= 40, "No."),
+	TZHAAR_FIGHT_PIT_MINIGAME(Minigame.TZHAAR_FIGHT_PIT, new RSTile(2402, 5181, 0), "No."),
 	;
 
 	private final RSTile location;
@@ -628,6 +652,32 @@ public enum Teleport {
 		this.location = scroll.getLocation();
 		this.requirement = () -> inMembersWorld() && scroll.canUse();
 		this.action = () -> scroll.teleportTo(false);
+		this.teleportLimit = TeleportConstants.LEVEL_20_WILDERNESS_LIMIT;
+	}
+
+	Teleport(Minigame minigame, RSTile location, String... chatOptions){
+		this(minigame, location, null, chatOptions);
+	}
+
+	Teleport(Minigame minigame, RSTile location, Requirement requirement, String... chatOptions){
+		setMoveCost(150);
+		this.location = location;
+		if(requirement != null){
+			this.requirement = () -> canUseMinigameTeleport() && requirement.satisfies();
+		} else{
+			this.requirement = Teleport::canUseMinigameTeleport;
+		}
+		this.action = () -> {
+			if(!minigame.teleport()){
+				return false;
+			}
+			if(chatOptions.length > 0){
+				NPCInteraction.handleConversation(chatOptions);
+			} else if(NPCInteraction.isConversationWindowUp()){
+				NPCInteraction.handleConversation();
+			}
+			return true;
+		};
 		this.teleportLimit = TeleportConstants.LEVEL_20_WILDERNESS_LIMIT;
 	}
 
@@ -772,5 +822,10 @@ public enum Teleport {
 
 	private static boolean hasBeenToZeah(){
 		return RSVarBit.get(4897).getValue() > 0;
+	}
+
+	private static boolean canUseMinigameTeleport(){
+		return inMembersWorld() && !Player.getRSPlayer().isInCombat() &&
+				((long) Game.getSetting(888) * 60 * 1000) + (30 * 60 * 1000) < Timing.currentTimeMillis();
 	}
 }
