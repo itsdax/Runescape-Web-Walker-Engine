@@ -914,6 +914,6 @@ public enum Teleport {
 
 	private static boolean canUseMinigameTeleport(){
 		return inMembersWorld() && !Player.getRSPlayer().isInCombat() &&
-				((long) Game.getSetting(888) * 60 * 1000) + (30 * 60 * 1000) < Timing.currentTimeMillis();
+				((long) Game.getSetting(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
 	}
 }
