@@ -4,6 +4,7 @@ import dax.api_lib.models.Requirement;
 import dax.shared.helpers.InterfaceHelper;
 import dax.shared.helpers.RSItemHelper;
 import dax.shared.helpers.magic.Spell;
+import dax.shared.helpers.magic.SpellBook;
 import dax.shared.helpers.questing.QuestHelper;
 import dax.teleports.teleport_utils.TeleportConstants;
 import dax.teleports.teleport_utils.TeleportLimit;
@@ -57,15 +58,6 @@ public enum Teleport {
 		35, new RSTile(3225, 3219, 0),
 		() -> inMembersWorld() && Inventory.getCount("Lumbridge teleport") > 0,
 		() -> RSItemHelper.click("Lumbridge t.*", "Break")
-	),
-
-	LUMBRIDGE_HOME_TELEPORT(
-		150, new RSTile(3225, 3219, 0),
-		() -> ((long) Game.getSetting(892) * 60 * 1000) + (30 * 60 * 1000) < Timing.currentTimeMillis(),
-		() -> {
-			final RSTile myPos = Player.getPosition();
-			return selectSpell("Lumbridge Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
-		}
 	),
 
 	FALADOR_TELEPORT(
@@ -630,7 +622,11 @@ public enum Teleport {
 			new RSTile(2660, 3158, 0),
 			() -> Skills.SKILLS.FISHING.getActualLevel() >= 15
 	),
-//	GUARDIANS_OF_THE_RIFT_MINIGAME(Minigame.GUARDIANS_OF_THE_RIFT, new RSTile(0, 0, 0), () -> Quest.TEMPLE_OF_THE_EYE.getState() == Quest.State.COMPLETE),
+	GUARDIANS_OF_THE_RIFT_MINIGAME(
+			Minigame.GUARDIANS_OF_THE_RIFT,
+			new RSTile(3614, 9478, 0),
+			() -> Quest.TEMPLE_OF_THE_EYE.getState() == Quest.State.COMPLETE
+	),
 	LAST_MAN_STANDING_MINIGAME(
 			Minigame.LAST_MAN_STANDING,
 		new RSTile(3151, 3635, 0)
@@ -712,6 +708,43 @@ public enum Teleport {
 			() -> inMembersWorld() && Inventory.getCount("Catherby teleport") > 0,
 			() -> RSItemHelper.click("Catherby t.*", "Break")
 	),
+
+	LUMBRIDGE_HOME_TELEPORT(
+			150, new RSTile(3225, 3219, 0),
+			Teleport::canUseHomeTeleport,
+			() -> {
+				final RSTile myPos = Player.getPosition();
+				return selectSpell("Lumbridge Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+			}
+	),
+
+	ARCEUUS_HOME_TELEPORT(
+			150, new RSTile(1712, 3883, 0),
+			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.ARCEUUS,
+			() -> {
+				final RSTile myPos = Player.getPosition();
+				return selectSpell("Arceuus Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+			}
+	),
+
+	EDGEVILLE_HOME_TELEPORT(
+			150, new RSTile(3087, 3496, 0),
+			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.ANCIENT,
+			() -> {
+				final RSTile myPos = Player.getPosition();
+				return selectSpell("Edgeville Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+			}
+	),
+
+	LUNAR_HOME_TELEPORT(
+			150, new RSTile(2095, 3913, 0),
+			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.LUNAR,
+			() -> {
+				final RSTile myPos = Player.getPosition();
+				return selectSpell("Lunar Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+			}
+	),
+
 	;
 
 	private final RSTile location;
@@ -910,6 +943,11 @@ public enum Teleport {
 
 	private static boolean hasBeenToZeah(){
 		return RSVarBit.get(4897).getValue() > 0;
+	}
+
+	private static boolean canUseHomeTeleport(){
+		return inMembersWorld() && !Player.getRSPlayer().isInCombat() &&
+				((long) Game.getSetting(892) * 60 * 1000) + (30 * 60 * 1000) < Timing.currentTimeMillis();
 	}
 
 	private static boolean canUseMinigameTeleport(){
