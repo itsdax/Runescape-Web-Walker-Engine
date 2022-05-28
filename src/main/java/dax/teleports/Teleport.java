@@ -670,6 +670,48 @@ public enum Teleport {
 			new RSTile(2402, 5181, 0),
 			"No."
 	),
+
+	MOONCLAN_TELEPORT_TAB(
+			35, new RSTile(2115, 3914, 0),
+			() -> Quest.LUNAR_DIPLOMACY.getState() == Quest.State.COMPLETE && inMembersWorld() && Inventory.getCount("Moonclan teleport") > 0,
+			() -> RSItemHelper.click("Moonclan tele.*", "Break")
+	),
+
+	OURANIA_TELEPORT_TAB(
+			35, new RSTile(2468, 3246, 0),
+			() -> RSVarBit.get(5376).getValue() > 0 && inMembersWorld() && Inventory.getCount("Ourania teleport") > 0,
+			() -> RSItemHelper.click("Ourania t.*", "Break")
+	),
+
+	WATERBIRTH_TELEPORT_TAB(
+			35, new RSTile(2546, 3757, 0),
+			() -> inMembersWorld() && Inventory.getCount("Waterbirth teleport") > 0,
+			() -> RSItemHelper.click("Waterbirth t.*", "Break")
+	),
+
+	BARBARIAN_OUTPUT_TELEPORT_TAB(
+			35, new RSTile(2544, 3568, 0),
+			() -> inMembersWorld() && Inventory.getCount("Barbarian teleport") > 0,
+			() -> RSItemHelper.click("Barbarian tele.*", "Break")
+	),
+
+	KHAZARD_TELEPORT_TAB(
+			35, new RSTile(2637, 3167, 0),
+			() -> inMembersWorld() && Inventory.getCount("Khazard teleport") > 0,
+			() -> RSItemHelper.click("Khazard tele.*", "Break")
+	),
+
+	FISHING_GUILD_TELEPORT_TAB(
+			35, new RSTile(2612, 3391, 0),
+			() -> inMembersWorld() && Inventory.getCount("Fishing guild teleport") > 0,
+			() -> RSItemHelper.click("Fishing guild t.*", "Break")
+	),
+
+	CATHERBY_TELEPORT_TAB(
+			35, new RSTile(2801, 3449, 0),
+			() -> inMembersWorld() && Inventory.getCount("Catherby teleport") > 0,
+			() -> RSItemHelper.click("Catherby t.*", "Break")
+	),
 	;
 
 	private final RSTile location;
