@@ -31,6 +31,7 @@ public class WebWalkerServerApi implements Loggable {
         return (WebWalkerServerApi) ScriptCache.get().computeIfAbsent("DaxWalker.WebWalkerServerApi", k -> new WebWalkerServerApi());
     }
 
+    // Pending to be changed to https://walker.dax.cloud
     private static final String WALKER_ENDPOINT = "https://api.dax.cloud", TEST_ENDPOINT = "http://localhost:8080";
 
     private static final String
