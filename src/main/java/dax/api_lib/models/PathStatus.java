@@ -19,6 +19,9 @@ public enum PathStatus {
     //OFFLINE
     NO_RESPONSE_FROM_SERVER,
 
+    // Server Issue
+    BAD_RESPONSE_FROM_SERVER,
+
     //WHAT IS GOING ON
     UNKNOWN
 

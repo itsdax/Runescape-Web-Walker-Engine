@@ -40,6 +40,7 @@ public class PlayerDetails {
             4885,
             4895,
             4897,
+            5027,
             5087,
             5088,
             5089,

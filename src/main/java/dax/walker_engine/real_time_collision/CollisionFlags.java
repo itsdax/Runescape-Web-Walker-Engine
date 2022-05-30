@@ -7,6 +7,7 @@ public class CollisionFlags {
     public static final int OCCUPIED            = 0x100;
     public static final int SOLID               = 0x20000;
     public static final int BLOCKED             = 0x200000;
+    public static final int BLOCKED_FLOOR_DECORATION = 0x40000;
     public static final int CLOSED              = 0xFFFFFF;
     public static final int INITIALIZED         = 0x1000000; //or unitialized. i dont fucking know
 

@@ -67,6 +67,7 @@ public class AStarNode {
         return !(CollisionFlags.checkFlag(collisionData, CollisionFlags.OCCUPIED)
                 || CollisionFlags.checkFlag(collisionData, CollisionFlags.SOLID)
                 || CollisionFlags.checkFlag(collisionData, CollisionFlags.BLOCKED)
+                || CollisionFlags.checkFlag(collisionData, CollisionFlags.BLOCKED_FLOOR_DECORATION)
                 || CollisionFlags.checkFlag(collisionData, CollisionFlags.CLOSED));
     }
 

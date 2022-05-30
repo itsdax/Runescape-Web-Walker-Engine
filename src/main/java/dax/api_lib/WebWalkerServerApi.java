@@ -3,6 +3,7 @@ package dax.api_lib;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import dax.api_lib.json.Json;
 import dax.api_lib.json.JsonValue;
@@ -30,7 +31,8 @@ public class WebWalkerServerApi implements Loggable {
         return (WebWalkerServerApi) ScriptCache.get().computeIfAbsent("DaxWalker.WebWalkerServerApi", k -> new WebWalkerServerApi());
     }
 
-    private static final String WALKER_ENDPOINT = "https://api.dax.cloud", TEST_ENDPOINT = "http://localhost:8080";
+    // This was originally https://api.dax.cloud
+    private static final String WALKER_ENDPOINT = "https://walker.dax.cloud", TEST_ENDPOINT = "http://localhost:8080";
 
     private static final String
             GENERATE_PATH = "/walker/generatePath",
@@ -51,8 +53,8 @@ public class WebWalkerServerApi implements Loggable {
 
     public List<PathResult> getPaths(BulkPathRequest bulkPathRequest) {
         try {
-            return parseResults(post(gson.toJson(bulkPathRequest),WALKER_ENDPOINT + "/walker/generatePaths"));
-        } catch(IOException e){
+            return parseResults(post(gson.toJson(bulkPathRequest), WALKER_ENDPOINT + "/walker/generatePaths"));
+        } catch (IOException e) {
             getInstance().log("Is server down? Spam dax.");
             return Collections.singletonList(new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER));
         }
@@ -60,8 +62,8 @@ public class WebWalkerServerApi implements Loggable {
 
     public List<PathResult> getBankPaths(BulkBankPathRequest bulkBankPathRequest) {
         try {
-            return parseResults(post(gson.toJson(bulkBankPathRequest),WALKER_ENDPOINT + "/walker/generateBankPaths"));
-        } catch(IOException e){
+            return parseResults(post(gson.toJson(bulkBankPathRequest), WALKER_ENDPOINT + "/walker/generateBankPaths"));
+        } catch (IOException e) {
             getInstance().log("Is server down? Spam dax.");
             return Collections.singletonList(new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER));
         }
@@ -114,19 +116,19 @@ public class WebWalkerServerApi implements Loggable {
         isTestMode = testMode;
     }
 
-    private List<PathResult> parseResults(ServerResponse serverResponse){
+    private List<PathResult> parseResults(ServerResponse serverResponse) {
         if (!serverResponse.isSuccess()) {
-            JsonValue jsonValue  = null;
-            try{
+            JsonValue jsonValue = null;
+            try {
                 jsonValue = Json.parse(serverResponse.getContents());
-            } catch(Exception | Error e){
+            } catch (Exception | Error e) {
                 jsonValue = Json.NULL;
             }
             if (!jsonValue.isNull()) {
                 getInstance().log("[Error] " + jsonValue.asObject().getString(
                         "message",
                         "Could not generate path: " + serverResponse.getContents()
-                                                                             ));
+                ));
             }
 
             switch (serverResponse.getCode()) {
@@ -137,11 +139,19 @@ public class WebWalkerServerApi implements Loggable {
                 case 404:
                     return Collections.singletonList(new PathResult(PathStatus.INVALID_CREDENTIALS));
             }
+
+            if (serverResponse.getCode() >= 500) {
+                log("Error: " + serverResponse.getCode() + ": " + serverResponse.getContents());
+                log("Please send dax the debug. That could be found right after 'Generating path:'");
+                return Collections.singletonList(new PathResult(PathStatus.BAD_RESPONSE_FROM_SERVER));
+            }
+
         }
 
         try {
-            return gson.fromJson(serverResponse.getContents(), new TypeToken<List<PathResult>>() {}.getType());
-        } catch (ParseException | IllegalStateException e) {
+            return gson.fromJson(serverResponse.getContents(), new TypeToken<List<PathResult>>() {
+            }.getType());
+        } catch (JsonSyntaxException | ParseException | IllegalStateException e) {
             PathResult pathResult = new PathResult(PathStatus.UNKNOWN);
             log("Error: " + pathResult.getPathStatus());
             return Collections.singletonList(pathResult);
@@ -150,10 +160,10 @@ public class WebWalkerServerApi implements Loggable {
 
     private PathResult parseResult(ServerResponse serverResponse) {
         if (!serverResponse.isSuccess()) {
-            JsonValue jsonValue  = null;
-            try{
+            JsonValue jsonValue = null;
+            try {
                 jsonValue = Json.parse(serverResponse.getContents());
-            } catch(Exception | Error e){
+            } catch (Exception | Error e) {
                 jsonValue = Json.NULL;
             }
             if (!jsonValue.isNull()) {
@@ -171,13 +181,19 @@ public class WebWalkerServerApi implements Loggable {
                 case 404:
                     return new PathResult(PathStatus.INVALID_CREDENTIALS);
             }
+
+            if (serverResponse.getCode() >= 500) {
+                log("Error: " + serverResponse.getCode() + ": " + serverResponse.getContents());
+                log("Please send dax the debug. That could be found right after 'Generating path:'");
+                return new PathResult(PathStatus.BAD_RESPONSE_FROM_SERVER);
+            }
         }
 
         PathResult pathResult;
         JsonElement jsonObject;
         try {
             jsonObject = new JsonParser().parse(serverResponse.getContents());
-        } catch (ParseException | IllegalStateException e) {
+        } catch (JsonSyntaxException | ParseException | IllegalStateException e) {
             pathResult = new PathResult(PathStatus.UNKNOWN);
             log("Error: " + pathResult.getPathStatus());
             return pathResult;
@@ -189,7 +205,7 @@ public class WebWalkerServerApi implements Loggable {
     }
 
     private ServerResponse post(com.google.gson.JsonObject jsonObject, String endpoint) throws IOException {
-        return post(gson.toJson(jsonObject),endpoint);
+        return post(gson.toJson(jsonObject), endpoint);
     }
 
     private ServerResponse post(String json, String endpoint) throws IOException {
