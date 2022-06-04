@@ -795,7 +795,11 @@ public enum Teleport {
 			if(chatOptions.length > 0){
 				NPCInteraction.handleConversation(chatOptions);
 			} else if(NPCInteraction.isConversationWindowUp()){
-				NPCInteraction.handleConversation();
+				if(NPCChat.getOptions() != null){
+					Walking.walkTo(Player.getPosition());//exit chat by walking to our tile
+				} else {
+					NPCInteraction.handleConversation();
+				}
 			}
 			return true;
 		};
