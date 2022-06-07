@@ -9,6 +9,7 @@ import dax.shared.helpers.questing.QuestHelper;
 import dax.teleports.teleport_utils.TeleportConstants;
 import dax.teleports.teleport_utils.TeleportLimit;
 import dax.teleports.teleport_utils.TeleportScrolls;
+import dax.walker_engine.WaitFor;
 import dax.walker_engine.interaction_handling.NPCInteraction;
 import org.tribot.api.General;
 import org.tribot.api.ScriptCache;
@@ -789,13 +790,15 @@ public enum Teleport {
 			this.requirement = Teleport::canUseMinigameTeleport;
 		}
 		this.action = () -> {
+			if(NPCInteraction.isConversationWindowUp()){
+				Walking.walkTo(Player.getPosition());//exit chat by walking to our tile
+				WaitFor.milliseconds(200, 600);
+			}
 			if(!minigame.teleport()){
 				return false;
 			}
 			if(chatOptions.length > 0){
 				NPCInteraction.handleConversation(chatOptions);
-			} else if(NPCInteraction.isConversationWindowUp()){
-				NPCInteraction.handleConversation();
 			}
 			return true;
 		};
