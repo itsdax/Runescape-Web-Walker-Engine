@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class NPCInteraction implements Loggable {
 
-    public static String[] GENERAL_RESPONSES = {"Sorry, I'm a bit busy.", "OK then.", "Yes.", "Okay..."};
+    public static String[] GENERAL_RESPONSES = {"Sorry, I'm a bit busy.", "OK then.", "Yes, don't ask again.", "Yes.", "Okay..."};
 
     private static final int
             ITEM_ACTION_INTERFACE_WINDOW = 193,
