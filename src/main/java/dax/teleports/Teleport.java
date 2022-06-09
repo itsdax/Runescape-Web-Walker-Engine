@@ -715,7 +715,8 @@ public enum Teleport {
 			Teleport::canUseHomeTeleport,
 			() -> {
 				final RSTile myPos = Player.getPosition();
-				return selectSpell("Lumbridge Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+				return selectSpell("Lumbridge Home Teleport", "Cast") && Timing.waitCondition(() ->  !Player.getRSPlayer().isInCombat() &&
+						!Player.getPosition().equals(myPos), 15000);
 			}
 	),
 
@@ -724,7 +725,8 @@ public enum Teleport {
 			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.ARCEUUS,
 			() -> {
 				final RSTile myPos = Player.getPosition();
-				return selectSpell("Arceuus Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+				return selectSpell("Arceuus Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getRSPlayer().isInCombat() &&
+						!Player.getPosition().equals(myPos), 15000);
 			}
 	),
 
@@ -733,7 +735,8 @@ public enum Teleport {
 			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.ANCIENT,
 			() -> {
 				final RSTile myPos = Player.getPosition();
-				return selectSpell("Edgeville Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+				return selectSpell("Edgeville Home Teleport", "Cast") && Timing.waitCondition(() ->  !Player.getRSPlayer().isInCombat() &&
+						!Player.getPosition().equals(myPos), 15000);
 			}
 	),
 
@@ -742,7 +745,8 @@ public enum Teleport {
 			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.LUNAR,
 			() -> {
 				final RSTile myPos = Player.getPosition();
-				return selectSpell("Lunar Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getPosition().equals(myPos), 15000);
+				return selectSpell("Lunar Home Teleport", "Cast") && Timing.waitCondition(() ->  !Player.getRSPlayer().isInCombat() &&
+						!Player.getPosition().equals(myPos), 15000);
 			}
 	),
 
