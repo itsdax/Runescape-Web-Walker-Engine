@@ -35,6 +35,7 @@ public class PlayerDetails {
             2328,
             3534,
             3741,
+            4494,//fremmy elite diary status
             4538,
             4566,
             4885,
