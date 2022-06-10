@@ -242,6 +242,10 @@ public class NavigationSpecialCase implements Loggable {
 
         SLEPE_BOAT_FROM_PORT(3671, 3542, 0),
         SLEPE_BOAT_FROM_SLEPE(3661, 3277, 0),
+
+        SOUL_WARS_PORTAL(2206, 2858, 0),
+        FEROX_ENCLAVE_PORTAL_TO_ISLE_OF_SOULS(3158, 10027, 0),
+        EDGEVILLE_PORTAL_TO_ISLE_OF_SOULS(3082, 3476, 0),
         ;
 
 
@@ -959,6 +963,16 @@ public class NavigationSpecialCase implements Loggable {
             case SLEPE_BOAT_FROM_SLEPE:
                 return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Row boat")), "Travel") && WaitFor.condition( 15000,  () -> SLEPE_BOAT_FROM_PORT.getRSTile().distanceTo(Player.getPosition()) < 5
                         ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
+
+            case SOUL_WARS_PORTAL:
+                return clickObject(Filters.Objects.nameEquals("Soul Wars Portal"), "Enter",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case FEROX_ENCLAVE_PORTAL_TO_ISLE_OF_SOULS:
+                return clickObject(Filters.Objects.nameEquals("Portal"), "Ferox Enclave",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case EDGEVILLE_PORTAL_TO_ISLE_OF_SOULS:
+                return clickObject(Filters.Objects.nameEquals("Portal"), "Edgeville",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
