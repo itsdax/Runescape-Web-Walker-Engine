@@ -470,7 +470,7 @@ public class NavigationSpecialCase implements Loggable {
                     }
                 }, true));
                 Sorting.sortByDistance(objects, new RSTile(2935, 10172, 0), true);
-                if (clickObject(objects[0], "Ride", () -> Player.getPosition().getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                if (objects.length > 0 && clickObject(objects[0], "Ride", () -> Player.getPosition().getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     getInstance().log("Rode cart to GE");
                     return true;
                 } else {
