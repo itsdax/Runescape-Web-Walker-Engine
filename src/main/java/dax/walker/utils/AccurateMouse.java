@@ -285,8 +285,17 @@ public class AccurateMouse {
             return false;
         }
 
-        Rectangle area = clickable instanceof RSItem ? ((RSItem) clickable).getArea() : ((RSInterface) clickable).getAbsoluteBounds();
+        Rectangle area;
+        if(clickable instanceof RSItem){
+            area = ((RSItem) clickable).getArea();
+            if(((RSItem) clickable).getType() == RSItem.TYPE.INVENTORY && !GameTab.TABS.INVENTORY.isOpen()){
+                GameTab.TABS.INVENTORY.open();
+            }
+        } else {
+            area = ((RSInterface) clickable).getAbsoluteBounds();
+        }
         String uptext = Game.getUptext();
+
         if (area.contains(Mouse.getPos())) {
             if (uptext != null && (clickActions.length == 0 || Arrays.stream(clickActions).anyMatch(uptext::contains))) {
                 if (hover) {
