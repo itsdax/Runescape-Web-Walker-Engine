@@ -712,7 +712,7 @@ public enum Teleport {
 
 	LUMBRIDGE_HOME_TELEPORT(
 			150, new RSTile(3225, 3219, 0),
-			Teleport::canUseHomeTeleport,
+			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.STANDARD,
 			() -> {
 				final RSTile myPos = Player.getPosition();
 				return selectSpell("Lumbridge Home Teleport", "Cast") && Timing.waitCondition(() ->  !Player.getRSPlayer().isInCombat() &&
