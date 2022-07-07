@@ -173,10 +173,10 @@ public enum Teleport {
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
-	RING_OF_DUELING_DUEL_ARENA (
+	RING_OF_DUELING_PVP_ARENA (
 		35, new RSTile(3313, 3233, 0),
 		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.RING_OF_DUELING_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*duel arena.*")
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*PvP Arena.*")
 	),
 
 	RING_OF_DUELING_CASTLE_WARS (
