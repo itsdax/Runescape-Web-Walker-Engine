@@ -17,7 +17,15 @@ public enum RuneElement {
     FIRE("Fire", "Lava", "Smoke", "Steam"),
     WATER("Water", "Mud", "Steam", "Mist"),
     LAW("Law"),
+    BODY("Body"),
+    MIND("Mind"),
     NATURE("Nature"),
+    COSMIC("Cosmic"),
+    CHAOS("Chaos"),
+    ASTRAL("Astral"),
+    DEATH("Death"),
+    BLOOD("Blood"),
+    WRATH("Wrath"),
     SOUL("Soul");
 
     private String[] alternativeNames;
@@ -37,7 +45,7 @@ public enum RuneElement {
         RSItem[] items = Inventory.find(new Filter<RSItem>() {
             @Override
             public boolean accept(RSItem rsItem) {
-                if(rsItem.getDefinition().isMembersOnly() && !WorldHopper.isCurrentWorldMembers().orElse(false))
+                if (rsItem.getDefinition().isMembersOnly() && !WorldHopper.isCurrentWorldMembers().orElse(false))
                     return false;
                 String name = getItemName(rsItem).toLowerCase();
 
@@ -60,7 +68,7 @@ public enum RuneElement {
         return Equipment.find(new Filter<RSItem>() {
             @Override
             public boolean accept(RSItem rsItem) {
-                if(rsItem.getDefinition().isMembersOnly() && !WorldHopper.isCurrentWorldMembers().orElse(false))
+                if (rsItem.getDefinition().isMembersOnly() && !WorldHopper.isCurrentWorldMembers().orElse(false))
                     return false;
                 String name = getItemName(rsItem).toLowerCase();
                 if (!name.contains("staff")) {
