@@ -352,7 +352,7 @@ public class NavigationSpecialCase implements Loggable {
 
             case WATERBIRTH:
                 String option = NPCs.find(Filters.NPCs.nameContains("Jarvald").combine(Filters.NPCs.actionsContains(
-                		"Travel"),true)).length > 0 ? "Travel" : "Talk-to";
+                		"Rellekka"),true)).length > 0 ? "Rellekka" : "Talk-to";
                 if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Jarvald"), new String[]{option}, new String[]{
                         "What Jarvald is doing.",
                         "Can I come?",
