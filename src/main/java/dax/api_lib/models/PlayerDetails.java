@@ -34,8 +34,9 @@ public class PlayerDetails {
             2310,
             2328,
             3534,
+            3618, //dream mentor
             3741,
-            4494,//fremmy elite diary status
+            4494, //fremmy elite diary status
             4538,
             4566,
             4885,
@@ -52,6 +53,7 @@ public class PlayerDetails {
             7255,
             9016,
             10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
+            13903, //Sleeping Giants quest
         })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
