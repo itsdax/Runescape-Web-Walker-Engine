@@ -623,6 +623,10 @@ public enum Teleport {
 			new RSTile(2660, 3158, 0),
 			() -> Skills.SKILLS.FISHING.getActualLevel() >= 15
 	),
+	GIANTS_FOUNDRY_MINIGAME(
+		Minigame.GIANTS_FOUNDRY,
+		new RSTile(3361, 3147, 0)
+	),
 	GUARDIANS_OF_THE_RIFT_MINIGAME(
 			Minigame.GUARDIANS_OF_THE_RIFT,
 			new RSTile(3614, 9478, 0),
