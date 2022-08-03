@@ -212,7 +212,7 @@ public class AccurateMouse {
         }
 
         Point point = null;
-        if (clickable instanceof RSTile && Arrays.stream(clickActions).anyMatch(s -> s.matches("Walk here"))) {
+        if (clickable instanceof RSTile) {
             point = ((RSTile) clickable).getHumanHoverPoint();
         } else if (model == null) {
             return false;
