@@ -315,7 +315,7 @@ public enum Teleport {
 
 	SKILLS_WOODCUTTING_GUILD (
 		35, new RSTile(1663, 3507, 0),
-		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
+		() -> inMembersWorld() && hasBeenToZeah() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Woodcutting.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
