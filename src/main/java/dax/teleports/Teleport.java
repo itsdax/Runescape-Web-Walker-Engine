@@ -566,8 +566,11 @@ public enum Teleport {
 
 	ENCHANTED_LYRE_RELLEKA(
 			35, new RSTile(2661, 3465, 0),
-			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.ENCHANTED_LYRE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.ENCHANTED_LYRE_FILTER, "Play|Rellekka.*")
+			() -> inMembersWorld() && Inventory.find(Filters.Items.nameContains("Enchanted lyre")).length > 0,
+			() -> {
+				RSItem[] lyre = Inventory.find(Filters.Items.nameContains("Enchanted lyre"));
+				return lyre.length > 0 && RSItemHelper.clickMatch(lyre[0], "Play|Rellekka.*");
+			}
 	),
 
 	FARMING_CAPE_TELEPORT(
