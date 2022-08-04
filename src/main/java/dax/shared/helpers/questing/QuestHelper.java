@@ -20,7 +20,7 @@ public class QuestHelper {
             org.tribot.script.sdk.Quest.DESERT_TREASURE,
             org.tribot.script.sdk.Quest.DRAGON_SLAYER_I,
             org.tribot.script.sdk.Quest.DREAM_MENTOR,
-            org.tribot.script.sdk.Quest.FAIRYTALE_I_GROWING_PAINS,
+            org.tribot.script.sdk.Quest.FAIRYTALE_I__GROWING_PAINS,
             org.tribot.script.sdk.Quest.FAMILY_CREST,
             org.tribot.script.sdk.Quest.FIGHT_ARENA,
             org.tribot.script.sdk.Quest.THE_FREMENNIK_ISLES,
