@@ -892,8 +892,6 @@ public enum Teleport {
 	}
 
 	public static List<RSTile> getValidStartingRSTiles(boolean membersWorld, boolean pvpWorld, List<Teleport> blacklist) {
-		currentlyInMembersWorld = membersWorld;
-		currentlyInPvpWorld = pvpWorld;
 		return Arrays.stream(values())
 				.filter(t -> {
 					if((!membersWorld && t.requiresMembers) || (pvpWorld && !t.canBeUsedInPvpWorlds))
@@ -906,16 +904,6 @@ public enum Teleport {
 
 	private interface Action {
 		boolean trigger();
-	}
-
-	private static boolean currentlyInMembersWorld = false, currentlyInPvpWorld = false;
-
-	private static boolean inMembersWorld() {
-		return currentlyInMembersWorld;
-	}
-
-	private static boolean inPvpWorld() {
-		return currentlyInPvpWorld;
 	}
 
 	private static Predicate<RSItem> notNotedFilter() {
