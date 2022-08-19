@@ -315,7 +315,7 @@ public enum Teleport {
 
 	SKILLS_WOODCUTTING_GUILD (
 		35, new RSTile(1663, 3507, 0),
-		() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
+		() -> inMembersWorld() && hasBeenToZeah() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER),
 		() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Woodcutting.*"),
 		TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
@@ -566,8 +566,11 @@ public enum Teleport {
 
 	ENCHANTED_LYRE_RELLEKA(
 			35, new RSTile(2661, 3465, 0),
-			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.ENCHANTED_LYRE_FILTER),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.ENCHANTED_LYRE_FILTER, "Play|Rellekka.*")
+			() -> inMembersWorld() && Inventory.find(Filters.Items.nameContains("Enchanted lyre")).length > 0,
+			() -> {
+				RSItem[] lyre = Inventory.find(Filters.Items.nameContains("Enchanted lyre"));
+				return lyre.length > 0 && RSItemHelper.clickMatch(lyre[0], "Play|Rellekka.*");
+			}
 	),
 
 	FARMING_CAPE_TELEPORT(
@@ -622,6 +625,10 @@ public enum Teleport {
 			Minigame.FISHING_TRAWLER,
 			new RSTile(2660, 3158, 0),
 			() -> Skills.SKILLS.FISHING.getActualLevel() >= 15
+	),
+	GIANTS_FOUNDRY_MINIGAME(
+		Minigame.GIANTS_FOUNDRY,
+		new RSTile(3361, 3147, 0)
 	),
 	GUARDIANS_OF_THE_RIFT_MINIGAME(
 			Minigame.GUARDIANS_OF_THE_RIFT,

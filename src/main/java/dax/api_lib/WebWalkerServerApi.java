@@ -236,9 +236,13 @@ public class WebWalkerServerApi implements Loggable {
             return new ServerResponse(false, connection.getResponseCode(), IOHelper.readInputStream(connection.getErrorStream()));
         }
 
-        String contents = IOHelper.readInputStream(connection.getInputStream());
-        cache.put(json, contents);
-        return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
+        try {
+            String contents = IOHelper.readInputStream(connection.getInputStream());
+            cache.put(json, contents);
+            return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
+        } catch(IOException e){
+            return new ServerResponse(false, connection.getResponseCode(), IOHelper.readInputStream(connection.getErrorStream()));
+        }
     }
 
 
