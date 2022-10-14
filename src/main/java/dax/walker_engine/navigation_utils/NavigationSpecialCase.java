@@ -246,6 +246,8 @@ public class NavigationSpecialCase implements Loggable {
         SOUL_WARS_PORTAL(2206, 2858, 0),
         FEROX_ENCLAVE_PORTAL_TO_ISLE_OF_SOULS(3158, 10027, 0),
         EDGEVILLE_PORTAL_TO_ISLE_OF_SOULS(3082, 3476, 0),
+	    
+        KBD_LAIR(2271, 4680, 0),
         ;
 
 
@@ -993,6 +995,10 @@ public class NavigationSpecialCase implements Loggable {
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case EDGEVILLE_PORTAL_TO_ISLE_OF_SOULS:
                 return clickObject(Filters.Objects.nameEquals("Portal"), "Edgeville",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+			
+	    case KBD_LAIR:
+                return clickObject(Filters.Objects.nameEquals("Lever"), "Pull",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
