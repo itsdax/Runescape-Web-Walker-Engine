@@ -10,6 +10,7 @@ import dax.walker_engine.WalkingCondition;
 import dax.walker_engine.navigation_utils.ShipUtils;
 import org.tribot.api.ScriptCache;
 import org.tribot.api.interfaces.Positionable;
+import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
 
@@ -117,7 +118,7 @@ public class DaxWalker implements Loggable {
 
         PlayerDetails playerDetails = PlayerDetails.generate();
         boolean isInPvpWorld = InterfaceHelper.getAllInterfaces(90).stream()
-                .anyMatch(i -> i.getText().startsWith("" + Player.getRSPlayer().getCombatLevel()));
+                .anyMatch(i -> i.getTextureID() == 1046 && Interfaces.isInterfaceSubstantiated(i));
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld);
 

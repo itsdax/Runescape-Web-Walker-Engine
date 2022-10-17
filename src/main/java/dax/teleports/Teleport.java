@@ -980,7 +980,7 @@ public enum Teleport {
 	}
 
 	private static boolean canUseMinigameTeleport(){
-		return !inPvpWorld() && !Player.getRSPlayer().isInCombat() &&
+		return !Player.getRSPlayer().isInCombat() &&
 				((long) Game.getSetting(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
 	}
 }
