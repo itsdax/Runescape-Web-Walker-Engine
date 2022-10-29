@@ -251,8 +251,6 @@ public class NavigationSpecialCase implements Loggable {
         KBD_LAIR_LOBBY(3067, 10253, 0),
         ;
 
-
-
         int x, y, z;
         SpecialLocation(int x, int y, int z){
             this.x = x;
@@ -998,8 +996,8 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Portal"), "Edgeville",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
 			
-	    case KBD_LAIR:
-	    case KBD_LAIR_LOBBY:
+	          case KBD_LAIR:
+	          case KBD_LAIR_LOBBY:
                 return clickObject(Filters.Objects.nameEquals("Lever"), "Pull",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
