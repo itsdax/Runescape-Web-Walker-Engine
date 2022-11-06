@@ -322,20 +322,6 @@ public class WalkerEngine implements Loggable{
                 .anyMatch(t -> t.trigger() && WaitFor.condition(General.random(5000, 20000),
                         () -> startPosition.distanceTo(Player.getPosition()) < 10 ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS);
-//        for (Teleport teleport : Teleport.values()) {
-//            if (!teleport.getRequirement().satisfies()) continue;
-//            if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
-//                log("Using teleport method: " + teleport);
-//                if(teleport.trigger()) {
-//                    return WaitFor.condition(General.random(5000, 20000),
-//                            () -> startPosition.distanceTo(Player.getPosition()) < 10 ?
-//                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-//                } else {
-//                    return false;
-//                }
-//            }
-//        }
-//        return true;
     }
 
 }
