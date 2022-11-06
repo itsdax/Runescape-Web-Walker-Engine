@@ -135,7 +135,7 @@ public class DaxWalker implements Loggable {
         return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
     }
 
-    private static List<Teleport> getBlacklist() {
+    public static List<Teleport> getBlacklist() {
         return (List<Teleport>) ScriptCache.get().computeIfAbsent(
                 "DaxWalkerTeleport.blacklist",
                 key -> new ArrayList<>());
