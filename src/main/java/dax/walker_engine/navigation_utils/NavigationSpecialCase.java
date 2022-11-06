@@ -246,9 +246,10 @@ public class NavigationSpecialCase implements Loggable {
         SOUL_WARS_PORTAL(2206, 2858, 0),
         FEROX_ENCLAVE_PORTAL_TO_ISLE_OF_SOULS(3158, 10027, 0),
         EDGEVILLE_PORTAL_TO_ISLE_OF_SOULS(3082, 3476, 0),
+	    
+        KBD_LAIR(2271, 4680, 0),
+        KBD_LAIR_LOBBY(3067, 10253, 0),
         ;
-
-
 
         int x, y, z;
         SpecialLocation(int x, int y, int z){
@@ -333,12 +334,6 @@ public class NavigationSpecialCase implements Loggable {
             case SHILO_ENTRANCE: break;
             case SHILO_INSIDE: return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mosol Rei"), new String[]{"Talk-to"}, new String[]{"Yes, Ok, I'll go into the village!"});
 
-            case RELLEKKA_WEST_BOAT:
-                if (NPCInteraction.talkTo(Filters.NPCs.actionsEquals("Waterbirth"), new String[]{"Waterbirth"}, new String[0])){
-                    WaitFor.milliseconds(2000, 3000);
-                }
-                break;
-
             case MISCELLANIA_TO_RELLEKKA:
             case RELLEKKA_TO_MISCELLANIA:
                 final RSTile curr = Player.getPosition();
@@ -350,16 +345,43 @@ public class NavigationSpecialCase implements Loggable {
                 }
                 break;
 
+            case RELLEKKA_WEST_BOAT:
+                RSNPC[] jarvald = NPCs.find(Filters.NPCs.nameEquals("Jarvald"));
+                if(jarvald.length == 0)
+                    return false;
+                boolean success;
+                if(Filters.NPCs.actionsContains("Rellekka").test(jarvald[0])){
+                    success = NPCInteraction.clickNpc(jarvald[0], "Rellekka");
+                } else {
+                    success = NPCInteraction.talkTo(Filters.NPCs.nameEquals("Jarvald"), new String[]{"Talk-to"}, new String[]{
+                            "What Jarvald is doing.",
+                            "Can I come?",
+                            "YES",
+                            "Yes"
+                    });
+                }
+                if(success){
+                    return WaitFor.condition(10000, () -> Player.getPosition().distanceTo(RELLEKKA_WEST_BOAT.getRSTile()) < 10
+                            ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                }
+                break;
             case WATERBIRTH:
-                String option = NPCs.find(Filters.NPCs.nameContains("Jarvald").combine(Filters.NPCs.actionsContains(
-                		"Rellekka"),true)).length > 0 ? "Rellekka" : "Talk-to";
-                if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Jarvald"), new String[]{option}, new String[]{
-                        "What Jarvald is doing.",
-                        "Can I come?",
-                        "YES",
-                        "Yes"
-                })){
-                    WaitFor.milliseconds(2000, 3000);
+                jarvald = NPCs.find(Filters.NPCs.nameEquals("Jarvald"));
+                if(jarvald.length == 0)
+                    return false;
+                if(Filters.NPCs.actionsContains("Waterbirth Island").test(jarvald[0])){
+                    success = NPCInteraction.clickNpc(jarvald[0], "Waterbirth Island");
+                } else {
+                    success = NPCInteraction.talkTo(Filters.NPCs.nameEquals("Jarvald"), new String[]{"Talk-to"}, new String[]{
+                            "What Jarvald is doing.",
+                            "Can I come?",
+                            "YES",
+                            "Yes"
+                    });
+                }
+                if(success){
+                    return WaitFor.condition(10000, () -> Player.getPosition().distanceTo(WATERBIRTH.getRSTile()) < 10
+                            ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
 
@@ -972,6 +994,11 @@ public class NavigationSpecialCase implements Loggable {
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case EDGEVILLE_PORTAL_TO_ISLE_OF_SOULS:
                 return clickObject(Filters.Objects.nameEquals("Portal"), "Edgeville",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+			
+	          case KBD_LAIR:
+	          case KBD_LAIR_LOBBY:
+                return clickObject(Filters.Objects.nameEquals("Lever"), "Pull",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 

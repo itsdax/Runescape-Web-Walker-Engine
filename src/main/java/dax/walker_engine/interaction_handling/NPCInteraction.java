@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -68,14 +69,16 @@ public class NPCInteraction implements Loggable {
         return clickNpc(rsnpcFilter, options) && waitForConversationWindow();
     }
 
-    public static boolean clickNpc(Filter<RSNPC> rsnpcFilter, String... options) {
+    public static boolean clickNpc(Predicate<RSNPC> rsnpcFilter, String... options) {
         RSNPC[] rsnpcs = NPCs.findNearest(rsnpcFilter);
         if (rsnpcs.length < 1) {
             getInstance().log("Cannot find NPC.");
             return false;
         }
+        return clickNpc(rsnpcs[0], options);
+    }
 
-        RSNPC npc = rsnpcs[0];
+    public static boolean clickNpc(RSNPC npc, String... options){
         return InteractionHelper.click(npc, options);
     }
 

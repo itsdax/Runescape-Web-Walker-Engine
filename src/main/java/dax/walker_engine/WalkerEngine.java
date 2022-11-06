@@ -1,6 +1,7 @@
 package dax.walker_engine;
 
 
+import dax.api_lib.DaxWalker;
 import org.tribot.api.General;
 import org.tribot.api.ScriptCache;
 import org.tribot.api.input.Mouse;
@@ -21,6 +22,8 @@ import dax.walker_engine.real_time_collision.CollisionDataCollector;
 import dax.walker_engine.real_time_collision.RealTimeCollisionTile;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class WalkerEngine implements Loggable{
@@ -311,20 +314,14 @@ public class WalkerEngine implements Loggable{
             return true;
         if(Banking.isBankScreenOpen())
             Banking.close();
-        for (Teleport teleport : Teleport.values()) {
-            if (!teleport.getRequirement().satisfies()) continue;
-            if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
-                log("Using teleport method: " + teleport);
-                if(teleport.trigger()) {
-                    return WaitFor.condition(General.random(5000, 20000),
-                            () -> startPosition.distanceTo(Player.getPosition()) < 10 ?
-                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-                } else {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return Arrays.stream(Teleport.values()).filter(t ->
+                !DaxWalker.getBlacklist().contains(t) && t.isAtTeleportSpot(startPosition) &&
+                        !t.isAtTeleportSpot(playerPosition) && t.getRequirement().satisfies())
+                .sorted(Comparator.comparingInt(Teleport::getMoveCost))
+                .limit(1)
+                .anyMatch(t -> t.trigger() && WaitFor.condition(General.random(5000, 20000),
+                        () -> startPosition.distanceTo(Player.getPosition()) < 10 ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS);
     }
 
 }

@@ -1,6 +1,7 @@
 package dax.api_lib;
 
 import dax.api_lib.models.*;
+import dax.shared.helpers.InterfaceHelper;
 import dax.teleports.Teleport;
 import dax.walker_engine.Loggable;
 import dax.walker_engine.WaitFor;
@@ -9,9 +10,9 @@ import dax.walker_engine.WalkingCondition;
 import dax.walker_engine.navigation_utils.ShipUtils;
 import org.tribot.api.ScriptCache;
 import org.tribot.api.interfaces.Positionable;
+import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSTile;
-import dax.walker.DaxWalkerEngine;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,11 +74,15 @@ public class DaxWalker implements Loggable {
             return true;
         }
 
-        List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(destination.getPosition());
+        PlayerDetails playerDetails = PlayerDetails.generate();
+        boolean isInPvpWorld = InterfaceHelper.getAllInterfaces(90).stream()
+                .anyMatch(i -> i.getText().startsWith("" + Player.getRSPlayer().getCombatLevel()));
+
+        List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.getPosition());
 
         pathRequestPairs.add(new PathRequestPair(Point3D.fromPositionable(start), Point3D.fromPositionable(destination)));
 
-	    List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(PlayerDetails.generate(),pathRequestPairs));
+	    List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails,pathRequestPairs));
 
 	    List<PathResult> validPaths = getInstance().validPaths(pathResults);
 
@@ -111,11 +116,15 @@ public class DaxWalker implements Loggable {
         if(bank != null)
             return walkTo(bank.getPosition(), walkingCondition);
 
-        List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports();
+        PlayerDetails playerDetails = PlayerDetails.generate();
+        boolean isInPvpWorld = InterfaceHelper.getAllInterfaces(90).stream()
+                .anyMatch(i -> i.getTextureID() == 1046 && Interfaces.isInterfaceSubstantiated(i));
+
+        List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld);
 
         pathRequestPairs.add(new BankPathRequestPair(Point3D.fromPositionable(Player.getPosition()),null));
 
-        List<PathResult> pathResults = WebWalkerServerApi.getInstance().getBankPaths(new BulkBankPathRequest(PlayerDetails.generate(),pathRequestPairs));
+        List<PathResult> pathResults = WebWalkerServerApi.getInstance().getBankPaths(new BulkBankPathRequest(playerDetails,pathRequestPairs));
 
         List<PathResult> validPaths = getInstance().validPaths(pathResults);
         PathResult pathResult = getInstance().getBestPath(validPaths);
@@ -126,15 +135,30 @@ public class DaxWalker implements Loggable {
         return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
     }
 
-    private List<PathRequestPair> getPathTeleports(RSTile start) {
-        return Teleport.getValidStartingRSTiles().stream()
+    public static List<Teleport> getBlacklist() {
+        return (List<Teleport>) ScriptCache.get().computeIfAbsent(
+                "DaxWalkerTeleport.blacklist",
+                key -> new ArrayList<>());
+    }
+
+    public static void blacklistTeleports(Teleport... teleports){
+        getBlacklist().addAll(Arrays.asList(teleports));
+    }
+
+    public static void clearTeleportBlacklist(){
+        getBlacklist().clear();
+    }
+
+    private List<PathRequestPair> getPathTeleports(boolean members, boolean pvp, RSTile start) {
+        return Teleport.getValidStartingRSTiles(members, pvp, getBlacklist()).stream()
+                .filter(t -> !getBlacklist().contains(t))
                 .map(t -> new PathRequestPair(Point3D.fromPositionable(t),
                         Point3D.fromPositionable(start)))
                 .collect(Collectors.toList());
     }
 
-    private List<BankPathRequestPair> getBankPathTeleports() {
-        return Teleport.getValidStartingRSTiles().stream()
+    private List<BankPathRequestPair> getBankPathTeleports(boolean members, boolean pvp) {
+        return Teleport.getValidStartingRSTiles(members, pvp, getBlacklist()).stream()
                 .map(t -> new BankPathRequestPair(Point3D.fromPositionable(t), null))
                 .collect(Collectors.toList());
     }
