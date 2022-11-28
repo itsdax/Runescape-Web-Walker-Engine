@@ -864,8 +864,6 @@ public enum Teleport {
 	}
 
 	public void setMoveCost(int cost) {
-		if (getMoveCost() == 0)
-			return;
 		ScriptCache.get().put(
 				"DaxWalkerTeleport." + this.name() + ".moveCost",
 				cost);
