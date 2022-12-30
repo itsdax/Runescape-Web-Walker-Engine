@@ -665,11 +665,11 @@ public class PathObjectHandler implements Loggable {
     }
     private static boolean useBladeOnWeb(RSObject web){
         if(!Game.isUptext("->")){
-            RSItem[] slashable = Inventory.find(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier"));
+            RSItem[] slashable = Inventory.find(Filters.Items.nameEquals("Knife").or(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "halberd", "machete", "rapier").and(Filters.Items.nameNotEquals("Swordfish"))));
             if(slashable.length == 0 || !slashable[0].click("Use"))
                 return false;
         }
-        return InteractionHelper.click(web, Game.getUptext());
+        return InteractionHelper.click(web, "Use " + Game.getSelectedItemName() + " -> " + web.getDefinition().getName());
     }
 
 }
