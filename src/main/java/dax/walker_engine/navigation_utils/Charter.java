@@ -84,7 +84,6 @@ public class Charter implements Loggable {
         PORT_SARIM ("Port Sarim", new RSTile(3041, 3193, 0)),
         MOS_LE_HARMLESS ("Mos le'Harmless", null),
         CRANDOR ("Crandor", null),
-
         PRIFDDINAS ("Prifddinas", new RSTile(2159, 3329, 0));
 
 
