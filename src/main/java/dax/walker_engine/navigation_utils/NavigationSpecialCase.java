@@ -249,6 +249,20 @@ public class NavigationSpecialCase implements Loggable {
 	    
         KBD_LAIR(2271, 4680, 0),
         KBD_LAIR_LOBBY(3067, 10253, 0),
+
+        GAMES_ROOM_TOP(2898, 3565, 0),
+        GAMES_ROOM_MIDDLE(2207, 4934, 1),
+        GAMES_ROOM_BOTTOM(2207, 4938, 0),
+
+        MOLCH_NORTHERN_CAVE_ENTRANCE(1312, 3685, 0),
+        MOLCH_NORTHERN_CAVE_DROPDOWN(1312, 10086, 0),
+        MOLCH_SOUTHERN_CAVE_ENTRANCE(1293, 3659, 0),
+        MOLCH_SOUTHERN_CAVE_DROPDOWN(1292, 10058, 0),
+
+        BOATY_MOLCH_ISLAND(1369, 3639, 0),
+        BOATY_SHAYZIEN(1408, 3612, 0),
+        BOATY_BATTLEFRONT(1384, 3665, 0),
+        BOATY_MOLCH(1342, 3645, 0)
         ;
 
         int x, y, z;
@@ -996,10 +1010,39 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Portal"), "Edgeville",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
 			
-	          case KBD_LAIR:
-	          case KBD_LAIR_LOBBY:
-                return clickObject(Filters.Objects.nameEquals("Lever"), "Pull",
-                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+          case KBD_LAIR:
+          case KBD_LAIR_LOBBY:
+            return clickObject(Filters.Objects.nameEquals("Lever"), "Pull",
+                    () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+
+            case GAMES_ROOM_BOTTOM:
+                return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
+                        () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case GAMES_ROOM_MIDDLE:
+                String action = Player.getPosition().getY() > 4000 ? "Climb-up":"Climb-down";
+                return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals(action)), action,
+                        () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case GAMES_ROOM_TOP:
+                return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-up")), "Climb-up",
+                        () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                
+
+            case MOLCH_NORTHERN_CAVE_ENTRANCE:
+            case MOLCH_NORTHERN_CAVE_DROPDOWN:
+            case MOLCH_SOUTHERN_CAVE_DROPDOWN:
+            case MOLCH_SOUTHERN_CAVE_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Lizard dwelling"), "Enter",
+                        () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 100 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case BOATY_MOLCH_ISLAND:
+                return handleBoaty("Molch Island", specialLocation.getRSTile());
+            case BOATY_BATTLEFRONT:
+                return handleBoaty("Battlefront", specialLocation.getRSTile());
+            case BOATY_MOLCH:
+                return handleBoaty("Molch", specialLocation.getRSTile());
+            case BOATY_SHAYZIEN:
+                return handleBoaty("Shayzien", specialLocation.getRSTile());
         }
 
         return false;
@@ -1140,5 +1183,14 @@ public class NavigationSpecialCase implements Loggable {
             return true;
         }
         return false;
+    }
+
+    private static boolean handleBoaty(String destination, RSTile targetTile){
+        if(NPCInteraction.isConversationWindowUp()){
+            NPCInteraction.handleConversationRegex("^" + destination + "$");
+            return WaitFor.condition(8000, () -> Player.getPosition().distanceTo(targetTile) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS
+                    && WaitFor.milliseconds(800, 1200) != null;
+        }
+        return clickObject(Filters.Objects.nameEquals("Boaty"), "Board", () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && handleBoaty(destination, targetTile);
     }
 }
