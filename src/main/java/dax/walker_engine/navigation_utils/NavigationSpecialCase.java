@@ -262,7 +262,10 @@ public class NavigationSpecialCase implements Loggable {
         BOATY_MOLCH_ISLAND(1369, 3639, 0),
         BOATY_SHAYZIEN(1408, 3612, 0),
         BOATY_BATTLEFRONT(1384, 3665, 0),
-        BOATY_MOLCH(1342, 3645, 0)
+        BOATY_MOLCH(1342, 3645, 0),
+
+        MORT_MYRE_BRIDGE_N(3502, 3432, 0),
+        MORT_MYRE_BRIDGE_S(3502, 3425, 0)
         ;
 
         int x, y, z;
@@ -1043,6 +1046,11 @@ public class NavigationSpecialCase implements Loggable {
                 return handleBoaty("Molch", specialLocation.getRSTile());
             case BOATY_SHAYZIEN:
                 return handleBoaty("Shayzien", specialLocation.getRSTile());
+
+            case MORT_MYRE_BRIDGE_N:
+            case MORT_MYRE_BRIDGE_S:
+                return clickObject(Filters.Objects.nameEquals("Tree").and(Filters.Objects.actionsEquals("Cross-bridge")), "Cross-bridge",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
