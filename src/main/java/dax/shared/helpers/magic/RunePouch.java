@@ -8,12 +8,21 @@ import java.util.Arrays;
 
 public class RunePouch{
 
-    private static int	SLOT_1_TYPE_BIT = 29, SLOT_1_QUANTITY_BIT = 1624, SLOT_2_TYPE_BIT = 1622, SLOT_2_QUANTITY_BIT = 1625, SLOT_3_TYPE_BIT = 1623, SLOT_3_QUANTITY_BIT = 1626;
+    private static final int
+            SLOT_1_TYPE_BIT = 29,
+            SLOT_1_QUANTITY_BIT = 1624,
+            SLOT_2_TYPE_BIT = 1622,
+            SLOT_2_QUANTITY_BIT = 1625,
+            SLOT_3_TYPE_BIT = 1623,
+            SLOT_3_QUANTITY_BIT = 1626,
+            SLOT_4_TYPE_BIT = 14285,
+            SLOT_4_QUANTITY_BIT = 14286;
 
     public enum RuneSlot {
         FIRST (SLOT_1_TYPE_BIT,SLOT_1_QUANTITY_BIT),
         SECOND (SLOT_2_TYPE_BIT,SLOT_2_QUANTITY_BIT),
-        THIRD (SLOT_3_TYPE_BIT,SLOT_3_QUANTITY_BIT);
+        THIRD (SLOT_3_TYPE_BIT,SLOT_3_QUANTITY_BIT),
+        FOURTH(SLOT_4_TYPE_BIT,SLOT_4_QUANTITY_BIT);
 
         private int type;
         private int quantityVarbitIndex;
@@ -72,7 +81,7 @@ public class RunePouch{
     }
 
     private static boolean hasPouch(){
-        return Inventory.getCount("Rune pouch") > 0 && WorldHopper.isCurrentWorldMembers().orElse(false);
+        return Inventory.getCount("Rune pouch", "Divine rune pouch") > 0 && WorldHopper.isCurrentWorldMembers().orElse(false);
     }
 
 
