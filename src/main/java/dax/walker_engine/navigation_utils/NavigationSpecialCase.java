@@ -847,7 +847,6 @@ public class NavigationSpecialCase implements Loggable {
             case FOSSIL_ISLAND_FERRY_CAMP:
                 if(NPCs.find("Barge guard").length > 0){
                     if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Barge guard"),"Quick-Travel")){
-                        General.println("Success");
                         return WaitFor.condition(8000,
                                 () -> FOSSIL_ISLAND_FERRY_CAMP.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                     }
