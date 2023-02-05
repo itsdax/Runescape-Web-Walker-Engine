@@ -183,6 +183,12 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getNextTile() != null && destinationDetails.getNextTile().getRSTile().equals(new RSTile(3182, 9611, 0));
             }
+        }),
+        ARDOUGNE_LOCKED_HOUSE("Door", "Pick-lock", new RSTile(2611, 3316, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getAssumed().equals(new RSTile(2611, 3316, 0)) && destinationDetails.getDestination().getRSTile().equals(new RSTile(2610, 3316, 0));
+            }
         });
 
         private String name, action;
@@ -379,6 +385,20 @@ public class PathObjectHandler implements Loggable {
                     ladder.setClickHeight(General.random(-100, -40));
                     if(InteractionHelper.click(ladder, "Climb Down")){
                         WaitFor.condition(10000, () -> Game.getPlane() == 0 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    }
+                    break;
+                case ARDOUGNE_LOCKED_HOUSE:
+                    for (int i = 0; i < General.random(10, 15); i++) {
+                        if (!clickOnObject(object, specialObject.getAction())) {
+                            continue;
+                        }
+                        if (Player.getPosition().distanceTo(specialObject.getLocation()) > 1) {
+                            WaitFor.condition(General.random(3000, 4000), () -> Player.getPosition().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        }
+                        if (Player.getPosition().equals(specialObject.getLocation())) {
+                            successfulClick = true;
+                            break;
+                        }
                     }
                     break;
             }
