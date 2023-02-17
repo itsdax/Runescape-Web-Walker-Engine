@@ -851,6 +851,8 @@ public enum Teleport {
 				WaitFor.milliseconds(200, 600);
 			}
 			if(!minigame.teleport()){
+				Walking.walkTo(Player.getPosition());//fix niche scenarios by walking to our tile
+				WaitFor.milliseconds(200, 600);
 				return false;
 			}
 			if(chatOptions.length > 0){
@@ -984,6 +986,10 @@ public enum Teleport {
 	}
 
 	private static boolean canUseMinigameTeleport(){
+		if(RSVarBit.get(14022).getValue() == 1)//can't minigame teleport when we are at Duel Arena
+			return false;
+		if(RSVarBit.get(541).getValue() == 1)
+			return false;
 		return !Player.getRSPlayer().isInCombat() &&
 				((long) Game.getSetting(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
 	}
