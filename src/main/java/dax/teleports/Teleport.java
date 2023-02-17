@@ -378,7 +378,7 @@ public enum Teleport {
 
 	PRIFDDINAS(
 			35, new RSTile(3264, 6068, 0),
-			() -> inMembersWorld() && WearableItemTeleport.has(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER),
+			() -> WearableItemTeleport.has(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER, "Prifddinas")
 	),
 
