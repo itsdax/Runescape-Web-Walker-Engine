@@ -265,7 +265,11 @@ public class NavigationSpecialCase implements Loggable {
         BOATY_MOLCH(1342, 3645, 0),
 
         MORT_MYRE_BRIDGE_N(3502, 3432, 0),
-        MORT_MYRE_BRIDGE_S(3502, 3425, 0)
+        MORT_MYRE_BRIDGE_S(3502, 3425, 0),
+
+        BOATY_SLEPE(3661, 3277, 0),
+        BOATY_ICYENE_GRAVEYARD(3685, 3174, 0),
+        BOATY_BURGH(3525, 3170, 0)
         ;
 
         int x, y, z;
@@ -1050,6 +1054,13 @@ public class NavigationSpecialCase implements Loggable {
             case MORT_MYRE_BRIDGE_S:
                 return clickObject(Filters.Objects.nameEquals("Tree").and(Filters.Objects.actionsEquals("Cross-bridge")), "Cross-bridge",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case BOATY_BURGH:
+                return handleBoaty("Burgh de Rott.", specialLocation.getRSTile());
+            case BOATY_ICYENE_GRAVEYARD:
+                return handleBoaty("Icyene Graveyard.", specialLocation.getRSTile());
+            case BOATY_SLEPE:
+                return handleBoaty("Slepe.", specialLocation.getRSTile());
         }
 
         return false;
@@ -1195,9 +1206,9 @@ public class NavigationSpecialCase implements Loggable {
     private static boolean handleBoaty(String destination, RSTile targetTile){
         if(NPCInteraction.isConversationWindowUp()){
             NPCInteraction.handleConversationRegex("^" + destination + "$");
-            return WaitFor.condition(8000, () -> Player.getPosition().distanceTo(targetTile) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS
+            return WaitFor.condition(10000, () -> Player.getPosition().distanceTo(targetTile) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS
                     && WaitFor.milliseconds(800, 1200) != null;
         }
-        return clickObject(Filters.Objects.nameEquals("Boaty"), "Board", () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && handleBoaty(destination, targetTile);
+        return clickObject(Filters.Objects.nameEquals("Boaty", "Boat"), "Board", () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && handleBoaty(destination, targetTile);
     }
 }
