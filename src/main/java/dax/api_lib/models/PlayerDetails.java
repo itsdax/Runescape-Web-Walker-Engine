@@ -51,6 +51,7 @@ public class PlayerDetails {
             5810,
             6104,
             7255,
+            7928, //kourend elite diary
             9016,
             10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
             13903, //Sleeping Giants quest
