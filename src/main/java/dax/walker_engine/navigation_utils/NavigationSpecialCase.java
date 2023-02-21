@@ -1,6 +1,13 @@
 package dax.walker_engine.navigation_utils;
 
+import dax.shared.helpers.RSItemHelper;
+import dax.shared.helpers.RSObjectHelper;
+import dax.walker.utils.AccurateMouse;
 import dax.walker_engine.Loggable;
+import dax.walker_engine.WaitFor;
+import dax.walker_engine.interaction_handling.DoomsToggle;
+import dax.walker_engine.interaction_handling.InteractionHelper;
+import dax.walker_engine.interaction_handling.NPCInteraction;
 import dax.walker_engine.navigation_utils.fairyring.FairyRing;
 import org.tribot.api.General;
 import org.tribot.api.ScriptCache;
@@ -9,16 +16,9 @@ import org.tribot.api.util.Sorting;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.*;
-import dax.shared.helpers.RSItemHelper;
-import dax.shared.helpers.RSObjectHelper;
-import dax.walker.utils.AccurateMouse;
-import dax.walker_engine.WaitFor;
-import dax.walker_engine.interaction_handling.DoomsToggle;
-import dax.walker_engine.interaction_handling.InteractionHelper;
-import dax.walker_engine.interaction_handling.NPCInteraction;
 
-import java.awt.geom.Point2D;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -284,12 +284,13 @@ public class NavigationSpecialCase implements Loggable {
         }
     }
 
+
     public static SpecialLocation getLocation(RSTile rsTile){
         return Arrays.stream(
                 SpecialLocation.values()).filter(tile -> tile.z == rsTile.getPlane()
-                && Point2D.distance(tile.x, tile.y, rsTile.getX(), rsTile.getY()) <= 2)
-                    .findFirst().orElse(null);
+                && tile.getRSTile().distanceTo(rsTile) <= 2).min(Comparator.comparingInt(t -> t.getRSTile().distanceTo(rsTile))).orElse(null);
     }
+
 
     /**
      * action for getting to the case
