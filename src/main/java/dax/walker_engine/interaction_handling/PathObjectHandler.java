@@ -409,6 +409,7 @@ public class PathObjectHandler implements Loggable {
 		            Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(
 				            Collectors.toList()), destinationDetails);
             if (!clickOnObject(object, validOptions)) {
+                DoomsToggle.handleToggle();
                 return false;
             }
         }
