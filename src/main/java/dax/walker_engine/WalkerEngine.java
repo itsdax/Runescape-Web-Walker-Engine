@@ -314,6 +314,13 @@ public class WalkerEngine implements Loggable{
             return true;
         if(Banking.isBankScreenOpen())
             Banking.close();
+        if (Arrays.stream(Teleport.values()).filter(t ->
+              !DaxWalker.getBlacklist().contains(t) && t.isAtTeleportSpot(startPosition) &&
+                      !t.isAtTeleportSpot(playerPosition) && t.getRequirement().satisfies())
+                  .findAny()
+                  .isEmpty()){
+            return true;
+        }
         return Arrays.stream(Teleport.values()).filter(t ->
                 !DaxWalker.getBlacklist().contains(t) && t.isAtTeleportSpot(startPosition) &&
                         !t.isAtTeleportSpot(playerPosition) && t.getRequirement().satisfies())
