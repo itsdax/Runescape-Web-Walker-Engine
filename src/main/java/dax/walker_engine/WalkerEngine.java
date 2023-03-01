@@ -310,7 +310,7 @@ public class WalkerEngine implements Loggable{
     private boolean handleTeleports(List<RSTile> path) {
         RSTile startPosition = path.get(0);
         RSTile playerPosition = Player.getPosition();
-        if(startPosition.equals(playerPosition))
+        if(playerPosition.getPosition().distanceTo(startPosition) < 10)
             return true;
         if(Banking.isBankScreenOpen())
             Banking.close();
