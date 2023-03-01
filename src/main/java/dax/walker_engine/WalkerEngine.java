@@ -310,16 +310,18 @@ public class WalkerEngine implements Loggable{
     private boolean handleTeleports(List<RSTile> path) {
         RSTile startPosition = path.get(0);
         RSTile playerPosition = Player.getPosition();
-        if(startPosition.equals(playerPosition))
+        if(PathAnalyzer.furthestReachableTile(path) != null){
+            return true;
+        }
+        if(playerPosition.getPosition().distanceTo(startPosition) < 10)
             return true;
         if(Banking.isBankScreenOpen())
             Banking.close();
-        return Arrays.stream(Teleport.values()).filter(t ->
+        Teleport targetTeleport = Arrays.stream(Teleport.values()).filter(t ->
                 !DaxWalker.getBlacklist().contains(t) && t.isAtTeleportSpot(startPosition) &&
                         !t.isAtTeleportSpot(playerPosition) && t.getRequirement().satisfies())
-                .sorted(Comparator.comparingInt(Teleport::getMoveCost))
-                .limit(1)
-                .anyMatch(t -> t.trigger() && WaitFor.condition(General.random(5000, 20000),
+                .min(Comparator.comparingInt(Teleport::getMoveCost)).orElse(null);
+        return targetTeleport == null || (targetTeleport.trigger() && WaitFor.condition(General.random(5000, 20000),
                         () -> startPosition.distanceTo(Player.getPosition()) < 10 ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS);
     }
