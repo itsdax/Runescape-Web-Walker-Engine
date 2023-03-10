@@ -850,7 +850,7 @@ public enum Teleport {
 				Walking.walkTo(Player.getPosition());//exit chat by walking to our tile
 				WaitFor.milliseconds(200, 600);
 			}
-			if(!minigame.teleport()){
+			if(!minigame.teleport() || !Timing.waitCondition(() -> Player.getAnimation() > 0, 3500)){
 				Walking.walkTo(Player.getPosition());//fix niche scenarios by walking to our tile
 				WaitFor.milliseconds(200, 600);
 				return false;
