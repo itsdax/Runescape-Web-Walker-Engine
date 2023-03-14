@@ -860,7 +860,7 @@ public enum Teleport {
 			}
 			return true;
 		};
-		this.teleportLimit = TeleportConstants.LEVEL_20_WILDERNESS_LIMIT;
+		this.teleportLimit = TeleportConstants.LEVEL_0_WILDERNESS_LIMIT;
 		this.requiresMembers = requiresMembers;
 		this.canBeUsedInPvpWorlds = false;
 	}
@@ -986,9 +986,11 @@ public enum Teleport {
 	}
 
 	private static boolean canUseMinigameTeleport(){
-		if(RSVarBit.get(14022).getValue() == 1)//can't minigame teleport when we are at Duel Arena
+		if(RSVarBit.get(14022).getValue() == 1)//can't minigame teleport when we are at PvP Arena
 			return false;
 		if(RSVarBit.get(541).getValue() == 1)
+			return false;
+		if(Game.isInInstance())
 			return false;
 		return !Player.getRSPlayer().isInCombat() &&
 				((long) Game.getSetting(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();

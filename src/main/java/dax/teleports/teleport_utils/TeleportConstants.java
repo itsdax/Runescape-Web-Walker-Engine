@@ -7,6 +7,7 @@ public class TeleportConstants {
 
 
     public static final TeleportLimit
+            LEVEL_0_WILDERNESS_LIMIT = () -> getWildernessLevel() < 1,
             LEVEL_20_WILDERNESS_LIMIT = () -> getWildernessLevel() <= 20,
             LEVEL_30_WILDERNESS_LIMIT = () -> getWildernessLevel() <= 30;
 
