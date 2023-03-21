@@ -177,6 +177,7 @@ public class NavigationSpecialCase implements Loggable {
         FAIRY_RING_MORT_MYRE_SWAMP(3469, 3431, 0),
         FAIRY_RING_MOUNT_KARUULM(1302, 3762, 0),
         FAIRY_RING_MUDSKIPPER_POINT(2996, 3114, 0),
+        FAIRY_RING_MYREQUE_HIDEOUT(3447, 9824, 0),
         FAIRY_RING_NORTH_OF_NARDAH(3423, 3016, 0),
         FAIRY_RING_PISCATORIS_HUNTER_AREA(2319, 3619, 0),
         FAIRY_RING_POISON_WASTE(2213, 3099, 0),
@@ -812,6 +813,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations. MOUNT_KARUULM);
             case FAIRY_RING_MUDSKIPPER_POINT:
                 return FairyRing.takeFairyRing(FairyRing.Locations.MUDSKIPPER_POINT);
+            case FAIRY_RING_MYREQUE_HIDEOUT:
+                return FairyRing.takeFairyRing(FairyRing.Locations.MYREQUE_HIDEOUT);
             case FAIRY_RING_NORTH_OF_NARDAH:
                 return FairyRing.takeFairyRing(FairyRing.Locations.NORTH_OF_NARDAH);
             case FAIRY_RING_PISCATORIS_HUNTER_AREA:
