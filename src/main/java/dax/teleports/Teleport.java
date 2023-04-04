@@ -660,7 +660,7 @@ public enum Teleport {
 			Minigame.LAST_MAN_STANDING,
 			new RSTile(3151, 3635, 0),
 			false
-),
+	),
 	NMZ_MINIGAME(
 			Minigame.NIGHTMARE_ZONE,
 			new RSTile(2611, 3122, 0),
@@ -740,7 +740,7 @@ public enum Teleport {
 	),
 
 	LUMBRIDGE_HOME_TELEPORT(
-			150, new RSTile(3225, 3219, 0),
+			150, new RSTile(3223, 3218, 0),
 			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.STANDARD,
 			() -> {
 				final RSTile myPos = Player.getPosition();
