@@ -270,7 +270,13 @@ public class NavigationSpecialCase implements Loggable {
 
         BOATY_SLEPE(3661, 3277, 0),
         BOATY_ICYENE_GRAVEYARD(3685, 3174, 0),
-        BOATY_BURGH(3525, 3170, 0)
+        BOATY_BURGH(3525, 3170, 0),
+
+        LOKAR_SEARUNNER_RELLEKKA(2620, 3692, 0),
+        LOKAR_SEARUNNER_PIRATES_COVE(2213, 3794, 0),
+
+        CAPTAIN_BENTLEY_PIRATES_COVE(2222, 3797, 2),
+        CAPTAIN_BENTLEY_LUNAR_ISLE(2138, 3899, 2)
         ;
 
         int x, y, z;
@@ -1065,6 +1071,25 @@ public class NavigationSpecialCase implements Loggable {
                 return handleBoaty("Icyene Graveyard.", specialLocation.getRSTile());
             case BOATY_SLEPE:
                 return handleBoaty("Slepe.", specialLocation.getRSTile());
+
+            case CAPTAIN_BENTLEY_PIRATES_COVE:
+            case CAPTAIN_BENTLEY_LUNAR_ISLE:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Captain Bentley"),"Travel") &&
+                        WaitFor.condition(15000,() -> specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case LOKAR_SEARUNNER_RELLEKKA:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Lokar Searunner"),"Rellekka") &&
+                        WaitFor.condition(15000,() -> specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case LOKAR_SEARUNNER_PIRATES_COVE:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Lokar Searunner"),"Pirate's Cove") &&
+                        WaitFor.condition(15000,() -> {
+                            if(NPCInteraction.isConversationWindowUp()){
+                                NPCInteraction.handleConversationRegex("That's fine.*");
+                            }
+                            return specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
+                                    ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                        }) == WaitFor.Return.SUCCESS;
         }
 
         return false;
