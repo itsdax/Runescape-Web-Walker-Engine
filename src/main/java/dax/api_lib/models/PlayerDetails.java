@@ -63,6 +63,8 @@ public class PlayerDetails {
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
 
+        List<Boolean> playerPrefs = PlayerPreferences.getPlayerPreferences();
+
         return new PlayerDetails(
                 Skills.getActualLevel(Skills.SKILLS.ATTACK),
                 Skills.getActualLevel(Skills.SKILLS.DEFENCE),
@@ -91,7 +93,8 @@ public class PlayerDetails {
                 varbit,
                 WorldHopper.isCurrentWorldMembers().orElse(false),
                 equipment,
-                inventory
+                inventory,
+                playerPrefs
         );
     }
 
@@ -180,11 +183,14 @@ public class PlayerDetails {
     @DoNotRename
     private List<IntPair> inventory;
 
+    @DoNotRename
+    private List<Boolean> playerPrefs;
+
     public PlayerDetails() {
 
     }
 
-    public PlayerDetails(int attack, int defence, int strength, int hitpoints, int ranged, int prayer, int magic, int cooking, int woodcutting, int fletching, int fishing, int firemaking, int crafting, int smithing, int mining, int herblore, int agility, int thieving, int slayer, int farming, int runecrafting, int hunter, int construction, List<IntPair> setting, List<IntPair> varbit, boolean member, List<IntPair> equipment, List<IntPair> inventory) {
+    public PlayerDetails(int attack, int defence, int strength, int hitpoints, int ranged, int prayer, int magic, int cooking, int woodcutting, int fletching, int fishing, int firemaking, int crafting, int smithing, int mining, int herblore, int agility, int thieving, int slayer, int farming, int runecrafting, int hunter, int construction, List<IntPair> setting, List<IntPair> varbit, boolean member, List<IntPair> equipment, List<IntPair> inventory, List<Boolean> playerPrefs) {
         this.attack = attack;
         this.defence = defence;
         this.strength = strength;
@@ -213,6 +219,7 @@ public class PlayerDetails {
         this.member = member;
         this.equipment = equipment;
         this.inventory = inventory;
+        this.playerPrefs = playerPrefs;
     }
 
     public int getAttack() {
@@ -325,6 +332,10 @@ public class PlayerDetails {
 
     public List<IntPair> getInventory() {
         return inventory;
+    }
+
+    public List<Boolean> getPlayerPrefs(){
+        return playerPrefs;
     }
 
     public JsonElement toJson() {
