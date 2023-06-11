@@ -70,6 +70,9 @@ public class NavigationSpecialCase implements Loggable {
         SPIRIT_TREE_STRONGHOLD (2461, 3444, 0),
         SPIRIT_TREE_KHAZARD (2555, 3259, 0),
         SPIRIT_TREE_VILLAGE (2542, 3170, 0),
+        SPIRIT_TREE_FELDIP(2488, 2850, 0),
+        SPIRIT_TREE_PRIF (3274, 6123, 0),
+
 
         GNOME_TREE_GLIDER (GnomeGlider.Location.TA_QUIR_PRIW.getX(), GnomeGlider.Location.TA_QUIR_PRIW.getY(), GnomeGlider.Location.TA_QUIR_PRIW.getZ()),
         AL_KHARID_GLIDER (
@@ -418,6 +421,8 @@ public class NavigationSpecialCase implements Loggable {
             case SPIRIT_TREE_STRONGHOLD: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_STRONGHOLD);
             case SPIRIT_TREE_KHAZARD: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_KHAZARD);
             case SPIRIT_TREE_VILLAGE: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_VILLAGE);
+            case SPIRIT_TREE_FELDIP: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_FELDIP);
+            case SPIRIT_TREE_PRIF: return SpiritTree.to(SpiritTree.Location.SPIRIT_TREE_PRIFDDINAS);
 
             case GNOME_TREE_GLIDER: return GnomeGlider.to(GnomeGlider.Location.TA_QUIR_PRIW);
             case AL_KHARID_GLIDER: return GnomeGlider.to(GnomeGlider.Location.KAR_HEWO);
