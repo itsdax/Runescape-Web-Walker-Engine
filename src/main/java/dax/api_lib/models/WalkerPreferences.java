@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public enum PlayerPreferences {
+public enum WalkerPreferences {
     SPIRIT_TREE_ETCETERIA,
     SPIRIT_TREE_PORT_SARIM,
     SPIRIT_TREE_BRIMHAVEN,
@@ -23,11 +23,11 @@ public enum PlayerPreferences {
 
     @Getter @Setter
     public boolean enabled;
-    PlayerPreferences(){
+    WalkerPreferences(){
         setEnabled(false);
     }
 
-    public static List<Boolean> getPlayerPreferences(){
-        return Arrays.stream(values()).map(PlayerPreferences::isEnabled).collect(Collectors.toList());
+    public static List<Boolean> getWalkerPreferences(){
+        return Arrays.stream(values()).map(WalkerPreferences::isEnabled).collect(Collectors.toList());
     }
 }

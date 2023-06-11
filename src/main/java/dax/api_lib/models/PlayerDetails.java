@@ -63,7 +63,7 @@ public class PlayerDetails {
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
 
-        List<Boolean> playerPrefs = PlayerPreferences.getPlayerPreferences();
+        List<Boolean> playerPrefs = WalkerPreferences.getWalkerPreferences();
 
         return new PlayerDetails(
                 Skills.getActualLevel(Skills.SKILLS.ATTACK),
@@ -184,13 +184,13 @@ public class PlayerDetails {
     private List<IntPair> inventory;
 
     @DoNotRename
-    private List<Boolean> playerPrefs;
+    private List<Boolean> walkerPreferences;
 
     public PlayerDetails() {
 
     }
 
-    public PlayerDetails(int attack, int defence, int strength, int hitpoints, int ranged, int prayer, int magic, int cooking, int woodcutting, int fletching, int fishing, int firemaking, int crafting, int smithing, int mining, int herblore, int agility, int thieving, int slayer, int farming, int runecrafting, int hunter, int construction, List<IntPair> setting, List<IntPair> varbit, boolean member, List<IntPair> equipment, List<IntPair> inventory, List<Boolean> playerPrefs) {
+    public PlayerDetails(int attack, int defence, int strength, int hitpoints, int ranged, int prayer, int magic, int cooking, int woodcutting, int fletching, int fishing, int firemaking, int crafting, int smithing, int mining, int herblore, int agility, int thieving, int slayer, int farming, int runecrafting, int hunter, int construction, List<IntPair> setting, List<IntPair> varbit, boolean member, List<IntPair> equipment, List<IntPair> inventory, List<Boolean> walkerPreferences) {
         this.attack = attack;
         this.defence = defence;
         this.strength = strength;
@@ -219,7 +219,7 @@ public class PlayerDetails {
         this.member = member;
         this.equipment = equipment;
         this.inventory = inventory;
-        this.playerPrefs = playerPrefs;
+        this.walkerPreferences = walkerPreferences;
     }
 
     public int getAttack() {
@@ -334,7 +334,7 @@ public class PlayerDetails {
         return inventory;
     }
 
-    public List<Boolean> getPlayerPrefs(){
+    public List<Boolean> getWalkerPreferences(){
         return playerPrefs;
     }
 
