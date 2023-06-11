@@ -51,6 +51,7 @@ public class PlayerDetails {
             5090,
             5800, //fossil island- museum camp bank has been built if this is 1
             5810,
+            6071,
             6104,
             7255,
             7928, //kourend elite diary
