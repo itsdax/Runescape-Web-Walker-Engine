@@ -3,6 +3,7 @@ package dax.api_lib.models;
 import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import dax.api_lib.DaxWalker;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSVarBit;
 
@@ -63,7 +64,7 @@ public class PlayerDetails {
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
 
-        List<Boolean> playerPrefs = WalkerPreferences.getWalkerPreferences();
+        List<IntPair> playerPrefs = DaxWalker.getWalkerPreferences();
 
         return new PlayerDetails(
                 Skills.getActualLevel(Skills.SKILLS.ATTACK),
@@ -184,13 +185,13 @@ public class PlayerDetails {
     private List<IntPair> inventory;
 
     @DoNotRename
-    private List<Boolean> walkerPreferences;
+    private List<IntPair> walkerPreferences;
 
     public PlayerDetails() {
 
     }
 
-    public PlayerDetails(int attack, int defence, int strength, int hitpoints, int ranged, int prayer, int magic, int cooking, int woodcutting, int fletching, int fishing, int firemaking, int crafting, int smithing, int mining, int herblore, int agility, int thieving, int slayer, int farming, int runecrafting, int hunter, int construction, List<IntPair> setting, List<IntPair> varbit, boolean member, List<IntPair> equipment, List<IntPair> inventory, List<Boolean> walkerPreferences) {
+    public PlayerDetails(int attack, int defence, int strength, int hitpoints, int ranged, int prayer, int magic, int cooking, int woodcutting, int fletching, int fishing, int firemaking, int crafting, int smithing, int mining, int herblore, int agility, int thieving, int slayer, int farming, int runecrafting, int hunter, int construction, List<IntPair> setting, List<IntPair> varbit, boolean member, List<IntPair> equipment, List<IntPair> inventory, List<IntPair> walkerPreferences) {
         this.attack = attack;
         this.defence = defence;
         this.strength = strength;
@@ -334,44 +335,10 @@ public class PlayerDetails {
         return inventory;
     }
 
-    public List<Boolean> getWalkerPreferences(){
-        return playerPrefs;
-    }
+    public List<IntPair> getWalkerPreferences() { return walkerPreferences; }
 
     public JsonElement toJson() {
         return new Gson().toJsonTree(this);
-    }
-
-
-
-    public enum UserVars {
-        SPIRIT_TREE_PORT_SARIM(0),
-        SPIRIT_TREE_BRIMHAVEN(1),
-        SPIRIT_TREE_ETCETERIA(2),
-        SPIRIT_TREE_HOSIDIUS(3),
-        SPIRIT_TREE_FARMING_GUILD(4),
-        MYCELIUM_HOUSE_ON_THE_HILL(5),
-        MYCELIUM_VERDANT_VALLEY(6),
-        MYCELIUM_STICKY_SWAMP(7),
-        MYCELIUM_MUSHROOM_MEADOW(8)
-        ;
-        boolean canUse = false;
-        int id;
-        UserVars(int id){
-            this.id = id;
-        }
-
-        public boolean canUse(){
-            return canUse;
-        }
-
-        public void setCanUse(boolean value){
-            this.canUse = value;
-        }
-
-        public int getId(){
-            return id;
-        }
     }
 
 }
