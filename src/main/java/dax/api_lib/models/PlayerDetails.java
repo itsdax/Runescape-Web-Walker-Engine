@@ -58,6 +58,7 @@ public class PlayerDetails {
             7928, //kourend elite diary
             9016,
             10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
+            13719, //unlocked the 93 agility blood altar shortcut by mining the other side (78 mining req)
             13738, // temple of the eye
             13903, //Sleeping Giants quest
         })
