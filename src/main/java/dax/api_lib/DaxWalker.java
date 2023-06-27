@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class DaxWalker implements Loggable {
 
     private final Map<RSTile, Teleport> map;
+    private final Map<WalkerPreferences, Integer> walkerPreferences;
     public static DaxWalker getInstance() {
         Map<String, Object> cache = ScriptCache.get();
         DaxWalker daxWalker = (DaxWalker)cache.get("daxwalker");
@@ -39,9 +40,28 @@ public class DaxWalker implements Loggable {
         globalWalkingCondition = () -> WalkingCondition.State.CONTINUE_WALKER;
 
         map = new ConcurrentHashMap<>();
+        walkerPreferences = new ConcurrentHashMap<>();
+        Arrays.stream(WalkerPreferences.values()).forEach(p -> walkerPreferences.put(p, 0));
         for (Teleport teleport : Teleport.values()) {
             map.put(teleport.getLocation(), teleport);
         }
+    }
+
+    public static void enableWalkerPreference(WalkerPreferences... preferences){
+        for(WalkerPreferences preference: preferences){
+            getInstance().walkerPreferences.replace(preference, 1);
+        }
+    }
+    public static void disableWalkerPreference(WalkerPreferences... preferences){
+        for(WalkerPreferences preference: preferences){
+            getInstance().walkerPreferences.replace(preference, 0);
+        }
+    }
+    public static boolean getWalkerPreference(WalkerPreferences preference){
+        return getInstance().walkerPreferences.get(preference) == 1;
+    }
+    public static List<IntPair> getWalkerPreferences(){
+        return getInstance().walkerPreferences.keySet().stream().map(p -> new IntPair(p.ordinal(), getInstance().walkerPreferences.get(p))).collect(Collectors.toList());
     }
 
     public static WalkingCondition getGlobalWalkingCondition() {
