@@ -1102,9 +1102,13 @@ public class NavigationSpecialCase implements Loggable {
                                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                         }) == WaitFor.Return.SUCCESS;
 
-            case PRIF_MINE_OUTSIDE:
+            case PRIF_MINE_INSIDE:
                 return clickObject(Filters.Objects.nameEquals("Cave entrance"), "Enter",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case PRIF_MINE_OUTSIDE:
+                return clickObject(Filters.Objects.nameEquals("Steps"), "Exit",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
 
             case SHILO_CART_FROM_BRIMHAVEN:
             case SHILO_CART_FROM_SHILO:
