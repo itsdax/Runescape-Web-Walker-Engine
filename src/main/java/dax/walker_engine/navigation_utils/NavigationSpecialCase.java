@@ -279,7 +279,10 @@ public class NavigationSpecialCase implements Loggable {
         LOKAR_SEARUNNER_PIRATES_COVE(2213, 3794, 0),
 
         CAPTAIN_BENTLEY_PIRATES_COVE(2222, 3797, 2),
-        CAPTAIN_BENTLEY_LUNAR_ISLE(2138, 3899, 2)
+        CAPTAIN_BENTLEY_LUNAR_ISLE(2138, 3899, 2),
+
+        PRIF_MINE_INSIDE(3302, 12454, 0),
+        PRIF_MINE_OUTSIDE(3271, 6051, 0),
         ;
 
         int x, y, z;
@@ -1095,6 +1098,10 @@ public class NavigationSpecialCase implements Loggable {
                             return specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
                                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                         }) == WaitFor.Return.SUCCESS;
+
+            case PRIF_MINE_OUTSIDE:
+                return clickObject(Filters.Objects.nameEquals("Cave entrance"), "Enter",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
