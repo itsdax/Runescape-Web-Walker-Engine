@@ -283,6 +283,9 @@ public class NavigationSpecialCase implements Loggable {
 
         PRIF_MINE_INSIDE(3302, 12454, 0),
         PRIF_MINE_OUTSIDE(3271, 6051, 0),
+
+        SHILO_CART_FROM_BRIMHAVEN(2777, 3214, 0),
+        SHILO_CART_FROM_SHILO(2834, 2951, 0)
         ;
 
         int x, y, z;
@@ -1102,6 +1105,13 @@ public class NavigationSpecialCase implements Loggable {
             case PRIF_MINE_OUTSIDE:
                 return clickObject(Filters.Objects.nameEquals("Cave entrance"), "Enter",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case SHILO_CART_FROM_BRIMHAVEN:
+            case SHILO_CART_FROM_SHILO:
+                return NPCInteraction.clickNpc(Filters.NPCs.actionsContains("Pay-fare"), "Pay-fare") &&
+                        WaitFor.condition(15000,() -> specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
         }
 
         return false;
