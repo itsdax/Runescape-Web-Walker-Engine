@@ -275,6 +275,9 @@ public class NavigationSpecialCase implements Loggable {
         BOATY_ICYENE_GRAVEYARD(3685, 3174, 0),
         BOATY_BURGH(3525, 3170, 0),
 
+        LIGHTHOUSE_LADDER(2510, 3644, 0),
+        LIGHTHOUSE_UNDERGROUND(2518, 9994, 0),
+
         LOKAR_SEARUNNER_RELLEKKA(2620, 3692, 0),
         LOKAR_SEARUNNER_PIRATES_COVE(2213, 3794, 0),
 
@@ -285,7 +288,10 @@ public class NavigationSpecialCase implements Loggable {
         PRIF_MINE_OUTSIDE(3271, 6051, 0),
 
         SHILO_CART_FROM_BRIMHAVEN(2777, 3214, 0),
-        SHILO_CART_FROM_SHILO(2834, 2951, 0)
+        SHILO_CART_FROM_SHILO(2834, 2951, 0),
+
+        KILLERWAT_PLANE_ENTRANCE(3110, 3363, 2),
+        KILLERWAT_PLANE_EXIT(2677, 5214, 2)
         ;
 
         int x, y, z;
@@ -1083,6 +1089,12 @@ public class NavigationSpecialCase implements Loggable {
             case BOATY_SLEPE:
                 return handleBoaty("Slepe.", specialLocation.getRSTile());
 
+
+            case LIGHTHOUSE_LADDER:
+            case LIGHTHOUSE_UNDERGROUND:
+                return clickObject(Filters.Objects.nameEquals("Iron ladder"), "Climb",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
             case CAPTAIN_BENTLEY_PIRATES_COVE:
             case CAPTAIN_BENTLEY_LUNAR_ISLE:
                 return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Captain Bentley"),"Travel") &&
@@ -1116,6 +1128,17 @@ public class NavigationSpecialCase implements Loggable {
                         WaitFor.condition(15000,() -> specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
                                 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
+            case KILLERWAT_PLANE_ENTRANCE:
+            case KILLERWAT_PLANE_EXIT:
+                if(NPCInteraction.isConversationWindowUp()){
+                    NPCInteraction.handleConversation("Yes I want to go in and don't show me this message again.", "Thanks for the warning, but I'm not scared of any monster.");
+                    if(WaitFor.condition(4500, () -> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                            WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                        return true;
+                    }
+                }
+                return clickObject(Filters.Objects.nameEquals("Interdimensional rift", "Portal Home"), "Enter",
+                        () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
