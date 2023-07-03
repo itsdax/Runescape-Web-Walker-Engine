@@ -11,7 +11,9 @@ import dax.walker_engine.navigation_utils.ShipUtils;
 import org.tribot.api.ScriptCache;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Interfaces;
+import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSTile;
 
 import java.util.*;
@@ -93,6 +95,9 @@ public class DaxWalker implements Loggable {
         if (start.equals(destination)) {
             return true;
         }
+        if(Objects.getAt(start, Filters.Objects.nameEquals("Fairy ring")).length > 0){
+            start = start.translate(0, 1);
+        }
 
         PlayerDetails playerDetails = PlayerDetails.generate();
         boolean isInPvpWorld = InterfaceHelper.getAllInterfaces(90).stream()
@@ -142,7 +147,12 @@ public class DaxWalker implements Loggable {
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld);
 
-        pathRequestPairs.add(new BankPathRequestPair(Point3D.fromPositionable(Player.getPosition()),null));
+        RSTile start = Player.getPosition();
+        if(Objects.getAt(start, Filters.Objects.nameEquals("Fairy ring")).length > 0){
+            start = start.translate(0, 1);
+        }
+
+        pathRequestPairs.add(new BankPathRequestPair(Point3D.fromPositionable(start),null));
 
         List<PathResult> pathResults = WebWalkerServerApi.getInstance().getBankPaths(new BulkBankPathRequest(playerDetails,pathRequestPairs));
 
