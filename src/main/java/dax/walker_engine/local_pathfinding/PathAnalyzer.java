@@ -55,7 +55,7 @@ public class PathAnalyzer {
             }
             if (!direction.confirmTileMovable(RealTimeCollisionTile.get(current.getX(), current.getY(), current.getZ()))){
 
-                for (int j = 1; j < 5 && j + i < path.size(); j++) {
+                for (int j = 1; j < 7 && j + i < path.size(); j++) {
                     RSTile nextInPath = path.get(i + j);
                     RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.getPlane());
                     if (nextInPathCollision != null && nextInPathCollision.isWalkable()){
