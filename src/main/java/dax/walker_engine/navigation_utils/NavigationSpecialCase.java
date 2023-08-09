@@ -443,8 +443,8 @@ public class NavigationSpecialCase implements Loggable {
             case GANDIUS_GLIDER: return GnomeGlider.to(GnomeGlider.Location.GANDIUS);
 
             case ZANARIS_RING:
-                if (Equipment.getCount(772) == 0){
-                    if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(772)), "Wield")){
+                if (Equipment.getCount(FairyRing.DRAMEN_STAFFS) == 0){
+                    if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(FairyRing.DRAMEN_STAFFS)), "Wield")){
                         getInstance().log("Could not equip Dramen staff.");
                         break;
                     }

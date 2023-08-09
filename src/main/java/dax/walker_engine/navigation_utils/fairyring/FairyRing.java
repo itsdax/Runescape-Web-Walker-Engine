@@ -26,7 +26,7 @@ public class FairyRing {
 		INTERFACE_MASTER = 398,
 		TELEPORT_CHILD = 26,
 		ELITE_DIARY_VARBIT = 4538;
-	private static final int[]
+	public static final int[]
 			DRAMEN_STAFFS = {772,9084};
 
 	private static RSObject[] ring;
