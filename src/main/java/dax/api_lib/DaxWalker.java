@@ -101,7 +101,9 @@ public class DaxWalker implements Loggable {
 
         PlayerDetails playerDetails = PlayerDetails.generate();
         boolean isInPvpWorld = InterfaceHelper.getAllInterfaces(90).stream()
-                .anyMatch(i -> i.getText().startsWith("" + Player.getRSPlayer().getCombatLevel()));
+                .map(RSInterface::getText)
+                .filter(java.util.Objects::nonNull)
+                .anyMatch(t -> t.startsWith(String.valueOf(Player.getRSPlayer().getCombatLevel())));
 
         List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.getPosition());
 
