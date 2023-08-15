@@ -323,9 +323,9 @@ public class NavigationSpecialCase implements Loggable {
         switch (specialLocation){
 
             case BRIMHAVEN_DUNGEON:
-                if (Game.getSetting(393) != 1){
-                    if (!InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Saniboch")), "Pay")) {
-                        getInstance().log("Could not pay saniboch");
+                if (RSVarBit.get(5628).getValue() == 0 && RSVarBit.get(8122).getValue() == 0){
+                    if (!clickObject(Filters.Objects.nameEquals("Dungeon entrance"), "Enter", () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+                        getInstance().log("Could not pay to enter the dungeon");
                         break;
                     }
                     NPCInteraction.handleConversation("Yes","Pay 875 coins to enter once");
