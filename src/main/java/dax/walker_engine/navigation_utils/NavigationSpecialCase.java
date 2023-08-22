@@ -189,6 +189,7 @@ public class NavigationSpecialCase implements Loggable {
         FAIRY_RING_SHILO_VILLAGE(2801, 3003, 0),
         FAIRY_RING_SINCLAIR_MANSION(2705, 3576, 0),
         FAIRY_RING_SOUTH_CASTLE_WARS(2385, 3035, 0),
+        FAIRY_RING_STRANGLEWOOD(1295, 3493, 0),
         FAIRY_RING_TOWER_OF_LIFE(2658, 3230, 0),
         FAIRY_RING_TZHAAR(2437, 5126, 0),
         FAIRY_RING_WIZARDS_TOWER(3108, 3149, 0),
@@ -854,6 +855,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.SINCLAIR_MANSION);
             case FAIRY_RING_SOUTH_CASTLE_WARS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.SOUTH_CASTLE_WARS);
+            case FAIRY_RING_STRANGLEWOOD:
+                return FairyRing.takeFairyRing(FairyRing.Locations.STRANGLEWOOD);
             case FAIRY_RING_TOWER_OF_LIFE:
                 return FairyRing.takeFairyRing(FairyRing.Locations.TOWER_OF_LIFE);
             case FAIRY_RING_TZHAAR:
