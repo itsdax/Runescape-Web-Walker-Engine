@@ -292,7 +292,13 @@ public class NavigationSpecialCase implements Loggable {
         SHILO_CART_FROM_SHILO(2834, 2951, 0),
 
         KILLERWAT_PLANE_ENTRANCE(3110, 3363, 2),
-        KILLERWAT_PLANE_EXIT(2677, 5214, 2)
+        KILLERWAT_PLANE_EXIT(2677, 5214, 2),
+
+        STRANGLEWOOD_ROWBOAT_ENTRANCE(1194, 3452, 0),
+        STRANGLEWOOD_ROWBOAT_EXIT(1229, 3470, 0),
+
+        STRANGLEWOOD_ENTRY_ENTRANCE(1146, 3433, 0),
+        STRANGLEWOOD_ENTRY_EXIT(1149,3444,0),
         ;
 
         int x, y, z;
@@ -1142,6 +1148,15 @@ public class NavigationSpecialCase implements Loggable {
                 }
                 return clickObject(Filters.Objects.nameEquals("Interdimensional rift", "Portal Home"), "Enter",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case STRANGLEWOOD_ROWBOAT_ENTRANCE:
+            case STRANGLEWOOD_ROWBOAT_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Rowboat"), "Travel",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case STRANGLEWOOD_ENTRY_ENTRANCE:
+            case STRANGLEWOOD_ENTRY_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Entry"), "Enter",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
