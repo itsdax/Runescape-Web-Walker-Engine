@@ -317,7 +317,7 @@ public class WalkerEngine implements Loggable{
             return true;
         }
         PathAnalyzer.DestinationDetails destinationDetails = PathAnalyzer.furthestReachableTile(path);
-        if(destinationDetails != null && destinationDetails.getAssumed().isOnScreen()){
+        if(destinationDetails != null && destinationDetails.getAssumed().isClickable() && destinationDetails.getAssumed().distanceTo(playerPosition) < 20){
             log("We are already somewhere along the path. Destination details: " + destinationDetails);
             return true;
         }
