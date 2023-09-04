@@ -15,6 +15,7 @@ import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.RSInterface;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

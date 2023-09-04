@@ -133,6 +133,7 @@ public class FairyRing {
 		SHILO_VILLAGE(C, K, R),
 		SINCLAIR_MANSION(C, J, R),
 		SOUTH_CASTLE_WARS(B, K, P),
+		STRANGLEWOOD(B, L, S),
 		TOWER_OF_LIFE(D, J, P),
 		TZHAAR(B, L, P),
 		WIZARDS_TOWER(D, I, S),

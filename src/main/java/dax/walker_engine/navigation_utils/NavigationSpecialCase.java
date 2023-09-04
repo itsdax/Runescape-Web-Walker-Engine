@@ -189,6 +189,7 @@ public class NavigationSpecialCase implements Loggable {
         FAIRY_RING_SHILO_VILLAGE(2801, 3003, 0),
         FAIRY_RING_SINCLAIR_MANSION(2705, 3576, 0),
         FAIRY_RING_SOUTH_CASTLE_WARS(2385, 3035, 0),
+        FAIRY_RING_STRANGLEWOOD(1295, 3493, 0),
         FAIRY_RING_TOWER_OF_LIFE(2658, 3230, 0),
         FAIRY_RING_TZHAAR(2437, 5126, 0),
         FAIRY_RING_WIZARDS_TOWER(3108, 3149, 0),
@@ -291,7 +292,13 @@ public class NavigationSpecialCase implements Loggable {
         SHILO_CART_FROM_SHILO(2834, 2951, 0),
 
         KILLERWAT_PLANE_ENTRANCE(3110, 3363, 2),
-        KILLERWAT_PLANE_EXIT(2677, 5214, 2)
+        KILLERWAT_PLANE_EXIT(2677, 5214, 2),
+
+        STRANGLEWOOD_ROWBOAT_ENTRANCE(1194, 3452, 0),
+        STRANGLEWOOD_ROWBOAT_EXIT(1229, 3470, 0),
+
+        STRANGLEWOOD_ENTRY_ENTRANCE(1146, 3433, 0),
+        STRANGLEWOOD_ENTRY_EXIT(1149,3444,0),
         ;
 
         int x, y, z;
@@ -854,6 +861,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.SINCLAIR_MANSION);
             case FAIRY_RING_SOUTH_CASTLE_WARS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.SOUTH_CASTLE_WARS);
+            case FAIRY_RING_STRANGLEWOOD:
+                return FairyRing.takeFairyRing(FairyRing.Locations.STRANGLEWOOD);
             case FAIRY_RING_TOWER_OF_LIFE:
                 return FairyRing.takeFairyRing(FairyRing.Locations.TOWER_OF_LIFE);
             case FAIRY_RING_TZHAAR:
@@ -1139,6 +1148,15 @@ public class NavigationSpecialCase implements Loggable {
                 }
                 return clickObject(Filters.Objects.nameEquals("Interdimensional rift", "Portal Home"), "Enter",
                         () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case STRANGLEWOOD_ROWBOAT_ENTRANCE:
+            case STRANGLEWOOD_ROWBOAT_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Rowboat"), "Travel",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case STRANGLEWOOD_ENTRY_ENTRANCE:
+            case STRANGLEWOOD_ENTRY_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Entry"), "Enter",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
