@@ -196,6 +196,12 @@ public enum Teleport {
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*Ferox Enclave.*")
 	),
 
+	RING_OF_SHADOWS_STRANGLEWOOD(
+			35, new RSTile(1177, 3422, 0),
+			() -> RSVarBit.get(15140).getValue() == 1 && WearableItemTeleport.has(WearableItemTeleport.RING_OF_SHADOWS_FILTER),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_SHADOWS_FILTER, "(?i).*The Stranglewood")
+	),
+
 	NECKLACE_OF_PASSAGE_WIZARD_TOWER (
 		35, new RSTile(3113, 3179, 0),
 		() -> WearableItemTeleport.has(WearableItemTeleport.NECKLACE_OF_PASSAGE_FILTER),
