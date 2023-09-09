@@ -12,18 +12,18 @@ public enum PathStatus {
     UNREACHABLE(0),
     NO_WEB_PATH(0),
 
-    INVALID_CREDENTIALS(5000),
-    RATE_LIMIT_EXCEEDED(5000),
+    INVALID_CREDENTIALS(3000),
+    RATE_LIMIT_EXCEEDED(3000),
 
 
     //OFFLINE
-    NO_RESPONSE_FROM_SERVER(10000),
+    NO_RESPONSE_FROM_SERVER(5000),
 
     // Server Issue
-    BAD_RESPONSE_FROM_SERVER(10000),
+    BAD_RESPONSE_FROM_SERVER(5000),
 
     //WHAT IS GOING ON
-    UNKNOWN(10000);
+    UNKNOWN(5000);
 
     // Backoff duration in milliseconds
     private long backoffDuration;
