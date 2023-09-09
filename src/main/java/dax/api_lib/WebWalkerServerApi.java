@@ -1,8 +1,6 @@
 package dax.api_lib;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import dax.api_lib.json.Json;
@@ -69,45 +67,6 @@ public class WebWalkerServerApi implements Loggable {
         }
     }
 
-    public PathResult getPath(Point3D start, Point3D end, PlayerDetails playerDetails) {
-        com.google.gson.JsonObject pathRequest = new com.google.gson.JsonObject();
-        pathRequest.add("start", start.toJson());
-        pathRequest.add("end", end.toJson());
-
-        if (playerDetails != null) {
-            pathRequest.add("player", playerDetails.toJson());
-        }
-
-        try {
-            return parseResult(post(pathRequest, (isTestMode ? TEST_ENDPOINT : WALKER_ENDPOINT) + GENERATE_PATH));
-        } catch (IOException e) {
-            getInstance().log("Is server down? Spam dax.");
-            return new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER);
-        }
-
-    }
-
-    public PathResult getBankPath(Point3D start, RunescapeBank bank, PlayerDetails playerDetails) {
-        com.google.gson.JsonObject pathRequest = new com.google.gson.JsonObject();
-
-        pathRequest.add("start", start.toJson());
-
-        if (bank != null) {
-            pathRequest.addProperty("bank", bank.toString());
-        }
-
-        if (playerDetails != null) {
-            pathRequest.add("player", playerDetails.toJson());
-        }
-
-        try {
-            return parseResult(post(pathRequest, (isTestMode ? TEST_ENDPOINT : WALKER_ENDPOINT) + GENERATE_BANK_PATH));
-        } catch (IOException e) {
-            getInstance().log("Is server down? Spam dax.");
-            return new PathResult(PathStatus.NO_RESPONSE_FROM_SERVER);
-        }
-    }
-
     public boolean isTestMode() {
         return isTestMode;
     }
@@ -118,6 +77,7 @@ public class WebWalkerServerApi implements Loggable {
 
     private List<PathResult> parseResults(ServerResponse serverResponse) {
         if (!serverResponse.isSuccess()) {
+
             JsonValue jsonValue = null;
             try {
                 jsonValue = Json.parse(serverResponse.getContents());
@@ -158,56 +118,6 @@ public class WebWalkerServerApi implements Loggable {
         }
     }
 
-    private PathResult parseResult(ServerResponse serverResponse) {
-        if (!serverResponse.isSuccess()) {
-            JsonValue jsonValue = null;
-            try {
-                jsonValue = Json.parse(serverResponse.getContents());
-            } catch (Exception | Error e) {
-                jsonValue = Json.NULL;
-            }
-            if (!jsonValue.isNull()) {
-                getInstance().log("[Error] " + jsonValue.asObject().getString(
-                        "message",
-                        "Could not generate path: " + serverResponse.getContents()
-                ));
-            }
-
-            switch (serverResponse.getCode()) {
-                case 429:
-                    return new PathResult(PathStatus.RATE_LIMIT_EXCEEDED);
-                case 400:
-                case 401:
-                case 404:
-                    return new PathResult(PathStatus.INVALID_CREDENTIALS);
-            }
-
-            if (serverResponse.getCode() >= 500) {
-                log("Error: " + serverResponse.getCode() + ": " + serverResponse.getContents());
-                log("Please send dax the debug. That could be found right after 'Generating path:'");
-                return new PathResult(PathStatus.BAD_RESPONSE_FROM_SERVER);
-            }
-        }
-
-        PathResult pathResult;
-        JsonElement jsonObject;
-        try {
-            jsonObject = new JsonParser().parse(serverResponse.getContents());
-        } catch (JsonSyntaxException | ParseException | IllegalStateException e) {
-            pathResult = new PathResult(PathStatus.UNKNOWN);
-            log("Error: " + pathResult.getPathStatus());
-            return pathResult;
-        }
-
-        pathResult = PathResult.fromJson(jsonObject);
-        log("Response: " + pathResult.getPathStatus() + " Cost: " + pathResult.getCost());
-        return pathResult;
-    }
-
-    private ServerResponse post(com.google.gson.JsonObject jsonObject, String endpoint) throws IOException {
-        return post(gson.toJson(jsonObject), endpoint);
-    }
-
     private ServerResponse post(String json, String endpoint) throws IOException {
         getInstance().log("Generating path: " + json);
         if (cache.containsKey(json)) {
@@ -240,7 +150,7 @@ public class WebWalkerServerApi implements Loggable {
             String contents = IOHelper.readInputStream(connection.getInputStream());
             cache.put(json, contents);
             return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
-        } catch(IOException e){
+        } catch (IOException e) {
             return new ServerResponse(false, connection.getResponseCode(), IOHelper.readInputStream(connection.getErrorStream()));
         }
     }
