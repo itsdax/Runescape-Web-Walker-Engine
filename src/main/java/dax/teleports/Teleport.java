@@ -403,6 +403,11 @@ public enum Teleport {
 		() -> WearableItemTeleport.has(WearableItemTeleport.XERICS_TALISMAN_FILTER),
 		() -> teleportWithScrollInterface(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Lookout")
 	),
+	XERICS_HONOUR(
+		35, new RSTile(1257, 3563, 0),
+		() -> WearableItemTeleport.has(WearableItemTeleport.XERICS_TALISMAN_FILTER),
+		() -> teleportWithScrollInterface(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Honour")
+	),
 
 	WEST_ARDOUGNE_TELEPORT_TAB(
 		35, new RSTile(2500,3290,0),
