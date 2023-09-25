@@ -194,7 +194,7 @@ public class PathObjectHandler implements Loggable {
         WILDERNESS_CAVERN("Cavern", "Enter", new RSTile(3126, 3832, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new RSTile(3126, 3832, 0)) && destinationDetails.getDestination().getRSTile().equals(new RSTile(3197, 10056, 0));
+                return destinationDetails.getAssumed().equals(new RSTile(3126, 3832, 0)) && destinationDetails.getDestination().getRSTile().equals(new RSTile(3241, 10233, 0));
             }
         }),
         WILDERNESS_CREVICE("Crevice", "Jump-Down", new RSTile(3067, 3740, 0), new SpecialCondition() {
@@ -203,10 +203,10 @@ public class PathObjectHandler implements Loggable {
                 return destinationDetails.getAssumed().equals(new RSTile(3067, 3740, 0)) && destinationDetails.getDestination().getRSTile().equals(new RSTile(3187, 10127, 0));
             }
         }),
-        WILDERNESS_CREVICE_2("Cavern", "Enter", new RSTile(3126, 3832, 0), new SpecialCondition() {
+        WILDERNESS_CAVERN_2("Cavern", "Enter", new RSTile(3075, 3653, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new RSTile(3126, 3832, 0)) && destinationDetails.getDestination().getRSTile().equals(new RSTile(3241, 10233, 0));
+                return destinationDetails.getAssumed().equals(new RSTile(3075, 3653, 0)) && destinationDetails.getDestination().getRSTile().equals(new RSTile(3197, 10056, 0));
             }
         });
 
@@ -422,7 +422,7 @@ public class PathObjectHandler implements Loggable {
                     break;
                 case WILDERNESS_CREVICE:
                 case WILDERNESS_CAVERN:
-                case WILDERNESS_CREVICE_2:
+                case WILDERNESS_CAVERN_2:
                     if(NPCInteraction.isConversationWindowUp()){
                         NPCInteraction.handleConversation("Yes, and don't ask again.");
                     } else if(clickOnObject(object,specialObject.getAction())){
