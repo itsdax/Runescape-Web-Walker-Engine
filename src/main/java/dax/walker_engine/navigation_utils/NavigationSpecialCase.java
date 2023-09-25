@@ -299,6 +299,7 @@ public class NavigationSpecialCase implements Loggable {
 
         STRANGLEWOOD_ENTRY_ENTRANCE(1146, 3433, 0),
         STRANGLEWOOD_ENTRY_EXIT(1149,3444,0),
+
         ;
 
         int x, y, z;
