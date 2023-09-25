@@ -300,6 +300,9 @@ public class NavigationSpecialCase implements Loggable {
         STRANGLEWOOD_ENTRY_ENTRANCE(1146, 3433, 0),
         STRANGLEWOOD_ENTRY_EXIT(1149,3444,0),
 
+        GIANT_MOLE_HOLE(2996, 3377, 0),
+        GIANT_MOLE_ENTRANCE(1752, 5237, 0),
+
         ;
 
         int x, y, z;
@@ -1158,6 +1161,18 @@ public class NavigationSpecialCase implements Loggable {
             case STRANGLEWOOD_ENTRY_EXIT:
                 return clickObject(Filters.Objects.nameEquals("Entry"), "Enter",
                         ()-> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case GIANT_MOLE_ENTRANCE:
+            case GIANT_MOLE_HOLE:
+                if(Player.getPosition().distanceTo(GIANT_MOLE_HOLE.getRSTile()) >= 2){
+                    if(Walking.walkTo(GIANT_MOLE_HOLE.getRSTile())){
+                        WaitFor.condition(4500, () -> Player.getPosition().distanceTo(GIANT_MOLE_HOLE.getRSTile()) < 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    }
+                }
+                if(RSItemHelper.click("Spade", "Dig")){
+                    return (WaitFor.condition(4500, () -> Player.getPosition().equals(GIANT_MOLE_ENTRANCE.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) == WaitFor.Return.SUCCESS;
+                }
+                break;
         }
 
         return false;
