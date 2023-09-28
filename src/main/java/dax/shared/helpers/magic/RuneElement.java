@@ -28,7 +28,7 @@ public enum RuneElement {
     WRATH("Wrath"),
     SOUL("Soul");
 
-    private String[] alternativeNames;
+    private final String[] alternativeNames;
 
     RuneElement(String... alternativeNames) {
         this.alternativeNames = alternativeNames;
@@ -42,10 +42,11 @@ public enum RuneElement {
         if (haveStaff()) {
             return Integer.MAX_VALUE;
         }
+        final boolean inMembersWorld = WorldHopper.isCurrentWorldMembers().orElse(false);
         RSItem[] items = Inventory.find(new Filter<RSItem>() {
             @Override
             public boolean accept(RSItem rsItem) {
-                if (rsItem.getDefinition().isMembersOnly() && !WorldHopper.isCurrentWorldMembers().orElse(false))
+                if (rsItem.getDefinition().isMembersOnly() && !inMembersWorld)
                     return false;
                 String name = getItemName(rsItem).toLowerCase();
 
