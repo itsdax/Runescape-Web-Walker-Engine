@@ -303,6 +303,14 @@ public class NavigationSpecialCase implements Loggable {
         GIANT_MOLE_HOLE(2996, 3377, 0),
         GIANT_MOLE_ENTRANCE(1752, 5237, 0),
 
+        DWARVEN_BOATMAN_RELLEKKA(2838, 10127, 0),
+        DWARVEN_BOATMAN_KELDAGRIM(2888, 10226, 0),
+
+        DWARVEN_FERRYMAN_1_SOUTH(2838, 10127, 0),
+        DWARVEN_FERRYMAN_1_NORTH(2837, 10143, 0),
+
+        DWARVEN_FERRYMAN_2_SOUTH(2863, 10127, 0),
+        DWARVEN_FERRYMAN_2_NORTH(2854, 10143, 0)
         ;
 
         int x, y, z;
@@ -1173,6 +1181,21 @@ public class NavigationSpecialCase implements Loggable {
                     return (WaitFor.condition(4500, () -> Player.getPosition().equals(GIANT_MOLE_ENTRANCE.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) == WaitFor.Return.SUCCESS;
                 }
                 break;
+
+            case DWARVEN_BOATMAN_KELDAGRIM:
+            case DWARVEN_BOATMAN_RELLEKKA:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Dwarven Boatman"), "Travel") &&
+                        WaitFor.condition(15000,() -> specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
+            case DWARVEN_FERRYMAN_1_NORTH:
+            case DWARVEN_FERRYMAN_1_SOUTH:
+            case DWARVEN_FERRYMAN_2_NORTH:
+            case DWARVEN_FERRYMAN_2_SOUTH:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Dwarven Ferryman"), "Travel") &&
+                        WaitFor.condition(15000,() -> specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
+                                ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
         }
 
         return false;
