@@ -2,16 +2,16 @@ package dax.shared;
 
 import dax.walker_engine.real_time_collision.RealTimeCollisionTile;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class NodeInfo {
 
-    private static HashMap<Integer, HashMap<Integer, HashMap<Integer, Details>>> observableXMap = new HashMap<>(), pathTileXMap = new HashMap<>(), realTime = new HashMap<>();
+    private static ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Details>>> observableXMap = new ConcurrentHashMap<>(), pathTileXMap = new ConcurrentHashMap<>(), realTime = new ConcurrentHashMap<>();
 
     public static Details get(PathFindingNode pathFindingNode){
 
-        HashMap<Integer, HashMap<Integer, HashMap<Integer, Details>>> xMap = null;
+        ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Details>>> xMap = null;
         if (pathFindingNode instanceof RealTimeCollisionTile){
             xMap = realTime;
         }
@@ -19,11 +19,11 @@ public class NodeInfo {
             throw new NullPointerException("xMap should never be null for NodeInfo.");
         }
 
-        HashMap<Integer, HashMap<Integer, Details>> yMap = xMap.get(pathFindingNode.getX());
+        ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Details>> yMap = xMap.get(pathFindingNode.getX());
         if (yMap == null){
             return null;
         }
-        HashMap<Integer, Details> zMap = yMap.get(pathFindingNode.getY());
+        ConcurrentHashMap<Integer, Details> zMap = yMap.get(pathFindingNode.getY());
         if (zMap == null){
             return null;
         }
@@ -35,15 +35,15 @@ public class NodeInfo {
     }
 
     public static Details create(PathFindingNode pathFindingNode){
-        HashMap<Integer, HashMap<Integer, HashMap<Integer, Details>>> xMap = null;
+        ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Details>>> xMap = null;
         if (pathFindingNode instanceof RealTimeCollisionTile){
             xMap = realTime;
         }
         if (xMap == null){
             throw new NullPointerException("xMap should never be null for NodeInfo.");
         }
-        HashMap<Integer, HashMap<Integer, Details>> yMap = xMap.computeIfAbsent(pathFindingNode.getX(), k -> new HashMap<>());
-        HashMap<Integer, Details> zMap = yMap.computeIfAbsent(pathFindingNode.getY(), k -> new HashMap<>());
+        ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Details>> yMap = xMap.computeIfAbsent(pathFindingNode.getX(), k -> new ConcurrentHashMap<>());
+        ConcurrentHashMap<Integer, Details> zMap = yMap.computeIfAbsent(pathFindingNode.getY(), k -> new ConcurrentHashMap<>());
         return zMap.computeIfAbsent(pathFindingNode.getZ(), k -> new Details());
     }
 
@@ -52,7 +52,7 @@ public class NodeInfo {
 //        System.out.println("Clearing memory of " + c.getSimpleName());
         if (c == RealTimeCollisionTile.class){
             realTime.clear();
-            realTime = new HashMap<>();
+            realTime = new ConcurrentHashMap<>();
         }
     }
 
