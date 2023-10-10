@@ -33,6 +33,7 @@ public class PlayerDetails {
             199,
             357,
             386,//smoke dungeon boss room
+            571,
             1990,
             2310,
             2328,
