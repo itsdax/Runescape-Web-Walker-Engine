@@ -310,7 +310,10 @@ public class NavigationSpecialCase implements Loggable {
         DWARVEN_FERRYMAN_1_NORTH(2837, 10143, 0),
 
         DWARVEN_FERRYMAN_2_SOUTH(2863, 10127, 0),
-        DWARVEN_FERRYMAN_2_NORTH(2854, 10143, 0)
+        DWARVEN_FERRYMAN_2_NORTH(2854, 10143, 0),
+
+        KHAZARD_BATTLEMENT_ENTRANCE(2509, 3252, 0),
+        KHAZARD_BATTLEMENT_LANDING(2509, 3254, 0)
         ;
 
         int x, y, z;
@@ -1196,6 +1199,13 @@ public class NavigationSpecialCase implements Loggable {
                         WaitFor.condition(15000,() -> specialLocation.getRSTile().distanceTo(Player.getPosition()) < 10
                                 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
+            case KHAZARD_BATTLEMENT_ENTRANCE:
+            case KHAZARD_BATTLEMENT_LANDING:
+                if(NPCInteraction.isConversationWindowUp() || clickObject(Filters.Objects.nameEquals("Crumbled wall"), "Climb-over",
+                        ()-> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    NPCInteraction.handleConversation();
+                    return WaitFor.condition(15000, () -> Player.getPosition().equals(specialLocation.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                }
         }
 
         return false;
