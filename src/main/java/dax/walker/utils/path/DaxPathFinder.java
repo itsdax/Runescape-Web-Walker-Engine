@@ -163,15 +163,16 @@ public class DaxPathFinder {
 
     public static Destination[][] getMap() {
         final RSTile home = Player.getPosition().toLocalTile();
+        final int localX = home.getX(), localY = home.getY();
         Destination[][] map = new Destination[104][104];
         int[][] collisionData = PathFinding.getCollisionData();
-        if(collisionData == null || collisionData.length < home.getX() || collisionData[home.getX()].length < home.getY()){
+        if(collisionData == null || collisionData.length < localX || collisionData[localX].length < localY){
             return map;
         }
 
         Queue<Destination> queue = new LinkedList<>();
         queue.add(new Destination(home, null, 0));
-        map[home.getX()][home.getY()] = queue.peek();
+        map[localX][localY] = queue.peek();
 
         while (!queue.isEmpty()) {
             Destination currentLocal = queue.poll();
