@@ -208,6 +208,14 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getAssumed().equals(new RSTile(3075, 3653, 0)) && destinationDetails.getDestination().getRSTile().equals(new RSTile(3197, 10056, 0));
             }
+        }),
+        PLOUGH("Plough", "Push", null, new SpecialCondition() {
+            RSArea PLOUGH_NORTH = new RSArea(new RSTile(1762, 3557, 0), new RSTile(1780, 3543, 0)),
+            PLOUGH_SOUTH = new RSArea(new RSTile(1763, 3539, 0), new RSTile(1777, 3521, 0));
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return PLOUGH_NORTH.contains(destinationDetails.getAssumed()) || PLOUGH_SOUTH.contains(destinationDetails.getAssumed());
+            }
         });
 
         private String name, action;
@@ -389,6 +397,7 @@ public class PathObjectHandler implements Loggable {
                 case BRINE_RAT_CAVE_BOULDER:
                     RSNPC boulder = InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll")));
                     if(InteractionHelper.click(boulder, "Roll")){
+                        successfulClick = true;
                         if(WaitFor.condition(12000,
                             () -> NPCs.find(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll"))).length == 0 ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
@@ -403,6 +412,7 @@ public class PathObjectHandler implements Loggable {
                         return false;
                     ladder.setClickHeight(General.random(-100, -40));
                     if(InteractionHelper.click(ladder, "Climb Down")){
+                        successfulClick = true;
                         WaitFor.condition(10000, () -> Game.getPlane() == 0 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     }
                     break;
@@ -425,7 +435,9 @@ public class PathObjectHandler implements Loggable {
                 case WILDERNESS_CAVERN_2:
                     if(NPCInteraction.isConversationWindowUp()){
                         NPCInteraction.handleConversation("Yes, and don't ask again.");
+                        successfulClick = true;
                     } else if(clickOnObject(object,specialObject.getAction())){
+                        successfulClick = true;
                         Timing.waitCondition(() -> Player.getPosition().equals(new RSTile(3187, 10127, 0)) || NPCInteraction.isConversationWindowUp() || Interfaces.isInterfaceSubstantiated(DoomsToggle.REVENANTS_TOGGLE), 4500);
                         if(NPCInteraction.isConversationWindowUp()){
                             NPCInteraction.handleConversation("Yes, and don't ask again.");
@@ -434,6 +446,33 @@ public class PathObjectHandler implements Loggable {
                         }
                     }
                     break;
+
+                case PLOUGH:
+                    if(Player.getPosition().getY() > 3540){
+                        if(Walking.walkTo(
+                                Arrays.stream(
+                                        new RSTile[]{
+                                                new RSTile(1781, 3549, 0),
+                                                new RSTile(1781, 3551, 0),
+                                                new RSTile(1761, 3551, 0),
+                                                new RSTile(1761, 3549, 0)
+                                        }
+                        ).min(Comparator.comparingInt(t-> Player.getPosition().distanceTo(t))).orElse(new RSTile(1781, 3550, 0)))){
+                            successfulClick = true;
+                        }
+                    } else {
+                        if(Walking.walkTo(
+                                Arrays.stream(
+                                        new RSTile[]{
+                                                new RSTile(1769, 3540, 0),
+                                                new RSTile(1772, 3540, 0),
+                                                new RSTile(1769, 3521, 0),
+                                                new RSTile(1771, 3521, 0)
+                                        }
+                        ).min(Comparator.comparingInt(t-> Player.getPosition().distanceTo(t))).orElse(new RSTile(1770, 3540, 0)))){
+                            successfulClick = true;
+                        }
+                    }
             }
         }
 
