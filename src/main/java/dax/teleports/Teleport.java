@@ -554,7 +554,7 @@ public enum Teleport {
 
 	SALVE_GRAVEYARD_TAB(
 		35, new RSTile(3432, 3460, 0),
-		() -> Inventory.getCount("Salve graveyard teleport") > 0,
+		() -> Game.getSetting(302) >= 61 && Inventory.getCount("Salve graveyard teleport") > 0,
 		() -> RSItemHelper.click("Salve graveyard t.*", "Break")
 	),
 
