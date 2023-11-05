@@ -11,7 +11,6 @@ import dax.walker_engine.interaction_handling.NPCInteraction;
 import dax.walker_engine.navigation_utils.fairyring.FairyRing;
 import org.tribot.api.General;
 import org.tribot.api.ScriptCache;
-import org.tribot.api.types.generic.Filter;
 import org.tribot.api.util.Sorting;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
@@ -101,6 +100,7 @@ public class NavigationSpecialCase implements Loggable {
 
         DWARF_CARTS_GE (3141, 3504, 0),
         DWARFS_CARTS_KELDAGRIM (2922, 10170, 0),
+        DWARF_CARTS_KELDAGRIM_ARRIVE(2909, 10174 ,0),
 
         BRIMHAVEN_DUNGEON_SURFACE (2744, 3152, 0),
         BRIMHAVEN_DUNGEON (2713, 9564, 0),
@@ -553,12 +553,8 @@ public class NavigationSpecialCase implements Loggable {
                 getInstance().log("Unable to go inside tunnel.");
                 break;
             case DWARF_CARTS_GE:
-                RSObject[] objects = Objects.find(15, Filters.Objects.nameEquals("Train cart").combine(new Filter<RSObject>() {
-                    @Override
-                    public boolean accept(RSObject rsObject) {
-                        return rsObject.getPosition().getY() == 10171;
-                    }
-                }, true));
+            case DWARF_CARTS_KELDAGRIM_ARRIVE:
+                RSObject[] objects = Objects.find(15, Filters.Objects.nameEquals("Train cart").and(rsObject -> rsObject.getPosition().getY() == 10171));
                 Sorting.sortByDistance(objects, new RSTile(2935, 10172, 0), true);
                 if (objects.length > 0 && clickObject(objects[0], "Ride", () -> Player.getPosition().getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     getInstance().log("Rode cart to GE");
