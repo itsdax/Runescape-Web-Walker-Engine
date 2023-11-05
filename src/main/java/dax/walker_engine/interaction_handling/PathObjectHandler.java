@@ -505,7 +505,7 @@ public class PathObjectHandler implements Loggable {
             }
         }
 
-        WaitFor.condition(General.random(8500, 11000), () -> {
+        WaitFor.Return result = WaitFor.condition(General.random(8500, 11000), () -> {
             DoomsToggle.handleToggle();
             PathAnalyzer.DestinationDetails destinationDetails1 = PathAnalyzer.furthestReachableTile(path);
             if (NPCInteraction.isConversationWindowUp()) {
@@ -527,7 +527,7 @@ public class PathObjectHandler implements Loggable {
         if (strongholdDoor){
             General.sleep(800, 1200);
         }
-        return true;
+        return result == WaitFor.Return.SUCCESS;
     }
 
     public static RSObject[] getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
