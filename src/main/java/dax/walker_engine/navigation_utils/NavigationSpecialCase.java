@@ -99,7 +99,7 @@ public class NavigationSpecialCase implements Loggable {
         KALPHITE_TUNNEL_INSIDE (3483, 9510, 2),
 
         DWARF_CARTS_GE (3141, 3504, 0),
-        DWARFS_CARTS_KELDAGRIM (2922, 10170, 0),
+        DWARF_CARTS_KELDAGRIM(2922, 10170, 0),
         DWARF_CARTS_KELDAGRIM_ARRIVE(2909, 10174 ,0),
 
         BRIMHAVEN_DUNGEON_SURFACE (2744, 3152, 0),
@@ -553,20 +553,19 @@ public class NavigationSpecialCase implements Loggable {
                 getInstance().log("Unable to go inside tunnel.");
                 break;
             case DWARF_CARTS_GE:
-            case DWARF_CARTS_KELDAGRIM_ARRIVE:
+            case DWARF_CARTS_KELDAGRIM:
                 RSObject[] objects = Objects.find(15, Filters.Objects.nameEquals("Train cart").and(rsObject -> rsObject.getPosition().getY() == 10171));
                 Sorting.sortByDistance(objects, new RSTile(2935, 10172, 0), true);
                 if (objects.length > 0 && clickObject(objects[0], "Ride", () -> Player.getPosition().getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     getInstance().log("Rode cart to GE");
                     return true;
                 } else {
-                    getInstance().log("Could not ride card to GE.");
+                    getInstance().log("cart to GE.");
                 }
-
                 break;
 
-            case DWARFS_CARTS_KELDAGRIM:
-                break;
+            case DWARF_CARTS_KELDAGRIM_ARRIVE:
+                return clickObject(Filters.Objects.nameEquals("Trapdoor"), "Travel", () -> Player.getPosition().getY() > 10000 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
 
             case BRIMHAVEN_DUNGEON_SURFACE:
                 if (clickObject(Filters.Objects.nameEquals("Exit"), "Leave", () -> Player.getPosition().getY() < 8000 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
@@ -578,8 +577,7 @@ public class NavigationSpecialCase implements Loggable {
 
             case GNOME_ENTRANCE:
             case GNOME_EXIT:
-                if (clickObject(Filters.Objects.nameEquals("Gate").combine(Filters.Objects.actionsContains("Open"),
-		                true), "Open",
+                if (clickObject(Filters.Objects.nameEquals("Gate").and(Filters.Objects.actionsContains("Open")), "Open",
                         () -> {
                             if (NPCInteraction.isConversationWindowUp()) {
                                 NPCInteraction.handleConversation(NPCInteraction.GENERAL_RESPONSES);
