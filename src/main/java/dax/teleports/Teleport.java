@@ -4,7 +4,6 @@ import dax.api_lib.models.Requirement;
 import dax.shared.helpers.InterfaceHelper;
 import dax.shared.helpers.RSItemHelper;
 import dax.shared.helpers.magic.Spell;
-import dax.shared.helpers.magic.SpellBook;
 import dax.shared.helpers.questing.QuestHelper;
 import dax.teleports.teleport_utils.TeleportConstants;
 import dax.teleports.teleport_utils.TeleportLimit;
@@ -752,7 +751,7 @@ public enum Teleport {
 
 	LUMBRIDGE_HOME_TELEPORT(
 			150, new RSTile(3223, 3218, 0),
-			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.STANDARD,
+			Spell.LUMBRIDGE_HOME_TELEPORT::canUse,
 			() -> {
 				final RSTile myPos = Player.getPosition();
 				return selectSpell("Lumbridge Home Teleport", "Cast") && Timing.waitCondition(() ->  !Player.getRSPlayer().isInCombat() &&
@@ -763,7 +762,7 @@ public enum Teleport {
 
 	ARCEUUS_HOME_TELEPORT(
 			150, new RSTile(1712, 3883, 0),
-			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.ARCEUUS,
+			Spell.ARCEUUS_HOME_TELEPORT::canUse,
 			() -> {
 				final RSTile myPos = Player.getPosition();
 				return selectSpell("Arceuus Home Teleport", "Cast") && Timing.waitCondition(() -> !Player.getRSPlayer().isInCombat() &&
@@ -773,7 +772,7 @@ public enum Teleport {
 
 	EDGEVILLE_HOME_TELEPORT(
 			150, new RSTile(3087, 3496, 0),
-			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.ANCIENT,
+			Spell.EDGEVILLE_HOME_TELEPORT::canUse,
 			() -> {
 				final RSTile myPos = Player.getPosition();
 				return selectSpell("Edgeville Home Teleport", "Cast") && Timing.waitCondition(() ->  !Player.getRSPlayer().isInCombat() &&
@@ -783,7 +782,7 @@ public enum Teleport {
 
 	LUNAR_HOME_TELEPORT(
 			150, new RSTile(2095, 3913, 0),
-			() -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.LUNAR,
+			Spell.LUNAR_HOME_TELEPORT::canUse,
 			() -> {
 				final RSTile myPos = Player.getPosition();
 				return selectSpell("Lunar Home Teleport", "Cast") && Timing.waitCondition(() ->  !Player.getRSPlayer().isInCombat() &&
@@ -1008,19 +1007,16 @@ public enum Teleport {
 		return RSVarBit.get(4897).getValue() > 0;
 	}
 
-	private static boolean canUseHomeTeleport(){
-		return !Player.getRSPlayer().isInCombat() &&
-				((long) Game.getSetting(892) * 60 * 1000) + (30 * 60 * 1000) < Timing.currentTimeMillis();
-	}
-
-	private static boolean canUseMinigameTeleport(){
-		if(RSVarBit.get(14022).getValue() == 1)//can't minigame teleport when we are at PvP Arena
+	private static boolean canUseMinigameTeleport() {
+		if (RSVarBit.get(14022).getValue() == 1)//can't minigame teleport when we are at PvP Arena
 			return false;
-		if(RSVarBit.get(541).getValue() == 1)
+		if (RSVarBit.get(541).getValue() == 1)
 			return false;
-		if(Game.isInInstance())
+		if (Game.isInInstance())
 			return false;
 		return !Player.getRSPlayer().isInCombat() &&
 				((long) Game.getSetting(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
 	}
+
+
 }
