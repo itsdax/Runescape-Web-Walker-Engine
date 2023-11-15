@@ -78,7 +78,7 @@ public class Charter implements Loggable {
         CATHERBY ("Catherby", new RSTile(2796, 3414, 0)),
         CORSAIR_COVE ("Corsair Cove", new RSTile(2587, 2851, 0)),
         MUSA_POINT("Musa Point", new RSTile(2954, 3158, 0)),
-        MOS_LE_HARMLESS ("Mos le'Harmless", new RSTile(3671, 2931, 0)),
+        MOS_LE_HARMLESS ("Mos Le'Harmless", new RSTile(3671, 2931, 0)),
         PORT_KHAZARD ("Port Khazard", new RSTile(2674, 3144, 0)),
         PORT_PHASMATYS ("Port Phasmatys", new RSTile(3702, 3503, 0)),
         PORT_SARIM ("Port Sarim", new RSTile(3038, 3192, 0)),
