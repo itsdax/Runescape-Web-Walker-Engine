@@ -560,13 +560,13 @@ public enum Teleport {
 
 	FENKENSTRAINS_CASTLE_TAB(
 			35, new RSTile(3547, 3528, 0),
-			() -> Inventory.getCount("Fenkenstrain's castle teleport") > 0,
+			() -> Game.getSetting(302) >= 61 && Inventory.getCount("Fenkenstrain's castle teleport") > 0,
 			() -> RSItemHelper.click("Fenkenstrain's castle t.*", "Break")
 	),
 
 	BARROWS_TAB(
 			35, new RSTile(3565, 3314, 0),
-			() -> Inventory.getCount("Barrows teleport") > 0,
+			() -> Game.getSetting(302) >= 61 && Inventory.getCount("Barrows teleport") > 0,
 			() -> RSItemHelper.click("Barrows t.*", "Break")
 	),
 
