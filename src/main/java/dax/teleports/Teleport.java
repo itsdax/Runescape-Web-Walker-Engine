@@ -332,7 +332,7 @@ public enum Teleport {
 
 	SKILLS_FARMING_GUILD_OUTSIDE (
 			35, new RSTile(1248, 3719, 0),
-			() -> hasBeenToZeah() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER) && (RSVarBit.get(4895).getValue() < 600 || Skills.SKILLS.FARMING.getActualLevel() < 45),
+			() -> hasBeenToZeah() && WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER) && Skills.SKILLS.FARMING.getActualLevel() < 45,
 			() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Farming.*"),
 			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
