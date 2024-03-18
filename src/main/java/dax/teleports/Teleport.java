@@ -5,6 +5,7 @@ import dax.shared.helpers.InterfaceHelper;
 import dax.shared.helpers.RSItemHelper;
 import dax.shared.helpers.magic.Spell;
 import dax.shared.helpers.questing.QuestHelper;
+import dax.teleports.teleport_utils.POH;
 import dax.teleports.teleport_utils.TeleportConstants;
 import dax.teleports.teleport_utils.TeleportLimit;
 import dax.teleports.teleport_utils.TeleportScrolls;
@@ -491,6 +492,12 @@ public enum Teleport {
 		() -> RSItemHelper.click("Hosidius t.*", "Break")
 	),
 
+	PRIFDDINAS_TELEPORT_TAB(
+			35, new RSTile(3239, 6076, 0),
+			() -> Inventory.getCount("Prifddinas teleport") > 0,
+			() -> RSItemHelper.click("Prifddinas t.*", "Break")
+	),
+
 	CONSTRUCTION_CAPE_RIMMINGTON(
 		0, new RSTile(2954,3224, 0),
 		() -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER),
@@ -790,6 +797,87 @@ public enum Teleport {
 			}
 	),
 
+	POH_OUTSIDE_RIMMINGTON(
+			35, new RSTile(2954, 3224, 0),
+			() -> POH.RIMMINGTON.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_RIMMINGTON_TAB(
+			35, new RSTile(2954, 3224, 0),
+			() -> POH.RIMMINGTON.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
+			() -> RSItemHelper.click("Teleport to house", "Break")
+	),
+	POH_OUTSIDE_TAVERLY(
+			35, new RSTile(2894, 3465, 0),
+			() -> POH.TAVERLY.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_TAVERLY_TAB(
+			35, new RSTile(2894, 3465, 0),
+			() -> POH.TAVERLY.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
+			() -> RSItemHelper.click("Teleport to house", "Break")
+	),
+	POH_OUTSIDE_POLLNIVNEACH(
+			35, new RSTile(3340, 3004, 0),
+			() -> POH.POLLNIVNEACH.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_POLLNIVNEACH_TAB(
+			35, new RSTile(3340, 3004, 0),
+			() -> POH.POLLNIVNEACH.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_HOSIDIUS(
+			35, new RSTile(1744, 3517, 0),
+			() -> POH.HOSIDIUS.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_HOSIDIUS_TAB(
+			35, new RSTile(1744, 3517, 0),
+			() -> POH.HOSIDIUS.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_RELLEKKA(
+			35, new RSTile(2670, 3632, 0),
+			() -> POH.RELLEKKA.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_RELLEKKA_TAB(
+			35, new RSTile(2670, 3632, 0),
+			() -> POH.RELLEKKA.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_BRIMHAVEN(
+			35, new RSTile(2750, 3178, 0),
+			() -> POH.BRIMHAVEN.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_BRIMHAVEN_TAB(
+			35, new RSTile(2750, 3178, 0),
+			() -> POH.BRIMHAVEN.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_YANILLE(
+			35, new RSTile(2544, 3095, 0),
+			() -> POH.YANILLE.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_YANILLE_TAB(
+			35, new RSTile(2544, 3095, 0),
+			() -> POH.YANILLE.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_PRIFDDINAS(
+			35, new RSTile(3239, 6076, 0),
+			() -> POH.PRIFDDINAS.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	),
+	POH_OUTSIDE_PRIFDDINAS_TAB(
+			35, new RSTile(3239, 6076, 0),
+			() -> POH.PRIFDDINAS.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
+			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+	)
+
 	;
 
 	private final RSTile location;
@@ -1008,6 +1096,7 @@ public enum Teleport {
 	}
 
 	private static boolean canUseMinigameTeleport() {
+		
 		if (RSVarBit.get(14022).getValue() == 1)//can't minigame teleport when we are at PvP Arena
 			return false;
 		if (RSVarBit.get(541).getValue() == 1)

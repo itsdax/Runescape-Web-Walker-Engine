@@ -21,7 +21,7 @@ public enum Spell implements Validatable {
     CAMELOT_TELEPORT    (SpellBook.Type.STANDARD, 45, "Camelot Teleport",    new Pair<>(1, RuneElement.LAW), new Pair<>(5, RuneElement.AIR)),
     ARDOUGNE_TELEPORT   (SpellBook.Type.STANDARD, 51, "Ardougne Teleport",   new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.WATER)),
     KOUREND_TELEPORT	(SpellBook.Type.STANDARD, 69, "Kourend Castle Teleport",new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.SOUL),new Pair<>(4, RuneElement.WATER), new Pair<>(5, RuneElement.FIRE)),
-
+    TELEPORT_TO_HOUSE   (SpellBook.Type.STANDARD, 40, "Teleport to House",new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH))
     ;
 
     private SpellBook.Type spellBookType;
@@ -46,6 +46,9 @@ public enum Spell implements Validatable {
 
     public boolean cast() {
         return canUse() && Magic.selectSpell(getSpellName());
+    }
+    public boolean cast(String action) {
+        return canUse() && org.tribot.script.sdk.Magic.selectSpell(spellName, action);
     }
 
     @Override
