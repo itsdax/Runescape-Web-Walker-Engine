@@ -805,7 +805,7 @@ public enum Teleport {
 	POH_OUTSIDE_RIMMINGTON_TAB(
 			35, new RSTile(2954, 3224, 0),
 			() -> POH.RIMMINGTON.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
-			() -> RSItemHelper.click("Teleport to house", "Break")
+			() -> RSItemHelper.click("Teleport to house", "Outside")
 	),
 	POH_OUTSIDE_TAVERLY(
 			35, new RSTile(2894, 3465, 0),
@@ -815,7 +815,7 @@ public enum Teleport {
 	POH_OUTSIDE_TAVERLY_TAB(
 			35, new RSTile(2894, 3465, 0),
 			() -> POH.TAVERLY.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
-			() -> RSItemHelper.click("Teleport to house", "Break")
+			() -> RSItemHelper.click("Teleport to house", "Outside")
 	),
 	POH_OUTSIDE_POLLNIVNEACH(
 			35, new RSTile(3340, 3004, 0),
@@ -825,7 +825,7 @@ public enum Teleport {
 	POH_OUTSIDE_POLLNIVNEACH_TAB(
 			35, new RSTile(3340, 3004, 0),
 			() -> POH.POLLNIVNEACH.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(),
-			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+			() -> RSItemHelper.click("Teleport to house", "Outside")
 	),
 	POH_OUTSIDE_HOSIDIUS(
 			35, new RSTile(1744, 3517, 0),
@@ -835,7 +835,7 @@ public enum Teleport {
 	POH_OUTSIDE_HOSIDIUS_TAB(
 			35, new RSTile(1744, 3517, 0),
 			() -> POH.HOSIDIUS.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
-			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+			() -> RSItemHelper.click("Teleport to house", "Outside")
 	),
 	POH_OUTSIDE_RELLEKKA(
 			35, new RSTile(2670, 3632, 0),
@@ -845,7 +845,7 @@ public enum Teleport {
 	POH_OUTSIDE_RELLEKKA_TAB(
 			35, new RSTile(2670, 3632, 0),
 			() -> POH.RELLEKKA.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
-			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+			() -> RSItemHelper.click("Teleport to house", "Outside")
 	),
 	POH_OUTSIDE_BRIMHAVEN(
 			35, new RSTile(2750, 3178, 0),
@@ -855,7 +855,7 @@ public enum Teleport {
 	POH_OUTSIDE_BRIMHAVEN_TAB(
 			35, new RSTile(2750, 3178, 0),
 			() -> POH.BRIMHAVEN.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
-			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+			() -> RSItemHelper.click("Teleport to house", "Outside")
 	),
 	POH_OUTSIDE_YANILLE(
 			35, new RSTile(2544, 3095, 0),
@@ -865,7 +865,7 @@ public enum Teleport {
 	POH_OUTSIDE_YANILLE_TAB(
 			35, new RSTile(2544, 3095, 0),
 			() -> POH.YANILLE.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
-			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+			() -> RSItemHelper.click("Teleport to house", "Outside")
 	),
 	POH_OUTSIDE_PRIFDDINAS(
 			35, new RSTile(3239, 6076, 0),
@@ -875,7 +875,7 @@ public enum Teleport {
 	POH_OUTSIDE_PRIFDDINAS_TAB(
 			35, new RSTile(3239, 6076, 0),
 			() -> POH.PRIFDDINAS.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
-			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
+			() -> RSItemHelper.click("Teleport to house", "Outside")
 	)
 
 	;
