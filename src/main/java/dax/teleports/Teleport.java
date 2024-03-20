@@ -21,6 +21,7 @@ import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.types.RSVarBit;
+import org.tribot.script.sdk.Magic;
 import org.tribot.script.sdk.Minigame;
 import org.tribot.script.sdk.Quest;
 
@@ -1080,15 +1081,7 @@ public enum Teleport {
 	}
 
 	private static boolean selectSpell(String spellName, String action){
-		if(!GameTab.TABS.MAGIC.open()){
-			return false;
-		}
-		List<RSInterface> spells = InterfaceHelper.getAllInterfaces(TeleportConstants.SPELLBOOK_INTERFACE_MASTER);
-		RSInterface target = spells.stream().filter(spell -> {
-			String name = spell.getComponentName();
-			return name != null && name.contains(spellName) && !spell.isHidden();
-		}).findFirst().orElse(null);
-		return target != null && target.click(action);
+		return Magic.selectSpell(spellName, action);
 	}
 
 	private static boolean hasBeenToZeah(){
@@ -1096,7 +1089,7 @@ public enum Teleport {
 	}
 
 	private static boolean canUseMinigameTeleport() {
-		
+
 		if (RSVarBit.get(14022).getValue() == 1)//can't minigame teleport when we are at PvP Arena
 			return false;
 		if (RSVarBit.get(541).getValue() == 1)

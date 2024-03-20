@@ -2,11 +2,11 @@ package dax.shared.helpers.magic;
 
 import org.tribot.api.Timing;
 import org.tribot.api2007.Game;
-import org.tribot.api2007.Magic;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
 import dax.shared.Pair;
 import org.tribot.api2007.types.RSVarBit;
+import org.tribot.script.sdk.Magic;
 
 
 public enum Spell implements Validatable {
@@ -48,7 +48,7 @@ public enum Spell implements Validatable {
         return canUse() && Magic.selectSpell(getSpellName());
     }
     public boolean cast(String action) {
-        return canUse() && org.tribot.script.sdk.Magic.selectSpell(spellName, action);
+        return canUse() && Magic.selectSpell(spellName, action);
     }
 
     @Override
