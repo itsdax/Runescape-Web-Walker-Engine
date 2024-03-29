@@ -44,6 +44,8 @@ public class NavigationSpecialCase implements Loggable {
      */
     public enum SpecialLocation {
 
+        AL_KHARID_GATE_E(3267, 3227, 0),
+        AL_KHARID_GATE_W(3267, 3277, 0),
 
         RELLEKA_UPPER_PORT (2621, 3688, 0),
         SMALL_PIRATES_COVE_AREA (2213, 3794, 0),
@@ -157,6 +159,7 @@ public class NavigationSpecialCase implements Loggable {
         FAIRY_RING_APE_ATOLL(2740, 2738, 0),
         FAIRY_RING_ARCEUUS_LIBRARY(1639, 3868, 0),
         FAIRY_RING_ARDOUGNE_ZOO(2635, 3266, 0),
+        FAIRY_RING_AVIUM_SAVANNAH(1651, 3011, 0),
         FAIRY_RING_CANIFIS(3447, 3470, 0),
         FAIRY_RING_CHASM_OF_FIRE(1455, 3658, 0),
         FAIRY_RING_COSMIC_ENTITYS_PLANE(2075, 4848, 0),
@@ -338,7 +341,10 @@ public class NavigationSpecialCase implements Loggable {
         ZEAH_MINECART_NORTHERN_TUNDRAS(1648, 3931, 0),
         ZEAH_MINECART_PORT_PISCARILIUS(1761, 3710, 0),
         ZEAH_MINECART_SHAYZIEN_EAST(1590, 3620, 0),
-        ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0)
+        ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0),
+
+        QUETZAL_AT_VARROCK(3280, 3412, 0),
+        QUETZAL_AT_VARLAMORE(1710, 3124, 0)
         ;
 
         int x, y, z;
@@ -831,6 +837,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.ARCEUUS_LIBRARY);
             case FAIRY_RING_ARDOUGNE_ZOO:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ARDOUGNE_ZOO);
+            case FAIRY_RING_AVIUM_SAVANNAH:
+                return FairyRing.takeFairyRing(FairyRing.Locations.AVIUM_SAVANNAH);
             case FAIRY_RING_CANIFIS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.CANIFIS);
             case FAIRY_RING_CHASM_OF_FIRE:
@@ -1282,6 +1290,11 @@ public class NavigationSpecialCase implements Loggable {
                 return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_EAST);
             case ZEAH_MINECART_SHAYZIEN_WEST:
                 return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_WEST);
+            case QUETZAL_AT_VARLAMORE:
+            case QUETZAL_AT_VARROCK:
+                NPCInteraction.talkTo(Filters.NPCs.nameEquals("Regulus Cento"), new String[]{"Travel"}, new String[]{})
+                        && WaitFor.condition(15000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
         }
 
         return false;

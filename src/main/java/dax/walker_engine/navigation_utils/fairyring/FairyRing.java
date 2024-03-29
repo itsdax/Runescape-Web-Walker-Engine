@@ -99,6 +99,7 @@ public class FairyRing {
 		APE_ATOLL(C, L, R),
 		ARCEUUS_LIBRARY(C, I, S),
 		ARDOUGNE_ZOO(B, I, S),
+		AVIUM_SAVANNAH(A, J, P),
 		CANIFIS(C, K, S),
 		CHASM_OF_FIRE(D, J, R),
 		COSMIC_ENTITYS_PLANE(C, K, P),
