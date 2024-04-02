@@ -62,6 +62,9 @@ public enum Spell implements Validatable {
         if (this == ARDOUGNE_TELEPORT && Game.getSetting(165) < 30){
             return false;
         }
+        if (this == KOUREND_TELEPORT && RSVarBit.get(6027).getValue() < 11){
+            return false;
+        }
         if(areTeleportsFiltered()){
             return false;
         }
