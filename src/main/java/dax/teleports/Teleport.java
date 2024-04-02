@@ -889,7 +889,17 @@ public enum Teleport {
 			() -> POH.PRIFDDINAS.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
 			() -> RSItemHelper.click("Teleport to house", "Outside")
 	),
+	CIVITAS_ILLA_FORTIS_TELEPORT(
+			35, new RSTile(1680, 3132, 0),
+			() -> RSVarBit.get(9649).getValue() > 48 && Spell.CIVITAS_ILLA_FORTIS.canUse(),
+			() -> Spell.CIVITAS_ILLA_FORTIS.cast("Cast")
 
+	),
+	CALCIFIED_MOTH(
+			35, new RSTile(1440, 9555, 1),
+			() -> RSVarBit.get(9819).getValue() > 5 && Inventory.getCount("Calcified moth") > 0,
+			() -> RSItemHelper.click("Calcified moth", "Crush")
+	),
 
 
 	;
