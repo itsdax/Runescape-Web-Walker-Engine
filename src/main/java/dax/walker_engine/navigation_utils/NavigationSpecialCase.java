@@ -1291,6 +1291,12 @@ public class NavigationSpecialCase implements Loggable {
             case ZEAH_MINECART_SHAYZIEN_WEST:
                 return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_WEST);
             case QUETZAL_AT_VARLAMORE:
+                RSNPC[] npc = NPCs.findNearest(Filters.NPCs.nameEquals("Regulus Cento").and(Filters.NPCs.actionsNotEquals("Travel")));
+                if(npc.length > 0){
+                    return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Regulus Cento"), new String[]{"Talk-to"}, new String[]{"Let's do it!"})
+                            && WaitFor.condition(15000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+                }
             case QUETZAL_AT_VARROCK:
                 return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Regulus Cento"), new String[]{"Travel"}, new String[]{})
                         && WaitFor.condition(15000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
