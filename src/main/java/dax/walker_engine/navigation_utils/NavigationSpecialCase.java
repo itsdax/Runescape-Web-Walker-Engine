@@ -344,7 +344,7 @@ public class NavigationSpecialCase implements Loggable {
         ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0),
 
         QUETZAL_AT_VARROCK(3280, 3412, 0),
-        QUETZAL_AT_VARLAMORE(1710, 3124, 0)
+        QUETZAL_AT_VARLAMORE(1710, 3140, 0)
         ;
 
         int x, y, z;
