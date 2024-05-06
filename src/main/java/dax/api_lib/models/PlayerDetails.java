@@ -64,6 +64,7 @@ public class PlayerDetails {
             9016,
             9819,
             10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
+            12063, //below ice mountain quest
             13719, //unlocked the 93 agility blood altar shortcut by mining the other side (78 mining req)
             13738, // temple of the eye
             13903, //Sleeping Giants quest
