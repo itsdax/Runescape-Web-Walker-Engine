@@ -62,6 +62,7 @@ public class PlayerDetails {
             7928, //kourend elite diary
             8122,
             9016,
+            9459, //fremennik exiles
             9632,
             9819,
             10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
