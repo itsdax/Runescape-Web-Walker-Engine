@@ -193,7 +193,7 @@ public enum Teleport {
 	RING_OF_DUELING_PVP_ARENA (
 		35, new RSTile(3313, 3233, 0),
 		() -> WearableItemTeleport.has(WearableItemTeleport.RING_OF_DUELING_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*PvP Arena.*")
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*Emir.*")
 	),
 
 	RING_OF_DUELING_CASTLE_WARS (
