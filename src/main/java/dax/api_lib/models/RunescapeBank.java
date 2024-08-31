@@ -17,7 +17,7 @@ public enum RunescapeBank {
     BLAST_MINE(1502, 3856, 0),
     BURGH_DE_ROTT(3495, 3212, 0),
     CAMELOT(2725, 3493, 0),
-    CAM_TORUM(1450, 9557, 1),
+    CAM_TORUM(1450, 9568, 1),
     CANIFIS(3512, 3480, 0),
     CASTLE_WARS(2443, 3083, 0),
     CATHERBY(2808, 3441, 0),
