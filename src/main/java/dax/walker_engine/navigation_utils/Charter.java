@@ -62,8 +62,13 @@ public class Charter implements Loggable {
                 && !rsInterface.isHidden())
 
                 .collect(Collectors.toList())
-                .forEach(rsInterface -> locations.put(
-		                LocationProperty.stringToLocation(rsInterface.getActions()[0]), new Location(rsInterface)));
+                .forEach(rsInterface -> {
+                    String[] actions = rsInterface.getActions();
+                    if(actions == null || actions.length == 0)
+                        return;
+                    locations.put(
+                            LocationProperty.stringToLocation(actions[0]), new Location(rsInterface))
+                });
         return locations;
     }
 
