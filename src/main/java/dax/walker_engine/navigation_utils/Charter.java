@@ -67,7 +67,7 @@ public class Charter implements Loggable {
                     if(actions == null || actions.length == 0)
                         return;
                     locations.put(
-                            LocationProperty.stringToLocation(actions[0]), new Location(rsInterface))
+                            LocationProperty.stringToLocation(actions[0]), new Location(rsInterface));
                 });
         return locations;
     }
