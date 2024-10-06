@@ -348,7 +348,20 @@ public class NavigationSpecialCase implements Loggable {
         LUNAR_ISLE_RETURN_ORB(2101, 3918, 0),
         FREMENNIK_RETURN_ORB_DESTINATION(2631, 3678, 0),
         FREMENNIK_DOCK_TO_ISLAND_OF_STONE(2621, 3689, 0),
-        ISLAND_OF_STONE_LANDING(2472, 3994, 0)
+        ISLAND_OF_STONE_LANDING(2472, 3994, 0),
+
+        QUETZAL_ALDARIN(1390, 2901, 0),
+        QUETZAL_CAM_TORUM_ENTRANCE(1446, 3108, 0),
+        QUETZAL_CIVITAS_ILLA_FORTIS(1696, 3140, 0),
+        QUETZAL_COLOSSAL_WYRM_REMAINS(1670, 2934, 0),
+        //QUETZAL_FORTIS_COLOSSEUM(),
+        QUETZAL_OUTER_FORTIS(1700, 3035, 0),
+        QUETZAL_QUETZACALLI_GORGE(1510, 3222, 0),
+        QUETZAL_HUNTER_GUILD(1585, 3053, 0),
+        QUETZAL_SALVAGER_OUTLOOK(1614, 3300, 0),
+        QUETZAL_SUNSET_COAST(1548, 2995, 0),
+        QUETZAL_THE_TEOMAT(1437, 3171, 0),
+
         ;
 
         int x, y, z;
@@ -1329,6 +1342,26 @@ public class NavigationSpecialCase implements Loggable {
             case ISLAND_OF_STONE_LANDING:
                 return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Haskell"), new String[]{"Island of Stone", "Rellekka"}, new String[]{})
                         && WaitFor.condition(15000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case QUETZAL_ALDARIN:
+                return Quetzal.to(Quetzal.Location.ALDARIN);
+            case QUETZAL_CAM_TORUM_ENTRANCE:
+                return Quetzal.to(Quetzal.Location.CAM_TORUM_ENTRANCE);
+            case QUETZAL_CIVITAS_ILLA_FORTIS:
+                return Quetzal.to(Quetzal.Location.CIVITAS_ILLA_FORTIS);
+            case QUETZAL_COLOSSAL_WYRM_REMAINS:
+                return Quetzal.to(Quetzal.Location.COLOSSAL_WYRM_REMAINS);
+            case QUETZAL_OUTER_FORTIS:
+                return Quetzal.to(Quetzal.Location.OUTER_FORTIS);
+            case QUETZAL_QUETZACALLI_GORGE:
+                return Quetzal.to(Quetzal.Location.QUETZACALLI_GORGE);
+            case QUETZAL_HUNTER_GUILD:
+                return Quetzal.to(Quetzal.Location.HUNTER_GUILD);
+            case QUETZAL_SALVAGER_OUTLOOK:
+                return Quetzal.to(Quetzal.Location.SALVAGER_OUTLOOK);
+            case QUETZAL_SUNSET_COAST:
+                return Quetzal.to(Quetzal.Location.SUNSET_COAST);
+            case QUETZAL_THE_TEOMAT:
+                return Quetzal.to(Quetzal.Location.THE_TEOMAT);
 
         }
 
