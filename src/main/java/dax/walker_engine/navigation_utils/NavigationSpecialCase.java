@@ -362,6 +362,8 @@ public class NavigationSpecialCase implements Loggable {
         QUETZAL_SUNSET_COAST(1548, 2995, 0),
         QUETZAL_THE_TEOMAT(1437, 3171, 0),
 
+        ALDARIN_SHIP(1442, 2976, 0),
+        VARLAMORE_SHIP(1494, 2985, 0)
         ;
 
         int x, y, z;
@@ -1363,6 +1365,10 @@ public class NavigationSpecialCase implements Loggable {
             case QUETZAL_THE_TEOMAT:
                 return Quetzal.to(Quetzal.Location.THE_TEOMAT);
 
+            case VARLAMORE_SHIP:
+            case ALDARIN_SHIP:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Antonia"), "Travel")
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
         }
 
         return false;
