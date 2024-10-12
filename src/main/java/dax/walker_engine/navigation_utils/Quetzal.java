@@ -11,7 +11,7 @@ import org.tribot.api2007.types.RSTile;
 
 public class Quetzal {
 
-	public static final int QUETZAL_WIDGET_ROOT = 8741;
+	public static final int QUETZAL_WIDGET_ROOT = 874;
 
 	public enum Location {
 		ALDARIN("Aldarin", 1390, 2901, 0),
@@ -58,7 +58,7 @@ public class Quetzal {
 	public static boolean to(Location location){
 
 		if (!Interfaces.isInterfaceSubstantiated(QUETZAL_WIDGET_ROOT)
-					&& !InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Renu")), "Travel", () -> Interfaces.isInterfaceSubstantiated(QUETZAL_WIDGET_ROOT) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+					&& !InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Renu")), "Travel", () -> Interfaces.isInterfaceSubstantiated(QUETZAL_WIDGET_ROOT) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
 			return false;
 		}
 
