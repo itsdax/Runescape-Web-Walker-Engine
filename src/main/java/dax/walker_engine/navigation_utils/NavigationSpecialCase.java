@@ -1385,7 +1385,7 @@ public class NavigationSpecialCase implements Loggable {
     }
     public static boolean handleZeahBoats(String locationOption){
         String travelOption = "Travel";
-        RSNPC[] npcs = NPCs.find("Veos","Captain Magoro");
+        RSNPC[] npcs = NPCs.find("Veos","Captain Magoro", "Cabin Boy Herbert");
         if(npcs.length > 0){
             String[] actions = npcs[0].getActions();
             if(actions != null){
@@ -1403,7 +1403,7 @@ public class NavigationSpecialCase implements Loggable {
                 }
             }
         }
-        if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Veos", "Captain Magoro"),new String[]{travelOption})){
+        if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Veos", "Captain Magoro",  "Cabin Boy Herbert"),new String[]{travelOption})){
             RSTile current = Player.getPosition();
             if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || Player.getPosition().distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
                 return false;
