@@ -366,7 +366,12 @@ public class NavigationSpecialCase implements Loggable {
         VARLAMORE_SHIP(1494, 2985, 0),
 
         MIXOLOGY_ENTRANCE(1389, 2918, 0),
-        MIXOLOGY_EXIT(1388, 9313, 0)
+        MIXOLOGY_EXIT(1388, 9313, 0),
+
+        ANCIENT_CAVERN_WHIRLPOOL(2511, 3511, 0),
+        ANCIENT_CAVERN_ENTRANCE(1763, 5366, 1),
+        ANCIENT_CAVERN_AGED_LOG(1761, 5361, 0),
+        ANCIENT_CAVERN_EXIT(2531, 3446, 0)
         ;
 
         int x, y, z;
@@ -1379,6 +1384,14 @@ public class NavigationSpecialCase implements Loggable {
             case MIXOLOGY_EXIT:
                 return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
                         ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case ANCIENT_CAVERN_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Whirlpool").and(Filters.Objects.actionsEquals("Dive in")), "Dive in",
+                        ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
+            case ANCIENT_CAVERN_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Whirlpool").and(Filters.Objects.actionsEquals("Dive in")), "Dive in",
+                        ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
+
         }
 
         return false;
@@ -1475,6 +1488,18 @@ public class NavigationSpecialCase implements Loggable {
             return false;
         }
         return InteractionHelper.click(objects[0], action, condition);
+    }
+
+    public static boolean clickObject(Predicate<RSObject> filter, String action, WaitFor.Condition condition, int timeout) {
+        return clickObject(filter, new String[]{action}, condition, timeout);
+    }
+
+    public static boolean clickObject(Predicate<RSObject> filter, String[] action, WaitFor.Condition condition, int timeout){
+        RSObject[] objects = Objects.findNearest(15, filter);
+        if (objects.length == 0){
+            return false;
+        }
+        return InteractionHelper.click(objects[0], action, condition, timeout);
     }
 
 
