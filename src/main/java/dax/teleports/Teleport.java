@@ -375,13 +375,21 @@ public enum Teleport {
 		() -> WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Lava.*|Okay, teleport to level.*)")
 	),
-
 	DIGSITE_PENDANT (
 		35, new RSTile(3346,3445,0),
 		() -> WearableItemTeleport.has(WearableItemTeleport.DIGSITE_PENDANT_FILTER),
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.DIGSITE_PENDANT_FILTER, "Digsite")
 	),
-
+	DIGSITE_PENDANT_FOSSIL_ISLAND (
+			35, new RSTile(3764,3867,1),
+			() -> WearableItemTeleport.has(WearableItemTeleport.DIGSITE_PENDANT_FILTER),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.DIGSITE_PENDANT_FILTER, "Fossil Island")
+	),
+	DIGSITE_PENDANT_LITHKREN (
+			35, new RSTile(3549,10458,0),
+			() -> WearableItemTeleport.has(WearableItemTeleport.DIGSITE_PENDANT_FILTER),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.DIGSITE_PENDANT_FILTER, "Lithkren*")
+	),
 	ECTOPHIAL (
 		0, new RSTile(3660, 3524, 0),
 		() -> Inventory.find(Filters.Items.nameContains("Ectophial")).length > 0,

@@ -49,6 +49,8 @@ public class DaxWalker implements Loggable {
         for (Teleport teleport : Teleport.values()) {
             map.put(teleport.getLocation(), teleport);
         }
+        Arrays.stream(Teleport.values()).forEach(t -> map.put(t.getLocation(), t));
+        getBlacklist().addAll(List.of(Teleport.DIGSITE_PENDANT_FOSSIL_ISLAND, Teleport.DIGSITE_PENDANT_LITHKREN));
     }
 
     public static void enableWalkerPreference(WalkerPreferences... preferences) {
