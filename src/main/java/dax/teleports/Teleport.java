@@ -798,7 +798,7 @@ public enum Teleport {
 	),
 
 	EDGEVILLE_HOME_TELEPORT(
-			150, new RSTile(3087, 3496, 0),
+			150, new RSTile(3087, 3495, 0),
 			Spell.EDGEVILLE_HOME_TELEPORT::canUse,
 			() -> {
 				final RSTile myPos = Player.getPosition();
