@@ -38,6 +38,8 @@ public class PlayerDetails {
             2310,
             2328,
             2448,
+            3313,
+            3314,
             3534,
             3618, //dream mentor
             3741,
