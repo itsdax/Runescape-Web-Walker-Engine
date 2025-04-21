@@ -1409,9 +1409,9 @@ public class NavigationSpecialCase implements Loggable {
                         ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
 
             case LUMBRIDGE_GROUND_FLOOR:
-                action = "Top-floor";
+                action = "Bottom-floor";
             case LUMBRIDGE_TOP_FLOOR:
-                if(action == null) action = "Bottom-floor";
+                if(action == null) action = "Top-floor";
                 return clickObject(Filters.Objects.nameEquals("Stairs"), action,
                         ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
