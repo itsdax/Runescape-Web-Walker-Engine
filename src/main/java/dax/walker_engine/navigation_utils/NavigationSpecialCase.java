@@ -371,7 +371,12 @@ public class NavigationSpecialCase implements Loggable {
         ANCIENT_CAVERN_WHIRLPOOL(2511, 3511, 0),
         ANCIENT_CAVERN_ENTRANCE(1763, 5366, 1),
         ANCIENT_CAVERN_AGED_LOG(1761, 5361, 0),
-        ANCIENT_CAVERN_EXIT(2531, 3446, 0)
+        ANCIENT_CAVERN_EXIT(2531, 3446, 0),
+
+        NEITZ_BRIDGE_W(2314, 3839, 0),
+        NEITZ_BRIDGE_W2(2314, 3848, 0),
+        NEITZ_BRIDGE_E(2355, 3839, 0),
+        NEITZ_BRIDGE_E2(2355, 3848, 0),
         ;
 
         int x, y, z;
@@ -1392,6 +1397,12 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Whirlpool").and(Filters.Objects.actionsEquals("Dive in")), "Dive in",
                         ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
 
+            case NEITZ_BRIDGE_E:
+            case NEITZ_BRIDGE_E2:
+            case NEITZ_BRIDGE_W:
+            case NEITZ_BRIDGE_W2:
+                return clickObject(Filters.Objects.nameEquals("Robe bridge"), new String[]{"Walk-across", "Cross-bridge"},
+                        ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
         }
 
         return false;
