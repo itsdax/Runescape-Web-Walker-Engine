@@ -377,6 +377,9 @@ public class NavigationSpecialCase implements Loggable {
         NEITZ_BRIDGE_W2(2314, 3848, 0),
         NEITZ_BRIDGE_E(2355, 3839, 0),
         NEITZ_BRIDGE_E2(2355, 3848, 0),
+
+        LUMBRIDGE_GROUND_FLOOR(3206, 3208, 0),
+        LUMBRIDGE_TOP_FLOOR(3205, 3209, 2),
         ;
 
         int x, y, z;
@@ -405,6 +408,7 @@ public class NavigationSpecialCase implements Loggable {
      * @return
      */
     public static boolean handle(SpecialLocation specialLocation){
+        String action = null;
         switch (specialLocation){
 
             case AL_KHARID_GATE_E:
@@ -1148,7 +1152,7 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
                         () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_MIDDLE:
-                String action = Player.getPosition().getY() > 4000 ? "Climb-up":"Climb-down";
+                action = Player.getPosition().getY() > 4000 ? "Climb-up":"Climb-down";
                 return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals(action)), action,
                         () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_TOP:
@@ -1403,6 +1407,14 @@ public class NavigationSpecialCase implements Loggable {
             case NEITZ_BRIDGE_W2:
                 return clickObject(Filters.Objects.nameEquals("Robe bridge"), new String[]{"Walk-across", "Cross-bridge"},
                         ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
+
+            case LUMBRIDGE_GROUND_FLOOR:
+                action = "Top-floor";
+            case LUMBRIDGE_TOP_FLOOR:
+                if(action == null) action = "Bottom-floor";
+                return clickObject(Filters.Objects.nameEquals("Stairs"), action,
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
         }
 
         return false;
