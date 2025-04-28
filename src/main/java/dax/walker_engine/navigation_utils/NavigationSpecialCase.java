@@ -1405,7 +1405,7 @@ public class NavigationSpecialCase implements Loggable {
             case NEITZ_BRIDGE_E2:
             case NEITZ_BRIDGE_W:
             case NEITZ_BRIDGE_W2:
-                return clickObject(Filters.Objects.nameEquals("Robe bridge"), new String[]{"Walk-across", "Cross-bridge"},
+                return clickObject(Filters.Objects.nameEquals("Rope bridge"), new String[]{"Walk-across", "Cross-bridge"},
                         ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
 
             case LUMBRIDGE_GROUND_FLOOR:
