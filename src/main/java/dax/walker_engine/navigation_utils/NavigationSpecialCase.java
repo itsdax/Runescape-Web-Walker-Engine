@@ -1412,7 +1412,7 @@ public class NavigationSpecialCase implements Loggable {
                 action = "Bottom-floor";
             case LUMBRIDGE_TOP_FLOOR:
                 if(action == null) action = "Top-floor";
-                return clickObject(Filters.Objects.nameEquals("Stairs"), action,
+                return clickObject(Filters.Objects.nameEquals("Staircase"), action,
                         ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
         }
