@@ -354,6 +354,7 @@ public class NavigationSpecialCase implements Loggable {
         ISLAND_OF_STONE_LANDING(2472, 3994, 0),
 
         QUETZAL_ALDARIN(1390, 2901, 0),
+        QUETZAL_AUBURNVALE(1411, 3361, 0),
         QUETZAL_CAM_TORUM_ENTRANCE(1446, 3108, 0),
         QUETZAL_CIVITAS_ILLA_FORTIS(1696, 3140, 0),
         QUETZAL_COLOSSAL_WYRM_REMAINS(1670, 2934, 0),
@@ -1372,6 +1373,8 @@ public class NavigationSpecialCase implements Loggable {
                         && WaitFor.condition(15000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
             case QUETZAL_ALDARIN:
                 return Quetzal.to(Quetzal.Location.ALDARIN);
+            case QUETZAL_AUBURNVALE:
+                return Quetzal.to(Quetzal.Location.AUBURNVALE);
             case QUETZAL_CAM_TORUM_ENTRANCE:
                 return Quetzal.to(Quetzal.Location.CAM_TORUM_ENTRANCE);
             case QUETZAL_CIVITAS_ILLA_FORTIS:

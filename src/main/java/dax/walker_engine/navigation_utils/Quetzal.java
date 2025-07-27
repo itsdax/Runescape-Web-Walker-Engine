@@ -15,6 +15,7 @@ public class Quetzal {
 
 	public enum Location {
 		ALDARIN("Aldarin", 1390, 2901, 0),
+		AUBURNVALE("Auburnvale", 1411, 3361, 0),
 		CAM_TORUM_ENTRANCE("Cam Torum Entrance", 1446, 3108, 0),
 		CIVITAS_ILLA_FORTIS("Civitas illa Fortis", 1696, 3140, 0),
 		COLOSSAL_WYRM_REMAINS("Colossal Wyrm Remains", 1670, 2934, 0),
