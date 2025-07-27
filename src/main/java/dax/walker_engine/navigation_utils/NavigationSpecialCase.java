@@ -156,9 +156,11 @@ public class NavigationSpecialCase implements Loggable {
 
         FAIRY_RING_ABYSSAL_AREA(3059, 4875, 0),
         FAIRY_RING_ABYSSAL_NEXUS(3037, 4763, 0),
+        FAIRY_RING_ALDARIN(1359, 2942, 0),
         FAIRY_RING_APE_ATOLL(2740, 2738, 0),
         FAIRY_RING_ARCEUUS_LIBRARY(1639, 3868, 0),
         FAIRY_RING_ARDOUGNE_ZOO(2635, 3266, 0),
+        FAIRY_RING_AUBURNVALE(1429, 3324, 0),
         FAIRY_RING_AVIUM_SAVANNAH(1651, 3011, 0),
         FAIRY_RING_CANIFIS(3447, 3470, 0),
         FAIRY_RING_CHASM_OF_FIRE(1455, 3658, 0),
@@ -172,6 +174,7 @@ public class NavigationSpecialCase implements Loggable {
         FAIRY_RING_HAUNTED_WOODS(3597, 3495, 0),
         FAIRY_RING_HAZELMERE(2682, 3081, 0),
         FAIRY_RING_ISLAND_SOUTHEAST_ARDOUGNE(2700, 3247, 0),
+        FAIRY_RING_ISLE_OF_SOULS(2266, 2976, 0),
         FAIRY_RING_KALPHITE_HIVE(3251, 3095, 0),
         FAIRY_RING_KARAMJA_KARAMBWAN_SPOT(2900, 3111, 0),
         FAIRY_RING_LEGENDS_GUILD(2740, 3351, 0),
@@ -879,12 +882,16 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.ABYSSAL_AREA);
             case FAIRY_RING_ABYSSAL_NEXUS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ABYSSAL_NEXUS);
+            case FAIRY_RING_ALDARIN:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ALDARIN);
             case FAIRY_RING_APE_ATOLL:
                 return FairyRing.takeFairyRing(FairyRing.Locations.APE_ATOLL);
             case FAIRY_RING_ARCEUUS_LIBRARY:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ARCEUUS_LIBRARY);
             case FAIRY_RING_ARDOUGNE_ZOO:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ARDOUGNE_ZOO);
+            case FAIRY_RING_AUBURNVALE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.AUBURNVALE);
             case FAIRY_RING_AVIUM_SAVANNAH:
                 return FairyRing.takeFairyRing(FairyRing.Locations.AVIUM_SAVANNAH);
             case FAIRY_RING_CANIFIS:
@@ -911,6 +918,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.HAZELMERE);
             case FAIRY_RING_ISLAND_SOUTHEAST_ARDOUGNE:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ISLAND_SOUTHEAST_ARDOUGNE);
+            case FAIRY_RING_ISLE_OF_SOULS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ISLE_OF_SOULS);
             case FAIRY_RING_KALPHITE_HIVE:
                 return FairyRing.takeFairyRing(FairyRing.Locations.KALPHITE_HIVE);
             case FAIRY_RING_KARAMJA_KARAMBWAN_SPOT:
