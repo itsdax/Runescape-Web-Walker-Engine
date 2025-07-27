@@ -388,6 +388,9 @@ public class NavigationSpecialCase implements Loggable {
         QUETZ_MOUNTAIN_GUIDE(1486, 3232, 0),
         AUBURNVALE_MOUNTAIN_GUIDE(1360, 3310, 0),
 
+        ACHILKA_GLOOMTHORN_TRAIL(1400, 3246, 0),
+        ACHILKA_TAL_TEKLAN(1258, 3126, 0),
+        ACHILKA_KASTORI(1390, 3074, 0)
         ;
 
         int x, y, z;
@@ -1437,6 +1440,15 @@ public class NavigationSpecialCase implements Loggable {
                 return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mountain Guide"), new String[]{"Follow"}, new String[]{})
                         && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
 
+            case ACHILKA_KASTORI:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Kastori"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case ACHILKA_GLOOMTHORN_TRAIL:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Gloomthorn Trail"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case ACHILKA_TAL_TEKLAN:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Tal Teklan"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
         }
 
         return false;
