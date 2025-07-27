@@ -384,6 +384,10 @@ public class NavigationSpecialCase implements Loggable {
 
         LUMBRIDGE_GROUND_FLOOR(3206, 3208, 0),
         LUMBRIDGE_TOP_FLOOR(3205, 3209, 2),
+
+        QUETZ_MOUNTAIN_GUIDE(1486, 3232, 0),
+        AUBURNVALE_MOUNTAIN_GUIDE(1360, 3310, 0),
+
         ;
 
         int x, y, z;
@@ -1427,6 +1431,12 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Staircase"), action,
                         ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
+
+            case QUETZ_MOUNTAIN_GUIDE:
+            case AUBURNVALE_MOUNTAIN_GUIDE:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mountain Guide"), new String[]{"Follow"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
         }
 
         return false;
