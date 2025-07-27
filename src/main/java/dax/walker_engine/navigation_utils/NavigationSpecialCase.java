@@ -390,7 +390,11 @@ public class NavigationSpecialCase implements Loggable {
 
         ACHILKA_GLOOMTHORN_TRAIL(1400, 3246, 0),
         ACHILKA_TAL_TEKLAN(1258, 3126, 0),
-        ACHILKA_KASTORI(1390, 3074, 0)
+        ACHILKA_KASTORI(1390, 3074, 0),
+
+
+        PATERDOMUS_SHORTCUT_E( 3427, 3477, 0),
+        PATERDOMUS_SHORTCUT_W(3424, 3476, 0)
         ;
 
         int x, y, z;
@@ -1449,6 +1453,12 @@ public class NavigationSpecialCase implements Loggable {
             case ACHILKA_TAL_TEKLAN:
                 return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Tal Teklan"}, new String[]{})
                         && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+            case PATERDOMUS_SHORTCUT_E:
+            case PATERDOMUS_SHORTCUT_W:
+                return clickObject(Filters.Objects.nameEquals("Rocks"), "Climb",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
         }
 
         return false;
