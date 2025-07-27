@@ -526,6 +526,8 @@ public class PathObjectHandler implements Loggable {
         });
         if (strongholdDoor){
             General.sleep(800, 1200);
+        } else {
+            General.sleep(General.randomSD(200, 2000, 350, 100));
         }
         return result == WaitFor.Return.SUCCESS;
     }
