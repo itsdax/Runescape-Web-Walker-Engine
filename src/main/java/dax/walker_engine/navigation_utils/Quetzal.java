@@ -25,6 +25,7 @@ public class Quetzal {
 		HUNTER_GUILD("Hunter Guild", 1585, 3053, 0),
 		SALVAGER_OUTLOOK("Salvager Outlook", 1614, 3300, 0),
 		SUNSET_COAST("Sunset Coast", 1548, 2995, 0),
+		TAL_TEKLAN("Tal Teklan", 1226, 3091, 0),
 		THE_TEOMAT("The Teomat", 1437, 3171, 0),
 		;
 

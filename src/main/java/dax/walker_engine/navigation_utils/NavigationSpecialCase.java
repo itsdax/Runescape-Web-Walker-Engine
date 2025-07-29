@@ -364,6 +364,7 @@ public class NavigationSpecialCase implements Loggable {
         QUETZAL_HUNTER_GUILD(1585, 3053, 0),
         QUETZAL_SALVAGER_OUTLOOK(1614, 3300, 0),
         QUETZAL_SUNSET_COAST(1548, 2995, 0),
+        QUETZAL_TAL_TEKLAN(1226, 3091, 0),
         QUETZAL_THE_TEOMAT(1437, 3171, 0),
 
         ALDARIN_SHIP(1442, 2977, 0),
@@ -1402,6 +1403,8 @@ public class NavigationSpecialCase implements Loggable {
                 return Quetzal.to(Quetzal.Location.SALVAGER_OUTLOOK);
             case QUETZAL_SUNSET_COAST:
                 return Quetzal.to(Quetzal.Location.SUNSET_COAST);
+            case QUETZAL_TAL_TEKLAN:
+                return Quetzal.to(Quetzal.Location.TAL_TEKLAN);
             case QUETZAL_THE_TEOMAT:
                 return Quetzal.to(Quetzal.Location.THE_TEOMAT);
 
