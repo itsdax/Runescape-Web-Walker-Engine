@@ -1,6 +1,8 @@
 package dax.walker_engine.interaction_handling;
 
+import dax.shared.helpers.RSObjectHelper;
 import dax.walker_engine.Loggable;
+import dax.walker_engine.WaitFor;
 import dax.walker_engine.WalkerEngine;
 import dax.walker_engine.bfs.BFS;
 import dax.walker_engine.local_pathfinding.PathAnalyzer;
@@ -10,12 +12,10 @@ import org.tribot.api.General;
 import org.tribot.api.ScriptCache;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.*;
 import org.tribot.api2007.Objects;
+import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.*;
-import dax.shared.helpers.RSObjectHelper;
-import dax.walker_engine.WaitFor;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -208,15 +208,8 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getAssumed().equals(new RSTile(3075, 3653, 0)) && destinationDetails.getDestination().getRSTile().equals(new RSTile(3197, 10056, 0));
             }
-        }),
-        PLOUGH("Plough", "Push", null, new SpecialCondition() {
-            RSArea PLOUGH_NORTH = new RSArea(new RSTile(1762, 3557, 0), new RSTile(1780, 3543, 0)),
-            PLOUGH_SOUTH = new RSArea(new RSTile(1763, 3539, 0), new RSTile(1777, 3521, 0));
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return PLOUGH_NORTH.contains(destinationDetails.getAssumed()) || PLOUGH_SOUTH.contains(destinationDetails.getAssumed());
-            }
-        });
+        })
+        ;
 
         private String name, action;
         private RSTile location;
@@ -446,33 +439,6 @@ public class PathObjectHandler implements Loggable {
                         }
                     }
                     break;
-
-                case PLOUGH:
-                    if(Player.getPosition().getY() > 3540){
-                        if(Walking.walkTo(
-                                Arrays.stream(
-                                        new RSTile[]{
-                                                new RSTile(1781, 3549, 0),
-                                                new RSTile(1781, 3551, 0),
-                                                new RSTile(1761, 3551, 0),
-                                                new RSTile(1761, 3549, 0)
-                                        }
-                        ).min(Comparator.comparingInt(t-> Player.getPosition().distanceTo(t))).orElse(new RSTile(1781, 3550, 0)))){
-                            successfulClick = true;
-                        }
-                    } else {
-                        if(Walking.walkTo(
-                                Arrays.stream(
-                                        new RSTile[]{
-                                                new RSTile(1769, 3540, 0),
-                                                new RSTile(1772, 3540, 0),
-                                                new RSTile(1769, 3521, 0),
-                                                new RSTile(1771, 3521, 0)
-                                        }
-                        ).min(Comparator.comparingInt(t-> Player.getPosition().distanceTo(t))).orElse(new RSTile(1770, 3540, 0)))){
-                            successfulClick = true;
-                        }
-                    }
             }
         }
 
@@ -542,17 +508,17 @@ public class PathObjectHandler implements Loggable {
             List<String> actions2 = Arrays.asList(o2.getDefinition().getActions());
 
             if (assumedZ > destinationZ){
-                if (actions1.contains("Climb-up")){
+                if (actions1.contains("Climb-up") || actions1.contains("Climb")){
                     return -1;
                 }
-                if (actions2.contains("Climb-up")){
+                if (actions2.contains("Climb-up") || actions2.contains("Climb")){
                     return 1;
                 }
             } else if (assumedZ < destinationZ){
-                if (actions1.contains("Climb-down")){
+                if (actions1.contains("Climb-down") || actions1.contains("Climb")){
                     return -1;
                 }
-                if (actions2.contains("Climb-down")){
+                if (actions2.contains("Climb-down") || actions2.contains("Climb")){
                     return 1;
                 }
             } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getRSTile()) > 20){
