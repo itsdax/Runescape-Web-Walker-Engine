@@ -1521,7 +1521,7 @@ public class NavigationSpecialCase implements Loggable {
     }
 
     public static boolean handleKaramjaShip(){
-        String[] options = {"Pay-fare", "Pay-Fare"};
+        String[] options = {"Talk-to", "Talk To"};
         String[] chat = {"Yes please.", "Can I journey on this ship?", "Search away, I have nothing to hide.", "Ok."};
         boolean pirateTreasureComplete = Game.getSetting(71) >= 4;
         if(pirateTreasureComplete){
