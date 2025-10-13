@@ -58,13 +58,17 @@ public class Charter implements Loggable {
         InterfaceHelper.getAllInterfaces(CHARTER_INTERFACE_MASTER).stream().filter(
 
                 rsInterface -> rsInterface != null
-                && rsInterface.getFontID() == 495
-                && !rsInterface.isHidden()
-                && rsInterface.isTextShadowed())
+                && rsInterface.getModelID() == 17360
+                && !rsInterface.isHidden())
 
                 .collect(Collectors.toList())
-                .forEach(rsInterface -> locations.put(
-		                LocationProperty.stringToLocation(rsInterface.getText()), new Location(rsInterface)));
+                .forEach(rsInterface -> {
+                    String[] actions = rsInterface.getActions();
+                    if(actions == null || actions.length == 0)
+                        return;
+                    locations.put(
+                            LocationProperty.stringToLocation(actions[0]), new Location(rsInterface));
+                });
         return locations;
     }
 
@@ -74,18 +78,21 @@ public class Charter implements Loggable {
     }
 
     public enum LocationProperty {
+        ALDARIN("Aldarin", new RSTile(1455, 2968, 0)),
         BRIMHAVEN ("Brimhaven", new RSTile(2760, 3237, 0)),
         CATHERBY ("Catherby", new RSTile(2796, 3414, 0)),
         CORSAIR_COVE ("Corsair Cove", new RSTile(2587, 2851, 0)),
+        CIVITAS_ILLA_FORTIS("Civitas illa Fortis", new RSTile(1746, 3136, 0)),
         MUSA_POINT("Musa Point", new RSTile(2954, 3158, 0)),
         MOS_LE_HARMLESS ("Mos Le'Harmless", new RSTile(3671, 2931, 0)),
         PORT_KHAZARD ("Port Khazard", new RSTile(2674, 3144, 0)),
         PORT_PHASMATYS ("Port Phasmatys", new RSTile(3702, 3503, 0)),
         PORT_SARIM ("Port Sarim", new RSTile(3038, 3192, 0)),
         PORT_TYRAS ("Port Tyras", new RSTile(2142, 3122, 0)),
+        PRIFDDINAS ("Prifddinas", new RSTile(2159, 3329, 0)),
         SHIPYARD ("Shipyard", new RSTile(3001, 3032, 0)),
-        PRIFDDINAS ("Prifddinas", new RSTile(2159, 3329, 0));
-
+        SUNSET_COAST("Sunset Coast", new RSTile(1514, 2971, 0)),
+        ;
 
         private String name;
         private RSArea area;

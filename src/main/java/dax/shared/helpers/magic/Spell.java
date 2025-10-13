@@ -21,7 +21,8 @@ public enum Spell implements Validatable {
     CAMELOT_TELEPORT    (SpellBook.Type.STANDARD, 45, "Camelot Teleport",    new Pair<>(1, RuneElement.LAW), new Pair<>(5, RuneElement.AIR)),
     ARDOUGNE_TELEPORT   (SpellBook.Type.STANDARD, 51, "Ardougne Teleport",   new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.WATER)),
     KOUREND_TELEPORT	(SpellBook.Type.STANDARD, 69, "Kourend Castle Teleport",new Pair<>(2, RuneElement.LAW),new Pair<>(1, RuneElement.WATER), new Pair<>(1, RuneElement.FIRE)),
-    TELEPORT_TO_HOUSE   (SpellBook.Type.STANDARD, 40, "Teleport to House",new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH))
+    TELEPORT_TO_HOUSE   (SpellBook.Type.STANDARD, 40, "Teleport to House",new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH)),
+    CIVITAS_ILLA_FORTIS (SpellBook.Type.STANDARD, 54, "Civitas illa Fortis Teleport", new Pair<>(2, RuneElement.LAW), new Pair<>(1, RuneElement.EARTH), new Pair<>(1, RuneElement.FIRE))
     ;
 
     private SpellBook.Type spellBookType;
@@ -60,6 +61,12 @@ public enum Spell implements Validatable {
             return false;
         }
         if (this == ARDOUGNE_TELEPORT && Game.getSetting(165) < 30){
+            return false;
+        }
+        if (this == KOUREND_TELEPORT && RSVarBit.get(6027).getValue() < 11){
+            return false;
+        }
+        if (this == CIVITAS_ILLA_FORTIS && RSVarBit.get(9649).getValue() <= 48){
             return false;
         }
         if(areTeleportsFiltered()){

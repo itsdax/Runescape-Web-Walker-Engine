@@ -1,7 +1,6 @@
 package dax.teleports;
 
 import dax.api_lib.models.Requirement;
-import dax.shared.helpers.InterfaceHelper;
 import dax.shared.helpers.RSItemHelper;
 import dax.shared.helpers.magic.Spell;
 import dax.shared.helpers.questing.QuestHelper;
@@ -111,6 +110,18 @@ public enum Teleport {
 		() -> RSItemHelper.click("Ardougne t.*", "Break")
 	),
 
+	KOUREND_CASTLE_TELEPORT(
+			35, new RSTile(2661, 3300, 0),
+			Spell.KOUREND_TELEPORT::canUse,
+			() -> selectSpell("Kourend Castle Teleport","Cast")
+	),
+
+	KOUREND_CASTLE_TELEPORT_TAB(
+			35, new RSTile(2661, 3300, 0),
+			() -> RSVarBit.get(6027).getValue() >= 11 && Inventory.getCount("Kourend castle teleport") > 0,
+			() -> RSItemHelper.click("Kourend castle.*", "Break")
+	),
+
 	NARDAH_TELEPORT(
 		35, TeleportScrolls.NARDAH
 	),
@@ -182,7 +193,7 @@ public enum Teleport {
 	RING_OF_DUELING_PVP_ARENA (
 		35, new RSTile(3313, 3233, 0),
 		() -> WearableItemTeleport.has(WearableItemTeleport.RING_OF_DUELING_FILTER),
-		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*PvP Arena.*")
+		() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*Emir.*")
 	),
 
 	RING_OF_DUELING_CASTLE_WARS (
@@ -364,13 +375,21 @@ public enum Teleport {
 		() -> WearableItemTeleport.has(WearableItemTeleport.BURNING_AMULET_FILTER),
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Lava.*|Okay, teleport to level.*)")
 	),
-
 	DIGSITE_PENDANT (
 		35, new RSTile(3346,3445,0),
 		() -> WearableItemTeleport.has(WearableItemTeleport.DIGSITE_PENDANT_FILTER),
 		() -> WearableItemTeleport.teleport(WearableItemTeleport.DIGSITE_PENDANT_FILTER, "Digsite")
 	),
-
+	DIGSITE_PENDANT_FOSSIL_ISLAND (
+			35, new RSTile(3764,3867,1),
+			() -> WearableItemTeleport.has(WearableItemTeleport.DIGSITE_PENDANT_FILTER),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.DIGSITE_PENDANT_FILTER, "Fossil Island")
+	),
+	DIGSITE_PENDANT_LITHKREN (
+			35, new RSTile(3549,10458,0),
+			() -> WearableItemTeleport.has(WearableItemTeleport.DIGSITE_PENDANT_FILTER),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.DIGSITE_PENDANT_FILTER, "Lithkren*")
+	),
 	ECTOPHIAL (
 		0, new RSTile(3660, 3524, 0),
 		() -> Inventory.find(Filters.Items.nameContains("Ectophial")).length > 0,
@@ -779,7 +798,7 @@ public enum Teleport {
 	),
 
 	EDGEVILLE_HOME_TELEPORT(
-			150, new RSTile(3087, 3496, 0),
+			150, new RSTile(3087, 3495, 0),
 			Spell.EDGEVILLE_HOME_TELEPORT::canUse,
 			() -> {
 				final RSTile myPos = Player.getPosition();
@@ -877,7 +896,19 @@ public enum Teleport {
 			35, new RSTile(3239, 6076, 0),
 			() -> POH.PRIFDDINAS.isHouseLocation() && Inventory.getCount("Teleport to house") > 0,
 			() -> RSItemHelper.click("Teleport to house", "Outside")
-	)
+	),
+	CIVITAS_ILLA_FORTIS_TELEPORT(
+			35, new RSTile(1680, 3132, 0),
+			() -> RSVarBit.get(9649).getValue() > 48 && Spell.CIVITAS_ILLA_FORTIS.canUse(),
+			() -> Spell.CIVITAS_ILLA_FORTIS.cast("Cast")
+
+	),
+	CALCIFIED_MOTH(
+			35, new RSTile(1440, 9555, 1),
+			() -> RSVarBit.get(9819).getValue() > 5 && Inventory.getCount("Calcified moth") > 0,
+			() -> RSItemHelper.click("Calcified moth", "Crush")
+	),
+
 
 	;
 

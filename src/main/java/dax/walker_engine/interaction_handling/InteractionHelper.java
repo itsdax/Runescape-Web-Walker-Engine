@@ -23,22 +23,28 @@ public class InteractionHelper {
         return click(clickable, new String[]{action}, condition);
     }
 
+
+    public static boolean click(Clickable07 clickable, String[] actions, WaitFor.Condition condition) {
+        return click(clickable, actions, condition, General.random(7000, 8000));
+    }
+
     /**
      * Interacts with nearby object and waits for {@code condition}.
      *
      * @param clickable clickable entity
      * @param actions actions to click
      * @param condition condition to wait for after the click action
+     * @param timeout ms to wait for above condition to become true
      * @return if {@code condition} is null, then return the outcome of condition.
      *          Otherwise, return the result of the click action.
      */
-    public static boolean click(Clickable07 clickable, String[] actions, WaitFor.Condition condition){
+    public static boolean click(Clickable07 clickable, String[] actions, WaitFor.Condition condition, int timeout){
         if (clickable == null){
             return false;
         }
 
         if (clickable instanceof RSItem){
-            return clickable.click(actions) && (condition == null || WaitFor.condition(General.random(7000, 8000), condition) == WaitFor.Return.SUCCESS);
+            return clickable.click(actions) && (condition == null || WaitFor.condition(timeout, condition) == WaitFor.Return.SUCCESS);
         }
 
         RSTile position = ((Positionable) clickable).getPosition();
@@ -72,7 +78,7 @@ public class InteractionHelper {
             return false;
         }
 
-        return condition == null || WaitFor.condition(General.random(7000, 8500), condition) == WaitFor.Return.SUCCESS;
+        return condition == null || WaitFor.condition(timeout, condition) == WaitFor.Return.SUCCESS;
     }
 
     public static RSItem getRSItem(Predicate<RSItem> filter){

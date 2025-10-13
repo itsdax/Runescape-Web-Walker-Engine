@@ -24,7 +24,7 @@ public class PlayerDetails {
                 .map(rsItem -> new IntPair(rsItem.getID(), rsItem.getStack())).collect(Collectors.toList());
 
         List<IntPair> settings = Stream.of(10, 11, 17, 32, 63, 68, 71, 101, 111, 116, 131, 144, 145, 150, 165, 176,
-            179, 212, 226, 273, 299, 302, 307, 314, 317, 335, 347, 351, 365, 371, 387, 399, 425, 437, 440, 482, 622, 655, 671, 705, 794, 810,
+            179, 188, 212, 226, 273, 299, 302, 307, 314, 317, 328, 335, 347, 351, 365, 371, 387, 399, 425, 437, 440, 482, 622, 655, 671, 705, 794, 810,
             823, 869, 896, 964, 970, 1429, 1570, 1630, 1671, 1672)
                                        .map(value -> new IntPair(value, Game.getSetting(value))).distinct().collect(Collectors.toList());
 
@@ -38,9 +38,12 @@ public class PlayerDetails {
             2310,
             2328,
             2448,
+            3313,
+            3314,
             3534,
             3618, //dream mentor
             3741,
+            4163, //teleblock
             4493,
             4494, //fremmy elite diary status
             4538,
@@ -62,7 +65,15 @@ public class PlayerDetails {
             7928, //kourend elite diary
             8122,
             9016,
+            9459, //fremennik exiles
+            9632, //Children of the sun,
+            9649, //Twilights Promise
+            9655, //Defender of varrock
+            9819,
+            9956, //colossal wyrm remains quetzal landing site
+            9957, //outer fortis quetzal landing site
             10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
+            12063, //below ice mountain quest
             13719, //unlocked the 93 agility blood altar shortcut by mining the other side (78 mining req)
             13738, // temple of the eye
             13903, //Sleeping Giants quest

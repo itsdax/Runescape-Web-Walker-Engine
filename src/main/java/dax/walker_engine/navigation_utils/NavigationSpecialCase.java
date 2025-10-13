@@ -44,6 +44,8 @@ public class NavigationSpecialCase implements Loggable {
      */
     public enum SpecialLocation {
 
+        AL_KHARID_GATE_E(3267, 3227, 0),
+        AL_KHARID_GATE_W(3267, 3277, 0),
 
         RELLEKA_UPPER_PORT (2621, 3688, 0),
         SMALL_PIRATES_COVE_AREA (2213, 3794, 0),
@@ -154,9 +156,12 @@ public class NavigationSpecialCase implements Loggable {
 
         FAIRY_RING_ABYSSAL_AREA(3059, 4875, 0),
         FAIRY_RING_ABYSSAL_NEXUS(3037, 4763, 0),
+        FAIRY_RING_ALDARIN(1359, 2942, 0),
         FAIRY_RING_APE_ATOLL(2740, 2738, 0),
         FAIRY_RING_ARCEUUS_LIBRARY(1639, 3868, 0),
         FAIRY_RING_ARDOUGNE_ZOO(2635, 3266, 0),
+        FAIRY_RING_AUBURNVALE(1429, 3324, 0),
+        FAIRY_RING_AVIUM_SAVANNAH(1651, 3011, 0),
         FAIRY_RING_CANIFIS(3447, 3470, 0),
         FAIRY_RING_CHASM_OF_FIRE(1455, 3658, 0),
         FAIRY_RING_COSMIC_ENTITYS_PLANE(2075, 4848, 0),
@@ -169,6 +174,7 @@ public class NavigationSpecialCase implements Loggable {
         FAIRY_RING_HAUNTED_WOODS(3597, 3495, 0),
         FAIRY_RING_HAZELMERE(2682, 3081, 0),
         FAIRY_RING_ISLAND_SOUTHEAST_ARDOUGNE(2700, 3247, 0),
+        FAIRY_RING_ISLE_OF_SOULS(2266, 2976, 0),
         FAIRY_RING_KALPHITE_HIVE(3251, 3095, 0),
         FAIRY_RING_KARAMJA_KARAMBWAN_SPOT(2900, 3111, 0),
         FAIRY_RING_LEGENDS_GUILD(2740, 3351, 0),
@@ -338,7 +344,58 @@ public class NavigationSpecialCase implements Loggable {
         ZEAH_MINECART_NORTHERN_TUNDRAS(1648, 3931, 0),
         ZEAH_MINECART_PORT_PISCARILIUS(1761, 3710, 0),
         ZEAH_MINECART_SHAYZIEN_EAST(1590, 3620, 0),
-        ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0)
+        ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0),
+
+        QUETZAL_AT_VARROCK(3280, 3412, 0),
+        QUETZAL_AT_VARLAMORE(1703, 3140, 0),
+        LUNAR_ISLE_RETURN_ORB(2101, 3918, 0),
+        FREMENNIK_RETURN_ORB_DESTINATION(2631, 3678, 0),
+        FREMENNIK_DOCK_TO_ISLAND_OF_STONE(2621, 3689, 0),
+        ISLAND_OF_STONE_LANDING(2472, 3994, 0),
+
+        QUETZAL_ALDARIN(1390, 2901, 0),
+        QUETZAL_AUBURNVALE(1411, 3361, 0),
+        QUETZAL_CAM_TORUM_ENTRANCE(1446, 3108, 0),
+        QUETZAL_CIVITAS_ILLA_FORTIS(1696, 3140, 0),
+        QUETZAL_COLOSSAL_WYRM_REMAINS(1670, 2934, 0),
+        //QUETZAL_FORTIS_COLOSSEUM(),
+        QUETZAL_OUTER_FORTIS(1700, 3035, 0),
+        QUETZAL_QUETZACALLI_GORGE(1510, 3222, 0),
+        QUETZAL_HUNTER_GUILD(1585, 3053, 0),
+        QUETZAL_SALVAGER_OUTLOOK(1614, 3300, 0),
+        QUETZAL_SUNSET_COAST(1548, 2995, 0),
+        QUETZAL_TAL_TEKLAN(1226, 3091, 0),
+        QUETZAL_THE_TEOMAT(1437, 3171, 0),
+
+        ALDARIN_SHIP(1442, 2977, 0),
+        VARLAMORE_SHIP(1494, 2985, 0),
+
+        MIXOLOGY_ENTRANCE(1389, 2918, 0),
+        MIXOLOGY_EXIT(1388, 9313, 0),
+
+        ANCIENT_CAVERN_WHIRLPOOL(2511, 3511, 0),
+        ANCIENT_CAVERN_ENTRANCE(1763, 5366, 1),
+        ANCIENT_CAVERN_AGED_LOG(1761, 5361, 0),
+        ANCIENT_CAVERN_EXIT(2531, 3446, 0),
+
+        NEITZ_BRIDGE_W(2314, 3839, 0),
+        NEITZ_BRIDGE_W2(2314, 3848, 0),
+        NEITZ_BRIDGE_E(2355, 3839, 0),
+        NEITZ_BRIDGE_E2(2355, 3848, 0),
+
+        LUMBRIDGE_GROUND_FLOOR(3206, 3208, 0),
+        LUMBRIDGE_TOP_FLOOR(3205, 3209, 2),
+
+        QUETZ_MOUNTAIN_GUIDE(1486, 3232, 0),
+        AUBURNVALE_MOUNTAIN_GUIDE(1360, 3310, 0),
+
+        ACHILKA_GLOOMTHORN_TRAIL(1400, 3246, 0),
+        ACHILKA_TAL_TEKLAN(1258, 3126, 0),
+        ACHILKA_KASTORI(1390, 3074, 0),
+
+
+        PATERDOMUS_SHORTCUT_E( 3427, 3477, 0),
+        PATERDOMUS_SHORTCUT_W(3424, 3476, 0)
         ;
 
         int x, y, z;
@@ -367,7 +424,20 @@ public class NavigationSpecialCase implements Loggable {
      * @return
      */
     public static boolean handle(SpecialLocation specialLocation){
+        String action = null;
         switch (specialLocation){
+
+            case AL_KHARID_GATE_E:
+            case AL_KHARID_GATE_W:
+                if(Game.getSetting(273) < 110){
+                    if(Inventory.getCount("Coins") < 10){
+                        return false;
+                    } else {
+                        return clickObject(Filters.Objects.nameEquals("Gate").and(Filters.Objects.actionsEquals("Pay-toll(10gp)")), "Pay-toll(10gp)", () -> Player.getPosition().getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    }
+                } else {
+                    return clickObject(Filters.Objects.nameEquals("Gate").and(Filters.Objects.actionsEquals("Open")), "Open", () -> Player.getPosition().getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                }
 
             case BRIMHAVEN_DUNGEON:
                 if (RSVarBit.get(5628).getValue() == 0 && RSVarBit.get(8122).getValue() == 0){
@@ -825,12 +895,18 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.ABYSSAL_AREA);
             case FAIRY_RING_ABYSSAL_NEXUS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ABYSSAL_NEXUS);
+            case FAIRY_RING_ALDARIN:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ALDARIN);
             case FAIRY_RING_APE_ATOLL:
                 return FairyRing.takeFairyRing(FairyRing.Locations.APE_ATOLL);
             case FAIRY_RING_ARCEUUS_LIBRARY:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ARCEUUS_LIBRARY);
             case FAIRY_RING_ARDOUGNE_ZOO:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ARDOUGNE_ZOO);
+            case FAIRY_RING_AUBURNVALE:
+                return FairyRing.takeFairyRing(FairyRing.Locations.AUBURNVALE);
+            case FAIRY_RING_AVIUM_SAVANNAH:
+                return FairyRing.takeFairyRing(FairyRing.Locations.AVIUM_SAVANNAH);
             case FAIRY_RING_CANIFIS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.CANIFIS);
             case FAIRY_RING_CHASM_OF_FIRE:
@@ -855,6 +931,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.HAZELMERE);
             case FAIRY_RING_ISLAND_SOUTHEAST_ARDOUGNE:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ISLAND_SOUTHEAST_ARDOUGNE);
+            case FAIRY_RING_ISLE_OF_SOULS:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ISLE_OF_SOULS);
             case FAIRY_RING_KALPHITE_HIVE:
                 return FairyRing.takeFairyRing(FairyRing.Locations.KALPHITE_HIVE);
             case FAIRY_RING_KARAMJA_KARAMBWAN_SPOT:
@@ -1096,7 +1174,7 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
                         () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_MIDDLE:
-                String action = Player.getPosition().getY() > 4000 ? "Climb-up":"Climb-down";
+                action = Player.getPosition().getY() > 4000 ? "Climb-up":"Climb-down";
                 return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals(action)), action,
                         () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_TOP:
@@ -1282,13 +1360,115 @@ public class NavigationSpecialCase implements Loggable {
                 return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_EAST);
             case ZEAH_MINECART_SHAYZIEN_WEST:
                 return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_WEST);
+            case QUETZAL_AT_VARLAMORE:
+                RSNPC[] npc = NPCs.findNearest(Filters.NPCs.nameEquals("Regulus Cento").and(Filters.NPCs.actionsNotEquals("Travel")));
+                if(npc.length > 0){
+                    return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Regulus Cento"), new String[]{"Talk-to"}, new String[]{"Let's do it!"})
+                            && WaitFor.condition(15000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+                }
+            case QUETZAL_AT_VARROCK:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Regulus Cento"), new String[]{"Travel"}, new String[]{})
+                        && WaitFor.condition(15000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
+            case LUNAR_ISLE_RETURN_ORB:
+            case FREMENNIK_RETURN_ORB_DESTINATION:
+                if(clickObject(Filters.Objects.nameEquals("Return Orb"), "Teleport",
+                        () -> NPCInteraction.isConversationWindowUp() ?  WaitFor.Return.SUCCESS: WaitFor.Return.IGNORE)){
+                    NPCInteraction.handleConversation("Yes.");
+                    return WaitFor.condition(4500, ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                }
+                break;
+            case FREMENNIK_DOCK_TO_ISLAND_OF_STONE:
+            case ISLAND_OF_STONE_LANDING:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Haskell"), new String[]{"Island of Stone", "Rellekka"}, new String[]{})
+                        && WaitFor.condition(15000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case QUETZAL_ALDARIN:
+                return Quetzal.to(Quetzal.Location.ALDARIN);
+            case QUETZAL_AUBURNVALE:
+                return Quetzal.to(Quetzal.Location.AUBURNVALE);
+            case QUETZAL_CAM_TORUM_ENTRANCE:
+                return Quetzal.to(Quetzal.Location.CAM_TORUM_ENTRANCE);
+            case QUETZAL_CIVITAS_ILLA_FORTIS:
+                return Quetzal.to(Quetzal.Location.CIVITAS_ILLA_FORTIS);
+            case QUETZAL_COLOSSAL_WYRM_REMAINS:
+                return Quetzal.to(Quetzal.Location.COLOSSAL_WYRM_REMAINS);
+            case QUETZAL_OUTER_FORTIS:
+                return Quetzal.to(Quetzal.Location.OUTER_FORTIS);
+            case QUETZAL_QUETZACALLI_GORGE:
+                return Quetzal.to(Quetzal.Location.QUETZACALLI_GORGE);
+            case QUETZAL_HUNTER_GUILD:
+                return Quetzal.to(Quetzal.Location.HUNTER_GUILD);
+            case QUETZAL_SALVAGER_OUTLOOK:
+                return Quetzal.to(Quetzal.Location.SALVAGER_OUTLOOK);
+            case QUETZAL_SUNSET_COAST:
+                return Quetzal.to(Quetzal.Location.SUNSET_COAST);
+            case QUETZAL_TAL_TEKLAN:
+                return Quetzal.to(Quetzal.Location.TAL_TEKLAN);
+            case QUETZAL_THE_TEOMAT:
+                return Quetzal.to(Quetzal.Location.THE_TEOMAT);
+
+            case VARLAMORE_SHIP:
+            case ALDARIN_SHIP:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Antonia"), "Travel")
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+            case MIXOLOGY_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Staircase"), "Climb-up",
+                        ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case MIXOLOGY_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
+                        ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case ANCIENT_CAVERN_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Whirlpool").and(Filters.Objects.actionsEquals("Dive in")), "Dive in",
+                        ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
+            case ANCIENT_CAVERN_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Whirlpool").and(Filters.Objects.actionsEquals("Dive in")), "Dive in",
+                        ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
+
+            case NEITZ_BRIDGE_E:
+            case NEITZ_BRIDGE_E2:
+            case NEITZ_BRIDGE_W:
+            case NEITZ_BRIDGE_W2:
+                return clickObject(Filters.Objects.nameEquals("Rope bridge"), new String[]{"Walk-across", "Cross-bridge"},
+                        ()-> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
+
+            case LUMBRIDGE_GROUND_FLOOR:
+                action = "Bottom-floor";
+            case LUMBRIDGE_TOP_FLOOR:
+                if(action == null) action = "Top-floor";
+                return clickObject(Filters.Objects.nameEquals("Staircase"), action,
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(12000, 15000));
+
+            case QUETZ_MOUNTAIN_GUIDE:
+            case AUBURNVALE_MOUNTAIN_GUIDE:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mountain Guide"), new String[]{"Follow"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+            case ACHILKA_KASTORI:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Kastori"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case ACHILKA_GLOOMTHORN_TRAIL:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Gloomthorn Trail"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case ACHILKA_TAL_TEKLAN:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Tal Teklan"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Player.getPosition().distanceTo(specialLocation.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+            case PATERDOMUS_SHORTCUT_E:
+            case PATERDOMUS_SHORTCUT_W:
+                return clickObject(Filters.Objects.nameEquals("Rocks"), "Climb",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
         }
 
         return false;
     }
     public static boolean handleZeahBoats(String locationOption){
         String travelOption = "Travel";
-        RSNPC[] npcs = NPCs.find("Veos","Captain Magoro");
+        RSNPC[] npcs = NPCs.find("Veos","Captain Magoro", "Cabin Boy Herbert");
         if(npcs.length > 0){
             String[] actions = npcs[0].getActions();
             if(actions != null){
@@ -1306,7 +1486,7 @@ public class NavigationSpecialCase implements Loggable {
                 }
             }
         }
-        if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Veos", "Captain Magoro"),new String[]{travelOption})){
+        if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Veos", "Captain Magoro",  "Cabin Boy Herbert"),new String[]{travelOption})){
             RSTile current = Player.getPosition();
             if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || Player.getPosition().distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
                 return false;
@@ -1378,6 +1558,18 @@ public class NavigationSpecialCase implements Loggable {
             return false;
         }
         return InteractionHelper.click(objects[0], action, condition);
+    }
+
+    public static boolean clickObject(Predicate<RSObject> filter, String action, WaitFor.Condition condition, int timeout) {
+        return clickObject(filter, new String[]{action}, condition, timeout);
+    }
+
+    public static boolean clickObject(Predicate<RSObject> filter, String[] action, WaitFor.Condition condition, int timeout){
+        RSObject[] objects = Objects.findNearest(15, filter);
+        if (objects.length == 0){
+            return false;
+        }
+        return InteractionHelper.click(objects[0], action, condition, timeout);
     }
 
 
