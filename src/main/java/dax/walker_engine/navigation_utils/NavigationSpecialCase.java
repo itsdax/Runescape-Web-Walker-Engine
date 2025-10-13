@@ -1526,7 +1526,7 @@ public class NavigationSpecialCase implements Loggable {
         boolean pirateTreasureComplete = Game.getSetting(71) >= 4;
         if(pirateTreasureComplete){
             return handleShip("Pay-fare","Pay-Fare");
-        } else if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), options, chat)
+        } else if (NPCInteraction.talkTo(Filters.NPCs.actionsContains(options), new String[]{"Talk-to", "Talk to"}, chat)
                 && WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(1800, 2800);
             return true;
