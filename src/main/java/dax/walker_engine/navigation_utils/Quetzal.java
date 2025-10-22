@@ -23,7 +23,7 @@ public class Quetzal {
 		OUTER_FORTIS("Outer Fortis", 1700, 3035, 0),
 		QUETZACALLI_GORGE("Quetzacalli Gorge", 1510, 3222, 0),
 		HUNTER_GUILD("Hunter Guild", 1585, 3053, 0),
-		SALVAGER_OUTLOOK("Salvager Outlook", 1614, 3300, 0),
+		SALVAGER_OVERLOOK("Salvager Overlook", 1614, 3300, 0),
 		SUNSET_COAST("Sunset Coast", 1548, 2995, 0),
 		TAL_TEKLAN("Tal Teklan", 1226, 3091, 0),
 		THE_TEOMAT("The Teomat", 1437, 3171, 0),
