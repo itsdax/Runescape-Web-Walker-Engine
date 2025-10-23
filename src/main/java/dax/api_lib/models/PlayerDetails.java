@@ -68,6 +68,7 @@ public class PlayerDetails {
             9459, //fremennik exiles
             9632, //Children of the sun,
             9649, //Twilights Promise
+            9650, //varlamore
             9655, //Defender of varrock
             9819,
             9956, //colossal wyrm remains quetzal landing site
