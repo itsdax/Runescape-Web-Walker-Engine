@@ -53,14 +53,19 @@ public class Charter implements Loggable {
                 InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsEquals("Charter")), "Charter", () -> Interfaces.isInterfaceValid(CHARTER_INTERFACE_MASTER) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
     }
 
+    private static boolean isValidCharterInterface(RSInterface rsInterface) {
+        return rsInterface != null
+                && rsInterface.getModelID() == -1
+                && rsInterface.getTextureID() == -1
+                && rsInterface.getActions() != null
+                && rsInterface.getActions().length == 1
+                && !rsInterface.isHidden();
+    }
+
     private static HashMap<LocationProperty, Location> getCharterLocations(){
         HashMap<LocationProperty, Location> locations = new HashMap<>();
-        InterfaceHelper.getAllInterfaces(CHARTER_INTERFACE_MASTER).stream().filter(
-
-                rsInterface -> rsInterface != null
-                && rsInterface.getModelID() == 17360
-                && !rsInterface.isHidden())
-
+        InterfaceHelper.getAllInterfaces(CHARTER_INTERFACE_MASTER).stream()
+                .filter(Charter::isValidCharterInterface)
                 .collect(Collectors.toList())
                 .forEach(rsInterface -> {
                     String[] actions = rsInterface.getActions();
