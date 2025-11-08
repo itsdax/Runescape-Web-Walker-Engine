@@ -1400,7 +1400,7 @@ public class NavigationSpecialCase implements Loggable {
             case QUETZAL_HUNTER_GUILD:
                 return Quetzal.to(Quetzal.Location.HUNTER_GUILD);
             case QUETZAL_SALVAGER_OVERLOOK:
-                return Quetzal.to(Quetzal.Location.SALVAGER_OUTLOOK);
+                return Quetzal.to(Quetzal.Location.SALVAGER_OVERLOOK);
             case QUETZAL_SUNSET_COAST:
                 return Quetzal.to(Quetzal.Location.SUNSET_COAST);
             case QUETZAL_TAL_TEKLAN:
