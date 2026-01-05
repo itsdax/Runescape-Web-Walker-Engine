@@ -909,6 +909,12 @@ public enum Teleport {
 			() -> RSItemHelper.click("Calcified moth", "Crush")
 	),
 
+	MOKHAIOTL_WAYSTONE(
+			35, new RSTile(1312, 9498, 1),
+			() -> RSVarBit.get(16663).getValue() >= 68 && Inventory.getCount("Mokhaiotl waystone") > 0,
+			() -> RSItemHelper.click("Mokhaiotl waystone", "Channel")
+	),
+
 
 	;
 
