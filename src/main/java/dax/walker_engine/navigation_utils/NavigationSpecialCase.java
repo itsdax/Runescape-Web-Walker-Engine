@@ -1465,6 +1465,15 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Rocks"), "Climb",
                         ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
+
+            case HUNTER_GUILD_BASEMENT:
+                return clickObject(Filters.Objects.nameEquals("Stairs"), "Climb-down",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
+            case HUNTER_GUILD_MAIN_FLOOR:
+                return clickObject(Filters.Objects.nameEquals("Stairs"), "Climb-up",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
         }
 
         return false;
