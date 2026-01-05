@@ -111,13 +111,13 @@ public enum Teleport {
 	),
 
 	KOUREND_CASTLE_TELEPORT(
-			35, new RSTile(2661, 3300, 0),
+			35, new RSTile(1639, 3673, 0),
 			Spell.KOUREND_TELEPORT::canUse,
 			() -> selectSpell("Kourend Castle Teleport","Cast")
 	),
 
 	KOUREND_CASTLE_TELEPORT_TAB(
-			35, new RSTile(2661, 3300, 0),
+			35, new RSTile(1639, 3673, 0),
 			() -> RSVarBit.get(6027).getValue() >= 11 && Inventory.getCount("Kourend castle teleport") > 0,
 			() -> RSItemHelper.click("Kourend castle.*", "Break")
 	),
