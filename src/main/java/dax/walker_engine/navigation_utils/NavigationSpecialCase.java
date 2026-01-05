@@ -47,8 +47,6 @@ public class NavigationSpecialCase implements Loggable {
         AL_KHARID_GATE_E(3267, 3227, 0),
         AL_KHARID_GATE_W(3267, 3277, 0),
 
-        RELLEKA_UPPER_PORT (2621, 3688, 0),
-        SMALL_PIRATES_COVE_AREA (2213, 3794, 0),
 
         PIRATE_COVE_SHIP_TILE (2138, 3900, 2),
         CAPTAIN_BENTLY_PIRATES_COVE (2223, 3796, 2),
@@ -396,7 +394,10 @@ public class NavigationSpecialCase implements Loggable {
 
 
         PATERDOMUS_SHORTCUT_E( 3427, 3477, 0),
-        PATERDOMUS_SHORTCUT_W(3424, 3476, 0)
+        PATERDOMUS_SHORTCUT_W(3424, 3476, 0),
+
+        HUNTER_GUILD_BASEMENT(1558, 9451, 0),
+        HUNTER_GUILD_MAIN_FLOOR(1557, 3047, 0)
         ;
 
         int x, y, z;
@@ -458,15 +459,6 @@ public class NavigationSpecialCase implements Loggable {
                 }
                 break;
 
-            case RELLEKA_UPPER_PORT:
-            case SMALL_PIRATES_COVE_AREA:
-                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{
-                    "That's fine, I'm just going to Pirates' Cove."})){
-                    System.out.println("Was not able to travel with Lokar");
-                    break;
-                }
-                WaitFor.milliseconds(3300, 5200);
-                break;
             case CAPTAIN_BENTLY_PIRATES_COVE:
             case CAPTAIN_BENTLY_LUNAR_ISLE:
                 if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Captain"), new String[]{"Travel"}, new String[]{})){
