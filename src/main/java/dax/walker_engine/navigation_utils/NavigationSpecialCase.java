@@ -171,6 +171,7 @@ public class NavigationSpecialCase implements Loggable {
         FAIRY_RING_FELDIP_HILLS_HUNTER_AREA(2571, 2956, 0),
         FAIRY_RING_FISHER_KINGS_REALM(2650, 4730, 0),
         FAIRY_RING_GORAKS_PLANE(3038, 5348, 0),
+        FAIRY_RING_GRIMSTONE_DUNGEON(2926, 10455, 0),
         FAIRY_RING_HAUNTED_WOODS(3597, 3495, 0),
         FAIRY_RING_HAZELMERE(2682, 3081, 0),
         FAIRY_RING_ISLAND_SOUTHEAST_ARDOUGNE(2700, 3247, 0),
@@ -925,6 +926,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.FISHER_KINGS_REALM);
             case FAIRY_RING_GORAKS_PLANE:
                 return FairyRing.takeFairyRing(FairyRing.Locations.GORAKS_PLANE);
+            case FAIRY_RING_GRIMSTONE_DUNGEON:
+                return FairyRing.takeFairyRing(FairyRing.Locations.GRIMSTONE_DUNGEON);
             case FAIRY_RING_HAUNTED_WOODS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.HAUNTED_WOODS);
             case FAIRY_RING_HAZELMERE:
