@@ -44,6 +44,7 @@ public class PlayerDetails {
             3618, //dream mentor
             3741,
             4163, //teleblock
+            4464, //falador hard diary
             4493,
             4494, //fremmy elite diary status
             4538,
@@ -78,6 +79,7 @@ public class PlayerDetails {
             13719, //unlocked the 93 agility blood altar shortcut by mining the other side (78 mining req)
             13738, // temple of the eye
             13903, //Sleeping Giants quest
+            19564, //Grimstone visited
         })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
 				        Collectors.toList());
