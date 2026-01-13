@@ -397,7 +397,12 @@ public class NavigationSpecialCase implements Loggable {
         PATERDOMUS_SHORTCUT_W(3424, 3476, 0),
 
         HUNTER_GUILD_BASEMENT(1558, 9451, 0),
-        HUNTER_GUILD_MAIN_FLOOR(1557, 3047, 0)
+        HUNTER_GUILD_MAIN_FLOOR(1557, 3047, 0),
+
+        SLAYER_TOWER_BASEMENT_LADDER(3412, 9932, 3),
+        SLAYER_TOWER_MAIN_LEVEL(3417, 3536, 0),
+        SLAYER_TOWER_IVY(3418, 3533, 0),
+        SLAYER_TOWER_BROKEN_WINDOW(3420, 3534, 2),
         ;
 
         int x, y, z;
@@ -1464,6 +1469,25 @@ public class NavigationSpecialCase implements Loggable {
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
             case HUNTER_GUILD_MAIN_FLOOR:
                 return clickObject(Filters.Objects.nameEquals("Stairs"), "Climb-up",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
+
+
+            case SLAYER_TOWER_BASEMENT_LADDER:
+                return clickObject(Filters.Objects.nameEquals("Ladder"), "Climb-down",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
+            case SLAYER_TOWER_MAIN_LEVEL:
+                return clickObject(Filters.Objects.nameEquals("Ladder"), "Climb-up",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
+
+            case SLAYER_TOWER_IVY:
+                return clickObject(Filters.Objects.nameEquals("Broken window"), "Climb-down",
+                        ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
+                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
+            case SLAYER_TOWER_BROKEN_WINDOW:
+                return clickObject(Filters.Objects.nameEquals("Ivy"), "Climb-up",
                         ()-> Player.getPosition().equals(specialLocation.getRSTile()) ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, General.random(6000, 9000));
         }
