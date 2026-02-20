@@ -34,6 +34,7 @@ public class PlayerDetails {
             357,
             386,//smoke dungeon boss room
             571,
+            1048,
             1990,
             2310,
             2328,
@@ -64,22 +65,27 @@ public class PlayerDetails {
             7255,
             7796,//forsaken tower
             7928, //kourend elite diary
-            8122,
+            8122, //brim dungeon perm access
             9016,
             9459, //fremennik exiles
             9632, //Children of the sun,
             9649, //Twilights Promise
             9650, //varlamore
             9655, //Defender of varrock
+            9957, //Outer fortis quetzal landing site
             9819,
+            9955, //Cam Torum quetzal landing site
             9956, //colossal wyrm remains quetzal landing site
             9957, //outer fortis quetzal landing site
-            10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
+            9958, //fortis colosseum quetzal landing site
+            10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1,
+            11379, //salvager outlook quetzal landing site
             12063, //below ice mountain quest
             13719, //unlocked the 93 agility blood altar shortcut by mining the other side (78 mining req)
             13738, // temple of the eye
             13903, //Sleeping Giants quest
             15288, //Path of Glouphrie quest
+            17757, //kastori quetzal landing site
             19564, //Grimstone visited
         })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
