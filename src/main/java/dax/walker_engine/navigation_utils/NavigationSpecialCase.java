@@ -357,10 +357,11 @@ public class NavigationSpecialCase implements Loggable {
         QUETZAL_CAM_TORUM_ENTRANCE(1446, 3108, 0),
         QUETZAL_CIVITAS_ILLA_FORTIS(1696, 3140, 0),
         QUETZAL_COLOSSAL_WYRM_REMAINS(1670, 2934, 0),
-        //QUETZAL_FORTIS_COLOSSEUM(),
+        QUETZAL_FORTIS_COLOSSEUM(1779, 3111, 0),
+        QUETZAL_HUNTER_GUILD(1585, 3053, 0),
+        QUETZAL_KASTORI(1344, 3022, 0),
         QUETZAL_OUTER_FORTIS(1700, 3035, 0),
         QUETZAL_QUETZACALLI_GORGE(1510, 3222, 0),
-        QUETZAL_HUNTER_GUILD(1585, 3053, 0),
         QUETZAL_SALVAGER_OVERLOOK(1614, 3300, 0),
         QUETZAL_SUNSET_COAST(1548, 2995, 0),
         QUETZAL_TAL_TEKLAN(1226, 3091, 0),
@@ -1393,6 +1394,10 @@ public class NavigationSpecialCase implements Loggable {
                 return Quetzal.to(Quetzal.Location.CIVITAS_ILLA_FORTIS);
             case QUETZAL_COLOSSAL_WYRM_REMAINS:
                 return Quetzal.to(Quetzal.Location.COLOSSAL_WYRM_REMAINS);
+            case QUETZAL_FORTIS_COLOSSEUM:
+                return Quetzal.to(Quetzal.Location.FORTIS_COLOSSEUM);
+            case QUETZAL_KASTORI:
+                return Quetzal.to(Quetzal.Location.KASTORI);
             case QUETZAL_OUTER_FORTIS:
                 return Quetzal.to(Quetzal.Location.OUTER_FORTIS);
             case QUETZAL_QUETZACALLI_GORGE:

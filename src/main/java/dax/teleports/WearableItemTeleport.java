@@ -1,15 +1,17 @@
 package dax.teleports;
 
+import dax.shared.helpers.RSItemHelper;
+import dax.walker_engine.WaitFor;
 import dax.walker_engine.interaction_handling.NPCInteraction;
 import org.tribot.api.General;
 import org.tribot.api2007.Equipment;
+import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
+import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSTile;
-import dax.shared.helpers.RSItemHelper;
-import dax.walker_engine.WaitFor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +43,8 @@ public class WearableItemTeleport {
 	public static final Predicate<RSItem> SLAYER_RING = Filters.Items.nameContains("Slayer ring");
 	public static final Predicate<RSItem> FARMING_CAPE_FILTER = Filters.Items.nameContains("Farming cape");
 	public static final Predicate<RSItem> DRAKANS_MEDALLION_FILTER = Filters.Items.nameEquals("Drakan's medallion");
+	public static final Predicate<RSItem> PENDANT_OF_ATES_FILTER = Filters.Items.nameContains("Pendant of ates");
+
 
 
 	private WearableItemTeleport() {
@@ -71,6 +75,41 @@ public class WearableItemTeleport {
 		return RSItemHelper.clickMatch(teleportItem, "(Rub|Teleport|" + regex + ")") && WaitFor.condition(
 				General.random(3800, 4600), () -> {
 					NPCInteraction.handleConversationRegex(regex);
+					if (startingPosition.distanceTo(Player.getPosition()) > 5) {
+						return WaitFor.Return.SUCCESS;
+					}
+					return WaitFor.Return.IGNORE;
+				}) == WaitFor.Return.SUCCESS;
+	}
+
+
+	public static boolean teleportWithPendantOfAtes(String destination){
+		if(!Interfaces.isInterfaceSubstantiated(879)){
+			RSItem[] teleportItem = Inventory.find(PENDANT_OF_ATES_FILTER);
+			if (teleportItem.length == 0) {
+				teleportItem = Equipment.find(PENDANT_OF_ATES_FILTER);
+			}
+
+			if (teleportItem.length == 0) {
+				return false;
+			}
+
+			boolean interact = teleportItem[0].click("Rub");
+			if(!interact){
+				return false;
+			}
+			if(WaitFor.condition(General.random(600, 1800), () -> {
+				if(Interfaces.isInterfaceSubstantiated(879))
+					return WaitFor.Return.SUCCESS;
+				return WaitFor.Return.IGNORE;
+			}) != WaitFor.Return.SUCCESS) {
+				return false;
+			}
+		}
+		final RSTile startingPosition = Player.getPosition();
+		RSInterface targetComponent = Interfaces.get(879, i -> i.getComponentName().matches(".*"+destination+".*"));
+		return Interfaces.isInterfaceSubstantiated(targetComponent) && targetComponent.click() && WaitFor.condition(
+				General.random(3800, 4600), () -> {
 					if (startingPosition.distanceTo(Player.getPosition()) > 5) {
 						return WaitFor.Return.SUCCESS;
 					}
