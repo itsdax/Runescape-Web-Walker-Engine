@@ -7,6 +7,7 @@ import dax.walker_engine.Loggable;
 import dax.walker_engine.WaitFor;
 import dax.walker_engine.WalkerEngine;
 import dax.walker_engine.WalkingCondition;
+import dax.walker_engine.navigation_utils.Quetzal;
 import dax.walker_engine.navigation_utils.ShipUtils;
 import org.tribot.api.ScriptCache;
 import org.tribot.api.interfaces.Positionable;
@@ -48,6 +49,7 @@ public class DaxWalker implements Loggable {
         Arrays.stream(WalkerPreferences.values()).forEach(p -> walkerPreferences.put(p, 0));
         Arrays.stream(Teleport.values()).forEach(t -> map.put(t.getLocation(), t));
         getBlacklist().addAll(List.of(Teleport.DIGSITE_PENDANT_FOSSIL_ISLAND, Teleport.DIGSITE_PENDANT_LITHKREN));
+        Quetzal.getInstance(); // initialize listener
     }
 
     public static void enableWalkerPreference(WalkerPreferences... preferences) {
@@ -228,4 +230,6 @@ public class DaxWalker implements Loggable {
     public String getName() {
         return "DaxWalker";
     }
+
+
 }

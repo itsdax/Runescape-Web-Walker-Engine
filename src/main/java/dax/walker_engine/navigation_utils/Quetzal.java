@@ -10,6 +10,12 @@ import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.types.RSVarBit;
+import org.tribot.script.sdk.MessageListening;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Quetzal {
 
@@ -19,6 +25,34 @@ public class Quetzal {
 			WHISTLE_WIDGET_ROOT = 949,
 			WHISTLE_WIDGET_CHILD = 12,
 			LAST_LOCATION_VARBIT = 9950;
+
+
+	private final Map<String, Integer> chargeManager;
+
+	private static Quetzal instance;
+
+	private Quetzal(){
+		chargeManager = new HashMap<>();
+		MessageListening.addServerMessageListener(message -> {
+			int whistleCharges = getWhistleCharges(message);
+			if (whistleCharges >= 0) {
+				Quetzal.getInstance().setCurrentCharges(whistleCharges);
+			}
+		});
+	}
+	public static Quetzal getInstance(){
+		return instance != null ? instance : (instance = new Quetzal());
+	}
+
+
+	public int getCurrentCharges() {
+		return chargeManager.getOrDefault(Player.getRSPlayer().getName(), 0);
+	}
+
+	public void setCurrentCharges(int currentCharges) {
+		chargeManager.put(Player.getRSPlayer().getName(), currentCharges);
+	}
+
 
 	public enum Location {
 		ALDARIN("Aldarin", 1390, 2901, 0, 11377, 9),
@@ -119,5 +153,26 @@ public class Quetzal {
 			return true;
 		}
 		return false;
+	}
+
+
+
+	private static final Pattern WHISTLE_CHARGE_PATTERN =
+			Pattern.compile("^Your (?:basic |enhanced |perfected )?quetzal whistle has (\\d+) charges remaining\\.$", Pattern.CASE_INSENSITIVE);
+
+	private int getWhistleCharges(String message) {
+		String cleanMessage = message.replaceAll("<[^>]*>", "");
+
+		Matcher matcher = WHISTLE_CHARGE_PATTERN.matcher(cleanMessage);
+
+		if (matcher.find()) {
+			try {
+				return Integer.parseInt(matcher.group(1));
+			} catch (NumberFormatException e) {
+				return -1;
+			}
+		}
+
+		return -1;
 	}
 }

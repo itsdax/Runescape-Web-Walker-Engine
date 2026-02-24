@@ -954,92 +954,92 @@ public enum Teleport {
 	),
 	QUETZAL_WHISTLE_ALDARIN(
 			35, new RSTile(1390, 2901, 0),
-			() -> Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
-					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0,
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && (Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
+					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.ALDARIN)
 	),
 	QUETZAL_WHISTLE_AUBURNVALE(
 			35, new RSTile(1411, 3361, 0),
-			() -> Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
-					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0,
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && (Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
+					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.AUBURNVALE)
 	),
 	QUETZAL_WHISTLE_CAM_TORUM(
 			35, new RSTile(1446, 3108, 0),
-			() -> RSVarBit.get(9955).getValue() >= 1 &&
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && RSVarBit.get(9955).getValue() >= 1 &&
 					(Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
 							Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.CAM_TORUM_ENTRANCE)
 	),
 	QUETZAL_WHISTLE_CIVITAS_ILLA_FORTIS(
 			35, new RSTile(1696, 3140, 0),
-			() -> Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
-					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0,
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && (Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
+					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.CIVITAS_ILLA_FORTIS)
 	),
 	QUETZAL_WHISTLE_COLOSSAL_WYRM_REMAINS(
 			35, new RSTile(1670, 2934, 0),
-			() -> RSVarBit.get(9956).getValue() >= 1 &&
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && RSVarBit.get(9956).getValue() >= 1 &&
 					(Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
 							Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.COLOSSAL_WYRM_REMAINS)
 	),
 	QUETZAL_WHISTLE_FORTIS_COLOSSEUM(
 			35, new RSTile(1779, 3111, 0),
-			() -> RSVarBit.get(9958).getValue() >= 1 &&
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && RSVarBit.get(9958).getValue() >= 1 &&
 					(Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
 							Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.FORTIS_COLOSSEUM)
 	),
 	QUETZAL_WHISTLE_KASTORI(
 			35, new RSTile(1344, 3022, 0),
-			() -> Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
-					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0,
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && (Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
+					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.KASTORI)
 	),
 	QUETZAL_WHISTLE_OUTER_FORTIS(
 			35, new RSTile(1700, 3035, 0),
-			() -> RSVarBit.get(9957).getValue() >= 1 &&
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && RSVarBit.get(9957).getValue() >= 1 &&
 					(Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
 							Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.OUTER_FORTIS)
 	),
 	QUETZAL_WHISTLE_QUETZACALLI_GORGE(
 			35, new RSTile(1510, 3222, 0),
-			() -> Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
-					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0,
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && (Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
+					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.QUETZACALLI_GORGE)
 	),
 	QUETZAL_WHISTLE_HUNTER_GUILD(
 			35, new RSTile(1585, 3053, 0),
-			() -> Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
-					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0,
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && (Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
+					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.HUNTER_GUILD)
 	),
 	QUETZAL_WHISTLE_SALVAGER_OUTLOOK(
 			35, new RSTile(1614, 3300, 0),
-			() -> RSVarBit.get(11379).getValue() >= 1 &&
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && RSVarBit.get(11379).getValue() >= 1 &&
 					(Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
 							Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.SALVAGER_OVERLOOK)
 	),
 	QUETZAL_WHISTLE_SUNSET_COAST(
 			35, new RSTile(1548, 2995, 0),
-			() -> RSVarBit.get(9953).getValue() >= 1 &&
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && RSVarBit.get(9953).getValue() >= 1 &&
 					(Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
 							Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.SUNSET_COAST)
 	),
 	QUETZAL_WHISTLE_TAL_TEKLAN(
 			35, new RSTile(1226, 3091, 0),
-			() -> Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
-					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0,
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && (Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
+					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.TAL_TEKLAN)
 	),
 	QUETZAL_WHISTLE_THE_TEOMAT(
 			35, new RSTile(1437, 3171, 0),
-			() -> Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
-					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0,
+			() -> Quetzal.getInstance().getCurrentCharges() > 0 && (Inventory.find(Filters.Items.nameContains("quetzal whistle")).length > 0 ||
+					Equipment.getCount(Filters.Items.nameContains("quetzal whistle")) > 0),
 			() -> Quetzal.teleport(Quetzal.Location.THE_TEOMAT)
 	)
 
