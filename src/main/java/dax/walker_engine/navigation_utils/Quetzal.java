@@ -132,8 +132,8 @@ public class Quetzal {
 		int lastLocation = RSVarBit.get(LAST_LOCATION_VARBIT).getValue();
 		if(lastLocation != location.getLastLocationValue()){
 			if (!Interfaces.isInterfaceSubstantiated(WHISTLE_WIDGET_ROOT) &&
-					!RSItemHelper.click(Filters.Items.nameContains("quetzal whistle"), "Signal") &&
-					WaitFor.condition(4500, () -> Interfaces.isInterfaceSubstantiated(QUETZAL_WIDGET_ROOT) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+					(!RSItemHelper.click(Filters.Items.nameContains("quetzal whistle"), "Signal") ||
+					WaitFor.condition(4500, () -> Interfaces.isInterfaceSubstantiated(QUETZAL_WIDGET_ROOT) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS)){
 				RSInterface chatOption = Interfaces.get(229, i -> {
 					String text = i.getText();
 					return text != null && text.matches(".*whistle.*no charges.*");
